@@ -1,0 +1,66 @@
+roundcube (0.1~beta2.2-10) unstable; urgency=low
+
+  * Depends on PHP pear modules instead of shipping them in the package
+
+ -- Vincent Bernat <bernat@luffy.cx>  Tue,  6 Mar 2007 20:44:33 +0100
+
+roundcube (0.1~beta2.2-9) unstable; urgency=low
+
+  * Licenses clarification in debian/copyright
+  * Only keep php5 | php4 in Depends:.
+
+ -- Vincent Bernat <bernat@luffy.cx>  Mon,  5 Mar 2007 22:31:28 +0100
+
+roundcube (0.1~beta2.2-8) unstable; urgency=low
+
+  * Use current locale to guess the language to select
+
+ -- Vincent Bernat <bernat@luffy.cx>  Sun, 25 Feb 2007 19:43:35 +0100
+
+roundcube (0.1~beta2.2-7) unstable; urgency=low
+
+  * Fix language selection
+
+ -- Vincent Bernat <bernat@luffy.cx>  Sat, 17 Feb 2007 08:14:54 +0100
+
+roundcube (0.1~beta2.2-6) unstable; urgency=low
+
+  * Really fix crontab
+  * Add language selection
+
+ -- Vincent Bernat <bernat@luffy.cx>  Sat, 17 Feb 2007 07:51:32 +0100
+
+roundcube (0.1~beta2.2-5) unstable; urgency=low
+
+  * Fix crontab
+  * Provide roundcube.default
+
+ -- Vincent Bernat <bernat@luffy.cx>  Fri, 16 Feb 2007 20:40:46 +0100
+
+roundcube (0.1~beta2.2-4) unstable; urgency=low
+
+  * Allow to control the expiration of temporary files (following a
+    suggestion from Sean Finney)
+
+ -- Vincent Bernat <bernat@luffy.cx>  Mon, 12 Feb 2007 21:15:32 +0100
+
+roundcube (0.1~beta2.2-3) unstable; urgency=low
+
+  * Depends on SQL client to allow dbconfig-common to setup the database
+  * Move temp directory to /var/cache/roundcube/temp
+
+ -- Vincent Bernat <bernat@luffy.cx>  Sun, 11 Feb 2007 21:56:03 +0100
+
+roundcube (0.1~beta2.2-2) unstable; urgency=low
+
+  * Delete log files on purge
+  * Setup logrotate
+
+ -- Vincent Bernat <bernat@luffy.cx>  Sun, 11 Feb 2007 09:25:43 +0100
+
+roundcube (0.1~beta2.2-1) unstable; urgency=low
+
+  * Initial release (Closes: #333756, #344949)
+
+ -- Vincent Bernat <bernat@luffy.cx>  Sun, 11 Feb 2007 09:11:02 +0100
+

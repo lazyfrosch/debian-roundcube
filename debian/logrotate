@@ -1,0 +1,6 @@
+/var/log/roundcube/sendmail /var/log/roundcube/errors {
+   weekly
+   rotate 4
+   compress
+   missingok
+}

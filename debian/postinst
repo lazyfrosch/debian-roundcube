@@ -1,0 +1,95 @@
+#!/bin/sh
+# postinst script for roundcube
+#
+# see: dh_installdeb(1)
+
+set -e
+
+. /usr/share/debconf/confmodule
+. /usr/share/dbconfig-common/dpkg/postinst 
+dbc_generate_include=php:/etc/roundcube/debian-db.php
+dbc_generate_include_owner="www-data:www-data"
+dbc_generate_include_perms="660"
+dbc_dbfile_owner="www-data:www-data"
+dbc_dbfile_perms="0660"
+dbc_dbuser=roundcube
+dbc_dbname=roundcube
+
+dbc_go roundcube $@
+
+case "$1" in
+    configure)
+
+ 	CONFFILE=/etc/roundcube/main.inc.php
+ 	touch $CONFFILE.ucftmp
+ 	chmod 640 $CONFFILE.ucftmp
+
+	db_get roundcube/hosts || true
+	hosts="$RET"
+	if [ "$hosts" != "" ]; then
+	    hosts="array(\"$(echo $hosts | sed 's/ /\",\"/g')\")"
+	else
+	    hosts="''"
+	fi
+
+	db_get roundcube/language || true
+	language="$RET"
+	zcat /usr/share/doc/roundcube/main.inc.php.dist.gz | \
+	    sed -e "s+^\(\$rcmail_config\['default_host'\] = \)''\(;\)\$+\1${hosts}\2+" \
+	        -e "s+^\(\$rcmail_config\['locale_string'\] = '\).*\(';\)\$+\1${language}\2+" >> $CONFFILE.ucftmp
+
+	ucf --debconf-ok $CONFFILE.ucftmp $CONFFILE
+ 	chown root:www-data $CONFFILE
+        rm -f $CONFFILE.ucftmp
+	
+	# Handle webserver reconfiguration/restart ; stolen from zabbix package
+	db_get roundcube/reconfigure-webserver || true
+	webservers="$RET"
+	restart=""
+
+	for webserver in $webservers; do
+            webserver=${webserver%,}
+            test -x /usr/sbin/$webserver || continue
+        
+            if [ ! -f /etc/$webserver/conf.d/roundcube ] && [ ! -h /etc/$webserver/conf.d/roundcube ]; then
+            ln -s /etc/roundcube/apache.conf /etc/$webserver/conf.d/roundcube
+            restart="$restart $webserver"
+        fi
+        done
+
+        db_get roundcube/restart-webserver || true
+	res="$RET"
+	db_stop || true
+	if [ "$res" = "true" ]; then
+            for webserver in $restart; do
+		webserver=${webserver%,}
+		if [ -x /usr/sbin/invoke-rc.d ]; then
+                    invoke-rc.d $webserver restart
+		else
+                    /etc/init.d/$webserver restart
+		fi
+            done
+	fi
+
+	chown -R www-data:adm /var/log/roundcube
+	chmod -R 750 /var/log/roundcube
+	chown -R www-data:www-data /var/cache/roundcube/temp
+	chmod -R 750 /var/cache/roundcube/temp
+
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+
+#DEBHELPER#
+
+exit 0
+
+
