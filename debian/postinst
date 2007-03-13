@@ -73,8 +73,8 @@ case "$1" in
 
 	chown -R www-data:adm /var/log/roundcube
 	chmod -R 750 /var/log/roundcube
-	chown -R www-data:www-data /var/cache/roundcube/temp
-	chmod -R 750 /var/cache/roundcube/temp
+	chown -R www-data:www-data /var/lib/roundcube/temp
+	chmod -R 750 /var/lib/roundcube/temp
 
     ;;
 
