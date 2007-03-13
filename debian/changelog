@@ -1,0 +1,5 @@
+roundcube (0.1~beta2.2~dfsg-1) experimental; urgency=low
+
+  * Initial release. (Closes: #333756, #344949)
+
+ -- Romain Beauxis <toots@rastageeks.org>  Tue, 13 Mar 2007 13:28:05 +0100

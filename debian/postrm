@@ -1,0 +1,76 @@
+#!/bin/sh
+# postrm script for roundcube
+#
+# see: dh_installdeb(1)
+
+set -e
+
+if [ -f /usr/share/debconf/confmodule ]; then
+        . /usr/share/debconf/confmodule
+fi
+if [ -f /usr/share/dbconfig-common/dpkg/postrm ]; then
+        . /usr/share/dbconfig-common/dpkg/postrm 
+        dbc_go roundcube $@
+fi
+
+case "$1" in
+    upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+    ;;
+    
+    remove)
+
+	# Handling web server reconfiguration
+	db_get roundcube/reconfigure-webserver
+        webservers="$RET"
+        restart=""
+        
+        for webserver in $webservers; do
+            webserver=${webserver%,}
+        
+            case "$webserver" in
+                apache|apache-perl|apache-ssl|apache2)
+                    rm -f /etc/$webserver/conf.d/roundcube
+                    test -x /usr/sbin/$webserver || continue
+                    restart="$restart $webserver"
+                    ;;
+                *)
+                    ;;
+            esac
+        done
+        
+        db_get roundcube/restart-webserver
+        res="$RET"
+        db_stop || true
+        if [ "$res" = "true" ]; then
+            for webserver in $restart; do
+                webserver=${webserver%,}
+                if [ -x /usr/sbin/invoke-rc.d ]; then
+                    invoke-rc.d $webserver restart
+                else
+                    /etc/init.d/$webserver restart
+                fi
+            done
+        fi
+    ;;
+
+    purge)
+        rm -f /etc/roundcube/debian-db.php
+        if which ucf >/dev/null 2>&1; then
+                ucf --purge /etc/roundcube/debian-db.php
+		ucf --purge /etc/roundcube/main.inc.php
+        fi
+	rm -f /etc/roundcube/main.inc.php
+	rm -rf /var/log/roundcube
+	rm -rf /var/lib/roundcube
+    ;;
+    *)
+        echo "postrm called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+#DEBHELPER#
+
+exit 0
+
+

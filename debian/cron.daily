@@ -1,0 +1,9 @@
+#!/bin/sh
+
+MAX_TMPFILE_LIFETIME=5
+# MAX_TMPFILE_LIFETIME can be overridden in this file
+if [ -r /etc/default/roundcube ]; then
+	. /etc/default/roundcube
+fi
+
+find /var/lib/roundcube/temp -type f -mtime +$MAX_TMPFILE_LIFETIME -print0 | xargs -0 -r rm

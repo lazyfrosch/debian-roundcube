@@ -1,0 +1,45 @@
+#!/bin/sh
+
+set -e
+
+. /usr/share/debconf/confmodule
+
+db_input medium roundcube/hosts || true
+db_go || true
+
+# Retrieve all available languages
+instd_langs=$(echo /usr/share/roundcube/program/localization/*/messages.inc | \
+    sed 's+[^ ]*/\([^ ]*\)/messages.inc+\1,+g' | sed 's+,$++')
+# Retrieve the old list
+db_metaget roundcube/language languages && oldchoices="$RET"
+if [ ! "$oldchoices" ] || [ "$instd_langs" != "$oldchoices" ]; then
+       db_subst roundcube/language languages $instd_langs
+       db_fset roundcube/language seen false
+       # Try to guess the locale
+       locale=$(echo $LANG | sed 's/[@\.].*//')
+       if [ -d /usr/share/roundcube/program/localization/$locale ]; then
+	   db_set roundcube/language $locale
+       else
+	   locale=$(echo $locale | sed 's/_.*//')
+	   if [ -d /usr/share/roundcube/program/localization/$locale ]; then
+	       db_set roundcube/language $locale
+	   else
+	       db_set roundcube/language en_US
+	   fi
+       fi
+fi
+# Ask the question
+db_input medium roundcube/language || true
+db_go || true
+
+if [ -f /usr/share/dbconfig-common/dpkg/config ]; then
+        dbc_dbtypes="mysql, pgsql, sqlite"
+        dbc_authmethod_user="password"
+        . /usr/share/dbconfig-common/dpkg/config 
+        dbc_go roundcube $@
+fi
+
+db_input medium roundcube/reconfigure-webserver || true
+db_go || true
+db_input medium roundcube/restart-webserver || true
+db_go || true

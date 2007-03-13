@@ -1,0 +1,31 @@
+Template: roundcube/reconfigure-webserver
+Type: multiselect
+_Choices: apache, apache-ssl, apache-perl, apache2
+Default: apache, apache-ssl, apache-perl, apache2
+_Description: Webserver Reconfiguration:
+ RoundCube supports any web server that php does, but this automatic
+ configuration process only supports Apache. Please select which 
+ apache version you want to configure the RoundCube frontend for.
+
+Template: roundcube/restart-webserver
+Type: boolean
+Default: true
+_Description: Would you like to restart your webserver(s) now?
+ Remember that in order to apply the changes your webserver(s) has/have to
+ be restarted. 
+
+Template: roundcube/hosts
+Type: string
+Default:
+_Description: IMAP server on which RoundCube should connect to:
+ Leave this field blank to show a textbox at login, give a list
+ of space-separated hosts to display a pulldown menu or set one
+ host. To use SSL connection, use ssl://hostname:993.
+
+Template: roundcube/language
+Type: select
+Choices: ${languages}
+_Description: Default language:
+ Each user can select in his preferences the language of the
+ interface. However, for the login screen and for the first
+ connection, this is the language selected here that will be used.

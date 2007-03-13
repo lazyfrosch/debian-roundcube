@@ -1,0 +1,22 @@
+Source: roundcube
+Section: web
+Priority: extra
+Maintainer: Debian Roundcube Maintainers <pkg-roundcube-maintainers@lists.alioth.debian.org>
+Uploaders: Vincent Bernat <bernat@luffy.cx>, Romain Beauxis <toots@rastageeks.org>
+Build-Depends: debhelper (>= 5), quilt, patchutils (>= 0.2.25), cdbs (>= 0.4.27-1)
+Build-Depends-Indep: po-debconf
+Standards-Version: 3.7.2
+
+Package: roundcube
+Architecture: all
+Depends: dbconfig-common, debconf | debconf-2.0, apache2 | httpd, php5 | php4, php5-mysql | php4-mysql | php5-pgsql | php4-pgsql | php5-sqlite | php4-sqlite, php5-mcrypt | php4-mcrypt, php-db, php-auth, php-net-smtp, php-net-socket, php-mail-mime, ucf, mysql-client | virtual-mysql-client | postgresql-client-8.1 | postgresql-client | sqlite, ${misc:Depends}
+Suggests: mysql-server | posgresql-server
+Description: modern, skinnable, AJAX based webmail solution for IMAP servers
+ RoundCube Webmail is a browser-based multilingual IMAP client with an
+ application-like user interface. It provides full functionality you
+ expect from an e-mail client, including MIME support, address book,
+ folder manipulation and message filters.
+ .
+ The user interface is fully skinnable using XHTML and CSS 2.
+ .
+  Homepage: http://www.roundcube.net/

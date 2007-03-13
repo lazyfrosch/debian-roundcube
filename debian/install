@@ -1,0 +1,3 @@
+index.php program/ usr/share/roundcube
+skins temp var/lib/roundcube
+debian/conf/* etc/roundcube
