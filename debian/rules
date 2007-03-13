@@ -1,66 +1,28 @@
 #!/usr/bin/make -f
-# -*- makefile -*-
 
-# Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+include /usr/share/cdbs/1/rules/debhelper.mk
 
-configure: configure-stamp
-configure-stamp:
-	dh_testdir
-	touch configure-stamp
+# In order to regenerate 'debian/control' :
+#    DEB_AUTO_UPDATE_DEBIAN_CONTROL=yes fakeroot debian/rules clean
+# Then check manually if everything's ok
 
-
-build: build-stamp
-
-build-stamp: configure-stamp 
-	dh_testdir
-	touch $@
-
-clean:
-	dh_testdir
-	dh_testroot
-	rm -f build-stamp configure-stamp
-	dh_clean 
-
-install: build
-	dh_testdir
-	dh_testroot
-	dh_clean -k 
-	dh_installdirs
-
-	install -m 0644 $(CURDIR)/index.php $(CURDIR)/debian/roundcube/usr/share/roundcube
-	cp -r $(CURDIR)/program $(CURDIR)/debian/roundcube/usr/share/roundcube
+binary-install/roundcube::
 	rm -rf $(CURDIR)/debian/roundcube/usr/share/roundcube/program/lib/{Auth,DB,DB.php,Mail,Net,PEAR.php}
-	cp -r $(CURDIR)/skins $(CURDIR)/debian/roundcube/usr/share/roundcube
-	find $(CURDIR)/debian/roundcube/usr/share/roundcube -type f -print0 | xargs -0 chmod 644
+	find debian/roundcube/usr/share/roundcube -maxdepth 1 -mindepth 1 | \
+	while read i; do \
+		dh_link "`echo "$$i" | sed -e s#debian/roundcube/##`" \
+		"`echo "$$i" | sed -e s#debian/roundcube/usr/share/roundcube/#var/lib/roundcube/#`"; \
+	done
+	chmod -x $(CURDIR)/debian/roundcube/usr/share/roundcube/program/include/rcube_mdb2.inc
+	chmod -x $(CURDIR)/debian/roundcube/var/lib/roundcube/skins/default/images/icons/plus.gif
+	chmod -x $(CURDIR)/debian/roundcube/var/lib/roundcube/skins/default/common.css
+	chmod -x $(CURDIR)/debian/roundcube/var/lib/roundcube/skins/default/images/display/loading.gif
+	chmod -x $(CURDIR)/debian/roundcube/var/lib/roundcube/skins/default/images/buttons/up_arrow.png
+	chmod -x $(CURDIR)/debian/roundcube/usr/share/roundcube/program/include/rcube_db.inc
+	chmod -x $(CURDIR)/debian/roundcube/var/lib/roundcube/skins/default/images/buttons/down_arrow.png
+	chmod -x $(CURDIR)/debian/roundcube/var/lib/roundcube/skins/default/googiespell.css
+	chmod -x $(CURDIR)/debian/roundcube/usr/share/dbconfig-common/data/roundcube/install/pqsql/postgres.initial.sql
+	chmod -x $(CURDIR)/debian/roundcube/usr/share/roundcube/program/js/googiespell.js
 
-	cp $(CURDIR)/config/*.php $(CURDIR)/debian/roundcube/usr/share/roundcube/config
-	install -m 0644 $(CURDIR)/debian/conf/apache.conf $(CURDIR)/debian/roundcube/etc/roundcube
-	install -m 0640 $(CURDIR)/debian/conf/db.inc.php $(CURDIR)/debian/roundcube/etc/roundcube
-	install -m 0640 $(CURDIR)/debian/default $(CURDIR)/debian/roundcube/etc/default/roundcube.default
-
-	install -m 0644 $(CURDIR)/SQL/mysql.initial.sql $(CURDIR)/debian/roundcube/usr/share/dbconfig-common/data/roundcube/install/mysql
-	install -m 0644 $(CURDIR)/SQL/postgres.initial.sql $(CURDIR)/debian/roundcube/usr/share/dbconfig-common/data/roundcube/install/pgsql
-	install -m 0644 $(CURDIR)/SQL/sqlite.initial.sql $(CURDIR)/debian/roundcube/usr/share/dbconfig-common/data/roundcube/install/sqlite
-
-
-binary-indep: build install
-
-binary-arch: build install
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs CHANGELOG
-	dh_installdocs
-	dh_installlogrotate
-	dh_install
-	dh_installcron
-	dh_installdebconf	
-	dh_compress
-	dh_fixperms
-	dh_installdeb
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install configure
+cleanbuilddir/roundcube::
+	debconf-updatepo

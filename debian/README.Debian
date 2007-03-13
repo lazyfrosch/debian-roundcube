@@ -1,5 +1,0 @@
-All configuration files are in /etc/roundcube. Logs are in
-/var/log/roundcube and the temporary directory is
-/var/cache/roundcube/temp.
-
- -- Vincent Bernat <bernat@luffy.cx>, Sun, 11 Feb 2007 22:06:48 +0100

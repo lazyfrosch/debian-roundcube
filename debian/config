@@ -12,7 +12,7 @@ instd_langs=$(echo /usr/share/roundcube/program/localization/*/messages.inc | \
     sed 's+[^ ]*/\([^ ]*\)/messages.inc+\1,+g' | sed 's+,$++')
 # Retrieve the old list
 db_metaget roundcube/language languages && oldchoices="$RET"
-if [ ! "$oldchoices" -o "$instd_langs" != "$oldchoices" ]; then
+if [ ! "$oldchoices" ] || [ "$instd_langs" != "$oldchoices" ]; then
        db_subst roundcube/language languages $instd_langs
        db_fset roundcube/language seen false
        # Try to guess the locale

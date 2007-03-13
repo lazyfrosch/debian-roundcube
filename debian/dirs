@@ -1,7 +1,6 @@
 usr/share/roundcube
-usr/share/roundcube/config
 usr/share/dbconfig-common/data/roundcube/install
 etc/roundcube
 var/log/roundcube
-var/cache/roundcube/temp
+var/lib/roundcube/config
 etc/default
