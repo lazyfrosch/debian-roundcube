@@ -1,18 +1,29 @@
 #!/usr/bin/make -f
 
 include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/rules/patchsys-quilt.mk
 
 # In order to regenerate 'debian/control' :
 #    DEB_AUTO_UPDATE_DEBIAN_CONTROL=yes fakeroot debian/rules clean
 # Then check manually if everything's ok
 
 binary-install/roundcube::
-	rm -rf $(CURDIR)/debian/roundcube/usr/share/roundcube/program/lib/{Auth,DB,DB.php,Mail,Net,PEAR.php}
+	# Removing PEAR classes that are provided via strd packages
+	rm -rf $(CURDIR)/debian/roundcube/usr/share/roundcube/program/lib/Auth
+	rm -rf $(CURDIR)/debian/roundcube/usr/share/roundcube/program/lib/DB
+	rm -rf $(CURDIR)/debian/roundcube/usr/share/roundcube/program/lib/DB.php
+	rm -rf $(CURDIR)/debian/roundcube/usr/share/roundcube/program/lib/Mail
+	rm -rf $(CURDIR)/debian/roundcube/usr/share/roundcube/program/lib/Net
+	rm -rf $(CURDIR)/debian/roundcube/usr/share/roundcube/program/lib/PEAR.php
+	# Symlink all that is in /usr/share/roundcube to /var/lib/roundcube
 	find debian/roundcube/usr/share/roundcube -maxdepth 1 -mindepth 1 | \
 	while read i; do \
 		dh_link "`echo "$$i" | sed -e s#debian/roundcube/##`" \
 		"`echo "$$i" | sed -e s#debian/roundcube/usr/share/roundcube/#var/lib/roundcube/#`"; \
 	done
+	# Install config/db.inc.php.dist
+	install -m 0640 $(CURDIR)/config/db.inc.php.dist $(CURDIR)/debian/roundcube/etc/roundcube/db.inc.php
+	# Some files are executable while not being scripts or binary...
 	chmod -x $(CURDIR)/debian/roundcube/usr/share/roundcube/program/include/rcube_mdb2.inc
 	chmod -x $(CURDIR)/debian/roundcube/var/lib/roundcube/skins/default/images/icons/plus.gif
 	chmod -x $(CURDIR)/debian/roundcube/var/lib/roundcube/skins/default/common.css
