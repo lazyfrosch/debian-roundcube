@@ -1,6 +1,3 @@
 index.php program/ usr/share/roundcube
 skins temp var/lib/roundcube
 debian/conf/* etc/roundcube
-SQL/mysql.initial.sql usr/share/dbconfig-common/data/roundcube/install/mysql
-SQL/postgres.initial.sql usr/share/dbconfig-common/data/roundcube/install/pqsql
-SQL/sqlite.initial.sql usr/share/dbconfig-common/data/roundcube/install/sqlite
