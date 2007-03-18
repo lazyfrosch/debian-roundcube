@@ -15,6 +15,8 @@ binary-install/roundcube::
 	rm -rf $(CURDIR)/debian/roundcube/usr/share/roundcube/program/lib/Mail
 	rm -rf $(CURDIR)/debian/roundcube/usr/share/roundcube/program/lib/Net
 	rm -rf $(CURDIR)/debian/roundcube/usr/share/roundcube/program/lib/PEAR.php
+	# Removing non-licensed des.inc
+	rm -rf $(CURDIR)/debian/roundcube/usr/share/roundcube/program/lib/des.inc
 	# Symlink all that is in /usr/share/roundcube to /var/lib/roundcube
 	find debian/roundcube/usr/share/roundcube -maxdepth 1 -mindepth 1 | \
 	while read i; do \
