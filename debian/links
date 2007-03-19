@@ -4,3 +4,4 @@ var/lib/roundcube/temp usr/share/roundcube/temp
 var/lib/roundcube/skins usr/share/roundcube/skins
 var/lib/roundcube/config usr/share/roundcube/config
 var/log/roundcube var/lib/roundcube/logs
+var/lib/roundcube/logs usr/share/roundcube/logs
