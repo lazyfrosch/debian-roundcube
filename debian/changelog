@@ -1,4 +1,4 @@
-roundcube (0.1~beta2.2-1) experimental; urgency=low
+roundcube (0.1~beta2.2~dfsg-1) experimental; urgency=low
 
   * Initial release. (Closes: #333756, #344949)
 
