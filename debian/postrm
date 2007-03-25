@@ -61,7 +61,7 @@ case "$1" in
         fi
 	rm -f /etc/roundcube/main.inc.php
 	rm -rf /var/log/roundcube
-	rm -rf /var/cache/roundcube/temp
+	rm -rf /var/lib/roundcube/temp
     ;;
     *)
         echo "postrm called with unknown argument \`$1'" >&2
