@@ -1,5 +1,13 @@
 --- roundcube_0.1~beta2.2/program/include/main.inc	2006-12-22 23:26:24.000000000 +0100
 +++ roundcube_0.1~beta2.2/program/include/main.inc	2007-03-18 10:24:11.000000000 +0100
+@@ -19,7 +19,6 @@
+ 
+ */
+ 
+-require_once('lib/des.inc');
+ require_once('lib/utf7.inc');
+ require_once('lib/utf8.class.php');
+ 
 @@ -758,7 +758,13 @@
  // encrypt IMAP password using DES encryption
  function encrypt_passwd($pass)
@@ -32,3 +40,5 @@
    }
  
  
+--- include/main.inc~	2007-03-25 12:09:19.000000000 +0200
++++ include/main.inc	2007-03-25 12:15:45.000000000 +0200
