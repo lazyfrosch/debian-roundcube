@@ -24,7 +24,7 @@ if [ ! "$oldchoices" ] || [ "$instd_langs" != "$oldchoices" ]; then
 	   if [ -d /usr/share/roundcube/program/localization/$locale ]; then
 	       db_set roundcube/language $locale
 	   else
-	       db_set roundcube/language en
+	       db_set roundcube/language en_US
 	   fi
        fi
 fi
