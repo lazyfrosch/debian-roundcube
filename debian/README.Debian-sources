@@ -1,9 +1,9 @@
 Debian roundcube package.
 =========================
 
-This package uses a DES encryption using mcrypt instead of the original des.inc file.
-Indeed, the licence of this file was not DFSG and mcrypt is a very good DFSG drop 
-down alternative..
+This package uses a DES encryption using mcrypt instead of the
+original des.inc file. Indeed, the licence of this file was not DFSG
+and mcrypt is a very good DFSG drop down alternative..
 
 File removed from upstream tarball: programs/lib/des.inc
 
