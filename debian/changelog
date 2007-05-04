@@ -1,4 +1,4 @@
-roundcube (0.1~beta2.2~dfsg-2) unstable; urgency=high
+roundcube (0.1~beta2.2~dfsg-2) unstable; urgency=low
 
   * Fix a security issue by disallowing access to logs.
   * First upload to unstable.
