@@ -1,3 +1,9 @@
+roundcube (0.1~beta2.2~dfsg-2) experimental; urgency=high
+
+  * Fix a security issue by disallowing access to logs.
+
+ -- Vincent Bernat <bernat@luffy.cx>  Sat,  5 May 2007 00:23:40 +0200
+
 roundcube (0.1~beta2.2~dfsg-1) experimental; urgency=low
 
   * Initial release. (Closes: #333756, #344949)
