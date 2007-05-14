@@ -18,8 +18,10 @@ binary-install/roundcube::
 	# Symlink all that is in /usr/share/roundcube to /var/lib/roundcube
 	find debian/roundcube/usr/share/roundcube -maxdepth 1 -mindepth 1 | \
 	while read i; do \
-		dh_link "`echo "$$i" | sed -e s#debian/roundcube/##`" \
-		"`echo "$$i" | sed -e s#debian/roundcube/usr/share/roundcube/#var/lib/roundcube/#`"; \
+		if [ ! -L "$$i" ]; then \
+		  dh_link "`echo "$$i" | sed -e s#debian/roundcube/##`" \
+		  "`echo "$$i" | sed -e s#debian/roundcube/usr/share/roundcube/#var/lib/roundcube/#`"; \
+		fi \
 	done
 	# Install config/db.inc.php.dist
 	install -m 0640 $(CURDIR)/config/db.inc.php.dist $(CURDIR)/debian/roundcube/etc/roundcube/db.inc.php
