@@ -1,4 +1,3 @@
 dbconfig-common_support.patch
 correct_install_path.patch
 use_mcrypt.patch
-rfc2822_date.patch
