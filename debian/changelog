@@ -1,15 +1,10 @@
 roundcube (0.1~rc1~dfsg-1) unstable; urgency=low
 
   * New upstream release
+  * Fixed dh_link calls
+    Closes: #423824
 
  -- Vincent Bernat <bernat@luffy.cx>  Sun, 20 May 2007 13:59:44 +0200
-
-roundcube (0.1~beta2.2~dfsg-3) unstable; urgency=low
-
-  * Fixed dh_link calls
-  Closes: #423824
-
- -- Romain Beauxis <toots@rastageeks.org>  Mon, 14 May 2007 14:20:55 +0200
 
 roundcube (0.1~beta2.2~dfsg-2) unstable; urgency=low
 
