@@ -1,8 +1,13 @@
 roundcube (0.1~rc1~dfsg-1) unstable; urgency=low
 
+  [ Vincent Bernat ]
   * New upstream release
+  [ Romain Beauxis ]
   * Fixed dh_link calls
     Closes: #423824
+  * Added custom patch to use php unix timestamp support
+    with sqlite since UNIX_TIMESTAMP is not supported by sqlite
+    before 3.
 
  -- Vincent Bernat <bernat@luffy.cx>  Sun, 20 May 2007 13:59:44 +0200
 

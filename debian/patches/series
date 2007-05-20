@@ -1,3 +1,4 @@
 dbconfig-common_support.patch
 correct_install_path.patch
 use_mcrypt.patch
+use_php_timestamp_implementation_for_sqlite.patch
