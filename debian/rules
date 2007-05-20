@@ -42,6 +42,7 @@ binary-install/roundcube::
 	chmod -x $(CURDIR)/debian/roundcube/var/lib/roundcube/skins/default/images/buttons/down_arrow.png
 	chmod -x $(CURDIR)/debian/roundcube/var/lib/roundcube/skins/default/googiespell.css
 	chmod -x $(CURDIR)/debian/roundcube/usr/share/roundcube/program/js/googiespell.js
+	find $(CURDIR)/debian/roundcube/usr/share/roundcube/program/localization -type f -print0 | xargs -0 chmod -x
 
 clean::
 	debconf-updatepo
