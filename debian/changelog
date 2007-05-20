@@ -1,3 +1,17 @@
+roundcube (0.1~rc1~dfsg-1) unstable; urgency=low
+
+  [ Vincent Bernat ]
+  * New upstream release
+  * Update script for sqlite in postinst
+  [ Romain Beauxis ]
+  * Fixed dh_link calls
+    Closes: #423824
+  * Added custom patch to use php unix timestamp support
+    with sqlite since UNIX_TIMESTAMP is not supported by sqlite.
+  * Dropped php4 dependencies
+
+ -- Vincent Bernat <bernat@luffy.cx>  Sun, 20 May 2007 13:59:44 +0200
+
 roundcube (0.1~beta2.2~dfsg-2) unstable; urgency=low
 
   * Fix a security issue by disallowing access to logs.

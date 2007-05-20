@@ -1,0 +1,37 @@
+diff -urN roundcube-0.1~rc1~dfsg.old/program/include/rcube_db.inc roundcube-0.1~rc1~dfsg/program/include/rcube_db.inc
+--- roundcube-0.1~rc1~dfsg.old/program/include/rcube_db.inc	2007-05-24 21:27:53.000000000 +0200
++++ roundcube-0.1~rc1~dfsg/program/include/rcube_db.inc	2007-05-24 21:29:36.000000000 +0200
+@@ -27,6 +27,13 @@
+  */
+ require_once('DB.php');
+ 
++/* User function for getting timestamps under sqlite */
++function custom_date_to_timestamp($data) {
++   $date = strptime($data,'%Y-%m-%d %H:%M:%S');
++   return mktime($date['tm_hour'],$date['tm_min'],$date['tm_sec'],$date['tm_mon']+1,$date['tm_mday'],1900 + $date['tm_year']);
++}
++
++
+ 
+ /**
+  * Database independent query interface
+@@ -152,6 +159,9 @@
+       $dsn = $this->db_dsnw;
+ 
+     $this->db_handle = $this->dsn_connect($dsn);
++    if ($this->db_provider == "sqlite") {
++        sqlite_create_function($this->db_handle->connection,'custom_date_to_timestamp','custom_date_to_timestamp',1);    
++    }
+     $this->db_connected = $this->db_handle ? TRUE : FALSE;
+     }
+     
+@@ -462,6 +472,9 @@
+       case 'mssql':
+         return "datediff(s, '1970-01-01 00:00:00', $field)";
+ 
++      case 'sqlite':
++        return "custom_date_to_timestamp($field)";
++
+       default:
+         return "UNIX_TIMESTAMP($field)";
+       }

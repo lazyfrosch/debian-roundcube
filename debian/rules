@@ -18,15 +18,20 @@ binary-install/roundcube::
 	# Symlink all that is in /usr/share/roundcube to /var/lib/roundcube
 	find debian/roundcube/usr/share/roundcube -maxdepth 1 -mindepth 1 | \
 	while read i; do \
-		dh_link "`echo "$$i" | sed -e s#debian/roundcube/##`" \
-		"`echo "$$i" | sed -e s#debian/roundcube/usr/share/roundcube/#var/lib/roundcube/#`"; \
+		if [ ! -L "$$i" ]; then \
+		  dh_link "`echo "$$i" | sed -e s#debian/roundcube/##`" \
+		  "`echo "$$i" | sed -e s#debian/roundcube/usr/share/roundcube/#var/lib/roundcube/#`"; \
+		fi \
 	done
 	# Install config/db.inc.php.dist
 	install -m 0640 $(CURDIR)/config/db.inc.php.dist $(CURDIR)/debian/roundcube/etc/roundcube/db.inc.php
-	# Install empty tables for each db type
+	# Install empty tables and updates for each db type
 	install -m 0644 $(CURDIR)/SQL/mysql.initial.sql $(CURDIR)/debian/roundcube/usr/share/dbconfig-common/data/roundcube/install/mysql
+	install -m 0644 $(CURDIR)/SQL/mysql.update.sql $(CURDIR)/debian/roundcube/usr/share/dbconfig-common/data/roundcube/upgrade/mysql/0.1~rc1~dfsg-1
 	install -m 0644 $(CURDIR)/SQL/postgres.initial.sql $(CURDIR)/debian/roundcube/usr/share/dbconfig-common/data/roundcube/install/pgsql
-	install -m 0644 $(CURDIR)/SQL/sqlite.initial.sql $(CURDIR)/debian/roundcube/usr/share/dbconfig-common/data/roundcube/install/sqlite	
+	install -m 0644 $(CURDIR)/SQL/postgres.update.sql $(CURDIR)/debian/roundcube/usr/share/dbconfig-common/data/roundcube/upgrade/pgsql/0.1~rc1~dfsg-1
+	install -m 0644 $(CURDIR)/SQL/sqlite.initial.sql $(CURDIR)/debian/roundcube/usr/share/dbconfig-common/data/roundcube/install/sqlite
+	install -m 0644 $(CURDIR)/SQL/sqlite.update.sql $(CURDIR)/debian/roundcube/usr/share/dbconfig-common/data/roundcube/upgrade/sqlite/0.1~rc1~dfsg-1
 	# Some files are executable while not being scripts or binary...
 	chmod -x $(CURDIR)/debian/roundcube/usr/share/roundcube/program/include/rcube_mdb2.inc
 	chmod -x $(CURDIR)/debian/roundcube/var/lib/roundcube/skins/default/images/icons/plus.gif
@@ -37,6 +42,7 @@ binary-install/roundcube::
 	chmod -x $(CURDIR)/debian/roundcube/var/lib/roundcube/skins/default/images/buttons/down_arrow.png
 	chmod -x $(CURDIR)/debian/roundcube/var/lib/roundcube/skins/default/googiespell.css
 	chmod -x $(CURDIR)/debian/roundcube/usr/share/roundcube/program/js/googiespell.js
+	find $(CURDIR)/debian/roundcube/usr/share/roundcube/program/localization -type f -print0 | xargs -0 chmod -x
 
 clean::
 	debconf-updatepo

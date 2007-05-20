@@ -20,6 +20,58 @@ dbc_go roundcube $@
 case "$1" in
     configure)
 
+	# From 0.1-beta2.2 to 0.1-rc1, a column was added to table
+	# `identities'. For MySQL and PostgreSQL, this is handled by
+	# dbconfig-common but for sqlite, there is no way to add a
+	# column to a table. Therefore, we dump here the table and add
+	# the column.
+	[ "$dbc_upgrade" = "true" ] && {
+	    case "$dbc_dbtype" in
+		sqlite)
+		    db="${dbc_basepath}/${dbc_dbname}"
+		# OK, we need to check if the table contains html_signature
+		    if ! sqlite "$db" '.schema identities' | grep -q html_signature; then
+		        # We need to add it
+			echo -n "Need to upgrade 'identities' table in $db... "
+			upgrade_tmp=$(mktemp -t roundcube.sqlite.XXXXXXXXXX)
+			(
+			    cat <<EOF
+BEGIN TRANSACTION;
+DROP TABLE identities;
+CREATE TABLE identities (
+  identity_id integer NOT NULL PRIMARY KEY,
+  user_id integer NOT NULL default '0',
+  del tinyint NOT NULL default '0',
+  standard tinyint NOT NULL default '0',
+  name varchar(128) NOT NULL default '',
+  organization varchar(128) default '',
+  email varchar(128) NOT NULL default '',
+  "reply-to" varchar(128) NOT NULL default '',
+  bcc varchar(128) NOT NULL default '',
+  signature text NOT NULL default '',
+  html_signature tinyint NOT NULL default '0'
+);
+
+CREATE INDEX ix_identities_user_id ON identities(user_id);
+
+EOF
+			    # We dump and keep only inserts
+			    sqlite "$db" '.dump identities' | \
+				awk '/^INSERT INTO/ {start = 1} {if (start == 1) print}' | \
+				head -n -2 | \
+				sed 's/^\(INSERT INTO identities \)/\1(identity_id, user_id, del, standard, name, organization, email, "reply-to", bcc, signature) /'
+			    echo 'COMMIT;' ) > $upgrade_tmp
+			sqlite "$db" < $upgrade_tmp
+			rm $upgrade_tmp
+			echo "OK"
+		    fi
+		    ;;
+		*)
+		    # Do nothing
+		    ;;
+	    esac
+	}
+
  	CONFFILE=/etc/roundcube/main.inc.php
  	touch $CONFFILE.ucftmp
  	chmod 640 $CONFFILE.ucftmp
