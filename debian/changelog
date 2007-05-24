@@ -1,8 +1,9 @@
 roundcube (0.1~rc1~dfsg-1) experimental; urgency=low
 
-  [ Vincent Bernat ]
+[ Vincent Bernat ]
   * New upstream release
-  [ Romain Beauxis ]
+  * Update script for sqlite in postinst
+[ Romain Beauxis ]
   * Fixed dh_link calls
     Closes: #423824
   * Added custom patch to use php unix timestamp support
