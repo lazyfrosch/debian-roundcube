@@ -9,7 +9,7 @@ Standards-Version: 3.7.2
 
 Package: roundcube
 Architecture: all
-Depends: dbconfig-common, debconf | debconf-2.0, apache2 | httpd, php5 | php4, php5-mysql | php4-mysql | php5-pgsql | php4-pgsql | php5-sqlite | php4-sqlite, php-db, php-auth, php-net-smtp, php-net-socket, php-mail-mime, ucf, mysql-client | virtual-mysql-client | postgresql-client-8.1 | postgresql-client | sqlite, ${misc:Depends}
+Depends: dbconfig-common, debconf | debconf-2.0, apache2 | httpd, php5, php5-mysql | php5-pgsql | php5-sqlite, php-db, php-auth, php-net-smtp, php-net-socket, php-mail-mime, ucf, mysql-client | virtual-mysql-client | postgresql-client-8.1 | postgresql-client | sqlite, ${misc:Depends}
 Suggests: mysql-server | posgresql-server
 Description: modern, skinnable, AJAX based webmail solution for IMAP servers
  RoundCube Webmail is a browser-based multilingual IMAP client with an
