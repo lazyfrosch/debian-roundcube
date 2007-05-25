@@ -1,4 +1,4 @@
-roundcube (0.1~rc1~dfsg-1) experimental; urgency=low
+roundcube (0.1~rc1~dfsg-1) unstable; urgency=low
 
   [ Vincent Bernat ]
   * New upstream release
