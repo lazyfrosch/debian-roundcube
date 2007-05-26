@@ -11,10 +11,10 @@ Package: roundcube
 Architecture: all
 Depends: dbconfig-common, debconf | debconf-2.0, apache2 | httpd, php5, php5-mysql | php5-pgsql | php5-sqlite, php-db, php-auth, php-net-smtp, php-net-socket, php-mail-mime, ucf, mysql-client | virtual-mysql-client | postgresql-client-8.1 | postgresql-client | sqlite, ${misc:Depends}
 Suggests: mysql-server | posgresql-server
-Description: modern, skinnable, AJAX based webmail solution for IMAP servers
+Description: skinnable AJAX based webmail solution for IMAP servers
  RoundCube Webmail is a browser-based multilingual IMAP client with an
- application-like user interface. It provides full functionality you
- expect from an e-mail client, including MIME support, address book,
+ application-like user interface. It provides full functionality
+ expected from an e-mail client, including MIME support, address book,
  folder manipulation and message filters.
  .
  The user interface is fully skinnable using XHTML and CSS 2.
