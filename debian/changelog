@@ -1,3 +1,9 @@
+roundcube (0.1~rc1~dfsg-2) unstable; urgency=low
+
+  * Removed custom unix_timestamp for sqlite: solved upstream
+
+ -- Romain Beauxis <toots@rastageeks.org>  Tue, 05 Jun 2007 15:22:36 +0200
+
 roundcube (0.1~rc1~dfsg-1) unstable; urgency=low
 
   [ Vincent Bernat ]
