@@ -1,3 +1,24 @@
+roundcube (0.1~rc1~dfsg-2) unstable; urgency=low
+
+  * Removed custom unix_timestamp for sqlite: solved upstream
+  * Debconf templates and debian/control reviewed by the debian-l10n-
+    english team as part of the Smith review project.
+    Closes: #426086, #427546, #427546
+  * Debconf translation updates:
+    - Galician. Closes: #426140
+    - Basque. Closes: #426150
+    - Czech. Closes: #426428
+    - Portuguese. Closes: #426451
+    - Arabic. Closes: #427110
+    - Italian. Closes: #427206
+    - German. Closes: #427536
+    - French. Closes: #427736
+    - Tamil. Closes: #428254
+    - Russian. Closes: #428364
+    - Spanish. Closes: #428573
+
+ -- Romain Beauxis <toots@rastageeks.org>  Tue, 05 Jun 2007 15:22:36 +0200
+
 roundcube (0.1~rc1~dfsg-1) unstable; urgency=low
 
   [ Vincent Bernat ]

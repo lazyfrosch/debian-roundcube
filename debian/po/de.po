@@ -1,50 +1,48 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# German translation of roundcube templates
+# Helge Kreutzmann <debian@helgefjell.de>, 2007.
+# This file is distributed under the same license as the roundcube package.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: roundcube\n"
 "Report-Msgid-Bugs-To: pkg-roundcube-maintainers@lists.alioth.debian.org\n"
 "POT-Creation-Date: 2007-05-26 09:36+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2007-05-27 10:27+0200\n"
+"Last-Translator: Helge Kreutzmann <debian@helgefjell.de>\n"
+"Language-Team: German <debian-l10n-german@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
 msgid "apache"
-msgstr ""
+msgstr "Apache"
 
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
 msgid "apache-ssl"
-msgstr ""
+msgstr "Apache-SSL"
 
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
 msgid "apache-perl"
-msgstr ""
+msgstr "Apache-Perl"
 
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
 msgid "apache2"
-msgstr ""
+msgstr "Apache2"
 
 #. Type: multiselect
 #. Description
 #: ../templates:2002
 msgid "Web server(s) to configure automatically:"
-msgstr ""
+msgstr "Webserver, die automatisch konfiguriert werden sollen:"
 
 #. Type: multiselect
 #. Description
@@ -53,6 +51,8 @@ msgid ""
 "RoundCube supports any web server supported by PHP, however only Apache can "
 "be configured automatically."
 msgstr ""
+"RoundCube unterstützt jeden Webserver, der auch von PHP unterstützt wird. "
+"Allerdings kann nur Apache automatisch konfiguriert werden."
 
 #. Type: multiselect
 #. Description
@@ -61,12 +61,14 @@ msgid ""
 "Please select the web server(s) that should be configured automatically for "
 "RoundCube."
 msgstr ""
+"Bitte wählen Sie den/die Webserver aus, die für RoundCube automatisch "
+"konfiguriert werden sollen."
 
 #. Type: boolean
 #. Description
 #: ../templates:3001
 msgid "Should the webserver(s) be restarted now?"
-msgstr ""
+msgstr "Soll der/die Webserver jetzt automatisch neu gestartet werden?"
 
 #. Type: boolean
 #. Description
@@ -75,18 +77,22 @@ msgid ""
 "In order to activate the new configuration, the reconfigured web servers "
 "have to be restarted."
 msgstr ""
+"Um die neue Konfiguration zu aktivieren, müssen die rekonfigurierten "
+"Webserver neu gestartet werden."
 
 #. Type: string
 #. Description
 #: ../templates:4001
 msgid "IMAP server(s) used with RoundCube:"
-msgstr ""
+msgstr "IMAP-Server, die mit RoundCube verwendet werden sollen:"
 
 #. Type: string
 #. Description
 #: ../templates:4001
 msgid "Please select the IMAP server that should be used with RoundCube."
 msgstr ""
+"Bitte wählen Sie den IMAP-Server aus, der mit RoundCube verwendet werden "
+"soll."
 
 #. Type: string
 #. Description
@@ -96,6 +102,10 @@ msgid ""
 "space-separated list of hosts will display a pull-down menu. Entering a "
 "single host will enforce using this host."
 msgstr ""
+"Falls dies leer gelassen wird, erscheint ein Textkasten bei der Anmeldung. "
+"Bei Eingabe einer Liste von Rechnern (durch Leerzeichen getrennt) wird ein "
+"Auswahlmenü angezeigt. Wird ein einzelner Rechner eingegeben, so wird dieser "
+"erzwungen."
 
 #. Type: string
 #. Description
@@ -103,24 +113,28 @@ msgstr ""
 msgid ""
 "To use SSL connections, please enter host names as 'ssl://hostname:993'."
 msgstr ""
+"Um SSL-Verbindungen zu benutzen, geben Sie bitte die Rechnernamen als »ssl://"
+"hostname:993« ein."
 
 #. Type: select
 #. Description
 #: ../templates:5001
 msgid "Default language:"
-msgstr ""
+msgstr "Standardsprache:"
 
 #. Type: select
 #. Description
 #: ../templates:5001
 msgid "Please choose the default language for RoundCube."
-msgstr ""
+msgstr "Bitte wählen Sie die Standardsprache für RoundCube."
 
 #. Type: select
 #. Description
 #: ../templates:5001
 msgid "This choice can be overridden by individual users in their preferences."
 msgstr ""
+"Diese Auswahl kann von jedem Benutzer in seinen persönlichen Einstellungen "
+"überschrieben werden."
 
 #. Type: select
 #. Description
@@ -129,3 +143,5 @@ msgid ""
 "However, the default language will be used for the login screen and the "
 "first connection of users."
 msgstr ""
+"Allerdings wird die Standardsprache beim Anmeldebildschirm und der ersten "
+"Verbindung mit den Benutzern verwandt."

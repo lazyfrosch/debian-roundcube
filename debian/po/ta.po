@@ -1,0 +1,139 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: roundcube\n"
+"Report-Msgid-Bugs-To: pkg-roundcube-maintainers@lists.alioth.debian.org\n"
+"POT-Creation-Date: 2007-05-26 09:36+0200\n"
+"PO-Revision-Date: 2007-06-10 13:35+0530\n"
+"Last-Translator: Dr.T.Vasudevan <agnihot3@gmail.com>\n"
+"Language-Team: Tamil\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: multiselect
+#. Choices
+#: ../templates:2001
+msgid "apache"
+msgstr "அபாசே"
+
+#. Type: multiselect
+#. Choices
+#: ../templates:2001
+msgid "apache-ssl"
+msgstr "அபாசே-எஸ்எஸ்எல்"
+
+#. Type: multiselect
+#. Choices
+#: ../templates:2001
+msgid "apache-perl"
+msgstr "அபாசே-பெர்ல்"
+
+#. Type: multiselect
+#. Choices
+#: ../templates:2001
+msgid "apache2"
+msgstr "அபாசே2"
+
+#. Type: multiselect
+#. Description
+#: ../templates:2002
+msgid "Web server(s) to configure automatically:"
+msgstr "தானியங்கியாக வடிவமைக்க வலை சேவையகம்(கங்கள்):"
+
+#. Type: multiselect
+#. Description
+#: ../templates:2002
+msgid ""
+"RoundCube supports any web server supported by PHP, however only Apache can "
+"be configured automatically."
+msgstr ""
+"ரவ்ண்ட்க்யூப் பிஹெச்பிஆல் ஆதரிக்கப்பட்ட எந்த வலை சேவையகத்தையும் ஆதரிக்கும். ஆயினுக்ம் அபாசே "
+"மட்டுமே தானியங்கியாக வடிவமைக்கப்பட முடியும்."
+
+#. Type: multiselect
+#. Description
+#: ../templates:2002
+msgid ""
+"Please select the web server(s) that should be configured automatically for "
+"RoundCube."
+msgstr ""
+"ரவ்ண்ட்க்யூப் க்கு தானியங்கியாக வடிவமைக்கப்பட வேண்டிய வலை சேவையகத்தை(கங்களை) "
+"தேர்ந்தெடுக்கவும்."
+
+#. Type: boolean
+#. Description
+#: ../templates:3001
+msgid "Should the webserver(s) be restarted now?"
+msgstr "வலை சேவையகத்தை(கங்களை) மீள் துவக்கவா?"
+
+#. Type: boolean
+#. Description
+#: ../templates:3001
+msgid ""
+"In order to activate the new configuration, the reconfigured web servers "
+"have to be restarted."
+msgstr "புதிய வடிவமைப்பை செயல்படுத்த வடிவமைத்த வலை சேவையகம் மீள் துவக்கப் பட வேண்டும்."
+
+#. Type: string
+#. Description
+#: ../templates:4001
+msgid "IMAP server(s) used with RoundCube:"
+msgstr "ரவ்ண்ட்க்யூப் உடன் பயன்படுத்த வேண்டிய ஐமாப் சேவையகம்(கங்கள்):"
+
+#. Type: string
+#. Description
+#: ../templates:4001
+msgid "Please select the IMAP server that should be used with RoundCube."
+msgstr "ரவ்ண்ட்க்யூப் உடன் பயன்படுத்த வேண்டிய ஐமாப் சேவையகம்(கங்கள்) ஐ தேர்ந்தெடுக்கவும்."
+
+#. Type: string
+#. Description
+#: ../templates:4001
+msgid ""
+"If this is left blank, a text box will be displayed at login. Entering a "
+"space-separated list of hosts will display a pull-down menu. Entering a "
+"single host will enforce using this host."
+msgstr ""
+"இதை வெற்றாக விட்டால் உள்நுழைவு போது ஒரு சோதனைப் பெட்டி காட்டப் படும். இடைவெளியுடன் "
+"கூடிய புரவன்கள் பட்டியல் ஐ உள்ளிட்டால் ஒரு இழுவை பட்டியல் காட்டப் படும். ஒரு தனிப் பெயரை "
+"உள்ளிட்டால் இந்த புரவனை பயன்படுத்துவதை உறுதியாக்கும்."
+
+#. Type: string
+#. Description
+#: ../templates:4001
+msgid ""
+"To use SSL connections, please enter host names as 'ssl://hostname:993'."
+msgstr ""
+"எஸ்எஸ்எல் இணைப்பை பயன் படுத்த புரவன் பெயர்களை  'ssl://hostname:993' போல் உள்ளிடவும்."
+
+#. Type: select
+#. Description
+#: ../templates:5001
+msgid "Default language:"
+msgstr "முன்னிருப்பு மொழி:"
+
+#. Type: select
+#. Description
+#: ../templates:5001
+msgid "Please choose the default language for RoundCube."
+msgstr "ரவ்ண்ட்க்யூப் க்கு முன்னிருப்பு மொழி ஐ தேர்ந்தெடுக்கவும்."
+
+#. Type: select
+#. Description
+#: ../templates:5001
+msgid "This choice can be overridden by individual users in their preferences."
+msgstr "இந்த தேர்வு பயனர் விருப்பங்களால் மீறப்பட இயலும்."
+
+#. Type: select
+#. Description
+#: ../templates:5001
+msgid ""
+"However, the default language will be used for the login screen and the "
+"first connection of users."
+msgstr ""
+"ஆயினும் உள்நுழைவின் போதும் முதல் பயனர் இணைப்பின் போதும் முன்னிருப்பு மொழியே பயன் படும்."

@@ -1,50 +1,50 @@
-# SOME DESCRIPTIVE TITLE.
+# translation of ar.po to Arabic
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
+# Ossama M. Khayat <okhayat@yahoo.com>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ar\n"
 "Report-Msgid-Bugs-To: pkg-roundcube-maintainers@lists.alioth.debian.org\n"
 "POT-Creation-Date: 2007-05-26 09:36+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2007-06-02 01:26+0300\n"
+"Last-Translator: Ossama M. Khayat <okhayat@yahoo.com>\n"
+"Language-Team: Arabic <support@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
 msgid "apache"
-msgstr ""
+msgstr "apache"
 
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
 msgid "apache-ssl"
-msgstr ""
+msgstr "apache-ssl"
 
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
 msgid "apache-perl"
-msgstr ""
+msgstr "apache-perl"
 
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
 msgid "apache2"
-msgstr ""
+msgstr "apache2"
 
 #. Type: multiselect
 #. Description
 #: ../templates:2002
 msgid "Web server(s) to configure automatically:"
-msgstr ""
+msgstr "خادم الوب المطلوب تهيئته آلياً:"
 
 #. Type: multiselect
 #. Description
@@ -52,7 +52,7 @@ msgstr ""
 msgid ""
 "RoundCube supports any web server supported by PHP, however only Apache can "
 "be configured automatically."
-msgstr ""
+msgstr "يدعم RoundCube أي خادم وب يدعمه PHP، ولكن يمكن تهيئة Apache فقط آلياً."
 
 #. Type: multiselect
 #. Description
@@ -60,13 +60,13 @@ msgstr ""
 msgid ""
 "Please select the web server(s) that should be configured automatically for "
 "RoundCube."
-msgstr ""
+msgstr "الرجاء اختيار خادم الوب الذي يجب أن يقوم RoundCube بتهيئته آلياً."
 
 #. Type: boolean
 #. Description
 #: ../templates:3001
 msgid "Should the webserver(s) be restarted now?"
-msgstr ""
+msgstr "هل تريد تشغيل خادم الوب الآن؟"
 
 #. Type: boolean
 #. Description
@@ -75,18 +75,19 @@ msgid ""
 "In order to activate the new configuration, the reconfigured web servers "
 "have to be restarted."
 msgstr ""
+"لتنشيط التهيئة الجديدة، يجب إعادة تشغيل خادمات الوب التي تمت إعادة تهيئتها."
 
 #. Type: string
 #. Description
 #: ../templates:4001
 msgid "IMAP server(s) used with RoundCube:"
-msgstr ""
+msgstr "خادمات IMAP المستخدمة مع RoundCube:"
 
 #. Type: string
 #. Description
 #: ../templates:4001
 msgid "Please select the IMAP server that should be used with RoundCube."
-msgstr ""
+msgstr "الرجاء اختيار خادم IMAP الذي يجب استخدامه مع RoundCube."
 
 #. Type: string
 #. Description
@@ -96,6 +97,9 @@ msgid ""
 "space-separated list of hosts will display a pull-down menu. Entering a "
 "single host will enforce using this host."
 msgstr ""
+"إن ترك هذا الحقل فارغاً، فسيتم إظهار مربع نص عند تسجيل الدخول. إدخال أسماء "
+"مضيفين تفصل بينهم مسافات سيظهر قائمة منسدلة بهذه الأسماء. وإدخال اسم مضيف "
+"هنا سيجبر استخدام هذا المضيف."
 
 #. Type: string
 #. Description
@@ -103,24 +107,25 @@ msgstr ""
 msgid ""
 "To use SSL connections, please enter host names as 'ssl://hostname:993'."
 msgstr ""
+"لاستخدام اتصالات SSL، الرجاء إدخال اسم المضيف بالشكل 'ssl://hostname:993'."
 
 #. Type: select
 #. Description
 #: ../templates:5001
 msgid "Default language:"
-msgstr ""
+msgstr "اللغة الافتراضية:"
 
 #. Type: select
 #. Description
 #: ../templates:5001
 msgid "Please choose the default language for RoundCube."
-msgstr ""
+msgstr "الرجاء اختيار اللغة الافتراضية للحزمة RoundCube."
 
 #. Type: select
 #. Description
 #: ../templates:5001
 msgid "This choice can be overridden by individual users in their preferences."
-msgstr ""
+msgstr "يمكن تخطي هذا الخيار من قبل المستخدمين عبر تغيير تفضيلاتهم."
 
 #. Type: select
 #. Description
@@ -129,3 +134,5 @@ msgid ""
 "However, the default language will be used for the login screen and the "
 "first connection of users."
 msgstr ""
+"على أي، سيتم استخدام اللغة الافتراضية لشاشة تسجيل الدخول والاتصال الأول "
+"للمستخدمين."
