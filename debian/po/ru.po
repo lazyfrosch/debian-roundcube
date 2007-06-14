@@ -1,50 +1,52 @@
-# SOME DESCRIPTIVE TITLE.
+# translation of roundcube_ru.po to Russian
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
+# Yuri Kozlov <kozlov.y@gmail.com>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: 0.1~rc1~dfsg-1\n"
 "Report-Msgid-Bugs-To: pkg-roundcube-maintainers@lists.alioth.debian.org\n"
 "POT-Creation-Date: 2007-05-26 09:36+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2007-06-11 13:06+0400\n"
+"Last-Translator: Yuri Kozlov <kozlov.y@gmail.com>\n"
+"Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
 msgid "apache"
-msgstr ""
+msgstr "apache"
 
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
 msgid "apache-ssl"
-msgstr ""
+msgstr "apache-ssl"
 
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
 msgid "apache-perl"
-msgstr ""
+msgstr "apache-perl"
 
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
 msgid "apache2"
-msgstr ""
+msgstr "apache2"
 
 #. Type: multiselect
 #. Description
 #: ../templates:2002
 msgid "Web server(s) to configure automatically:"
-msgstr ""
+msgstr "Веб-сервер(ы), которые нужно настроить автоматически:"
 
 #. Type: multiselect
 #. Description
@@ -53,6 +55,8 @@ msgid ""
 "RoundCube supports any web server supported by PHP, however only Apache can "
 "be configured automatically."
 msgstr ""
+"RoundCube работает с любым веб-сервером, поддерживающим PHP, однако "
+"автоматическая настройка выполняется только для Apache."
 
 #. Type: multiselect
 #. Description
@@ -61,12 +65,13 @@ msgid ""
 "Please select the web server(s) that should be configured automatically for "
 "RoundCube."
 msgstr ""
+"Выберите веб-сервер(ы), которые нужно настроить автоматически под RoundCube."
 
 #. Type: boolean
 #. Description
 #: ../templates:3001
 msgid "Should the webserver(s) be restarted now?"
-msgstr ""
+msgstr "Перезапустить веб-сервер(ы) прямо сейчас?"
 
 #. Type: boolean
 #. Description
@@ -75,18 +80,19 @@ msgid ""
 "In order to activate the new configuration, the reconfigured web servers "
 "have to be restarted."
 msgstr ""
+"Чтобы новая конфигурация вступила в силу, нужно перезапустить веб-серверы."
 
 #. Type: string
 #. Description
 #: ../templates:4001
 msgid "IMAP server(s) used with RoundCube:"
-msgstr ""
+msgstr "IMAP-сервер(ы), используемые с RoundCube:"
 
 #. Type: string
 #. Description
 #: ../templates:4001
 msgid "Please select the IMAP server that should be used with RoundCube."
-msgstr ""
+msgstr "Укажите сервер IMAP, который нужно использовать с RoundCube."
 
 #. Type: string
 #. Description
@@ -96,6 +102,10 @@ msgid ""
 "space-separated list of hosts will display a pull-down menu. Entering a "
 "single host will enforce using this host."
 msgstr ""
+"Если вы оставите поле пустым, при входе будет показано текстовое поле для "
+"ввода. Укажите список (через пробел) хостов, которые нужно показать в "
+"выпадающем меню. Если ввести только один хост, то только он и будет "
+"использован."
 
 #. Type: string
 #. Description
@@ -103,24 +113,26 @@ msgstr ""
 msgid ""
 "To use SSL connections, please enter host names as 'ssl://hostname:993'."
 msgstr ""
+"Чтобы использовать SSL-соединения, вводите имена хостов в виде 'ssl://"
+"хост:993'."
 
 #. Type: select
 #. Description
 #: ../templates:5001
 msgid "Default language:"
-msgstr ""
+msgstr "Язык по умолчанию:"
 
 #. Type: select
 #. Description
 #: ../templates:5001
 msgid "Please choose the default language for RoundCube."
-msgstr ""
+msgstr "Укажите язык по умолчанию для RoundCube."
 
 #. Type: select
 #. Description
 #: ../templates:5001
 msgid "This choice can be overridden by individual users in their preferences."
-msgstr ""
+msgstr "Этот выбор может быть изменён любым пользователем в их настройках."
 
 #. Type: select
 #. Description
@@ -129,3 +141,5 @@ msgid ""
 "However, the default language will be used for the login screen and the "
 "first connection of users."
 msgstr ""
+"Однако, язык по умолчанию будет использован для выдачи приглашения к входу и "
+"во время первого подключения пользователя."

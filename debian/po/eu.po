@@ -1,50 +1,50 @@
-# SOME DESCRIPTIVE TITLE.
+# translation of roundcube-templates.po to Euskara
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
+# Piarres Beobide <pi@beobide.net>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: roundcube-templates\n"
 "Report-Msgid-Bugs-To: pkg-roundcube-maintainers@lists.alioth.debian.org\n"
 "POT-Creation-Date: 2007-05-26 09:36+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2007-05-26 20:51+0200\n"
+"Last-Translator: Piarres Beobide <pi@beobide.net>\n"
+"Language-Team: Euskara <Librezale@librezale.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
 msgid "apache"
-msgstr ""
+msgstr "apache"
 
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
 msgid "apache-ssl"
-msgstr ""
+msgstr "apache-ssl"
 
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
 msgid "apache-perl"
-msgstr ""
+msgstr "apache-perl"
 
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
 msgid "apache2"
-msgstr ""
+msgstr "apache2"
 
 #. Type: multiselect
 #. Description
 #: ../templates:2002
 msgid "Web server(s) to configure automatically:"
-msgstr ""
+msgstr "Automatikoki konfiguratu behar den web zerbitzaria:"
 
 #. Type: multiselect
 #. Description
@@ -53,6 +53,8 @@ msgid ""
 "RoundCube supports any web server supported by PHP, however only Apache can "
 "be configured automatically."
 msgstr ""
+"RoundCube-k PHP onartzen duen edozein web zerbitzari onartzen du, hala ere "
+"Apache bakarrik konfiguratu daiteke automatikoki."
 
 #. Type: multiselect
 #. Description
@@ -61,12 +63,14 @@ msgid ""
 "Please select the web server(s) that should be configured automatically for "
 "RoundCube."
 msgstr ""
+"Mesedez hautatu Roundube-rentzat automatikoki konfiguratu behar den web "
+"zerbitzaria(k)."
 
 #. Type: boolean
 #. Description
 #: ../templates:3001
 msgid "Should the webserver(s) be restarted now?"
-msgstr ""
+msgstr "Web zerbitzaria(k) orain berrabiarazi behar al da?"
 
 #. Type: boolean
 #. Description
@@ -75,18 +79,20 @@ msgid ""
 "In order to activate the new configuration, the reconfigured web servers "
 "have to be restarted."
 msgstr ""
+"Konfigurazio berria gaitu ahal izateko, birkonfiguratutako web zerbitzariak "
+"berrabiarazi egin behar dira."
 
 #. Type: string
 #. Description
 #: ../templates:4001
 msgid "IMAP server(s) used with RoundCube:"
-msgstr ""
+msgstr "RoundCube-rekin erabiliko d(ir)en IMAP zerbitzaria(k):"
 
 #. Type: string
 #. Description
 #: ../templates:4001
 msgid "Please select the IMAP server that should be used with RoundCube."
-msgstr ""
+msgstr "Mesedez hautatu RoundCube-rekin erabiliko den IMAP zerbitzaria."
 
 #. Type: string
 #. Description
@@ -96,6 +102,10 @@ msgid ""
 "space-separated list of hosts will display a pull-down menu. Entering a "
 "single host will enforce using this host."
 msgstr ""
+"Hau zurian utzi ezkero, testu kutxa bat bistaraziko da saioa hastean. "
+"Zuriunez bereziriko ostalari zerrenda bat idatzi ezkero aukeratzeko menu bat "
+"bistaraziko da. Ostalari bakar bat idatziaz ostalari hori erabiltzea "
+"behartuko da."
 
 #. Type: string
 #. Description
@@ -103,24 +113,27 @@ msgstr ""
 msgid ""
 "To use SSL connections, please enter host names as 'ssl://hostname:993'."
 msgstr ""
+"SSL konexioak erabiltzeko, idatzi ostalari izena formatu honetan: ssl://"
+"ostalaria:993'."
 
 #. Type: select
 #. Description
 #: ../templates:5001
 msgid "Default language:"
-msgstr ""
+msgstr "Lehenetsitako hizkuntza:"
 
 #. Type: select
 #. Description
 #: ../templates:5001
 msgid "Please choose the default language for RoundCube."
-msgstr ""
+msgstr "Mesedez hautatu RoundCube-ren hizkuntz lehenetsia."
 
 #. Type: select
 #. Description
 #: ../templates:5001
 msgid "This choice can be overridden by individual users in their preferences."
 msgstr ""
+"Hautapen hauek erabiltzaile bakoitzak bere hobespenetan gainidatzi ditzake."
 
 #. Type: select
 #. Description
@@ -129,3 +142,5 @@ msgid ""
 "However, the default language will be used for the login screen and the "
 "first connection of users."
 msgstr ""
+"Hala ere, lehenetsiriko hizkuntza saio hasiera orria eta erabiltzailearen "
+"lehen konexioetan erabiliko da."
