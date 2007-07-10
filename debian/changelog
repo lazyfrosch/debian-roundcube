@@ -1,3 +1,9 @@
+roundcube (0.1~rc1+dfsg-4) unstable; urgency=low
+
+  * Renamed version to a more convenient scheme. 
+
+ -- Romain Beauxis <toots@rastageeks.org>  Tue, 10 Jul 2007 18:48:03 +0200
+
 roundcube (0.1~rc1~dfsg-3) unstable; urgency=low
 
   * Add php5-mcrypt dependency (Closes: #431177)
