@@ -1,3 +1,10 @@
+roundcube (0.1~rc1-1) unstable; urgency=low
+
+  * New upstream release
+  * Removed non gpl file des.inc
+
+ -- Romain Beauxis <toots@rastageeks.org>  Tue, 24 Jul 2007 13:36:20 +0200
+
 roundcube (0.1~rc1~dfsg-3) unstable; urgency=low
 
   * Add php5-mcrypt dependency (Closes: #431177)
