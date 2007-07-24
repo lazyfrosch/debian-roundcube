@@ -14,7 +14,6 @@ Version 2 or later, found on Debian systems in the file
 Some files are taken from other projects :
  - googiespell from amix@amix.dk, MIT license
  - lib/html2text.inc from jon@chuggnutt.com, GPL license
- - lib/utf8.class.php from Alexander Minkovsky, public domain
  - lib/{enriched,icl_commons,imap,mime,utf7}.inc from IlohaMail project, GPL license
  - lib/encoding/*.map from Unicode, Inc., with "BSD-lite" license
 
