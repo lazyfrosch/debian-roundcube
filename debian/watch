@@ -2,4 +2,4 @@
 version=3
 
 # Uncomment to find new files on sourceforge, for debscripts >= 2.9
-http://sf.net/roundcubemail/roundcubemail-([\d\.]+.*)\.tar\.gz
+opts=dversionmangle=s/~/-/g;s/$/-dep/ http://sf.net/roundcubemail/roundcubemail-([\d\.]+.*)\.tar\.gz
