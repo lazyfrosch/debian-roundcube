@@ -76,8 +76,12 @@ msgstr "Перезапустить веб-сервер(ы) прямо сейча
 #. Type: boolean
 #. Description
 #: ../templates:3001
+#, fuzzy
+#| msgid ""
+#| "In order to activate the new configuration, the reconfigured web servers "
+#| "have to be restarted."
 msgid ""
-"In order to activate the new configuration, the reconfigured web servers "
+"In order to activate the new configuration, the reconfigured web server(s) "
 "have to be restarted."
 msgstr ""
 "Чтобы новая конфигурация вступила в силу, нужно перезапустить веб-серверы."
