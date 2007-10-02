@@ -72,7 +72,7 @@ msgstr ""
 #. Description
 #: ../templates:3001
 msgid ""
-"In order to activate the new configuration, the reconfigured web servers "
+"In order to activate the new configuration, the reconfigured web server(s) "
 "have to be restarted."
 msgstr ""
 

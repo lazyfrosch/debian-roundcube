@@ -1,3 +1,10 @@
+roundcube (0.1~rc1-2) unstable; urgency=low
+
+  * Fix dependencies by creating virtual packages for each database
+    backend, thanks to Joey Hess (Closes: #444925).
+
+ -- Vincent Bernat <bernat@luffy.cx>  Tue, 02 Oct 2007 20:09:19 +0200
+
 roundcube (0.1~rc1-1) unstable; urgency=low
 
   * New upstream release

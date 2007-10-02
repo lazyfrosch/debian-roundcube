@@ -74,8 +74,12 @@ msgstr "Faut-il redémarrer le(s) serveur(s) web maintenant ?"
 #. Type: boolean
 #. Description
 #: ../templates:3001
+#, fuzzy
+#| msgid ""
+#| "In order to activate the new configuration, the reconfigured web servers "
+#| "have to be restarted."
 msgid ""
-"In order to activate the new configuration, the reconfigured web servers "
+"In order to activate the new configuration, the reconfigured web server(s) "
 "have to be restarted."
 msgstr ""
 "Afin d'activer la nouvelle configuration, le(s) serveur(s) web reconfigurés "

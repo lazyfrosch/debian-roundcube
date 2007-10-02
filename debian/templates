@@ -23,7 +23,7 @@ Type: boolean
 Default: true
 _Description: Should the webserver(s) be restarted now?
  In order to activate the new configuration, the reconfigured web
- servers have to be restarted.
+ server(s) have to be restarted.
 
 Template: roundcube/hosts
 Type: string
