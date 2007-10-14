@@ -1,3 +1,12 @@
+roundcube (0.1~rc1-3) unstable; urgency=low
+
+  * In respect to policy 12.3, do not put main.inc.php.dist in
+    /usr/share/doc, thanks to Jonas Smedegaard (Closes: #446502).
+  * Update German and French debconf templates, thanks to Christian
+    Perrier (Closes: #446458) and Helge Kreutzmann (Closes: #446532).
+
+ -- Vincent Bernat <bernat@luffy.cx>  Sun, 14 Oct 2007 08:41:24 +0200
+
 roundcube (0.1~rc1-2) unstable; urgency=low
 
   * Fix dependencies by creating virtual packages for each database

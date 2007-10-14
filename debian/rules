@@ -25,6 +25,7 @@ binary-install/roundcube::
 	done
 	# Install config/db.inc.php.dist
 	install -m 0640 $(CURDIR)/config/db.inc.php.dist $(CURDIR)/debian/roundcube/etc/roundcube/db.inc.php
+	install -m 0640 $(CURDIR)/config/main.inc.php.dist $(CURDIR)/debian/roundcube/usr/share/roundcube
 	# Install empty tables and updates for each db type
 	install -m 0644 $(CURDIR)/SQL/mysql.initial.sql $(CURDIR)/debian/roundcube/usr/share/dbconfig-common/data/roundcube/install/mysql
 	install -m 0644 $(CURDIR)/SQL/mysql.update.sql $(CURDIR)/debian/roundcube/usr/share/dbconfig-common/data/roundcube/upgrade/mysql/0.1~rc1~dfsg-1
