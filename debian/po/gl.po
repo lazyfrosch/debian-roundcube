@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: roundcube\n"
 "Report-Msgid-Bugs-To: pkg-roundcube-maintainers@lists.alioth.debian.org\n"
 "POT-Creation-Date: 2007-05-26 09:36+0200\n"
-"PO-Revision-Date: 2007-05-26 18:19+0200\n"
+"PO-Revision-Date: 2007-10-24 22:32+0100\n"
 "Last-Translator: Jacobo Tarrio <jtarrio@debian.org>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -73,16 +73,12 @@ msgstr "¿Debería(n) reiniciarse o(s) servidor(es) web?"
 #. Type: boolean
 #. Description
 #: ../templates:3001
-#, fuzzy
-#| msgid ""
-#| "In order to activate the new configuration, the reconfigured web servers "
-#| "have to be restarted."
 msgid ""
 "In order to activate the new configuration, the reconfigured web server(s) "
 "have to be restarted."
 msgstr ""
-"Para activar a nova configuración hai que reiniciar os servidores web "
-"reconfigurados."
+"Para activar a nova configuración hai que reiniciar o(s) servidor(es) web "
+"reconfigurado(s)."
 
 #. Type: string
 #. Description
