@@ -6,7 +6,7 @@
 
 -// PEAR database DSN for read/write operations
 -// format is db_provider://user:password@host/databse
--// currentyl suported db_providers: mysql, pgsql, sqlite
+-// currently supported db_providers: mysql, sqlite
 -
 -$rcmail_config['db_dsnw'] = 'mysql://roundcube:pass@localhost/roundcubemail';
 -// postgres example: 'pgsql://roundcube:pass@localhost/roundcubemail';
