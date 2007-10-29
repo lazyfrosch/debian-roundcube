@@ -1,4 +1,10 @@
 For better compatibility, the schema used for MySQL is the one
 targeted at MySQL 4.0, not the one for MySQL 4.1 or MySQL 5.x.
 
- -- Vincent Bernat <bernat@luffy.cx>, Tue, 22 May 2007 21:17:27 +0200
+To use tinymce editor:
+ - install tinymce package
+ - uncomment the first block in /etc/apache*/conf.d/roundcube
+ - set $rcmail_config['enable_htmleditor'] to TRUE in
+   /etc/roundcube/main.inc.php
+
+ -- Vincent Bernat <bernat@luffy.cx>, Mon, 29 Oct 2007 21:39:09 +0100

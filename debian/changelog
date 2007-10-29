@@ -1,8 +1,11 @@
-roundcube (0.1~rc1-4) unstable; urgency=low
+roundcube (0.1~rc2-1) unstable; urgency=low
 
+  * New upstream, thanks to Nicolas Stransky (Closes: #447503). This
+    release support tinymce as HTML editor. Look at README.Debian for more
+    information.
   * Update Galician debconf template, thanks to Jacobo Tarrio (Closes: #447943).
 
- --
+ -- Vincent Bernat <bernat@luffy.cx>  Mon, 29 Oct 2007 22:08:43 +0100
 
 roundcube (0.1~rc1-3) unstable; urgency=low
 
