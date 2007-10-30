@@ -11,6 +11,7 @@ Package: roundcube
 Architecture: all
 Depends: dbconfig-common, debconf | debconf-2.0, apache2 | httpd, php5, php5-mcrypt, roundcube-db, php-db, php-auth, php-net-smtp, php-net-socket, php-mail-mime, ucf, ${misc:Depends}
 Suggests: tinymce
+Homepage: http://www.roundcube.net/
 Description: skinnable AJAX based webmail solution for IMAP servers
  RoundCube Webmail is a browser-based multilingual IMAP client with an
  application-like user interface. It provides full functionality
@@ -18,14 +19,13 @@ Description: skinnable AJAX based webmail solution for IMAP servers
  folder manipulation and message filters.
  .
  The user interface is fully skinnable using XHTML and CSS 2.
- .
-  Homepage: http://www.roundcube.net/
 
 Package: roundcube-mysql
 Architecture: all
 Depends: roundcube, php5-mysql, mysql-client | virtual-mysql-client
 Suggests: mysql-server
 Provides: roundcube-db
+Homepage: http://www.roundcube.net/
 Description: virtual package providing MySQL dependencies for RoundCube
  This package provides MySQL dependencies for RoundCube Webmail, a
  skinnable AJAX based webmail solution for IMAP servers. Install this
@@ -36,6 +36,7 @@ Architecture: all
 Depends: roundcube, php5-pgsql, postgresql-client-8.1 | postgresql-client 
 Suggests: postgresql-server
 Provides: roundcube-db
+Homepage: http://www.roundcube.net/
 Description: virtual package providing PostgreSQL dependencies for RoundCube
  This package provides PostgreSQL dependencies for RoundCube Webmail,
  a skinnable AJAX based webmail solution for IMAP servers. Install
@@ -45,6 +46,7 @@ Package: roundcube-sqlite
 Architecture: all
 Depends: roundcube, php5-sqlite, sqlite
 Provides: roundcube-db
+Homepage: http://www.roundcube.net/
 Description: virtual package providing sqlite dependencies for RoundCube
  This package provides sqlite dependencies for RoundCube Webmail, a
  skinnable AJAX based webmail solution for IMAP servers. Install this
