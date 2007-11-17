@@ -1,0 +1,11 @@
+--- roundcube/index.php	2007-10-29 21:56:00.000000000 +0100
++++ roundcube/index.php	2007-11-17 09:10:54.000000000 +0100
+@@ -103,7 +103,7 @@
+ if ($_action != 'get' && $_action != 'viewsource')
+ {
+   // use gzip compression if supported
+-  if (function_exists('ob_gzhandler') && ini_get('zlib.output_compression'))
++  if (function_exists('ob_gzhandler') && !ini_get('zlib.output_compression'))
+     ob_start('ob_gzhandler');
+   else
+     ob_start();
