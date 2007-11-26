@@ -1,9 +1,15 @@
 roundcube (0.1~rc2-2) unstable; urgency=low
 
+  [ Vincent Bernat ]
   * Fix a conflict between ob_gzhandler and zlib output compression,
     thanks to kaouete (Closes: #450482).
 
- -- Vincent Bernat <bernat@luffy.cx>  Sat, 17 Nov 2007 09:13:03 +0100
+  [ Romain Beauxis ]
+  * Fix tinymce patch and inclusion
+    Closes: #452016
+  * Splitted virtual packages to avoid circular dependencies.
+
+ -- Romain Beauxis <toots@rastageeks.org>  Mon, 26 Nov 2007 11:54:21 +0100
 
 roundcube (0.1~rc2-1) unstable; urgency=low
 
