@@ -1,3 +1,11 @@
+roundcube (0.1~rc2-4) unstable; urgency=low
+
+  * Thightened dependencies for a safe upgrade
+  * Finally removed any circular dependency, -db packages no longer pull
+    a full roundcube install
+
+ -- Romain Beauxis <toots@rastageeks.org>  Sun, 09 Dec 2007 14:24:24 +0100
+
 roundcube (0.1~rc2-3) unstable; urgency=low
 
   * Upload to unstable
