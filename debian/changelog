@@ -1,3 +1,10 @@
+roundcube (0.1~rc2-3) unstable; urgency=low
+
+  * Upload to unstable
+  * Bumped standard version to 3.7.3 (no changes) 
+
+ -- Romain Beauxis <toots@rastageeks.org>  Sun, 09 Dec 2007 14:19:28 +0100
+
 roundcube (0.1~rc2-2) experimental; urgency=low
 
   [ Vincent Bernat ]
