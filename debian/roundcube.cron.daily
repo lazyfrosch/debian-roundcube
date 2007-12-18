@@ -1,0 +1,9 @@
+#!/bin/sh
+# This file conflicts with /etc/cron.daily/roundcube-core. If you have
+# modified it, report your modifications to
+# /etc/cron.daily/roundcube-core. If this file is left empty or
+# untouched, it will be deleted.
+
+# If you leave the following marker, this file will be deleted during
+# the next upgrade:
+# 75321 DELETE 75321
