@@ -1,3 +1,11 @@
+roundcube (0.1~rc2-5) unstable; urgency=low
+
+  * Deal with old /etc/logrotate.d/roundcube by removing it if left
+    untouched (Closes: #456546). Also deal with /etc/default/roundcube and
+    /etc/cron.daily/roundcube.
+
+ -- Vincent Bernat <bernat@luffy.cx>  Tue, 18 Dec 2007 23:02:46 +0100
+
 roundcube (0.1~rc2-4) unstable; urgency=low
 
   * Thightened dependencies for a safe upgrade
