@@ -1,3 +1,12 @@
+roundcube (0.1~rc2-6) unstable; urgency=high
+
+  * Bug fix: "CVE-2007-6321: Cross-site scripting (XSS) vulnerability",
+    thanks to Micah Anderson (Closes: #455840). The patch is from
+    http://lists.roundcube.net/mail-archive/dev/2007-12/0000038.html and
+    provided by Robin Elfrink.
+
+ -- Vincent Bernat <bernat@luffy.cx>  Fri, 28 Dec 2007 21:25:42 +0100
+
 roundcube (0.1~rc2-5) unstable; urgency=low
 
   * Deal with old /etc/logrotate.d/roundcube by removing it if left
