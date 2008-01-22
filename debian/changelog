@@ -3,7 +3,8 @@ roundcube (0.1~rc2-6) unstable; urgency=high
   * Bug fix: "CVE-2007-6321: Cross-site scripting (XSS) vulnerability",
     thanks to Micah Anderson (Closes: #455840). The patch is from
     http://lists.roundcube.net/mail-archive/dev/2007-12/0000038.html and
-    provided by Robin Elfrink.
+    provided by Robin Elfrink. It has been modified with some functions
+    stolen from Squirrelmail.
   * Finnish debconf template, thanks to Esko Arajärvi (Closes: #458244).
 
  -- Vincent Bernat <bernat@luffy.cx>  Sat, 29 Dec 2007 21:55:17 +0100

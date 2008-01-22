@@ -1,9 +1,48 @@
---- roundcube/program/steps/mail/func.inc	(revision 943)
-+++ roundcube/program/steps/mail/func.inc	(working copy)
-@@ -477,6 +477,85 @@
+--- roundcube/program/steps/mail/func.inc	2007-10-17 08:50:28.000000000 +0200
++++ roundcube/program/steps/mail/func.inc	2008-01-22 21:59:30.000000000 +0100
+@@ -481,6 +481,124 @@
+   return Q($out);
    }
  
- 
++/* Stolen from Squirrelmail */
++function sq_deent(&$attvalue, $regex, $hex=false){
++    $ret_match = false;
++    preg_match_all($regex, $attvalue, $matches);
++    if (is_array($matches) && sizeof($matches[0]) > 0){
++        $repl = Array();
++        for ($i = 0; $i < sizeof($matches[0]); $i++){
++            $numval = $matches[1][$i];
++            if ($hex){
++                $numval = hexdec($numval);
++            }
++            $repl{$matches[0][$i]} = chr($numval);
++        }
++        $attvalue = strtr($attvalue, $repl);
++        return true;
++    } else {
++        return false;
++    }
++}
++
++/* Stolen verbatim from Squirrelmail */
++function sq_defang(&$attvalue){
++    /**
++     * Skip this if there aren't ampersands or backslashes.
++     */
++    if (strpos($attvalue, '&') === false
++        && strpos($attvalue, '\\') === false){
++        return;
++    }
++    $m = false;
++    do {
++        $m = false;
++        $m = $m || sq_deent($attvalue, '/\&#0*(\d+);*/s');
++        $m = $m || sq_deent($attvalue, '/\&#x0*((\d|[a-f])+);*/si', true);
++        $m = $m || sq_deent($attvalue, '/\\\\(\d+)/s', true);
++    } while ($m == true);
++    $attvalue = stripslashes($attvalue);
++}
++
 +function rcmail_html_filter($html)
 +  {
 +  preg_match_all('/<\/?\w+((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+\s*|\s*)\/?>/', $html, $tags);
@@ -71,22 +110,22 @@
 +    $newvalue = preg_replace('/(\/\*.*\*\/)/','$2',$value);
 +    /* Translate dangerous characters */
 +    $newvalue = str_replace($replace[0], $replace[1], $newvalue);
++    sq_defang($newvalue);
 +    /* Rename dangerous CSS */
-+	$newvalue = preg_replace('/expression/i', 'expresion', $newvalue);
-+	$newvalue = preg_replace('/url/i', 'urrl', $newvalue);
-+	$newattrs = preg_replace('/'.preg_quote($value, '/').'$/', $newvalue, $tags[1][$nr]);
-+	$newtag = preg_replace('/'.preg_quote($tags[1][$nr], '/').'/', $newattrs, $tags[0][$nr]);
++    $newvalue = preg_replace('/expression/i', 'idiocy', $newvalue);
++    $newvalue = preg_replace('/url/i', 'idiocy', $newvalue);
++    $newattrs = preg_replace('/'.preg_quote($value, '/').'$/', $newvalue, $tags[1][$nr]);
++    $newtag = preg_replace('/'.preg_quote($tags[1][$nr], '/').'/', $newattrs, $tags[0][$nr]);
 +    $html = preg_replace('/'.preg_quote($tags[0][$nr], '/').'/', $newtag, $html);
 +    }
 +
 +  return $html;
 +  }
 +
-+
+ 
  function rcmail_print_body($part, $safe=FALSE, $plain=FALSE)
    {
-   global $IMAP, $REMOTE_OBJECTS;
-@@ -528,7 +607,7 @@
+@@ -533,7 +651,7 @@
        $body = preg_replace($remote_patterns, $remote_replaces, $body);
        }
  
