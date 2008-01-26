@@ -16,6 +16,7 @@ Some files are taken from other projects :
  - lib/html2text.inc from jon@chuggnutt.com, GPL license
  - lib/{enriched,icl_commons,imap,mime,utf7}.inc from IlohaMail project, GPL license
  - lib/encoding/*.map from Unicode, Inc., with "BSD-lite" license
+ - debian/patches/xss-fix.patch contains code from Squirrelmail, GPLv2
 
 All licenses can be found in the corresponding source file.
 

@@ -2,3 +2,4 @@ dbconfig-common_support.patch
 correct_install_path.patch
 use_packaged_tinymce.patch
 ob_gzhandler.patch
+xss-fix.patch
