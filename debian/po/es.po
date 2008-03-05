@@ -28,8 +28,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: roundcube_0.1~rc1~dfsg-1\n"
-"Report-Msgid-Bugs-To: pkg-roundcube-maintainers@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2007-05-26 09:36+0200\n"
+"Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
+"POT-Creation-Date: 2008-03-05 22:12+0100\n"
 "PO-Revision-Date: 2007-05-28 10:47+0200\n"
 "Last-Translator: Carlos Galisteo <cgalisteo@k-rolus.net>\n"
 "Language-Team:  <debian-l10n-spanish@lists.debian.org>\n"
@@ -40,25 +40,13 @@ msgstr ""
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
-msgid "apache"
-msgstr ""
-
-#. Type: multiselect
-#. Choices
-#: ../templates:2001
-msgid "apache-ssl"
-msgstr ""
-
-#. Type: multiselect
-#. Choices
-#: ../templates:2001
-msgid "apache-perl"
-msgstr ""
-
-#. Type: multiselect
-#. Choices
-#: ../templates:2001
 msgid "apache2"
+msgstr ""
+
+#. Type: multiselect
+#. Choices
+#: ../templates:2001
+msgid "lighttpd"
 msgstr ""
 
 #. Type: multiselect
@@ -72,8 +60,8 @@ msgstr "Reconfiguración del servidor web:"
 #. Description
 #: ../templates:2002
 msgid ""
-"RoundCube supports any web server supported by PHP, however only Apache can "
-"be configured automatically."
+"RoundCube supports any web server supported by PHP, however only Apache 2 "
+"and lighttpd can be configured automatically."
 msgstr ""
 
 #. Type: multiselect
