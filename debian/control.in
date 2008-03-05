@@ -12,7 +12,7 @@ Vcs-Browser: http://svn.debian.org/wsvn/pkg-roundcube/roundcube
 
 Package: roundcube-core
 Architecture: all
-Depends: dbconfig-common, debconf | debconf-2.0, apache2 | lighttpd | httpd, php5, php5-mcrypt, roundcube-db, php-db, php-auth, php-net-smtp, php-net-socket, php-mail-mime, ucf, tinymce, ${misc:Depends}
+Depends: dbconfig-common, debconf | debconf-2.0, apache2 | lighttpd | httpd, php5, php5-mcrypt, roundcube-db, php-db, php-auth, php-net-smtp, php-net-socket, php-mail-mime, ucf, tinymce, ${misc:Depends}, libmagic1
 Replaces: roundcube
 Conflicts: roundcube (<< 0.1~rc2-2)
 Description: skinnable AJAX based webmail solution for IMAP servers
