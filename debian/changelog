@@ -10,6 +10,9 @@ roundcube (0.1-1) UNRELEASED; urgency=low
   * Upstream has switched to MDB2 database backend which is not packaged
     in Debian yet. We switch back to old backend.
   * Fix debian/watch to handle correctly detection of new versions.
+  * Add support for lighttpd and remove support for older version of
+    Apache. The debconf question about webserver autoconfiguration is
+    reworded (Closes: #462961).
 
  -- Vincent Bernat <bernat@luffy.cx>  Wed, 05 Mar 2008 20:49:03 +0100
 

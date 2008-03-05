@@ -13,6 +13,29 @@ if [ -f /usr/share/dbconfig-common/dpkg/postrm ]; then
         dbc_go roundcube $@
 fi
 
+lighttpd_remove() {
+	if [ -f /etc/lighttpd/conf-available/50-roundcube.conf ] ; then
+		rm -f /etc/lighttpd/conf-available/50-roundcube.conf
+		if [ ! -x /usr/sbin/lighty-disable-mod ] ; then
+			echo "Lighttpd not installed, skipping"
+		else
+			/usr/sbin/lighty-disable-mod roundcube
+		fi
+		# See bug #448682
+		if [ -h /etc/lighttpd/conf-enabled/50-roundcube.conf ] ; then
+		    echo 'Manually deleting lighttpd/roundcube configuration link'
+		    rm /etc/lighttpd/conf-enabled/50-roundcube.conf
+		fi
+	fi
+}
+
+apache_remove() {
+	if [ -d /etc/$webserver/conf.d ] && [ -L /etc/$webserver/conf.d/roundcube ]; then
+		rm -f /etc/$webserver/conf.d/roundcube
+	fi
+}
+
+
 case "$1" in
     upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
     ;;
@@ -28,14 +51,20 @@ case "$1" in
             webserver=${webserver%,}
         
             case "$webserver" in
-                apache|apache-perl|apache-ssl|apache2)
-                    rm -f /etc/$webserver/conf.d/roundcube
-                    test -x /usr/sbin/$webserver || continue
-                    restart="$restart $webserver"
-                    ;;
+                apache*)
+		    apache_remove $webserver
+		    ;;
+		lighttpd)
+		    lighttpd_remove
+		    ;;
                 *)
+		    echo "Unknown webserver $webserver"
                     ;;
             esac
+
+            test -x /usr/sbin/$webserver || continue
+            restart="$restart $webserver"
+
         done
         
         db_get roundcube/restart-webserver

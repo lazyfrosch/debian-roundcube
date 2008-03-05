@@ -9,11 +9,11 @@
 
 Template: roundcube/reconfigure-webserver
 Type: multiselect
-__Choices: apache, apache-ssl, apache-perl, apache2
-Default: apache, apache-ssl, apache-perl, apache2
+__Choices: apache2, lighttpd
+Default: apache2, lighttpd
 _Description: Web server(s) to configure automatically:
  RoundCube supports any web server supported by PHP, however only
- Apache can be configured automatically.
+ Apache 2 and lighttpd can be configured automatically.
  .
  Please select the web server(s) that should be configured
  automatically for RoundCube.
