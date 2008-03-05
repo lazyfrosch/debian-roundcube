@@ -17,7 +17,7 @@ roundcube (0.1-1) UNRELEASED; urgency=low
   * Move po-debconf from Build-Depends-Indep to Build-Depends since it is
     needed for clean target.
   * Correct path to /usr/share/file/magic, provided by libmagic1. Provide
-    license information about this file in debian/copyright
+    license information about this file in debian/copyright.
 
  -- Vincent Bernat <bernat@luffy.cx>  Wed, 05 Mar 2008 20:49:03 +0100
 
