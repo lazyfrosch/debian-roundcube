@@ -1,8 +1,13 @@
-roundcube (0.1~rc2-7) UNRELEASED; urgency=low
+roundcube (0.1-1) UNRELEASED; urgency=low
 
+  * New upstream release (Closes: #469487)
+  * Remove 'ob_gzhandler.patch' and 'xss-fix.patch'. They have been
+    merged upstream.
+  * Upstream has switched to MDB2 database backend which is not packaged
+    in Debian yet. We switch back to old backend.
   * Fix debian/watch to handle correctly detection of new versions.
 
- -- Vincent Bernat <bernat@luffy.cx>  Wed, 05 Mar 2008 20:47:02 +0100
+ -- Vincent Bernat <bernat@luffy.cx>  Wed, 05 Mar 2008 20:49:03 +0100
 
 roundcube (0.1~rc2-6) unstable; urgency=high
 
