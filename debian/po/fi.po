@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: roundcube_0.1~rc2-4\n"
-"Report-Msgid-Bugs-To: pkg-roundcube-maintainers@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2007-05-26 09:36+0200\n"
+"Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
+"POT-Creation-Date: 2008-03-05 22:12+0100\n"
 "PO-Revision-Date: 2007-12-29 22:04+0200\n"
 "Last-Translator: Esko Arajärvi <edu@iki.fi>\n"
 "Language-Team: Finnish <debian-l10n-finnish@lists.debian.org>\n"
@@ -15,26 +15,14 @@ msgstr ""
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
-msgid "apache"
-msgstr "apache"
-
-#. Type: multiselect
-#. Choices
-#: ../templates:2001
-msgid "apache-ssl"
-msgstr "apache-ssl"
-
-#. Type: multiselect
-#. Choices
-#: ../templates:2001
-msgid "apache-perl"
-msgstr "apache-perl"
-
-#. Type: multiselect
-#. Choices
-#: ../templates:2001
 msgid "apache2"
 msgstr "apache2"
+
+#. Type: multiselect
+#. Choices
+#: ../templates:2001
+msgid "lighttpd"
+msgstr ""
 
 #. Type: multiselect
 #. Description
@@ -45,14 +33,26 @@ msgstr "Automaattisesti asetettavat verkkopalvelimet:"
 #. Type: multiselect
 #. Description
 #: ../templates:2002
-msgid "RoundCube supports any web server supported by PHP, however only Apache can be configured automatically."
-msgstr "RoundCube tukee kaikkia verkkopalvelimia, jotka tukevat PHP:ta, mutta vain Apachen asetukset voidaan tehdä automaattisesti."
+#, fuzzy
+#| msgid ""
+#| "RoundCube supports any web server supported by PHP, however only Apache "
+#| "can be configured automatically."
+msgid ""
+"RoundCube supports any web server supported by PHP, however only Apache 2 "
+"and lighttpd can be configured automatically."
+msgstr ""
+"RoundCube tukee kaikkia verkkopalvelimia, jotka tukevat PHP:ta, mutta vain "
+"Apachen asetukset voidaan tehdä automaattisesti."
 
 #. Type: multiselect
 #. Description
 #: ../templates:2002
-msgid "Please select the web server(s) that should be configured automatically for RoundCube."
-msgstr "Valitse verkkopalvelimet, joiden asetukset tulisi automaattisesti tehdä RoundCubea varten."
+msgid ""
+"Please select the web server(s) that should be configured automatically for "
+"RoundCube."
+msgstr ""
+"Valitse verkkopalvelimet, joiden asetukset tulisi automaattisesti tehdä "
+"RoundCubea varten."
 
 #. Type: boolean
 #. Description
@@ -63,8 +63,12 @@ msgstr "Tulisiko verkkopalvelimet käynnistää uudelleen nyt?"
 #. Type: boolean
 #. Description
 #: ../templates:3001
-msgid "In order to activate the new configuration, the reconfigured web server(s) have to be restarted."
-msgstr "Uusien asetusten käyttöönottamiseksi asetetut verkkopalvelimet tulee käynnistää uudelleen."
+msgid ""
+"In order to activate the new configuration, the reconfigured web server(s) "
+"have to be restarted."
+msgstr ""
+"Uusien asetusten käyttöönottamiseksi asetetut verkkopalvelimet tulee "
+"käynnistää uudelleen."
 
 #. Type: string
 #. Description
@@ -81,14 +85,24 @@ msgstr "Valitse IMAP-palvelimet, joita käytetään RoundCuben kanssa."
 #. Type: string
 #. Description
 #: ../templates:4001
-msgid "If this is left blank, a text box will be displayed at login. Entering a space-separated list of hosts will display a pull-down menu. Entering a single host will enforce using this host."
-msgstr "Jos tämä kenttä jätetään tyhjäksi, kirjautumisvaiheessa näytetään tekstikenttä. Jos kentässä on välilyönnein eroteltu lista palvelimista, kirjauduttaessa näytetään alasvetovalikko. Yhden palvelimen syöttäminen pakottaa kyseisen palvelimen käyttöön."
+msgid ""
+"If this is left blank, a text box will be displayed at login. Entering a "
+"space-separated list of hosts will display a pull-down menu. Entering a "
+"single host will enforce using this host."
+msgstr ""
+"Jos tämä kenttä jätetään tyhjäksi, kirjautumisvaiheessa näytetään "
+"tekstikenttä. Jos kentässä on välilyönnein eroteltu lista palvelimista, "
+"kirjauduttaessa näytetään alasvetovalikko. Yhden palvelimen syöttäminen "
+"pakottaa kyseisen palvelimen käyttöön."
 
 #. Type: string
 #. Description
 #: ../templates:4001
-msgid "To use SSL connections, please enter host names as 'ssl://hostname:993'."
-msgstr "SSL-yhteydet saat käyttöön syöttämällä palvelimien verkkonimet muodossa ”ssl://verkkonimi:993”."
+msgid ""
+"To use SSL connections, please enter host names as 'ssl://hostname:993'."
+msgstr ""
+"SSL-yhteydet saat käyttöön syöttämällä palvelimien verkkonimet muodossa "
+"”ssl://verkkonimi:993”."
 
 #. Type: select
 #. Description
@@ -111,6 +125,18 @@ msgstr "Yksittäiset käyttäjät voivat muuttaa tätä valintaa asetuksissaan."
 #. Type: select
 #. Description
 #: ../templates:5001
-msgid "However, the default language will be used for the login screen and the first connection of users."
-msgstr "Oletuskieltä käytetään kuitenkin kirjautumisruudussa ja käyttäjien ensimmäisen yhteyden yhteydessä."
+msgid ""
+"However, the default language will be used for the login screen and the "
+"first connection of users."
+msgstr ""
+"Oletuskieltä käytetään kuitenkin kirjautumisruudussa ja käyttäjien "
+"ensimmäisen yhteyden yhteydessä."
 
+#~ msgid "apache"
+#~ msgstr "apache"
+
+#~ msgid "apache-ssl"
+#~ msgstr "apache-ssl"
+
+#~ msgid "apache-perl"
+#~ msgstr "apache-perl"

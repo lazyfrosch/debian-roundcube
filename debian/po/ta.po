@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: roundcube\n"
-"Report-Msgid-Bugs-To: pkg-roundcube-maintainers@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2007-05-26 09:36+0200\n"
+"Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
+"POT-Creation-Date: 2008-03-05 22:12+0100\n"
 "PO-Revision-Date: 2007-06-10 13:35+0530\n"
 "Last-Translator: Dr.T.Vasudevan <agnihot3@gmail.com>\n"
 "Language-Team: Tamil\n"
@@ -18,26 +18,14 @@ msgstr ""
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
-msgid "apache"
-msgstr "அபாசே"
-
-#. Type: multiselect
-#. Choices
-#: ../templates:2001
-msgid "apache-ssl"
-msgstr "அபாசே-எஸ்எஸ்எல்"
-
-#. Type: multiselect
-#. Choices
-#: ../templates:2001
-msgid "apache-perl"
-msgstr "அபாசே-பெர்ல்"
-
-#. Type: multiselect
-#. Choices
-#: ../templates:2001
 msgid "apache2"
 msgstr "அபாசே2"
+
+#. Type: multiselect
+#. Choices
+#: ../templates:2001
+msgid "lighttpd"
+msgstr ""
 
 #. Type: multiselect
 #. Description
@@ -48,9 +36,13 @@ msgstr "தானியங்கியாக வடிவமைக்க வல�
 #. Type: multiselect
 #. Description
 #: ../templates:2002
+#, fuzzy
+#| msgid ""
+#| "RoundCube supports any web server supported by PHP, however only Apache "
+#| "can be configured automatically."
 msgid ""
-"RoundCube supports any web server supported by PHP, however only Apache can "
-"be configured automatically."
+"RoundCube supports any web server supported by PHP, however only Apache 2 "
+"and lighttpd can be configured automatically."
 msgstr ""
 "ரவ்ண்ட்க்யூப் பிஹெச்பிஆல் ஆதரிக்கப்பட்ட எந்த வலை சேவையகத்தையும் ஆதரிக்கும். ஆயினுக்ம் அபாசே "
 "மட்டுமே தானியங்கியாக வடிவமைக்கப்பட முடியும்."
@@ -141,3 +133,12 @@ msgid ""
 "first connection of users."
 msgstr ""
 "ஆயினும் உள்நுழைவின் போதும் முதல் பயனர் இணைப்பின் போதும் முன்னிருப்பு மொழியே பயன் படும்."
+
+#~ msgid "apache"
+#~ msgstr "அபாசே"
+
+#~ msgid "apache-ssl"
+#~ msgstr "அபாசே-எஸ்எஸ்எல்"
+
+#~ msgid "apache-perl"
+#~ msgstr "அபாசே-பெர்ல்"

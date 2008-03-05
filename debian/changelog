@@ -1,6 +1,28 @@
+roundcube (0.1-1) unstable; urgency=low
+
+  * New upstream release (Closes: #469487).
+     - This release seems to fix failure to set some fields when replying,
+       with bincimap as IMAP server (Closes: #443562)
+     - It also fixes the deletion of multiple messages, still with
+       bincimap (Closes: #451404)
+  * Remove 'ob_gzhandler.patch' and 'xss-fix.patch'. They have been
+    merged upstream.
+  * Upstream has switched to MDB2 database backend which is not packaged
+    in Debian yet. We switch back to old backend.
+  * Fix debian/watch to handle correctly detection of new versions.
+  * Add support for lighttpd and remove support for older version of
+    Apache. The debconf question about webserver autoconfiguration is
+    reworded (Closes: #462961).
+  * Do not depend on a specific revision of cdbs.
+  * Move po-debconf from Build-Depends-Indep to Build-Depends since it is
+    needed for clean target.
+  * Correct path to /usr/share/file/magic, provided by libmagic1. Provide
+    license information about this file in debian/copyright.
+
+ -- Vincent Bernat <bernat@luffy.cx>  Wed, 05 Mar 2008 20:49:03 +0100
+
 roundcube (0.1~rc2-6) unstable; urgency=high
 
-  [ Vincent Bernat ]
   * Bug fix: "CVE-2007-6321: Cross-site scripting (XSS) vulnerability",
     thanks to Micah Anderson (Closes: #455840). The patch is from
     http://lists.roundcube.net/mail-archive/dev/2007-12/0000038.html and
@@ -8,12 +30,7 @@ roundcube (0.1~rc2-6) unstable; urgency=high
     stolen from Squirrelmail.
   * Finnish debconf template, thanks to Esko Arajärvi (Closes: #458244).
 
-  [ Romain Beauxis ]
-  * Added DM-Upload-Allowed: yes to control file.
-  * Moved po-debconf to Build-Dep since it is needed for clean
-    target. Thanks to lintian.
-
- -- Romain Beauxis <toots@rastageeks.org>  Sat, 26 Jan 2008 03:26:42 +0100
+ -- Vincent Bernat <bernat@luffy.cx>  Sat, 29 Dec 2007 21:55:17 +0100
 
 roundcube (0.1~rc2-5) unstable; urgency=low
 

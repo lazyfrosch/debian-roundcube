@@ -17,6 +17,25 @@ dbc_dbname=roundcube
 
 dbc_go roundcube $@
 
+lighttpd_install() {
+	if [ ! -f /etc/lighttpd/conf-available/50-roundcube.conf ] ; then
+		if [ ! -x /usr/sbin/lighty-enable-mod ] ; then
+			echo "Lighttpd not installed, skipping"
+		else
+			ln -s /etc/roundcube/lighttpd.conf /etc/lighttpd/conf-available/50-roundcube.conf
+			/usr/sbin/lighty-enable-mod roundcube
+		fi
+	fi
+}
+
+apache_install() {
+	webserver=$1
+	if [ -d /etc/$webserver/conf.d ] && [ ! -e /etc/$webserver/conf.d/roundcube ]; then
+               ln -s /etc/roundcube/apache.conf /etc/$webserver/conf.d/roundcube
+	fi
+}
+
+
 case "$1" in
     configure)
 
@@ -117,11 +136,12 @@ EOF
 
 	for webserver in $webservers; do
             webserver=${webserver%,}
+	    if [ "$webserver" = "lighttpd" ] ; then
+		lighttpd_install
+	    else
+		apache_install $webserver
+	    fi
             test -x /usr/sbin/$webserver || continue
-        
-            if [ ! -f /etc/$webserver/conf.d/roundcube ] && [ ! -h /etc/$webserver/conf.d/roundcube ]; then
-               ln -s /etc/roundcube/apache.conf /etc/$webserver/conf.d/roundcube
-            fi
             restart="$restart $webserver"
         done
 

@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ar\n"
-"Report-Msgid-Bugs-To: pkg-roundcube-maintainers@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2007-05-26 09:36+0200\n"
+"Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
+"POT-Creation-Date: 2008-03-05 22:12+0100\n"
 "PO-Revision-Date: 2007-06-02 01:26+0300\n"
 "Last-Translator: Ossama M. Khayat <okhayat@yahoo.com>\n"
 "Language-Team: Arabic <support@arabeyes.org>\n"
@@ -19,26 +19,14 @@ msgstr ""
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
-msgid "apache"
-msgstr "apache"
-
-#. Type: multiselect
-#. Choices
-#: ../templates:2001
-msgid "apache-ssl"
-msgstr "apache-ssl"
-
-#. Type: multiselect
-#. Choices
-#: ../templates:2001
-msgid "apache-perl"
-msgstr "apache-perl"
-
-#. Type: multiselect
-#. Choices
-#: ../templates:2001
 msgid "apache2"
 msgstr "apache2"
+
+#. Type: multiselect
+#. Choices
+#: ../templates:2001
+msgid "lighttpd"
+msgstr ""
 
 #. Type: multiselect
 #. Description
@@ -49,9 +37,13 @@ msgstr "خادم الوب المطلوب تهيئته آلياً:"
 #. Type: multiselect
 #. Description
 #: ../templates:2002
+#, fuzzy
+#| msgid ""
+#| "RoundCube supports any web server supported by PHP, however only Apache "
+#| "can be configured automatically."
 msgid ""
-"RoundCube supports any web server supported by PHP, however only Apache can "
-"be configured automatically."
+"RoundCube supports any web server supported by PHP, however only Apache 2 "
+"and lighttpd can be configured automatically."
 msgstr "يدعم RoundCube أي خادم وب يدعمه PHP، ولكن يمكن تهيئة Apache فقط آلياً."
 
 #. Type: multiselect
@@ -140,3 +132,12 @@ msgid ""
 msgstr ""
 "على أي، سيتم استخدام اللغة الافتراضية لشاشة تسجيل الدخول والاتصال الأول "
 "للمستخدمين."
+
+#~ msgid "apache"
+#~ msgstr "apache"
+
+#~ msgid "apache-ssl"
+#~ msgstr "apache-ssl"
+
+#~ msgid "apache-perl"
+#~ msgstr "apache-perl"

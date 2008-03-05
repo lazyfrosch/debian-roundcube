@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.1~rc1~dfsg-1\n"
-"Report-Msgid-Bugs-To: pkg-roundcube-maintainers@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2007-05-26 09:36+0200\n"
+"Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
+"POT-Creation-Date: 2008-03-05 22:12+0100\n"
 "PO-Revision-Date: 2007-06-11 13:06+0400\n"
 "Last-Translator: Yuri Kozlov <kozlov.y@gmail.com>\n"
 "Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
@@ -21,26 +21,14 @@ msgstr ""
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
-msgid "apache"
-msgstr "apache"
-
-#. Type: multiselect
-#. Choices
-#: ../templates:2001
-msgid "apache-ssl"
-msgstr "apache-ssl"
-
-#. Type: multiselect
-#. Choices
-#: ../templates:2001
-msgid "apache-perl"
-msgstr "apache-perl"
-
-#. Type: multiselect
-#. Choices
-#: ../templates:2001
 msgid "apache2"
 msgstr "apache2"
+
+#. Type: multiselect
+#. Choices
+#: ../templates:2001
+msgid "lighttpd"
+msgstr ""
 
 #. Type: multiselect
 #. Description
@@ -51,9 +39,13 @@ msgstr "Веб-сервер(ы), которые нужно настроить а
 #. Type: multiselect
 #. Description
 #: ../templates:2002
+#, fuzzy
+#| msgid ""
+#| "RoundCube supports any web server supported by PHP, however only Apache "
+#| "can be configured automatically."
 msgid ""
-"RoundCube supports any web server supported by PHP, however only Apache can "
-"be configured automatically."
+"RoundCube supports any web server supported by PHP, however only Apache 2 "
+"and lighttpd can be configured automatically."
 msgstr ""
 "RoundCube работает с любым веб-сервером, поддерживающим PHP, однако "
 "автоматическая настройка выполняется только для Apache."
@@ -147,3 +139,12 @@ msgid ""
 msgstr ""
 "Однако, язык по умолчанию будет использован для выдачи приглашения к входу и "
 "во время первого подключения пользователя."
+
+#~ msgid "apache"
+#~ msgstr "apache"
+
+#~ msgid "apache-ssl"
+#~ msgstr "apache-ssl"
+
+#~ msgid "apache-perl"
+#~ msgstr "apache-perl"

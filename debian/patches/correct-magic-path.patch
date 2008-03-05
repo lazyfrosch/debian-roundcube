@@ -1,0 +1,11 @@
+--- roundcube-0.1/config/main.inc.php.dist~	2008-02-21 11:27:19.000000000 +0100
++++ roundcube-0.1/config/main.inc.php.dist	2008-03-06 14:04:53.000000000 +0100
+@@ -277,7 +277,7 @@
+ $rcmail_config['max_pagesize'] = 200;
+ 
+ // mime magic database
+-$rcmail_config['mime_magic'] = '/usr/share/misc/magic';
++$rcmail_config['mime_magic'] = '/usr/share/file/magic';
+ 
+ // end of config file
+ ?>
