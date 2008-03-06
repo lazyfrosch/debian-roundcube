@@ -1,4 +1,4 @@
-roundcube (0.1-1) UNRELEASED; urgency=low
+roundcube (0.1-1) unstable; urgency=low
 
   * New upstream release (Closes: #469487).
      - This release seems to fix failure to set some fields when replying,
