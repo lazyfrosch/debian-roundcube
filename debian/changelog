@@ -1,6 +1,7 @@
-roundcube (0.1-2) UNRELEASED; urgency=low
+roundcube (0.1-2) unstable; urgency=low
 
-  * Ship bin/ directory as well. This fix HTML composition.
+  * Ship bin/ directory as well. This fix conversion from HTML to text in
+    composition.
   * Disable spellchecker for tinymce since it is not shipped with Debian
     package of tinymce.
 
