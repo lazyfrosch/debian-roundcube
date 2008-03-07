@@ -1,3 +1,3 @@
-index.php program/ usr/share/roundcube
+index.php program/ bin/ usr/share/roundcube
 skins temp var/lib/roundcube
 debian/conf/* etc/roundcube

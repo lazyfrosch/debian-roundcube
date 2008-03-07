@@ -5,4 +5,7 @@ To use tinymce editor:
  - set $rcmail_config['enable_htmleditor'] to TRUE in
    /etc/roundcube/main.inc.php
 
- -- Vincent Bernat <bernat@luffy.cx>, Mon, 29 Oct 2007 21:39:09 +0100
+The spellchecker is disabled since it is not present in tinymce Debian
+package.
+
+ -- Vincent Bernat <bernat@luffy.cx>, Fri,  7 Mar 2008 09:54:52 +0100

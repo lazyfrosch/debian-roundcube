@@ -30,6 +30,7 @@ binary-install/roundcube-core::
 	find $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/localization -type f -print0 | xargs -0 chmod -x
 	# Remove useless file
 	rm $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/lib/magic
+	rm $(CURDIR)/debian/roundcube-core/usr/share/roundcube/bin/msgimport
 	# Remove files shipped in tinymce package
 	rm -rf $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/js/tiny_mce
 	dh_link -proundcube-core usr/share/tinymce/www usr/share/roundcube/program/js/tiny_mce
