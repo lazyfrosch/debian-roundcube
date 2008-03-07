@@ -4,3 +4,4 @@ use_packaged_tinymce.patch
 use-db-backend.patch
 correct-magic-path.patch
 disable-tinymce-spellchecker.patch
+fix-too-old-php-mail-mime.patch
