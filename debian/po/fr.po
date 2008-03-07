@@ -25,7 +25,7 @@ msgstr "Apache 2"
 #. Choices
 #: ../templates:2001
 msgid "lighttpd"
-msgstr ""
+msgstr "lighttpd"
 
 #. Type: multiselect
 #. Description
@@ -36,16 +36,12 @@ msgstr "Serveur(s) web à configurer automatiquement :"
 #. Type: multiselect
 #. Description
 #: ../templates:2002
-#, fuzzy
-#| msgid ""
-#| "RoundCube supports any web server supported by PHP, however only Apache "
-#| "can be configured automatically."
 msgid ""
 "RoundCube supports any web server supported by PHP, however only Apache 2 "
 "and lighttpd can be configured automatically."
 msgstr ""
 "RoundCube fonctionne avec n'importe quel serveur web géré par PHP. "
-"Cependant, seul Apache peut être configuré automatiquement."
+"Cependant, seul Apache 2 et lighttpd peuvent être configurés automatiquement."
 
 #. Type: multiselect
 #. Description
