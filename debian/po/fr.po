@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: roundcube-0.1~rc1~dfsg-1\n"
 "Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
 "POT-Creation-Date: 2008-03-05 22:12+0100\n"
-"PO-Revision-Date: 2007-06-02 00:35+0200\n"
+"PO-Revision-Date: 2008-03-08 11:24+0100\n"
 "Last-Translator: Vincent Bernat <bernat@luffy.cx>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -41,7 +41,8 @@ msgid ""
 "and lighttpd can be configured automatically."
 msgstr ""
 "RoundCube fonctionne avec n'importe quel serveur web géré par PHP. "
-"Cependant, seul Apache 2 et lighttpd peuvent être configurés automatiquement."
+"Cependant, seuls Apache 2 et lighttpd peuvent être configurés "
+"automatiquement."
 
 #. Type: multiselect
 #. Description

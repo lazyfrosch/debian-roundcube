@@ -1,3 +1,14 @@
+roundcube (0.1-4) UNRELEASED; urgency=low
+
+  * Debconf translation updates:
+    - French. Closes: #469802
+    - Russian. Closes: #469847
+    - Galician. Closes: #698666
+    - German. Closes: #469875
+    - Finnish. Closes: #469922
+
+ -- Vincent Bernat <bernat@luffy.cx>  Sat, 08 Mar 2008 11:15:00 +0100
+
 roundcube (0.1-3) unstable; urgency=low
 
   * Fix problem with too old php-mail-mime package (Closes: #469814)
