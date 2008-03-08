@@ -41,20 +41,19 @@ msgstr ""
 #. Choices
 #: ../templates:2001
 msgid "apache2"
-msgstr ""
+msgstr "apache2"
 
 #. Type: multiselect
 #. Choices
 #: ../templates:2001
 msgid "lighttpd"
-msgstr ""
+msgstr "lighttpd"
 
 #. Type: multiselect
 #. Description
 #: ../templates:2002
-#, fuzzy
 msgid "Web server(s) to configure automatically:"
-msgstr "Reconfiguración del servidor web:"
+msgstr "Servidores Web a reconfigurar automáticamente"
 
 #. Type: multiselect
 #. Description
@@ -63,6 +62,9 @@ msgid ""
 "RoundCube supports any web server supported by PHP, however only Apache 2 "
 "and lighttpd can be configured automatically."
 msgstr ""
+"RoundCube funciona con cualquier servidor Web que soporte PHP, sin "
+"embargo sólo Apache 2 y lighttpd se configuran automáticamente."
+
 
 #. Type: multiselect
 #. Description
@@ -71,50 +73,48 @@ msgid ""
 "Please select the web server(s) that should be configured automatically for "
 "RoundCube."
 msgstr ""
+"Por favor, seleccione el servidor o servidores Web que se deben configurar "
+"automáticamente para RoundCube."
 
 #. Type: boolean
 #. Description
 #: ../templates:3001
 msgid "Should the webserver(s) be restarted now?"
-msgstr ""
+msgstr "¿Deben reiniciarse ahora el servidor o servidores Web?"
 
 #. Type: boolean
 #. Description
 #: ../templates:3001
-#, fuzzy
 msgid ""
 "In order to activate the new configuration, the reconfigured web server(s) "
 "have to be restarted."
 msgstr ""
-"Recuerde que para aplicar los cambios en su(s) servidor(es) web debe "
-"reiniciarlo(s)"
+"Para activar la nueva configuración, deben reiniciarse el servidor o servidores Web."
 
 #. Type: string
 #. Description
 #: ../templates:4001
-#, fuzzy
 msgid "IMAP server(s) used with RoundCube:"
-msgstr "Servidor IMAP al que debe conectarse RoundCube:"
+msgstr "Servidor IMAP usado por RoundCube:"
 
 #. Type: string
 #. Description
 #: ../templates:4001
 msgid "Please select the IMAP server that should be used with RoundCube."
-msgstr ""
+msgstr "Por favor, seleccione el servidor IMAP que se debe usar con RoundCube."
 
 #. Type: string
 #. Description
 #: ../templates:4001
-#, fuzzy
 msgid ""
 "If this is left blank, a text box will be displayed at login. Entering a "
 "space-separated list of hosts will display a pull-down menu. Entering a "
 "single host will enforce using this host."
 msgstr ""
-"Deje este campo en blanco para mostrar un espacio donde introducir texto al "
-"autenticarse, proporcione una lista de equipos, separados por espacios, para "
-"mostrar un menú desplegable o establecer un equipo. Para usar una conexión "
-"SSL, use ssl://nombreequipo:993."
+"Si deja este campo en blanco se mostrará un espacio donde introducir texto al "
+"autenticarse. Si proporciona una lista de equipos, separados por espacios, se "
+"mostrará un menú desplegable. Si proporciona un único nombre de equipo se forzará "
+"el uso del mismo."
 
 #. Type: string
 #. Description
@@ -122,6 +122,8 @@ msgstr ""
 msgid ""
 "To use SSL connections, please enter host names as 'ssl://hostname:993'."
 msgstr ""
+"Para usar conexiones SSL, por favor escriba los nombres de host como "
+"'ssl://hostname:993'."
 
 #. Type: select
 #. Description
@@ -133,13 +135,13 @@ msgstr "Idioma predeterminado:"
 #. Description
 #: ../templates:5001
 msgid "Please choose the default language for RoundCube."
-msgstr ""
+msgstr "Por favor, elija el idioma predeterminado para RoundCube."
 
 #. Type: select
 #. Description
 #: ../templates:5001
 msgid "This choice can be overridden by individual users in their preferences."
-msgstr ""
+msgstr "Los usuarios pueden cambiar esta opción en sus preferencias."
 
 #. Type: select
 #. Description
@@ -148,28 +150,5 @@ msgid ""
 "However, the default language will be used for the login screen and the "
 "first connection of users."
 msgstr ""
-
-#~ msgid "apache, apache-ssl, apache-perl, apache2"
-#~ msgstr "apache, apache-ssl, apache-perl, apache2"
-
-#~ msgid ""
-#~ "RoundCube supports any web server that php does, but this automatic "
-#~ "configuration process only supports Apache. Please select which  apache "
-#~ "version you want to configure the RoundCube frontend for."
-#~ msgstr ""
-#~ "RoundCube funciona en cualquier servidor web en que lo haga php, pero "
-#~ "este proceso de configuración automática sólo soporta Apache. Por "
-#~ "favor, seleccione la versión de Apache para la que quiere configurar "
-#~ "RoundCube."
-
-#~ msgid "Would you like to restart your webserver(s) now?"
-#~ msgstr "¿Desea reiniciar su(s) servidor(es) web ahora?"
-
-#~ msgid ""
-#~ "Each user can select in his preferences the language of the interface. "
-#~ "However, for the login screen and for the first connection, this is the "
-#~ "language selected here that will be used."
-#~ msgstr ""
-#~ "Cada usuario puede seleccionar el lenguaje del interfaz en sus "
-#~ "preferencias.No obstante, el idioma que escoja aquí se usará en la "
-#~ "pantalla de inicio de sesión y para la primera conexión"
+"Sin embargo, el idioma predeterminado se usará en la pantalla de autenticación "
+"y en la primera conexión de los usuarios."

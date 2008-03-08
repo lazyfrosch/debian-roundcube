@@ -1,14 +1,14 @@
-# translation of roundcube-templates.po to Euskara
+# translation of roundcube-eu.po to Euskara
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Piarres Beobide <pi@beobide.net>, 2007.
+# Piarres Beobide <pi@beobide.net>, 2007, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: roundcube-templates\n"
+"Project-Id-Version: roundcube-eu\n"
 "Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
 "POT-Creation-Date: 2008-03-05 22:12+0100\n"
-"PO-Revision-Date: 2007-05-26 20:51+0200\n"
+"PO-Revision-Date: 2008-03-14 09:03+0100\n"
 "Last-Translator: Piarres Beobide <pi@beobide.net>\n"
 "Language-Team: Euskara <Librezale@librezale.org>\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgstr "apache2"
 #. Choices
 #: ../templates:2001
 msgid "lighttpd"
-msgstr ""
+msgstr "lighttpd"
 
 #. Type: multiselect
 #. Description
@@ -37,16 +37,12 @@ msgstr "Automatikoki konfiguratu behar den web zerbitzaria:"
 #. Type: multiselect
 #. Description
 #: ../templates:2002
-#, fuzzy
-#| msgid ""
-#| "RoundCube supports any web server supported by PHP, however only Apache "
-#| "can be configured automatically."
 msgid ""
 "RoundCube supports any web server supported by PHP, however only Apache 2 "
 "and lighttpd can be configured automatically."
 msgstr ""
 "RoundCube-k PHP onartzen duen edozein web zerbitzari onartzen du, hala ere "
-"Apache bakarrik konfiguratu daiteke automatikoki."
+"Apache2 eta lighttpd bakarrik konfiguratu daiteke automatikoki."
 
 #. Type: multiselect
 #. Description
@@ -67,16 +63,12 @@ msgstr "Web zerbitzaria(k) orain berrabiarazi behar al da?"
 #. Type: boolean
 #. Description
 #: ../templates:3001
-#, fuzzy
-#| msgid ""
-#| "In order to activate the new configuration, the reconfigured web servers "
-#| "have to be restarted."
 msgid ""
 "In order to activate the new configuration, the reconfigured web server(s) "
 "have to be restarted."
 msgstr ""
-"Konfigurazio berria gaitu ahal izateko, birkonfiguratutako web zerbitzariak "
-"berrabiarazi egin behar dira."
+"Konfigurazio berria gaitu ahal izateko, birkonfiguratutako web zerbitzaria"
+"(k) berrabiarazi egin behar d(ir)a."
 
 #. Type: string
 #. Description
@@ -109,7 +101,7 @@ msgstr ""
 msgid ""
 "To use SSL connections, please enter host names as 'ssl://hostname:993'."
 msgstr ""
-"SSL konexioak erabiltzeko, idatzi ostalari izena formatu honetan: ssl://"
+"SSL konexioak erabiltzeko, idatzi ostalari izena formatu honetan: 'ssl://"
 "ostalaria:993'."
 
 #. Type: select
@@ -140,12 +132,3 @@ msgid ""
 msgstr ""
 "Hala ere, lehenetsiriko hizkuntza saio hasiera orria eta erabiltzailearen "
 "lehen konexioetan erabiliko da."
-
-#~ msgid "apache"
-#~ msgstr "apache"
-
-#~ msgid "apache-ssl"
-#~ msgstr "apache-ssl"
-
-#~ msgid "apache-perl"
-#~ msgstr "apache-perl"

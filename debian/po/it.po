@@ -1,14 +1,14 @@
 # Italian (it) translation of debconf templates for roundcube
 # Copyright (C) 2007 Free Software Foundation, Inc.
 # This file is distributed under the same license as the roundcube package.
-# Luca Monducci <luca.mo@tiscali.it>, 2007.
+# Luca Monducci <luca.mo@tiscali.it>, 2007-2008.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: roundcube italian debconf templates\n"
+"Project-Id-Version: roundcube 0.1 italian debconf templates\n"
 "Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
 "POT-Creation-Date: 2008-03-05 22:12+0100\n"
-"PO-Revision-Date: 2007-05-29 21:09+0200\n"
+"PO-Revision-Date: 2008-03-08 12:09+0100\n"
 "Last-Translator: Luca Monducci <luca.mo@tiscali.it>\n"
 "Language-Team: Italian <debian-l10n-italian@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgstr "apache2"
 #. Choices
 #: ../templates:2001
 msgid "lighttpd"
-msgstr ""
+msgstr "lighttpd"
 
 #. Type: multiselect
 #. Description
@@ -36,16 +36,13 @@ msgstr "Server web da configurare automaticamente:"
 #. Type: multiselect
 #. Description
 #: ../templates:2002
-#, fuzzy
-#| msgid ""
-#| "RoundCube supports any web server supported by PHP, however only Apache "
-#| "can be configured automatically."
 msgid ""
 "RoundCube supports any web server supported by PHP, however only Apache 2 "
 "and lighttpd can be configured automatically."
 msgstr ""
 "RoundCube può essere usato con qualsiasi server web che supporta PHP, ma "
-"questo processo di configurazione automatica funziona solo con Apache."
+"questo processo di configurazione automatica funziona solo con Apache 2 e "
+"lighttpd."
 
 #. Type: multiselect
 #. Description
@@ -65,10 +62,6 @@ msgstr "Riavviare il/i server web adesso?"
 #. Type: boolean
 #. Description
 #: ../templates:3001
-#, fuzzy
-#| msgid ""
-#| "In order to activate the new configuration, the reconfigured web servers "
-#| "have to be restarted."
 msgid ""
 "In order to activate the new configuration, the reconfigured web server(s) "
 "have to be restarted."
@@ -136,12 +129,3 @@ msgid ""
 msgstr ""
 "La lingua predefinita viene comunque usata nella schermata d'accesso e per "
 "la prima connessione degli utenti."
-
-#~ msgid "apache"
-#~ msgstr "apache"
-
-#~ msgid "apache-ssl"
-#~ msgstr "apache-ssl"
-
-#~ msgid "apache-perl"
-#~ msgstr "apache-perl"

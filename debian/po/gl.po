@@ -1,13 +1,13 @@
 # Galician translation of roundcube's debconf templates
 # This file is distributed under the same license as the roundcube package.
-# Jacobo Tarrio <jtarrio@debian.org>, 2007.
+# Jacobo Tarrio <jtarrio@debian.org>, 2007, 2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: roundcube\n"
 "Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
 "POT-Creation-Date: 2008-03-05 22:12+0100\n"
-"PO-Revision-Date: 2007-10-24 22:32+0100\n"
+"PO-Revision-Date: 2008-03-07 16:27+0000\n"
 "Last-Translator: Jacobo Tarrio <jtarrio@debian.org>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "apache2"
 #. Choices
 #: ../templates:2001
 msgid "lighttpd"
-msgstr ""
+msgstr "lighttpd"
 
 #. Type: multiselect
 #. Description
@@ -35,16 +35,12 @@ msgstr "Servidor(es) web a reconfigurar automaticamente:"
 #. Type: multiselect
 #. Description
 #: ../templates:2002
-#, fuzzy
-#| msgid ""
-#| "RoundCube supports any web server supported by PHP, however only Apache "
-#| "can be configured automatically."
 msgid ""
 "RoundCube supports any web server supported by PHP, however only Apache 2 "
 "and lighttpd can be configured automatically."
 msgstr ""
 "RoundCube soporta os servidores web soportados por PHP; nembargantes, só se "
-"pode configurar automaticamente Apache."
+"poden configurar automaticamente Apache 2 e lighttpd."
 
 #. Type: multiselect
 #. Description

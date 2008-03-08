@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: roundcube_0.1~rc2-4\n"
 "Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
 "POT-Creation-Date: 2008-03-05 22:12+0100\n"
-"PO-Revision-Date: 2007-12-29 22:04+0200\n"
+"PO-Revision-Date: 2008-03-08 00:45+0200\n"
 "Last-Translator: Esko Arajärvi <edu@iki.fi>\n"
 "Language-Team: Finnish <debian-l10n-finnish@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr "apache2"
 #. Choices
 #: ../templates:2001
 msgid "lighttpd"
-msgstr ""
+msgstr "lighttpd"
 
 #. Type: multiselect
 #. Description
@@ -33,16 +33,12 @@ msgstr "Automaattisesti asetettavat verkkopalvelimet:"
 #. Type: multiselect
 #. Description
 #: ../templates:2002
-#, fuzzy
-#| msgid ""
-#| "RoundCube supports any web server supported by PHP, however only Apache "
-#| "can be configured automatically."
 msgid ""
 "RoundCube supports any web server supported by PHP, however only Apache 2 "
 "and lighttpd can be configured automatically."
 msgstr ""
-"RoundCube tukee kaikkia verkkopalvelimia, jotka tukevat PHP:ta, mutta vain "
-"Apachen asetukset voidaan tehdä automaattisesti."
+"RoundCube tukee mitä tahansa verkkopalvelinta, joka tukee PHP:ta. Vain "
+"Apache 2 ja lighttpd voidaan kuitenkin asettaa automaattisesti."
 
 #. Type: multiselect
 #. Description
@@ -67,7 +63,7 @@ msgid ""
 "In order to activate the new configuration, the reconfigured web server(s) "
 "have to be restarted."
 msgstr ""
-"Uusien asetusten käyttöönottamiseksi asetetut verkkopalvelimet tulee "
+"Uusien asetusten ottamiseksi käyttöön asetetut verkkopalvelimet tulee "
 "käynnistää uudelleen."
 
 #. Type: string
@@ -91,9 +87,9 @@ msgid ""
 "single host will enforce using this host."
 msgstr ""
 "Jos tämä kenttä jätetään tyhjäksi, kirjautumisvaiheessa näytetään "
-"tekstikenttä. Jos kentässä on välilyönnein eroteltu lista palvelimista, "
-"kirjauduttaessa näytetään alasvetovalikko. Yhden palvelimen syöttäminen "
-"pakottaa kyseisen palvelimen käyttöön."
+"tekstikenttä. Jos tässä kentässä on välilyönnein eroteltu lista "
+"palvelimista, kirjauduttaessa näytetään alasvetovalikko. Yhden palvelimen "
+"syöttäminen pakottaa kyseisen palvelimen käyttöön."
 
 #. Type: string
 #. Description
@@ -101,7 +97,7 @@ msgstr ""
 msgid ""
 "To use SSL connections, please enter host names as 'ssl://hostname:993'."
 msgstr ""
-"SSL-yhteydet saat käyttöön syöttämällä palvelimien verkkonimet muodossa "
+"SSL-yhteydet saadaan käyttöön syöttämällä palvelimien verkkonimet muodossa "
 "”ssl://verkkonimi:993”."
 
 #. Type: select
