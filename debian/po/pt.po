@@ -1,14 +1,14 @@
 # Portuguese translations for roundcube package.
 # Copyright (C) Miguel Figueiredo
 # This file is distributed under the same license as the roundcoube package.
-# Miguel Figueiredo <elmig@debianpt.org>, 2007.
+# Miguel Figueiredo <elmig@debianpt.org>, 2007, 2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: roundcube\n"
 "Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
 "POT-Creation-Date: 2008-03-05 22:12+0100\n"
-"PO-Revision-Date: 2007-05-27 22:41+0100\n"
+"PO-Revision-Date: 2008-03-09 14:12+0000\n"
 "Last-Translator: Miguel Figueiredo <elmig@debianpt.org>\n"
 "Language-Team: Portuguese <traduz@debianpt.org>\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgstr "apache2"
 #. Choices
 #: ../templates:2001
 msgid "lighttpd"
-msgstr ""
+msgstr "lighttpd"
 
 #. Type: multiselect
 #. Description
@@ -37,7 +37,6 @@ msgstr "Servidor(es) web a configurar automaticamente:"
 #. Type: multiselect
 #. Description
 #: ../templates:2002
-#, fuzzy
 #| msgid ""
 #| "RoundCube supports any web server supported by PHP, however only Apache "
 #| "can be configured automatically."
@@ -45,8 +44,8 @@ msgid ""
 "RoundCube supports any web server supported by PHP, however only Apache 2 "
 "and lighttpd can be configured automatically."
 msgstr ""
-"O RoundCube suporta qualquer servidor web suportado por PHP, no entanto o "
-"Apache pode ser configurado automaticamente."
+"O RoundCube suporta qualquer servidor web que suporte PHP, no entanto apenas "
+"o Apache 2 e lighttpd podem ser automaticamente configurados."
 
 #. Type: multiselect
 #. Description
@@ -62,12 +61,11 @@ msgstr ""
 #. Description
 #: ../templates:3001
 msgid "Should the webserver(s) be restarted now?"
-msgstr "Deve o servidor web reiniciado agora?"
+msgstr "Deverá o servidor web ser reiniciado agora?"
 
 #. Type: boolean
 #. Description
 #: ../templates:3001
-#, fuzzy
 #| msgid ""
 #| "In order to activate the new configuration, the reconfigured web servers "
 #| "have to be restarted."
@@ -75,8 +73,8 @@ msgid ""
 "In order to activate the new configuration, the reconfigured web server(s) "
 "have to be restarted."
 msgstr ""
-"De modo a activar a nova configuração, os servidores web reconfigurados têm "
-"de ser reiniciados."
+"De modo a activar a nova configuração, o(s) servidor(es) web reconfigurados "
+"terão de ser reiniciados."
 
 #. Type: string
 #. Description
@@ -111,7 +109,7 @@ msgid ""
 "To use SSL connections, please enter host names as 'ssl://hostname:993'."
 msgstr ""
 "Para utilizar ligações SSL, por favor introduza os nomes das máquinas como "
-"'ssl://nomedamáquina:993.'"
+"'ssl://nomedamáquina:993'."
 
 #. Type: select
 #. Description
@@ -140,8 +138,8 @@ msgid ""
 "However, the default language will be used for the login screen and the "
 "first connection of users."
 msgstr ""
-"No entanto, o idioma por omissão será utilizado para o ecrã de login e "
-"primeira ligação dos utilizadores."
+"No entanto, o idioma pré-definido será utilizado para o ecrã de login e "
+"para a primeira ligação dos utilizadores."
 
 #~ msgid "apache"
 #~ msgstr "apache"
