@@ -7,6 +7,7 @@ roundcube (0.1-4) UNRELEASED; urgency=low
     - German. Closes: #469875
     - Finnish. Closes: #469922
     - Italian. Closes: #469987
+    - Czech. Closes: #470150
 
  -- Vincent Bernat <bernat@luffy.cx>  Sat, 08 Mar 2008 11:15:00 +0100
 

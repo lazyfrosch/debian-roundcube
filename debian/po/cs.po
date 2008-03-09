@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: roundcube\n"
 "Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
 "POT-Creation-Date: 2008-03-05 22:12+0100\n"
-"PO-Revision-Date: 2007-05-28 19:51+0200\n"
+"PO-Revision-Date: 2008-03-09 13:03+0100\n"
 "Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
 "Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgstr "apache2"
 #. Choices
 #: ../templates:2001
 msgid "lighttpd"
-msgstr ""
+msgstr "lighttpd"
 
 #. Type: multiselect
 #. Description
@@ -36,7 +36,6 @@ msgstr "Webové servery, které se mají nastavit automaticky:"
 #. Type: multiselect
 #. Description
 #: ../templates:2002
-#, fuzzy
 #| msgid ""
 #| "RoundCube supports any web server supported by PHP, however only Apache "
 #| "can be configured automatically."
@@ -45,7 +44,7 @@ msgid ""
 "and lighttpd can be configured automatically."
 msgstr ""
 "RoundCube podporuje libovolný webový server, pod kterým běží PHP, ovšem "
-"automaticky lze nastavit pouze Apache."
+"automaticky lze nastavit pouze Apache 2 a lighttpd."
 
 #. Type: multiselect
 #. Description
@@ -66,7 +65,6 @@ msgstr "Mají se webové servery restartovat nyní?"
 #. Type: boolean
 #. Description
 #: ../templates:3001
-#, fuzzy
 #| msgid ""
 #| "In order to activate the new configuration, the reconfigured web servers "
 #| "have to be restarted."
@@ -137,12 +135,3 @@ msgid ""
 msgstr ""
 "Výchozí jazyk se však použije na přihlašovací obrazovce a při prvním "
 "připojení uživatelů."
-
-#~ msgid "apache"
-#~ msgstr "apache"
-
-#~ msgid "apache-ssl"
-#~ msgstr "apache-ssl"
-
-#~ msgid "apache-perl"
-#~ msgstr "apache-perl"
