@@ -1,4 +1,4 @@
-roundcube (0.1-4) UNRELEASED; urgency=low
+roundcube (0.1-4) unstable; urgency=low
 
   * Debconf translation updates:
     - French. Closes: #469802
