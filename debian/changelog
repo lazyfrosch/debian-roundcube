@@ -3,7 +3,7 @@ roundcube (0.1-4) unstable; urgency=low
   * Debconf translation updates:
     - French. Closes: #469802
     - Russian. Closes: #469847
-    - Galician. Closes: #698666
+    - Galician. Closes: #469866
     - German. Closes: #469875
     - Finnish. Closes: #469922
     - Italian. Closes: #469987
