@@ -1,3 +1,10 @@
+roundcube (0.1-5) unstable; urgency=low
+
+  * Debconf translation updates:
+    - Spanish. Closes: #473788
+
+ -- Vincent Bernat <bernat@luffy.cx>  Tue, 01 Apr 2008 19:23:58 +0200
+
 roundcube (0.1-4) unstable; urgency=low
 
   * Debconf translation updates:
