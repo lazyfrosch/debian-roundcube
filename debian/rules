@@ -19,13 +19,20 @@ binary-install/roundcube-core::
 	# Install config/db.inc.php.dist
 	install -m 0640 $(CURDIR)/config/db.inc.php.dist $(CURDIR)/debian/roundcube-core/etc/roundcube/db.inc.php
 	install -m 0640 $(CURDIR)/config/main.inc.php.dist $(CURDIR)/debian/roundcube-core/usr/share/roundcube
+
+	# Database related files
 	# Install empty tables and updates for each db type
 	install -m 0644 $(CURDIR)/SQL/mysql.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/mysql
-	install -m 0644 $(CURDIR)/SQL/mysql.update.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/upgrade/mysql/0.1~rc1~dfsg-1
 	install -m 0644 $(CURDIR)/SQL/postgres.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/pgsql
-	install -m 0644 $(CURDIR)/SQL/postgres.update.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/upgrade/pgsql/0.1~rc1~dfsg-1
 	install -m 0644 $(CURDIR)/SQL/sqlite.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/sqlite
-	install -m 0644 $(CURDIR)/SQL/sqlite.update.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/upgrade/sqlite/0.1~rc1~dfsg-1
+	# Database upgrade from latest versions
+	install -m 0644 $(CURDIR)/SQL/postgres.update.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/upgrade/pgsql/0.1.1-1
+	install -m 0644 $(CURDIR)/SQL/mysql.update.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/upgrade/mysql/0.1.1-1
+	install -m 0644 $(CURDIR)/SQL/sqlite.update.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/upgrade/sqlite/0.1.1-1
+
+	# Old database upgrades
+	cp -r $(CURDIR)/debian/sql/* $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/upgrade/.
+
 	# Some files are executable while not being scripts or binary...
 	find $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/localization -type f -print0 | xargs -0 chmod -x
 	# Remove useless file

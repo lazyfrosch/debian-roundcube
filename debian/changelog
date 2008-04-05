@@ -1,10 +1,14 @@
-roundcube (0.1-5) unstable; urgency=low
+roundcube (0.1.1-1) unstable; urgency=low
 
+  * New upstream release
+    - Copy old SQL upgrade scripts into debian/sql to allow upgrade from
+      versions older than 0.1
+    - Patch new MySQL upgrade script to fix a typo
   * Debconf translation updates:
     - Spanish. Closes: #473788
   * Depends on php-mail-mime (>= 1.5.0) and drop compatibility patch.
 
- -- Vincent Bernat <bernat@luffy.cx>  Sat, 05 Apr 2008 10:22:51 +0200
+ -- Vincent Bernat <bernat@luffy.cx>  Sat, 05 Apr 2008 18:16:33 +0200
 
 roundcube (0.1-4) unstable; urgency=low
 
