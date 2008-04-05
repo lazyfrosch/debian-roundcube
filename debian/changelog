@@ -6,7 +6,8 @@ roundcube (0.1.1-1) unstable; urgency=low
     - Patch new MySQL upgrade script to fix a typo
   * Debconf translation updates:
     - Spanish. Closes: #473788
-  * Depends on php-mail-mime (>= 1.5.0) and drop compatibility patch.
+  * Depends on php-mail-mime (>= 1.5.0) and drop compatibility patch
+  * Install upstream changelog in /usr/share/doc/roundcube*
 
  -- Vincent Bernat <bernat@luffy.cx>  Sat, 05 Apr 2008 18:16:33 +0200
 
