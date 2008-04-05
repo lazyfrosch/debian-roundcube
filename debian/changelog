@@ -2,8 +2,9 @@ roundcube (0.1-5) unstable; urgency=low
 
   * Debconf translation updates:
     - Spanish. Closes: #473788
+  * Depends on php-mail-mime (>= 1.5.0) and drop compatibility patch.
 
- -- Vincent Bernat <bernat@luffy.cx>  Tue, 01 Apr 2008 19:23:58 +0200
+ -- Vincent Bernat <bernat@luffy.cx>  Sat, 05 Apr 2008 10:22:51 +0200
 
 roundcube (0.1-4) unstable; urgency=low
 
