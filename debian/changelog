@@ -1,3 +1,10 @@
+roundcube (0.1.1-2) unstable; urgency=low
+
+  * Comment by default Alias directive for tinymce in Apache configuration
+    file (Closes: #476162).
+
+ -- Vincent Bernat <bernat@luffy.cx>  Tue, 15 Apr 2008 08:20:47 +0200
+
 roundcube (0.1.1-1) unstable; urgency=low
 
   * New upstream release
