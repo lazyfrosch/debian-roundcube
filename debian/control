@@ -6,7 +6,6 @@ Uploaders: Vincent Bernat <bernat@luffy.cx>, Romain Beauxis <toots@rastageeks.or
 Build-Depends: debhelper (>= 5), quilt, patchutils (>= 0.2.25), cdbs (>= 0.4.27), po-debconf
 Homepage: http://www.roundcube.net/
 Standards-Version: 3.7.3
-DM-Upload-Allowed: yes
 Vcs-Svn: svn://svn.debian.org/svn/pkg-roundcube/roundcube
 Vcs-Browser: http://svn.debian.org/wsvn/pkg-roundcube/roundcube
 
