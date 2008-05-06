@@ -1,3 +1,10 @@
+roundcube (0.1.1-3) unstable; urgency=low
+
+  * Fix an error introduced when fixing bug #476803. Thanks to Micah
+    Anderson for spotting it (Closes: #479775).
+
+ -- Vincent Bernat <bernat@debian.org>  Tue, 06 May 2008 18:46:52 +0200
+
 roundcube (0.1.1-2) unstable; urgency=low
 
   * Comment by default Alias directive for tinymce in Apache configuration
