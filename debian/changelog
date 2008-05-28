@@ -1,4 +1,4 @@
-roundcube (0.1.1-4) UNRELEASED; urgency=low
+roundcube (0.1.1-4) unstable; urgency=low
 
   * Add Slovak debconf translation, thanks to Ivan Masár (Closes: #481376)
   * Fix debian/copyright:
@@ -6,7 +6,7 @@ roundcube (0.1.1-4) UNRELEASED; urgency=low
      + Add an explanation on the BSD license present at the top of
        index.php (Closes: #477119)
   * We do not support tinymce 3, yet. Depends on tinymce2 | tinymce (<<
-    3). Closes: #481145
+    3). Closes: #481145, #483053, #482295
 
  -- Vincent Bernat <bernat@debian.org>  Tue, 20 May 2008 20:51:52 +0200
 
