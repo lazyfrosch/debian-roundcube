@@ -1,3 +1,11 @@
+roundcube (0.1.1-5) unstable; urgency=low
+
+  * Fix ordering of message-id in message headers, thanks to Reinhard
+    Tartler (Closes: #486493)
+  * Update Standards-Version to 3.8.0
+
+ -- Vincent Bernat <bernat@debian.org>  Tue, 17 Jun 2008 00:33:40 +0200
+
 roundcube (0.1.1-4) unstable; urgency=low
 
   * Add Slovak debconf translation, thanks to Ivan Masár (Closes: #481376)
