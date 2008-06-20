@@ -1,4 +1,4 @@
-roundcube (0.1.1-5) UNRELEASED; urgency=low
+roundcube (0.1.1-5) unstable; urgency=low
 
   * Fix ordering of message-id in message headers, thanks to Reinhard
     Tartler (Closes: #486493)
