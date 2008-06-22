@@ -1,3 +1,10 @@
+roundcube (0.1.1-6) unstable; urgency=low
+
+  * Fix use_packaged_tinymce patch which was incorrect after switch to
+    tinymce2 package.
+
+ -- Vincent Bernat <bernat@debian.org>  Sun, 22 Jun 2008 12:19:16 +0200
+
 roundcube (0.1.1-5) unstable; urgency=low
 
   * Fix ordering of message-id in message headers, thanks to Reinhard
