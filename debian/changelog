@@ -1,4 +1,4 @@
-roundcube (0.2~alpha-1) UNRELEASED; urgency=low
+roundcube (0.2~alpha-1) experimental; urgency=low
 
   * New upstream release
   * Update debian/watch file to correctly consider those new releases
