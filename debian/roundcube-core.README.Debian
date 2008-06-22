@@ -5,12 +5,4 @@ To use tinymce editor:
  - set $rcmail_config['enable_htmleditor'] to TRUE in
    /etc/roundcube/main.inc.php
 
-RoundCube needs tinymce 2. On recent Debian systems, this package is
-provided by tinymce2 package. If you use tinymce package from etch,
-you will need to check Apache or lighttpd configuration to adapt
-paths.
-
-The spellchecker is disabled since it is not present in tinymce Debian
-package.
-
- -- Vincent Bernat <bernat@debian.org>, Tue, 20 May 2008 20:51:28 +0200
+ -- Vincent Bernat <bernat@debian.org>, Sun, 22 Jun 2008 12:13:32 +0200

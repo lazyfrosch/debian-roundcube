@@ -38,11 +38,11 @@ binary-install/roundcube-core::
 	# Some files are executable while not being scripts or binary...
 	find $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/localization -type f -print0 | xargs -0 chmod -x
 	# Remove useless file
-	rm $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/lib/magic
-	rm $(CURDIR)/debian/roundcube-core/usr/share/roundcube/bin/msgimport
+	rm $(CURDIR)/debian/roundcube-core/usr/share/roundcube/bin/*.sh
+	find $(CURDIR)/debian/roundcube-core -name '._*' -print0 | xargs -r0 rm
 	# Remove files shipped in tinymce package
 	rm -rf $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/js/tiny_mce
-	dh_link -proundcube-core usr/share/tinymce2/www usr/share/roundcube/program/js/tiny_mce
+	dh_link -proundcube-core usr/share/tinymce/www usr/share/roundcube/program/js/tiny_mce
 
 clean::
 	debconf-updatepo
