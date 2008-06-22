@@ -9,6 +9,7 @@ roundcube (0.2~alpha-1) UNRELEASED; urgency=low
   * Update the following patches:
       + correct_install_path
       + use_packaged_tinymce
+  * Add a new patch to fix a login problem
   * Depends on tinymce >= 3
 
  -- Vincent Bernat <bernat@debian.org>  Sun, 22 Jun 2008 12:05:44 +0200
