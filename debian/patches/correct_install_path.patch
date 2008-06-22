@@ -1,11 +1,11 @@
---- roundcubemail-0.1~rc1~dfsg.orig/index.php~	2007-05-18 15:11:22.000000000 +0200
-+++ roundcubemail-0.1~rc1~dfsg.orig/index.php	2007-05-20 14:12:35.000000000 +0200
-@@ -47,7 +47,7 @@
+--- a/program/include/iniset.php~	2008-06-09 22:57:53.000000000 +0200
++++ a/program/include/iniset.php	2008-06-22 12:10:55.000000000 +0200
+@@ -27,7 +27,7 @@
+ define('JS_OBJECT_NAME', 'rcmail');
  
- // define global vars
- $OUTPUT_TYPE = 'html';
--$INSTALL_PATH = dirname(__FILE__);
-+$INSTALL_PATH = '/var/lib/roundcube';
- $MAIN_TASKS = array('mail','settings','addressbook','logout');
+ if (!defined('INSTALL_PATH')) {
+-  define('INSTALL_PATH', dirname($_SERVER['SCRIPT_FILENAME']).'/');
++  define('INSTALL_PATH', '/var/lib/roundcube/');
+ }
  
- if (empty($INSTALL_PATH))
+ // make sure path_separator is defined

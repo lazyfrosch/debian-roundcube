@@ -6,8 +6,8 @@ Index: roundcube-0.1~rc2/program/steps/mail/sendmail.inc
      if (! in_array($image_name, $included_images))
        {
        // add the image to the MIME message
--      $img_file = $INSTALL_PATH . '/' . $searchstr . $image_name;
-+      $img_file = '/usr/share/tinymce2/www/plugins/emotions/images/' . $image_name;
+-      $img_file = INSTALL_PATH . '/' . $searchstr . $image_name;
++      $img_file = '/usr/share/tinymce/www/plugins/emotions/images/' . $image_name;
        if(! $mime_message->addHTMLImage($img_file, 'image/gif', '', true, '_' . $image_name))
          $OUTPUT->show_message("emoticonerror", 'error');
  
