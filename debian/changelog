@@ -1,3 +1,9 @@
+roundcube (0.1.1-7) unstable; urgency=low
+
+  * Another fix for incorrect tinymce path. This should be the last one!
+
+ -- Vincent Bernat <bernat@debian.org>  Sun, 22 Jun 2008 12:36:59 +0200
+
 roundcube (0.1.1-6) unstable; urgency=low
 
   * Fix use_packaged_tinymce patch which was incorrect after switch to
