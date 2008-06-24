@@ -1,8 +1,12 @@
 roundcube (0.2~alpha-2) UNRELEASED; urgency=low
 
+  [ Vincent Bernat ]
   * Fix lintian warnings introduced by previous upload
 
- -- Vincent Bernat <bernat@debian.org>  Sun, 22 Jun 2008 14:21:36 +0200
+  [ Romain Beauxis ]
+  * Versioned roundcube-core dependency for roundcube 
+
+ -- Romain Beauxis <toots@rastageeks.org>  Tue, 24 Jun 2008 05:25:14 +0200
 
 roundcube (0.2~alpha-1) experimental; urgency=low
 
