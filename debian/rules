@@ -44,5 +44,9 @@ binary-install/roundcube-core::
 	rm -rf $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/js/tiny_mce
 	dh_link -proundcube-core usr/share/tinymce/www usr/share/roundcube/program/js/tiny_mce
 
+$(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/% :
+	install -d $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/bug/$(cdbs_curpkg)
+	install $(CURDIR)/debian/bug.control $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/bug/$(cdbs_curpkg)/control
+
 clean::
 	debconf-updatepo
