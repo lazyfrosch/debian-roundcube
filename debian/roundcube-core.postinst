@@ -23,7 +23,7 @@ lighttpd_install() {
 			echo "Lighttpd not installed, skipping"
 		else
 			ln -s /etc/roundcube/lighttpd.conf /etc/lighttpd/conf-available/50-roundcube.conf
-			/usr/sbin/lighty-enable-mod roundcube
+			lighty-enable-mod roundcube
 		fi
 	fi
 }

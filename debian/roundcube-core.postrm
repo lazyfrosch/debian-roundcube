@@ -19,7 +19,7 @@ lighttpd_remove() {
 		if [ ! -x /usr/sbin/lighty-disable-mod ] ; then
 			echo "Lighttpd not installed, skipping"
 		else
-			/usr/sbin/lighty-disable-mod roundcube
+			lighty-disable-mod roundcube
 		fi
 		# See bug #448682
 		if [ -h /etc/lighttpd/conf-enabled/50-roundcube.conf ] ; then

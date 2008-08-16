@@ -11,7 +11,7 @@ Vcs-Browser: http://svn.debian.org/wsvn/pkg-roundcube/roundcube
 
 Package: roundcube-core
 Architecture: all
-Depends: dbconfig-common, debconf | debconf-2.0, apache2 | lighttpd | httpd, php5, php5-mcrypt, roundcube-db, php-db, php-auth, php-net-smtp, php-net-socket, php-mail-mime (>= 1.5.0), ucf, tinymce (<< 3), ${misc:Depends}, libmagic1
+Depends: dbconfig-common, debconf | debconf-2.0, apache2 | lighttpd | httpd, php5, php5-mcrypt, roundcube-db, php-db, php-auth, php-net-smtp, php-net-socket, php-mail-mime (>= 1.5.0), ucf, tinymce (>= 3), ${misc:Depends}, libmagic1
 Replaces: roundcube
 Conflicts: roundcube (<< 0.1~rc2-2)
 Description: skinnable AJAX based webmail solution for IMAP servers
@@ -27,7 +27,7 @@ Description: skinnable AJAX based webmail solution for IMAP servers
 
 Package: roundcube
 Architecture: all
-Depends: roundcube-sqlite | roundcube-db, roundcube-core
+Depends: roundcube-sqlite | roundcube-db, roundcube-core (= ${binary:Version})
 Description: skinnable AJAX based webmail solution for IMAP servers
  RoundCube Webmail is a browser-based multilingual IMAP client with an
  application-like user interface. It provides full functionality
