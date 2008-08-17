@@ -96,8 +96,10 @@ msgstr ""
 #. Type: string
 #. Description
 #: ../templates:4001
-msgid "To use SSL connections, please enter host names as 'ssl://hostname:993'."
-msgstr "எஸ்எஸ்எல் இணைப்பை பயன் படுத்த புரவன் பெயர்களை  'ssl://hostname:993' போல் உள்ளிடவும்."
+msgid ""
+"To use SSL connections, please enter host names as 'ssl://hostname:993'."
+msgstr ""
+"எஸ்எஸ்எல் இணைப்பை பயன் படுத்த புரவன் பெயர்களை  'ssl://hostname:993' போல் உள்ளிடவும்."
 
 #. Type: select
 #. Description

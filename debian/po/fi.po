@@ -43,8 +43,12 @@ msgstr ""
 #. Type: multiselect
 #. Description
 #: ../templates:2002
-msgid "Please select the web server(s) that should be configured automatically for RoundCube."
-msgstr "Valitse verkkopalvelimet, joiden asetukset tulisi automaattisesti tehdä RoundCubea varten."
+msgid ""
+"Please select the web server(s) that should be configured automatically for "
+"RoundCube."
+msgstr ""
+"Valitse verkkopalvelimet, joiden asetukset tulisi automaattisesti tehdä "
+"RoundCubea varten."
 
 #. Type: boolean
 #. Description
@@ -117,13 +121,18 @@ msgstr "Yksittäiset käyttäjät voivat muuttaa tätä valintaa asetuksissaan."
 #. Type: select
 #. Description
 #: ../templates:5001
-msgid "However, the default language will be used for the login screen and the first connection of users."
-msgstr "Oletuskieltä käytetään kuitenkin kirjautumisruudussa ja käyttäjien ensimmäisen yhteyden yhteydessä."
+msgid ""
+"However, the default language will be used for the login screen and the "
+"first connection of users."
+msgstr ""
+"Oletuskieltä käytetään kuitenkin kirjautumisruudussa ja käyttäjien "
+"ensimmäisen yhteyden yhteydessä."
 
 #~ msgid "apache"
 #~ msgstr "apache"
+
 #~ msgid "apache-ssl"
 #~ msgstr "apache-ssl"
+
 #~ msgid "apache-perl"
 #~ msgstr "apache-perl"
-

@@ -98,10 +98,11 @@ msgstr ""
 #. Type: string
 #. Description
 #: ../templates:4001
-msgid "To use SSL connections, please enter host names as 'ssl://hostname:993'."
+msgid ""
+"To use SSL connections, please enter host names as 'ssl://hostname:993'."
 msgstr ""
-"SSL konexioak erabiltzeko, idatzi ostalari izena formatu honetan: "
-"'ssl://ostalaria:993'."
+"SSL konexioak erabiltzeko, idatzi ostalari izena formatu honetan: 'ssl://"
+"ostalaria:993'."
 
 #. Type: select
 #. Description
@@ -119,7 +120,8 @@ msgstr "Mesedez hautatu RoundCube-ren hizkuntz lehenetsia."
 #. Description
 #: ../templates:5001
 msgid "This choice can be overridden by individual users in their preferences."
-msgstr "Hautapen hauek erabiltzaile bakoitzak bere hobespenetan gainidatzi ditzake."
+msgstr ""
+"Hautapen hauek erabiltzaile bakoitzak bere hobespenetan gainidatzi ditzake."
 
 #. Type: select
 #. Description

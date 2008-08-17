@@ -64,7 +64,8 @@ msgstr "هل تريد تشغيل خادم الوب الآن؟"
 msgid ""
 "In order to activate the new configuration, the reconfigured web server(s) "
 "have to be restarted."
-msgstr "لتنشيط التهيئة الجديدة، يجب إعادة تشغيل خادمات الوب التي تمت إعادة تهيئتها."
+msgstr ""
+"لتنشيط التهيئة الجديدة، يجب إعادة تشغيل خادمات الوب التي تمت إعادة تهيئتها."
 
 #. Type: string
 #. Description
@@ -93,8 +94,10 @@ msgstr ""
 #. Type: string
 #. Description
 #: ../templates:4001
-msgid "To use SSL connections, please enter host names as 'ssl://hostname:993'."
-msgstr "لاستخدام اتصالات SSL، الرجاء إدخال اسم المضيف بالشكل 'ssl://hostname:993'."
+msgid ""
+"To use SSL connections, please enter host names as 'ssl://hostname:993'."
+msgstr ""
+"لاستخدام اتصالات SSL، الرجاء إدخال اسم المضيف بالشكل 'ssl://hostname:993'."
 
 #. Type: select
 #. Description
