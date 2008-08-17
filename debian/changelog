@@ -1,3 +1,10 @@
+roundcube (0.2~alpha-3) UNRELEASED; urgency=low
+
+  * Adapt descriptions of roundcube-database packages to refer them as
+    metapackages instead of virtual package (Closes: #495434).
+
+ -- Vincent Bernat <bernat@debian.org>  Sun, 17 Aug 2008 14:27:26 +0200
+
 roundcube (0.2~alpha-2) experimental; urgency=low
 
   [ Vincent Bernat ]
