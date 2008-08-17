@@ -3,6 +3,8 @@ roundcube (0.2~alpha-2) experimental; urgency=low
   [ Vincent Bernat ]
   * Fix lintian warnings introduced by previous upload
   * Fix lighttpd.conf to make it work with latest versions (Closes: #494044)
+  * Do not prepend path to lighty util in postinst and postrm, as per
+    Policy Manual section 6.1
   * Ship a bug/control file to have all bugs submitted against roundcube
     metapackage
   * Fix debian/roundcube-core.cron.daily to use
