@@ -6,7 +6,7 @@ roundcube (0.2~alpha-3) UNRELEASED; urgency=low
 
   [ Romain Beauxis ]
   * Changed versioned dependency of rouncube from binary:Version to
-    source:Version since these are all architecture independant packages.  
+    source:Version since these are all architecture independent packages.  
 
  -- Romain Beauxis <toots@rastageeks.org>  Wed, 20 Aug 2008 01:31:17 +0200
 
