@@ -5,12 +5,14 @@ roundcube (0.2~alpha-3) UNRELEASED; urgency=low
     metapackages instead of virtual package (Closes: #495434).
   * Add robots.txt from upstream, even if in some configuration, it will
     not be considered (Closes: #499108).
+  * Do not ship .htaccess files. Restrictions are set in Apache or
+    Lighttpd configuration files (Closes: #500202).
 
   [ Romain Beauxis ]
   * Changed versioned dependency of rouncube from binary:Version to
     source:Version since these are all architecture independent packages.  
 
- -- Vincent Bernat <bernat@debian.org>  Wed, 17 Sep 2008 20:46:00 +0200
+ -- Vincent Bernat <bernat@debian.org>  Sat, 27 Sep 2008 10:38:09 +0200
 
 roundcube (0.2~alpha-2) experimental; urgency=low
 
