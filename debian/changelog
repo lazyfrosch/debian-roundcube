@@ -1,3 +1,9 @@
+roundcube (0.2~alpha-4) UNRELEASED; urgency=low
+
+  * Add missing ${misc:Depends} to make Lintian happy.
+
+ -- Vincent Bernat <bernat@debian.org>  Sat, 13 Dec 2008 14:53:23 +0100
+
 roundcube (0.2~alpha-3) experimental; urgency=high
 
   [ Vincent Bernat ]

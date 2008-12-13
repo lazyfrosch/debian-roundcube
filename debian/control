@@ -27,7 +27,7 @@ Description: skinnable AJAX based webmail solution for IMAP servers
 
 Package: roundcube
 Architecture: all
-Depends: roundcube-sqlite | roundcube-db, roundcube-core (= ${source:Version})
+Depends: roundcube-sqlite | roundcube-db, roundcube-core (= ${source:Version}), ${misc:Depends}
 Description: skinnable AJAX based webmail solution for IMAP servers
  RoundCube Webmail is a browser-based multilingual IMAP client with an
  application-like user interface. It provides full functionality
@@ -40,7 +40,7 @@ Description: skinnable AJAX based webmail solution for IMAP servers
 
 Package: roundcube-mysql
 Architecture: all
-Depends: php5-mysql, mysql-client | virtual-mysql-client
+Depends: php5-mysql, mysql-client | virtual-mysql-client, ${misc:Depends}
 Suggests: mysql-server
 Provides: roundcube-db
 Description: metapackage providing MySQL dependencies for RoundCube
@@ -50,7 +50,7 @@ Description: metapackage providing MySQL dependencies for RoundCube
 
 Package: roundcube-pgsql
 Architecture: all
-Depends: php5-pgsql, postgresql-client-8.1 | postgresql-client 
+Depends: php5-pgsql, postgresql-client-8.1 | postgresql-client, ${misc:Depends}
 Suggests: postgresql-server
 Provides: roundcube-db
 Description: metapackage providing PostgreSQL dependencies for RoundCube
@@ -60,7 +60,7 @@ Description: metapackage providing PostgreSQL dependencies for RoundCube
 
 Package: roundcube-sqlite
 Architecture: all
-Depends: php5-sqlite, sqlite
+Depends: php5-sqlite, sqlite, ${misc:Depends}
 Provides: roundcube-db
 Description: metapackage providing sqlite dependencies for RoundCube
  This package provides sqlite dependencies for RoundCube Webmail, a
