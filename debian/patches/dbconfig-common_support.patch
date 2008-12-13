@@ -1,3 +1,5 @@
+The default db.inc.php is modified to adapt it to the use of dbconfig-common package.
+
 --- roundcube_0.1~beta2.2/config/db.inc.php.dist        2006-03-20 23:08:51.000000000 +0100
 +++ roundcube_0.1~beta2.2/config/db.inc.php.dist  2007-03-13 14:33:38.000000000 +0100
 @@ -14,13 +14,20 @@
