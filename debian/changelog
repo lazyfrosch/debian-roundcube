@@ -1,3 +1,20 @@
+roundcube (0.2~alpha-3) experimental; urgency=high
+
+  [ Vincent Bernat ]
+  * Fix a vulnerability in the use of preg_replace (Closes: #508628).
+  * Adapt descriptions of roundcube-database packages to refer them as
+    metapackages instead of virtual package (Closes: #495434).
+  * Add robots.txt from upstream, even if in some configuration, it will
+    not be considered (Closes: #499108).
+  * Do not ship .htaccess files. Restrictions are set in Apache or
+    Lighttpd configuration files (Closes: #500202).
+
+  [ Romain Beauxis ]
+  * Changed versioned dependency of rouncube from binary:Version to
+    source:Version since these are all architecture independent packages.  
+
+ -- Vincent Bernat <bernat@debian.org>  Sat, 13 Dec 2008 14:36:02 +0100
+
 roundcube (0.2~alpha-2) experimental; urgency=low
 
   [ Vincent Bernat ]

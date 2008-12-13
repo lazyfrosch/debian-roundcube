@@ -23,11 +23,11 @@ Description: skinnable AJAX based webmail solution for IMAP servers
  The user interface is fully skinnable using XHTML and CSS 2.
  .
  This package provides the core code for roundcube. You should install
- it along with one of the roundcube database virtual packages.
+ it along with one of the roundcube database metapackages.
 
 Package: roundcube
 Architecture: all
-Depends: roundcube-sqlite | roundcube-db, roundcube-core (= ${binary:Version})
+Depends: roundcube-sqlite | roundcube-db, roundcube-core (= ${source:Version})
 Description: skinnable AJAX based webmail solution for IMAP servers
  RoundCube Webmail is a browser-based multilingual IMAP client with an
  application-like user interface. It provides full functionality
@@ -43,7 +43,7 @@ Architecture: all
 Depends: php5-mysql, mysql-client | virtual-mysql-client
 Suggests: mysql-server
 Provides: roundcube-db
-Description: virtual package providing MySQL dependencies for RoundCube
+Description: metapackage providing MySQL dependencies for RoundCube
  This package provides MySQL dependencies for RoundCube Webmail, a
  skinnable AJAX based webmail solution for IMAP servers. Install this
  one if you want to use a MySQL database with RoundCube.
@@ -53,7 +53,7 @@ Architecture: all
 Depends: php5-pgsql, postgresql-client-8.1 | postgresql-client 
 Suggests: postgresql-server
 Provides: roundcube-db
-Description: virtual package providing PostgreSQL dependencies for RoundCube
+Description: metapackage providing PostgreSQL dependencies for RoundCube
  This package provides PostgreSQL dependencies for RoundCube Webmail,
  a skinnable AJAX based webmail solution for IMAP servers. Install
  this one if you want to use a PostgreSQL database with RoundCube.
@@ -62,7 +62,7 @@ Package: roundcube-sqlite
 Architecture: all
 Depends: php5-sqlite, sqlite
 Provides: roundcube-db
-Description: virtual package providing sqlite dependencies for RoundCube
+Description: metapackage providing sqlite dependencies for RoundCube
  This package provides sqlite dependencies for RoundCube Webmail, a
  skinnable AJAX based webmail solution for IMAP servers. Install this
  one if you want to use a sqlite database with RoundCube.
