@@ -13,7 +13,7 @@ roundcube (0.2~alpha-3) experimental; urgency=high
   * Changed versioned dependency of rouncube from binary:Version to
     source:Version since these are all architecture independent packages.  
 
- -- Vincent Bernat <bernat@debian.org>  Sat, 27 Sep 2008 10:38:09 +0200
+ -- Vincent Bernat <bernat@debian.org>  Sat, 13 Dec 2008 14:36:02 +0100
 
 roundcube (0.2~alpha-2) experimental; urgency=low
 
