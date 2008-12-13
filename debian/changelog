@@ -1,6 +1,7 @@
-roundcube (0.2~alpha-3) UNRELEASED; urgency=low
+roundcube (0.2~alpha-3) experimental; urgency=high
 
   [ Vincent Bernat ]
+  * Fix a vulnerability in the use of preg_replace (Closes: #508628).
   * Adapt descriptions of roundcube-database packages to refer them as
     metapackages instead of virtual package (Closes: #495434).
   * Add robots.txt from upstream, even if in some configuration, it will
