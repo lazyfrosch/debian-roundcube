@@ -3,8 +3,10 @@ roundcube (0.2~alpha-4) UNRELEASED; urgency=low
   * Add missing ${misc:Depends} to make Lintian happy.
   * Add description to each patch.
   * Execute cron job only if the directory to clean exists.
+  * Reload web server configuration instead of restart, thanks to a patch
+    from Tiago Bortoletto Vaz. Closes: #508633.
 
- -- Vincent Bernat <bernat@debian.org>  Sun, 14 Dec 2008 10:37:47 +0100
+ -- Vincent Bernat <bernat@debian.org>  Mon, 15 Dec 2008 19:54:22 +0100
 
 roundcube (0.2~alpha-3) experimental; urgency=high
 
