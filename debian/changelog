@@ -5,6 +5,7 @@ roundcube (0.2~alpha-4) UNRELEASED; urgency=low
   * Execute cron job only if the directory to clean exists.
   * Reload web server configuration instead of restart, thanks to a patch
     from Tiago Bortoletto Vaz. Closes: #508633.
+  * Add missing dependency on php5-gd, used for quota bar.
 
  -- Vincent Bernat <bernat@debian.org>  Mon, 15 Dec 2008 19:54:22 +0100
 
