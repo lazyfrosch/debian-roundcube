@@ -6,8 +6,10 @@ roundcube (0.2~alpha-4) UNRELEASED; urgency=low
   * Reload web server configuration instead of restart, thanks to a patch
     from Tiago Bortoletto Vaz. Closes: #508633.
   * Add missing dependency on php5-gd, used for quota bar.
+  * For roundcube-pgsql, depends on postgresql-client only. This package
+    is provided by the currently supported real package.
 
- -- Vincent Bernat <bernat@debian.org>  Mon, 15 Dec 2008 19:54:22 +0100
+ -- Vincent Bernat <bernat@debian.org>  Wed, 24 Dec 2008 17:16:41 +0100
 
 roundcube (0.2~alpha-3) experimental; urgency=high
 
