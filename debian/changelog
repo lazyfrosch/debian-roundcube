@@ -5,11 +5,13 @@ roundcube (0.2~alpha-4) UNRELEASED; urgency=low
   * Execute cron job only if the directory to clean exists.
   * Reload web server configuration instead of restart, thanks to a patch
     from Tiago Bortoletto Vaz. Closes: #508633.
+  * Fix a vulnerability in quota image generation. This fixes
+    CVE-2008-5620. Thanks to Nico Golde for reporting it. Closes: #509596.
   * Add missing dependency on php5-gd, used for quota bar.
   * For roundcube-pgsql, depends on postgresql-client only. This package
     is provided by the currently supported real package.
 
- -- Vincent Bernat <bernat@debian.org>  Wed, 24 Dec 2008 17:16:41 +0100
+ -- Vincent Bernat <bernat@debian.org>  Thu, 25 Dec 2008 11:38:13 +0100
 
 roundcube (0.2~alpha-3) experimental; urgency=high
 
