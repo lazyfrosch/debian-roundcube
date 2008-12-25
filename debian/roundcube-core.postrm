@@ -73,10 +73,12 @@ case "$1" in
         if [ "$res" = "true" ]; then
             for webserver in $restart; do
                 webserver=${webserver%,}
+                # Redirection of 3 is needed because Debconf uses it and it might
+                # be inherited by webserver. See bug #446324.
                 if [ -x /usr/sbin/invoke-rc.d ]; then
-                    invoke-rc.d $webserver restart
+                    invoke-rc.d $webserver reload 3>/dev/null || true
                 else
-                    /etc/init.d/$webserver restart
+                    /etc/init.d/$webserver reload 3>/dev/null || true
                 fi
             done
         fi

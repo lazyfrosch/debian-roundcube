@@ -1,3 +1,5 @@
+Use tinymce from tinycme package instead of the shipped one.
+
 Index: roundcube-0.1~rc2/program/steps/mail/sendmail.inc
 ===================================================================
 --- a/program/steps/mail/sendmail.inc~	2008-04-30 10:21:42.000000000 +0200

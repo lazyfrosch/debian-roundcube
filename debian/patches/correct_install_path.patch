@@ -1,3 +1,5 @@
+Install path is /var/lib/roundcube for Debian. Don't try to guess it.
+
 --- a/program/include/iniset.php~	2008-06-09 22:57:53.000000000 +0200
 +++ a/program/include/iniset.php	2008-06-22 12:10:55.000000000 +0200
 @@ -27,7 +27,7 @@

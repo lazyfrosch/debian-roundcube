@@ -1,3 +1,5 @@
+Fix a vulnerability due to the use of "e" option of preg_replace.
+
 --- roundcube-0.2~alpha/program/lib/html2text.php	2008-04-12 15:54:45.000000000 +0200
 +++ roundcube-0.2~alpha/program/lib/html2text.php	2008-12-13 14:21:44.000000000 +0100
 @@ -99,6 +99,22 @@

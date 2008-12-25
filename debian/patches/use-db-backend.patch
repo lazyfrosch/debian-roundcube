@@ -1,3 +1,5 @@
+Use db backend since mdb2 is not yet available in Debian.
+
 --- roundcubemail-0.1-dep/config/db.inc.php.dist~	2008-03-03 22:32:15.000000000 +0100
 +++ roundcubemail-0.1-dep/config/db.inc.php.dist	2008-03-05 21:07:28.000000000 +0100
 @@ -27,7 +27,7 @@

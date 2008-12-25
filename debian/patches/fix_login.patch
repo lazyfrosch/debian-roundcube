@@ -1,3 +1,5 @@
+Fix login redirection.
+
 --- a/program/include/rcmail.php~	2008-06-07 21:33:07.000000000 +0200
 +++ a/program/include/rcmail.php	2008-06-22 13:36:57.000000000 +0200
 @@ -474,7 +474,7 @@

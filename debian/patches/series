@@ -5,3 +5,4 @@ use-db-backend.patch
 correct-magic-path.patch
 fix_login.patch
 dont-use-preg-e-option.patch
+cve-2008-5620.patch

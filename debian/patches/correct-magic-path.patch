@@ -1,3 +1,5 @@
+On Debian, the magic file is in /usr/share/file/magic.
+
 --- roundcube-0.1/config/main.inc.php.dist~	2008-02-21 11:27:19.000000000 +0100
 +++ roundcube-0.1/config/main.inc.php.dist	2008-03-06 14:04:53.000000000 +0100
 @@ -277,7 +277,7 @@
