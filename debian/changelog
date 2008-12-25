@@ -1,4 +1,4 @@
-roundcube (0.2~alpha-4) UNRELEASED; urgency=low
+roundcube (0.2~alpha-4) experimental; urgency=low
 
   * Add missing ${misc:Depends} to make Lintian happy.
   * Add description to each patch.
