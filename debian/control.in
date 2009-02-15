@@ -28,7 +28,7 @@ Description: skinnable AJAX based webmail solution for IMAP servers
 Package: roundcube
 Architecture: all
 Depends: roundcube-sqlite | roundcube-db, roundcube-core (= ${source:Version}), ${misc:Depends}
-Description: skinnable AJAX based webmail solution for IMAP servers
+Description: skinnable AJAX based webmail solution for IMAP servers - metapackage
  RoundCube Webmail is a browser-based multilingual IMAP client with an
  application-like user interface. It provides full functionality
  expected from an e-mail client, including MIME support, address book,
