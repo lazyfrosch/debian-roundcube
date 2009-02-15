@@ -11,6 +11,8 @@ roundcube (0.2~stable-1) unstable; urgency=low
       + Update patch to use packaged tinymce.
   * Upload to unstable since Lenny is out.
   * Apply fix for XSS issue (CVE-2009-0413). Closes: #514179.
+  * Remove hack to update a SQLite table for an upgrade from a quite old
+    version of roundcube.
   * Fix pending l10n issues:
       + Update English debconf template. Closes: #473794.
       + Add Swedish translation thanks to Martin Bagge. Closes: #508752.
