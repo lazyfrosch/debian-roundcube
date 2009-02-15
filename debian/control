@@ -3,7 +3,7 @@ Section: web
 Priority: extra
 Maintainer: Debian Roundcube Maintainers <pkg-roundcube-maintainers@lists.alioth.debian.org>
 Uploaders: Vincent Bernat <bernat@debian.org>, Romain Beauxis <toots@rastageeks.org>
-Build-Depends: debhelper (>= 5), quilt, patchutils (>= 0.2.25), cdbs (>= 0.4.27), po-debconf
+Build-Depends: cdbs (>= 0.4.23-1.1), debhelper (>= 5), quilt, patchutils (>= 0.2.25), cdbs (>= 0.4.27), po-debconf
 Homepage: http://www.roundcube.net/
 Standards-Version: 3.8.0
 Vcs-Svn: svn://svn.debian.org/svn/pkg-roundcube/roundcube
@@ -11,7 +11,7 @@ Vcs-Browser: http://svn.debian.org/wsvn/pkg-roundcube/roundcube
 
 Package: roundcube-core
 Architecture: all
-Depends: dbconfig-common, debconf | debconf-2.0, apache2 | lighttpd | httpd, php5, php5-mcrypt, php5-gd, roundcube-db, php-db, php-auth, php-net-smtp, php-net-socket, php-mail-mime (>= 1.5.0), ucf, tinymce (>= 3), ${misc:Depends}, libmagic1
+Depends: dbconfig-common, debconf | debconf-2.0, apache2 | lighttpd | httpd, php5, php5-mcrypt, php5-gd, roundcube-db, php-mdb2, php-auth, php-net-smtp, php-net-socket, php-mail-mime (>= 1.5.0), ucf, tinymce (>= 3), ${misc:Depends}, libmagic1
 Replaces: roundcube
 Conflicts: roundcube (<< 0.1~rc2-2)
 Description: skinnable AJAX based webmail solution for IMAP servers
@@ -40,7 +40,7 @@ Description: skinnable AJAX based webmail solution for IMAP servers
 
 Package: roundcube-mysql
 Architecture: all
-Depends: php5-mysql, mysql-client | virtual-mysql-client, ${misc:Depends}
+Depends: php-mdb2-driver-mysql, mysql-client | virtual-mysql-client, ${misc:Depends}
 Suggests: mysql-server
 Provides: roundcube-db
 Description: metapackage providing MySQL dependencies for RoundCube
@@ -50,7 +50,7 @@ Description: metapackage providing MySQL dependencies for RoundCube
 
 Package: roundcube-pgsql
 Architecture: all
-Depends: php5-pgsql, postgresql-client, ${misc:Depends}
+Depends: php-mdb2-driver-pgsql, postgresql-client-8.1 | postgresql-client, ${misc:Depends}
 Suggests: postgresql-server
 Provides: roundcube-db
 Description: metapackage providing PostgreSQL dependencies for RoundCube
@@ -60,7 +60,7 @@ Description: metapackage providing PostgreSQL dependencies for RoundCube
 
 Package: roundcube-sqlite
 Architecture: all
-Depends: php5-sqlite, sqlite, ${misc:Depends}
+Depends: php-mdb2-driver-sqlite, sqlite, ${misc:Depends}
 Provides: roundcube-db
 Description: metapackage providing sqlite dependencies for RoundCube
  This package provides sqlite dependencies for RoundCube Webmail, a
