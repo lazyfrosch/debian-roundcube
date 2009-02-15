@@ -16,6 +16,7 @@ roundcube (0.2~stable-1) unstable; urgency=low
   * Fix pending l10n issues:
       + Update English debconf template. Closes: #473794.
       + Add Swedish translation thanks to Martin Bagge. Closes: #508752.
+  * Add patch from Kris Popendorf to log failed logins. Closes: #505267.
 
  -- Vincent Bernat <bernat@debian.org>  Sun, 15 Feb 2009 16:18:58 +0100
 
