@@ -1,6 +1,6 @@
 roundcube (0.2~stable-1) unstable; urgency=low
 
-  * New upstream version. Closes: #503573.
+  * New upstream version. Closes: #503573, #504570.
       + Add SQL update scripts for this new release and for
         0.2~alpha. Remove copy of SQL upgrade script from debian/rules.
       + Remove patch for CVE-2008-5620 which is now fixed upstream.
