@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: roundcube_0.1~rc1~dfsg-1\n"
 "Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
-"POT-Creation-Date: 2008-03-05 22:12+0100\n"
+"POT-Creation-Date: 2009-02-15 17:05+0100\n"
 "PO-Revision-Date: 2008-04-01 18:21+0200\n"
 "Last-Translator: Carlos Galisteo <cgalisteo@k-rolus.net>\n"
 "Language-Team:  <debian-l10n-spanish@lists.debian.org>\n"
@@ -61,8 +61,9 @@ msgstr "Servidores web a reconfigurar automáticamente:"
 msgid ""
 "RoundCube supports any web server supported by PHP, however only Apache 2 "
 "and lighttpd can be configured automatically."
-msgstr "RoundCube funciona con cualquier servidor web que soporte PHP, sin embargo sólo se configuran automáticamente Apache 2 y lighttpd."
-
+msgstr ""
+"RoundCube funciona con cualquier servidor web que soporte PHP, sin embargo "
+"sólo se configuran automáticamente Apache 2 y lighttpd."
 
 #. Type: multiselect
 #. Description
@@ -70,7 +71,9 @@ msgstr "RoundCube funciona con cualquier servidor web que soporte PHP, sin embar
 msgid ""
 "Please select the web server(s) that should be configured automatically for "
 "RoundCube."
-msgstr "Seleccione el/los servidor/es web que debe/n configurarse automáticamente para RoundCube."
+msgstr ""
+"Seleccione el/los servidor/es web que debe/n configurarse automáticamente "
+"para RoundCube."
 
 #. Type: boolean
 #. Description
@@ -84,7 +87,9 @@ msgstr "¿Debe/n reiniciarse ahora el/los servidor/es web?"
 msgid ""
 "In order to activate the new configuration, the reconfigured web server(s) "
 "have to be restarted."
-msgstr "Debe/n reiniciarse el/los servidor/es web para activar la nueva configuración."
+msgstr ""
+"Debe/n reiniciarse el/los servidor/es web para activar la nueva "
+"configuración."
 
 #. Type: string
 #. Description
@@ -95,7 +100,9 @@ msgstr "Servidor/es IMAP usado/s por RoundCube:"
 #. Type: string
 #. Description
 #: ../templates:4001
-msgid "Please select the IMAP server that should be used with RoundCube."
+#, fuzzy
+#| msgid "Please select the IMAP server that should be used with RoundCube."
+msgid "Please select the IMAP server(s) that should be used with RoundCube."
 msgstr "Seleccione el/los servidor/es IMAP que se usará/n con RoundCube."
 
 #. Type: string
@@ -105,14 +112,20 @@ msgid ""
 "If this is left blank, a text box will be displayed at login. Entering a "
 "space-separated list of hosts will display a pull-down menu. Entering a "
 "single host will enforce using this host."
-msgstr "Se mostrará un campo al autenticarse que el usuario podrá rellenar si deja este campo en blanco. Si proporciona una lista de equipos separados por espacios, se mostrará un menú desplegable. Si proporciona un único nombre de equipo se forzará el uso de este equipo."
+msgstr ""
+"Se mostrará un campo al autenticarse que el usuario podrá rellenar si deja "
+"este campo en blanco. Si proporciona una lista de equipos separados por "
+"espacios, se mostrará un menú desplegable. Si proporciona un único nombre de "
+"equipo se forzará el uso de este equipo."
 
 #. Type: string
 #. Description
 #: ../templates:4001
 msgid ""
 "To use SSL connections, please enter host names as 'ssl://hostname:993'."
-msgstr "Escriba los nombres de sistema como «ssl://hostname:9993» si desea usar conexiones SSL."
+msgstr ""
+"Escriba los nombres de sistema como «ssl://hostname:9993» si desea usar "
+"conexiones SSL."
 
 #. Type: select
 #. Description
@@ -139,5 +152,5 @@ msgid ""
 "However, the default language will be used for the login screen and the "
 "first connection of users."
 msgstr ""
-"Sin embargo, el idioma predeterminado se usará en la pantalla de autenticación "
-"y en la primera conexión de los usuarios."
+"Sin embargo, el idioma predeterminado se usará en la pantalla de "
+"autenticación y en la primera conexión de los usuarios."

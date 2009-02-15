@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
-"POT-Creation-Date: 2008-03-05 22:12+0100\n"
+"POT-Creation-Date: 2009-02-15 17:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,7 +73,7 @@ msgstr ""
 #. Type: string
 #. Description
 #: ../templates:4001
-msgid "Please select the IMAP server that should be used with RoundCube."
+msgid "Please select the IMAP server(s) that should be used with RoundCube."
 msgstr ""
 
 #. Type: string
