@@ -1,16 +1,16 @@
-# translation of ar.po to Arabic
+# translation of roundcube.po to swedish
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Ossama M. Khayat <okhayat@yahoo.com>, 2007, 2008.
+# Martin Bagge <brother@bsnet.se>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: ar\n"
+"Project-Id-Version: roundcube\n"
 "Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
 "POT-Creation-Date: 2009-02-15 17:05+0100\n"
-"PO-Revision-Date: 2008-03-18 15:29+0300\n"
-"Last-Translator: Ossama M. Khayat <okhayat@yahoo.com>\n"
-"Language-Team: Arabic <support@arabeyes.org>\n"
+"PO-Revision-Date: 2008-12-15 00:54+0100\n"
+"Last-Translator: Martin Bagge <brother@bsnet.se>\n"
+"Language-Team: swedish <debian-l10n-swedish@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -32,7 +32,7 @@ msgstr "lighttpd"
 #. Description
 #: ../templates:2002
 msgid "Web server(s) to configure automatically:"
-msgstr "خادم الوب المطلوب تهيئته آلياً:"
+msgstr "Webservrar som ska ställas in automatiskt:"
 
 #. Type: multiselect
 #. Description
@@ -41,8 +41,8 @@ msgid ""
 "RoundCube supports any web server supported by PHP, however only Apache 2 "
 "and lighttpd can be configured automatically."
 msgstr ""
-"يدعم RoundCube أي خادم وب يدعمه PHP، ولكن يمكن تهيئة Apache وlighttpd فقط "
-"آلياً."
+"Roundcube kan köras på alla webbservrar som stödje PHP, dock kan bara Apache "
+"2 och lighttpd ställas in automatiskt."
 
 #. Type: multiselect
 #. Description
@@ -50,13 +50,14 @@ msgstr ""
 msgid ""
 "Please select the web server(s) that should be configured automatically for "
 "RoundCube."
-msgstr "الرجاء اختيار خادم الوب الذي يجب أن يقوم RoundCube بتهيئته آلياً."
+msgstr ""
+"Ange den eller de webbservrar som ska ställas in automatiskt för RoundCube."
 
 #. Type: boolean
 #. Description
 #: ../templates:3001
 msgid "Should the webserver(s) be restarted now?"
-msgstr "هل تريد تشغيل خادم الوب الآن؟"
+msgstr "Ska webbservern/-servrarna startas om nu?"
 
 #. Type: boolean
 #. Description
@@ -64,14 +65,13 @@ msgstr "هل تريد تشغيل خادم الوب الآن؟"
 msgid ""
 "In order to activate the new configuration, the reconfigured web server(s) "
 "have to be restarted."
-msgstr ""
-"لتنشيط التهيئة الجديدة، يجب إعادة تشغيل خادمات الوب التي تمت إعادة تهيئتها."
+msgstr "För att aktivera de nya inställningarna måste webbservern startas om."
 
 #. Type: string
 #. Description
 #: ../templates:4001
 msgid "IMAP server(s) used with RoundCube:"
-msgstr "خادمات IMAP المستخدمة مع RoundCube:"
+msgstr "IMAP-värd/-ar som ska användas med RoundCube:"
 
 #. Type: string
 #. Description
@@ -79,7 +79,7 @@ msgstr "خادمات IMAP المستخدمة مع RoundCube:"
 #, fuzzy
 #| msgid "Please select the IMAP server that should be used with RoundCube."
 msgid "Please select the IMAP server(s) that should be used with RoundCube."
-msgstr "الرجاء اختيار خادم IMAP الذي يجب استخدامه مع RoundCube."
+msgstr "Ange IMAP-servern som ska användas med RoundCube:"
 
 #. Type: string
 #. Description
@@ -89,9 +89,10 @@ msgid ""
 "space-separated list of hosts will display a pull-down menu. Entering a "
 "single host will enforce using this host."
 msgstr ""
-"إن ترك هذا الحقل فارغاً، فسيتم إظهار مربع نص عند تسجيل الدخول. إدخال أسماء "
-"مضيفين تفصل بينهم مسافات سيظهر قائمة منسدلة بهذه الأسماء. وإدخال اسم مضيف "
-"هنا سيجبر استخدام هذا المضيف."
+"Om detta fält lämnas tomt kommer en textruta att visas vid inloggningsrutan. "
+"Ange en mellanslagsseparerad lista med värdar för att visa en "
+"rullgardinsmeny. Genom att endast ange en värd kommer endast denna att kunna "
+"användas."
 
 #. Type: string
 #. Description
@@ -99,25 +100,26 @@ msgstr ""
 msgid ""
 "To use SSL connections, please enter host names as 'ssl://hostname:993'."
 msgstr ""
-"لاستخدام اتصالات SSL، الرجاء إدخال اسم المضيف بالشكل 'ssl://hostname:993'."
+"För att använda säker anslutning (SSL) ang värdnamnet i formen 'ssl://"
+"värdnamn:933'."
 
 #. Type: select
 #. Description
 #: ../templates:5001
 msgid "Default language:"
-msgstr "اللغة الافتراضية:"
+msgstr "Standardspråk:"
 
 #. Type: select
 #. Description
 #: ../templates:5001
 msgid "Please choose the default language for RoundCube."
-msgstr "الرجاء اختيار اللغة الافتراضية للحزمة RoundCube."
+msgstr "Ange standardspråk för RoundCube."
 
 #. Type: select
 #. Description
 #: ../templates:5001
 msgid "This choice can be overridden by individual users in their preferences."
-msgstr "يمكن تخطي هذا الخيار من قبل المستخدمين عبر تغيير تفضيلاتهم."
+msgstr "Detta språk kan ändras för varje användare i deras egna inställingar."
 
 #. Type: select
 #. Description
@@ -126,5 +128,5 @@ msgid ""
 "However, the default language will be used for the login screen and the "
 "first connection of users."
 msgstr ""
-"على أي، سيتم استخدام اللغة الافتراضية لشاشة تسجيل الدخول والاتصال الأول "
-"للمستخدمين."
+"Tänk på att standardspråket kommer att användas för inloggningsrutan och "
+"första gången en användare ansluter."

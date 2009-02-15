@@ -1,3 +1,25 @@
+roundcube (0.2~stable-1) unstable; urgency=low
+
+  * New upstream version. Closes: #503573, #504570.
+      + Add SQL update scripts for this new release and for
+        0.2~alpha. Remove copy of SQL upgrade script from debian/rules.
+      + Remove patch for CVE-2008-5620 which is now fixed upstream.
+      + Remove patch correcting a vulnerability in html2text.php.
+      + Remove patch fixing login issue. This is fixed upstream.
+      + Remove patch setting the default backend to db instead of mdb2:
+        this is not possible any more. We depend on php-mdb2 now.
+      + Update patch to use packaged tinymce.
+  * Upload to unstable since Lenny is out.
+  * Apply fix for XSS issue (CVE-2009-0413). Closes: #514179.
+  * Remove hack to update a SQLite table for an upgrade from a quite old
+    version of roundcube.
+  * Fix pending l10n issues:
+      + Update English debconf template. Closes: #473794.
+      + Add Swedish translation thanks to Martin Bagge. Closes: #508752.
+  * Fix debian/copyright to make lintian happy.
+
+ -- Vincent Bernat <bernat@debian.org>  Sun, 15 Feb 2009 16:18:58 +0100
+
 roundcube (0.2~alpha-4) experimental; urgency=low
 
   * Add missing ${misc:Depends} to make Lintian happy.

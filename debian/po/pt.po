@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: roundcube\n"
 "Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
-"POT-Creation-Date: 2008-03-05 22:12+0100\n"
+"POT-Creation-Date: 2009-02-15 17:05+0100\n"
 "PO-Revision-Date: 2008-03-09 14:12+0000\n"
 "Last-Translator: Miguel Figueiredo <elmig@debianpt.org>\n"
 "Language-Team: Portuguese <traduz@debianpt.org>\n"
@@ -79,7 +79,9 @@ msgstr "Servidor(es) IMAP utilizado(s) com o RoundCube:"
 #. Type: string
 #. Description
 #: ../templates:4001
-msgid "Please select the IMAP server that should be used with RoundCube."
+#, fuzzy
+#| msgid "Please select the IMAP server that should be used with RoundCube."
+msgid "Please select the IMAP server(s) that should be used with RoundCube."
 msgstr ""
 "Por favor escolha o servidor IMAP que deve ser utilizado com o RoundCube."
 

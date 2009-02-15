@@ -29,7 +29,7 @@ Template: roundcube/hosts
 Type: string
 Default:
 _Description: IMAP server(s) used with RoundCube:
- Please select the IMAP server that should be used with RoundCube.
+ Please select the IMAP server(s) that should be used with RoundCube.
  .
  If this is left blank, a text box will be displayed at
  login. Entering a space-separated list of hosts will display a
