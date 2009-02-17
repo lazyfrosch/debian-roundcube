@@ -1,3 +1,10 @@
+roundcube (0.2~stable-2) UNRELEASED; urgency=low
+
+  * Update French debconf translation, thanks to Christian
+    Perrier. Closes: #515806.
+
+ -- Vincent Bernat <bernat@debian.org>  Tue, 17 Feb 2009 20:17:11 +0100
+
 roundcube (0.2~stable-1) unstable; urgency=low
 
   * New upstream version. Closes: #503573, #504570.
