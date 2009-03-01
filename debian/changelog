@@ -3,6 +3,9 @@ roundcube (0.2~stable-2) UNRELEASED; urgency=low
   * Update debconf translations:
       + French, thanks to Christian Perrier. Closes: #515806.
       + Swedish, thanks to Martin Bagge. Closes: #516683.
+  * Drop virtual package roundcube-db and add dependencies on real package
+    instead: this way, we can versioned dependencies on those to avoid
+    version mismatch between packages.
 
  -- Vincent Bernat <bernat@debian.org>  Tue, 17 Feb 2009 20:17:11 +0100
 
