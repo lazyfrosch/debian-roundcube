@@ -3,3 +3,4 @@ correct_install_path.patch
 use_packaged_tinymce.patch
 correct-magic-path.patch
 cve-2009-0413.patch
+too-old-md2.patch
