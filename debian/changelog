@@ -1,4 +1,4 @@
-roundcube (0.2~stable-2) UNRELEASED; urgency=low
+roundcube (0.2~stable-2) unstable; urgency=low
 
   * Update debconf translations:
       + French, thanks to Christian Perrier. Closes: #515806.
