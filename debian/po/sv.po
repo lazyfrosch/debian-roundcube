@@ -1,6 +1,6 @@
-# translation of roundcube.po to swedish
+# translation of debconf messages for Roundcube to Swedish
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the Roundcube package.
 #
 # Martin Bagge <brother@bsnet.se>, 2008.
 msgid ""
@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: roundcube\n"
 "Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
 "POT-Creation-Date: 2009-02-15 17:05+0100\n"
-"PO-Revision-Date: 2008-12-15 00:54+0100\n"
+"PO-Revision-Date: 2009-02-23 01:41+0100\n"
 "Last-Translator: Martin Bagge <brother@bsnet.se>\n"
 "Language-Team: swedish <debian-l10n-swedish@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -76,10 +76,8 @@ msgstr "IMAP-värd/-ar som ska användas med RoundCube:"
 #. Type: string
 #. Description
 #: ../templates:4001
-#, fuzzy
-#| msgid "Please select the IMAP server that should be used with RoundCube."
 msgid "Please select the IMAP server(s) that should be used with RoundCube."
-msgstr "Ange IMAP-servern som ska användas med RoundCube:"
+msgstr "Ange den/de IMAP-server/-servrar som ska användas med RoundCube:"
 
 #. Type: string
 #. Description

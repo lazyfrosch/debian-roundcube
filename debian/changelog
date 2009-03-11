@@ -1,3 +1,16 @@
+roundcube (0.2~stable-2) unstable; urgency=low
+
+  * Update debconf translations:
+      + French, thanks to Christian Perrier. Closes: #515806.
+      + Swedish, thanks to Martin Bagge. Closes: #516683.
+  * Drop virtual package roundcube-db and add dependencies on real package
+    instead: this way, we can have versioned dependencies on those to avoid
+    version mismatch between packages.
+  * Add a patch to not use a MDB2 feature not present in the Debian
+    package. Thanks to Grzegorz Sobański for the patch. Closes: #519104.
+
+ -- Vincent Bernat <bernat@debian.org>  Wed, 11 Mar 2009 18:49:32 +0100
+
 roundcube (0.2~stable-1) unstable; urgency=low
 
   * New upstream version. Closes: #503573, #504570.
