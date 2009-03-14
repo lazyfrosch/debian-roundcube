@@ -1,3 +1,11 @@
+roundcube (0.2.1-1) unstable; urgency=low
+
+  * New upstream release:
+      + Fix use_packaged_tinymce.patch to apply to this new version
+      + Remove cve-2009-0413.patch which has been applied upstream
+
+ -- Vincent Bernat <bernat@debian.org>  Sat, 14 Mar 2009 17:42:07 +0100
+
 roundcube (0.2~stable-2) unstable; urgency=low
 
   * Update debconf translations:
