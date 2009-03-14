@@ -4,10 +4,10 @@ Use tinymce from tinycme package instead of the shipped one.
 +++ roundcube-0.1~rc2/program/steps/mail/sendmail.inc	2007-11-26 11:44:04.000000000 +0100
 @@ -123,7 +123,7 @@
  
-     // sanitize image name so resulting attachment doesn't leave images dir
-     $image_name = preg_replace('/[^a-zA-Z0-9_\.\-]/i','',$image_name);
--    $img_file = INSTALL_PATH . '/' . $searchstr . $image_name;
-+    $img_file = '/usr/share/tinymce/www/plugins/emotions/img/' . $image_name;
+         // sanitize image name so resulting attachment doesn't leave images dir
+         $image_name = preg_replace('/[^a-zA-Z0-9_\.\-]/i', '', $image_name);
+-        $img_file = INSTALL_PATH . '/' . $searchstr . $image_name;
++        $img_file = '/usr/share/tinymce/www/plugins/emotions/img/' . $image_name;
  
-     if (! in_array($image_name, $included_images))
-       {
+         if (! in_array($image_name, $included_images)) {
+           // add the image to the MIME message
