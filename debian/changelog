@@ -3,8 +3,11 @@ roundcube (0.2.1-2) UNRELEASED; urgency=low
   * Update debconf translations:
       + German, thanks to Helge Kreutzmann. Closes: #520004.
       + Japanese, thanks to Hideki Yamane. Closes: #520024.
+  * Depend on php-mdb2-* (>= 1.5.0b2) since it is needed to fix some
+    bugs. Closes: #519104, #519293. Remove not needed any more patch from
+    debian/patches/series. Keep it in debian/patches to help backports.
 
- -- Vincent Bernat <bernat@debian.org>  Mon, 23 Mar 2009 18:52:31 +0100
+ -- Vincent Bernat <bernat@debian.org>  Sat, 25 Apr 2009 17:40:45 +0200
 
 roundcube (0.2.1-1) unstable; urgency=low
 
