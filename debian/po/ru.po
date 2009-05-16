@@ -16,7 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. Type: multiselect
 #. Choices
@@ -52,7 +53,8 @@ msgstr ""
 msgid ""
 "Please select the web server(s) that should be configured automatically for "
 "RoundCube."
-msgstr "Выберите веб-сервер(ы), которые нужно настроить автоматически под RoundCube."
+msgstr ""
+"Выберите веб-сервер(ы), которые нужно настроить автоматически под RoundCube."
 
 #. Type: boolean
 #. Description
@@ -67,8 +69,8 @@ msgid ""
 "In order to activate the new configuration, the reconfigured web server(s) "
 "have to be restarted."
 msgstr ""
-"Чтобы новые настройки вступили в силу, нужно перезапустить "
-"перенастроенный веб-сервер(ы)."
+"Чтобы новые настройки вступили в силу, нужно перезапустить перенастроенный "
+"веб-сервер(ы)."
 
 #. Type: string
 #. Description
@@ -79,7 +81,6 @@ msgstr "IMAP-сервер(ы), используемые с RoundCube:"
 #. Type: string
 #. Description
 #: ../templates:4001
-#| msgid "Please select the IMAP server that should be used with RoundCube."
 msgid "Please select the IMAP server(s) that should be used with RoundCube."
 msgstr "Укажите сервер(ы) IMAP, который нужно использовать с RoundCube."
 
@@ -99,7 +100,8 @@ msgstr ""
 #. Type: string
 #. Description
 #: ../templates:4001
-msgid "To use SSL connections, please enter host names as 'ssl://hostname:993'."
+msgid ""
+"To use SSL connections, please enter host names as 'ssl://hostname:993'."
 msgstr ""
 "Чтобы использовать соединение через SSL, вводите имена хостов в виде 'ssl://"
 "хост:993'."
@@ -131,4 +133,3 @@ msgid ""
 msgstr ""
 "Однако, язык по умолчанию будет использован для выдачи приглашения к входу и "
 "во время первого подключения пользователя."
-
