@@ -1,4 +1,4 @@
-roundcube (0.2.2-1) UNRELEASED; urgency=low
+roundcube (0.2.2-1) unstable; urgency=low
 
   * New upstream release
   * Bump Standards-Version. No changes required.
