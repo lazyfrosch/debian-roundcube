@@ -79,10 +79,8 @@ msgstr "RoundCube-rekin erabiliko d(ir)en IMAP zerbitzaria(k):"
 #. Type: string
 #. Description
 #: ../templates:4001
-#, fuzzy
-#| msgid "Please select the IMAP server that should be used with RoundCube."
 msgid "Please select the IMAP server(s) that should be used with RoundCube."
-msgstr "Mesedez hautatu RoundCube-rekin erabiliko den IMAP zerbitzaria."
+msgstr "Mesedez hautatu RoundCube-rekin erabiliko den IMAP zerbitzaria(k)."
 
 #. Type: string
 #. Description
