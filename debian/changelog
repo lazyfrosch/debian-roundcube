@@ -2,6 +2,7 @@ roundcube (0.2.2-1) unstable; urgency=low
 
   * New upstream release
   * Bump Standards-Version. No changes required.
+  * Remove *.js.src which are not needed at runtime.
   * Don't send email contents to Google by default by using php5-pspell
     instead. Thanks to Anand Kumria. Closes: #529563.
   * Update debconf translations:
