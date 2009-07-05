@@ -1,4 +1,4 @@
-roundcube (0.2.2-dep-1) UNRELEASED; urgency=low
+roundcube (0.2.2-1) UNRELEASED; urgency=low
 
   * New upstream release
   * Don't send email contents to Google by default by using php5-pspell
