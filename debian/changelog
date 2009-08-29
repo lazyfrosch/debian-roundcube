@@ -1,3 +1,10 @@
+roundcube (0.2.2-2) UNRELEASED; urgency=low
+
+  * Update Italian debconf translations, thanks to Luca Monducci.
+    Closes: #544199.
+
+ -- Vincent Bernat <bernat@debian.org>  Sat, 29 Aug 2009 17:57:59 +0200
+
 roundcube (0.2.2-1) unstable; urgency=low
 
   * New upstream release
