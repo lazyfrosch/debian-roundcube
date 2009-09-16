@@ -1,14 +1,14 @@
-# SOME DESCRIPTIVE TITLE.
+# Czech translation of roundcube debconf messages.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# This file is distributed under the same license as the roundcube package.
+# Miroslav Kure <kurem@debian.cz>, 2008,2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: roundcube\n"
 "Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
 "POT-Creation-Date: 2009-02-15 17:05+0100\n"
-"PO-Revision-Date: 2008-03-09 13:03+0100\n"
+"PO-Revision-Date: 2009-09-13 09:23+0200\n"
 "Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
 "Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -78,7 +78,6 @@ msgstr "IMAP servery používané s RoundCube:"
 #. Type: string
 #. Description
 #: ../templates:4001
-#, fuzzy
 #| msgid "Please select the IMAP server that should be used with RoundCube."
 msgid "Please select the IMAP server(s) that should be used with RoundCube."
 msgstr "Vyberte prosím IMAP server, který se má s RoundCube použít."
