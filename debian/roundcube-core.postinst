@@ -71,7 +71,7 @@ case "$1" in
 	cat /usr/share/roundcube/main.inc.php.dist | \
 	    sed -e "s+^\(\$rcmail_config\['default_host'\] = \)''\(;\)\$+\1${hosts}\2+" \
 	        -e "s+^\(\$rcmail_config\['des_key'\] = '\).*\(';\)\$+\1$deskey\2+" \
-	        -e "s+^\(\$rcmail_config\['locale_string'\] = '\).*\(';\)\$+\1${language}\2+" >> $CONFFILE.ucftmp
+	        -e "s+^\(\$rcmail_config\['language'\] = '\).*\(';\)\$+\1${language}\2+" >> $CONFFILE.ucftmp
 
 	ucf --debconf-ok $CONFFILE.ucftmp $CONFFILE
  	chown root:www-data $CONFFILE
