@@ -78,7 +78,6 @@ msgstr "IMAP servery používané s RoundCube:"
 #. Type: string
 #. Description
 #: ../templates:4001
-#| msgid "Please select the IMAP server that should be used with RoundCube."
 msgid "Please select the IMAP server(s) that should be used with RoundCube."
 msgstr "Vyberte prosím IMAP server, který se má s RoundCube použít."
 
