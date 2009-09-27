@@ -1,6 +1,7 @@
 etc/roundcube/main.inc.php var/lib/roundcube/config/main.inc.php
 etc/roundcube/db.inc.php var/lib/roundcube/config/db.inc.php
 var/lib/roundcube/temp usr/share/roundcube/temp
+var/lib/roundcube/plugins usr/share/roundcube/plugins
 var/lib/roundcube/skins usr/share/roundcube/skins
 var/lib/roundcube/config usr/share/roundcube/config
 var/log/roundcube var/lib/roundcube/logs
