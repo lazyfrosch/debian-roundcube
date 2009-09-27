@@ -1,12 +1,12 @@
-roundcube (0.2.2-2) UNRELEASED; urgency=low
+roundcube (0.3-1) UNRELEASED; urgency=low
 
+  * New upstream release. Closes: #545498.
   * Update debconf translations:
       + Italian, thanks to Luca Monducci. Closes: #544199.
       + Czech, thanks to Miroslav Kure. Closes: #546413.
   * Roundcube configuration now uses 'language' instead of 'locale_string'
     to specify the default language. Update postinst to reflect this
-    change. Thanks to Richard van den Berg for noticing this. Closes:
-    #544579.
+    change. Thanks to Richard van den Berg for noticing this. Closes: #544579.
 
  -- Vincent Bernat <bernat@debian.org>  Wed, 16 Sep 2009 22:32:29 +0200
 
