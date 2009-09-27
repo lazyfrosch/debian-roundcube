@@ -11,8 +11,9 @@ roundcube (0.3-1) unstable; urgency=low
   * Don't ship any plugins for now but ship an empty plugins directory.
   * Ship main .htaccess since it is needed to setup correctly PHP (for
     example, to disable PHP Suhosin cookie encryption).
+  * Bump Standards-Version. No changes required.
 
- -- Vincent Bernat <bernat@debian.org>  Wed, 16 Sep 2009 22:32:29 +0200
+ -- Vincent Bernat <bernat@debian.org>  Sun, 27 Sep 2009 11:00:30 +0200
 
 roundcube (0.2.2-1) unstable; urgency=low
 
