@@ -1,3 +1,4 @@
 robots.txt index.php program/ bin/ usr/share/roundcube
 skins temp var/lib/roundcube
 debian/conf/* etc/roundcube
+config/*.php etc/roundcube

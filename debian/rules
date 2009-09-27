@@ -21,9 +21,12 @@ binary-install/roundcube-core::
 		  "`echo "$$i" | sed -e s#debian/roundcube-core/usr/share/roundcube/#var/lib/roundcube/#`"; \
 		fi \
 	done
-	# Install config/db.inc.php.dist
+	# Install config files
 	install -m 0640 $(CURDIR)/config/db.inc.php.dist $(CURDIR)/debian/roundcube-core/etc/roundcube/db.inc.php
 	install -m 0640 $(CURDIR)/config/main.inc.php.dist $(CURDIR)/debian/roundcube-core/usr/share/roundcube
+	for c in $(CURDIR)/debian/roundcube-core/etc/roundcube/*.php; do \
+		dh_link -proundcube-core etc/roundcube/$$(basename $$c) var/lib/roundcube/config/$$(basename $$c) ; \
+	done
 
 	# Database related files
 	# Install empty tables and updates for each db type
