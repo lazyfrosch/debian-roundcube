@@ -42,7 +42,6 @@ binary-install/roundcube-core::
 	# Remove useless file
 	rm $(CURDIR)/debian/roundcube-core/usr/share/roundcube/bin/*.sh
 	find $(CURDIR)/debian/roundcube-core -name '._*' -print0 | xargs -r0 rm
-	find $(CURDIR)/debian/roundcube-core -name '.htaccess' -print0 | xargs -r0 rm
 	find $(CURDIR)/debian/roundcube-core -name '*.js.src' -print0 | xargs -r0 rm
 	# Remove files shipped in tinymce package
 	rm -rf $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/js/tiny_mce
