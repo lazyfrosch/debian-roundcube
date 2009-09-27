@@ -1,3 +1,20 @@
+roundcube (0.3-1) unstable; urgency=low
+
+  * New upstream release. Closes: #545498.
+  * Update debconf translations:
+      + Italian, thanks to Luca Monducci. Closes: #544199.
+      + Czech, thanks to Miroslav Kure. Closes: #546413.
+  * Roundcube configuration now uses 'language' instead of 'locale_string'
+    to specify the default language. Update postinst to reflect this
+    change. Thanks to Richard van den Berg for noticing this. Closes: #544579.
+  * Depends on libjs-jquery (>= 1.3) since this is now used by roundcube.
+  * Don't ship any plugins for now but ship an empty plugins directory.
+  * Ship main .htaccess since it is needed to setup correctly PHP (for
+    example, to disable PHP Suhosin cookie encryption).
+  * Bump Standards-Version. No changes required.
+
+ -- Vincent Bernat <bernat@debian.org>  Sun, 27 Sep 2009 11:00:30 +0200
+
 roundcube (0.2.2-1) unstable; urgency=low
 
   * New upstream release

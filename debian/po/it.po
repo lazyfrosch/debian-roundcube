@@ -1,14 +1,14 @@
 # Italian (it) translation of debconf templates for roundcube
 # Copyright (C) 2007 Free Software Foundation, Inc.
 # This file is distributed under the same license as the roundcube package.
-# Luca Monducci <luca.mo@tiscali.it>, 2007-2008.
-#
+# Luca Monducci <luca.mo@tiscali.it>, 2007-2009.
+# 
 msgid ""
 msgstr ""
-"Project-Id-Version: roundcube 0.1 italian debconf templates\n"
+"Project-Id-Version: roundcube 0.2.2 italian debconf templates\n"
 "Report-Msgid-Bugs-To: roundcube@packages.debian.org\n"
 "POT-Creation-Date: 2009-02-15 17:05+0100\n"
-"PO-Revision-Date: 2008-03-08 12:09+0100\n"
+"PO-Revision-Date: 2009-08-30 12:09+0200\n"
 "Last-Translator: Luca Monducci <luca.mo@tiscali.it>\n"
 "Language-Team: Italian <debian-l10n-italian@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -78,10 +78,8 @@ msgstr "Server IMAP da usare con RoundCube:"
 #. Type: string
 #. Description
 #: ../templates:4001
-#, fuzzy
-#| msgid "Please select the IMAP server that should be used with RoundCube."
 msgid "Please select the IMAP server(s) that should be used with RoundCube."
-msgstr "Scegliere il server IMAP che deve essere usato con RoundCube."
+msgstr "Scegliere il/i server IMAP da usare con RoundCube."
 
 #. Type: string
 #. Description

@@ -1,3 +1,5 @@
-robots.txt index.php program/ bin/ usr/share/roundcube
+robots.txt index.php .htaccess program/ bin/ usr/share/roundcube
 skins temp var/lib/roundcube
+plugins/filesystem_attachments var/lib/roundcube/plugins
 debian/conf/* etc/roundcube
+config/*.php etc/roundcube

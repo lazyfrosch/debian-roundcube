@@ -6,4 +6,5 @@ usr/share/dbconfig-common/data/roundcube/upgrade/sqlite
 etc/roundcube
 var/log/roundcube
 var/lib/roundcube/config
+var/lib/roundcube/plugins
 etc/default
