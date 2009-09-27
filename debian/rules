@@ -38,7 +38,7 @@ binary-install/roundcube-core::
 	cp -r $(CURDIR)/debian/sql/* $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/upgrade/.
 
 	# Some files are executable while not being scripts or binary...
-	find $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program -type f -print0 | xargs -r0 chmod -x
+	find $(CURDIR)/debian/roundcube-core/usr/share/roundcube -type f -print0 | xargs -r0 chmod -x
 	# Remove useless file
 	rm $(CURDIR)/debian/roundcube-core/usr/share/roundcube/bin/*.sh
 	find $(CURDIR)/debian/roundcube-core -name '._*' -print0 | xargs -r0 rm
