@@ -5,4 +5,7 @@ To use tinymce editor:
  - set $rcmail_config['enable_htmleditor'] to TRUE in
    /etc/roundcube/main.inc.php
 
- -- Vincent Bernat <bernat@debian.org>, Sun, 22 Jun 2008 12:13:32 +0200
+No plugins are shipped (except core plugins) with this package of
+roundcube. Add your plugin in /var/lib/roundcube/plugins.
+
+ -- Vincent Bernat <bernat@debian.org>, Sun, 27 Sep 2009 10:21:40 +0200
