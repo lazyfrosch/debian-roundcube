@@ -8,6 +8,7 @@ roundcube (0.3-1) UNRELEASED; urgency=low
     to specify the default language. Update postinst to reflect this
     change. Thanks to Richard van den Berg for noticing this. Closes: #544579.
   * Depends on libjs-jquery (>= 1.3) since this is now used by roundcube.
+  * Don't ship any plugins for now but ship an empty plugins directory.
 
  -- Vincent Bernat <bernat@debian.org>  Wed, 16 Sep 2009 22:32:29 +0200
 

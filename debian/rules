@@ -10,6 +10,9 @@ DEB_INSTALL_CHANGELOGS_ALL=CHANGELOG
 # Then check manually if everything's ok
 
 binary-install/roundcube-core::
+	# Remove plugins
+	rm -rf $(CURDIR)/debian/roundcube-core/usr/share/roundcube/plugins
+
 	# Symlink all that is in /usr/share/roundcube to /var/lib/roundcube
 	find debian/roundcube-core/usr/share/roundcube -maxdepth 1 -mindepth 1 | \
 	while read i; do \
