@@ -7,7 +7,6 @@ roundcube (0.3-1) UNRELEASED; urgency=low
   * Roundcube configuration now uses 'language' instead of 'locale_string'
     to specify the default language. Update postinst to reflect this
     change. Thanks to Richard van den Berg for noticing this. Closes: #544579.
-  * Depends on tinymce (>= 3.2.3) since this is what is shipped upstream.
 
  -- Vincent Bernat <bernat@debian.org>  Wed, 16 Sep 2009 22:32:29 +0200
 
