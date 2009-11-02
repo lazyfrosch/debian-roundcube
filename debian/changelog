@@ -1,4 +1,4 @@
-roundcube (0.3-3) unstable; urgency=low
+roundcube (0.3-3) UNRELEASED; urgency=low
 
   * Add a notice in NEWS.Debian about php.ini options that should be set
     to get Roundcube working properly. Closes: #549428, #552508.
