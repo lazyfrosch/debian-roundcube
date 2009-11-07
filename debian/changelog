@@ -1,4 +1,4 @@
-roundcube (0.3.1-1) UNRELEASED; urgency=low
+roundcube (0.3.1-1) unstable; urgency=low
 
   * New upstream release.
   * Add a notice in NEWS.Debian about php.ini options that should be set
