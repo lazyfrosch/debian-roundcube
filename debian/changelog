@@ -1,9 +1,10 @@
-roundcube (0.3-3) UNRELEASED; urgency=low
+roundcube (0.3.1-1) UNRELEASED; urgency=low
 
+  * New upstream release.
   * Add a notice in NEWS.Debian about php.ini options that should be set
     to get Roundcube working properly. Closes: #549428, #552508.
 
- -- Vincent Bernat <bernat@debian.org>  Mon, 02 Nov 2009 19:42:33 +0100
+ -- Vincent Bernat <bernat@debian.org>  Sat, 07 Nov 2009 17:41:37 +0100
 
 roundcube (0.3-2) unstable; urgency=low
 
