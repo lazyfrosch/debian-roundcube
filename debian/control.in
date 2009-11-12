@@ -6,8 +6,8 @@ Uploaders: Vincent Bernat <bernat@debian.org>, Romain Beauxis <toots@rastageeks.
 Build-Depends: @cdbs@, po-debconf
 Homepage: http://www.roundcube.net/
 Standards-Version: 3.8.3
-Vcs-Svn: svn://svn.debian.org/svn/pkg-roundcube/roundcube
-Vcs-Browser: http://svn.debian.org/wsvn/pkg-roundcube/roundcube
+Vcs-Svn: svn://svn.debian.org/svn/pkg-roundcube/trunk
+Vcs-Browser: http://svn.debian.org/wsvn/pkg-roundcube/trunk/
 
 Package: roundcube-core
 Architecture: all
