@@ -1,9 +1,9 @@
 Use json_encode to ensure compatibility with JQuery 1.4.
 
-Index: /trunk/roundcubemail/program/include/rcube_template.php
+Index: roundcubemail/program/include/rcube_template.php
 ===================================================================
---- /trunk/roundcubemail/program/include/rcube_template.php (revision 2980)
-+++ /trunk/roundcubemail/program/include/rcube_template.php (revision 3170)
+--- roundcubemail/program/include/rcube_template.php (revision 2980)
++++ roundcubemail/program/include/rcube_template.php (revision 3170)
 @@ -415,10 +415,10 @@
          $out = '';
          if (!$this->framed && !empty($this->js_env)) {
@@ -17,10 +17,10 @@ Index: /trunk/roundcubemail/program/include/rcube_template.php
 +                $args[$i] = json_encode($arg);
              }
              $parent = $this->framed || preg_match('/^parent\./', $method);
-Index: /trunk/roundcubemail/program/include/rcube_shared.inc
+Index: roundcubemail/program/include/rcube_shared.inc
 ===================================================================
---- /trunk/roundcubemail/program/include/rcube_shared.inc (revision 3132)
-+++ /trunk/roundcubemail/program/include/rcube_shared.inc (revision 3170)
+--- roundcubemail/program/include/rcube_shared.inc (revision 3132)
++++ roundcubemail/program/include/rcube_shared.inc (revision 3170)
 @@ -106,95 +106,4 @@
      exit;
      }
@@ -117,10 +117,10 @@ Index: /trunk/roundcubemail/program/include/rcube_shared.inc
 -  return json_serialize($arr);
  }
  
-Index: /trunk/roundcubemail/program/include/rcube_json_output.php
+Index: roundcubemail/program/include/rcube_json_output.php
 ===================================================================
---- /trunk/roundcubemail/program/include/rcube_json_output.php (revision 2905)
-+++ /trunk/roundcubemail/program/include/rcube_json_output.php (revision 3170)
+--- roundcubemail/program/include/rcube_json_output.php (revision 2905)
++++ roundcubemail/program/include/rcube_json_output.php (revision 3170)
 @@ -240,5 +240,5 @@
            $response['callbacks'] = $this->callbacks;
  
@@ -135,10 +135,10 @@ Index: /trunk/roundcubemail/program/include/rcube_json_output.php
 +                $args[$i] = json_encode($arg);
              }
  
-Index: /trunk/roundcubemail/program/steps/mail/func.inc
+Index: roundcubemail/program/steps/mail/func.inc
 ===================================================================
---- /trunk/roundcubemail/program/steps/mail/func.inc (revision 3099)
-+++ /trunk/roundcubemail/program/steps/mail/func.inc (revision 3170)
+--- roundcubemail/program/steps/mail/func.inc (revision 3099)
++++ roundcubemail/program/steps/mail/func.inc (revision 3170)
 @@ -523,5 +523,5 @@
    if (is_array($quota)) {
      $OUTPUT->add_script('$(document).ready(function(){
@@ -146,10 +146,10 @@ Index: /trunk/roundcubemail/program/steps/mail/func.inc
 +	rcmail.set_quota('.json_encode($quota).')});', 'foot');
      $quota = '';
      }
-Index: /trunk/roundcubemail/program/steps/mail/compose.inc
+Index: roundcubemail/program/steps/mail/compose.inc
 ===================================================================
---- /trunk/roundcubemail/program/steps/mail/compose.inc (revision 3166)
-+++ /trunk/roundcubemail/program/steps/mail/compose.inc (revision 3170)
+--- roundcubemail/program/steps/mail/compose.inc (revision 3166)
++++ roundcubemail/program/steps/mail/compose.inc (revision 3170)
 @@ -507,5 +507,5 @@
        JQ(Q(rcube_label('revertto'))),
        JQ(Q(rcube_label('nospellerrors'))),

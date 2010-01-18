@@ -1,9 +1,9 @@
 Compatibility with jQuery 1.4.
 
-Index: /trunk/roundcubemail/program/include/rcube_json_output.php
+Index: roundcubemail/program/include/rcube_json_output.php
 ===================================================================
---- /trunk/roundcubemail/program/include/rcube_json_output.php (revision 3175)
-+++ /trunk/roundcubemail/program/include/rcube_json_output.php (revision 3202)
+--- roundcubemail/program/include/rcube_json_output.php (revision 3175)
++++ roundcubemail/program/include/rcube_json_output.php (revision 3202)
 @@ -219,5 +219,4 @@
              send_nocacheing_headers();
              header('Content-Type: text/plain; charset=' . $this->get_charset());
