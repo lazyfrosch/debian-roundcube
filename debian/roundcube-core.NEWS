@@ -1,4 +1,4 @@
-roundcube (0.3-3) unstable; urgency=low
+roundcube (0.3.1-2) unstable; urgency=low
 
   * Starting from Roundcube 0.3, an incompatibility with Suhosin session
     encryption is present. This can be resolved by tuning php.ini for
