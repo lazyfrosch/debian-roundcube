@@ -4,3 +4,5 @@ use_packaged_tinymce.patch
 correct-magic-path.patch
 use_pspell.patch
 loginbox-size.patch
+changeset_r3170.patch
+changeset_r3202.patch
