@@ -1,6 +1,7 @@
 roundcube (0.3.1-2) unstable; urgency=low
 
-  * Fix VCS links in debian/control, thanks to Torsten Landschoff. Closes: #555900.
+  * Fix VCS links in debian/control, thanks to Torsten Landschoff.
+    Closes: #555900.
   * Really ship NEWS.Debian.
   * Add changesets 3170 and 3202 from upstream to handle gracefully jQuery
     1.4. Thanks to Volker Gropp for the report. Closes: #565715.
