@@ -1,15 +1,15 @@
 roundcube (0.3.1-2) unstable; urgency=low
 
-  * Starting from Roundcube 0.3, an incompatibility with Suhosin session
-    encryption is present. This can be resolved by tuning php.ini for
-    Roundcube with the "suhosin.session.encrypt" set to "Off".
+Starting from Roundcube 0.3, an incompatibility with Suhosin session
+encryption is present. This can be resolved by tuning php.ini for
+Roundcube with the "suhosin.session.encrypt" set to "Off".
   
-    We ship a .htaccess in /var/lib/roundcube to disable this
-    option. However, this only works with a webserver like Apache with
-    mod_php. If you are using a webserver with PHP configured as a *CGI
-    process, you need to tune the php.ini for this process: either turn of
-    globally Suhosin session encryption in /etc/php5/conf.d/suhosin or you
-    can provide your own php.ini to php5-cgi with "-c" option.
+We ship a .htaccess in /var/lib/roundcube to disable this
+option. However, this only works with a webserver like Apache with
+mod_php. If you are using a webserver with PHP configured as a *CGI
+process, you need to tune the php.ini for this process: either turn of
+globally Suhosin session encryption in /etc/php5/conf.d/suhosin or you
+can provide your own php.ini to php5-cgi with "-c" option.
 
  -- Vincent Bernat <bernat@debian.org>  Mon, 02 Nov 2009 19:48:22 +0100
 
