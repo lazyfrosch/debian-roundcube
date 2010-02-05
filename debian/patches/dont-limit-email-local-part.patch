@@ -1,0 +1,12 @@
+To fix #568360 and #568537, don't limit local part size.
+--- roundcube-0.3.1/program/include/main.inc~	2009-10-31 14:44:19.751802878 +0100
++++ roundcube-0.3.1/program/include/main.inc	2010-02-05 19:46:12.000000000 +0100
+@@ -1427,7 +1427,7 @@
+     return false;
+ 
+   // Check that there's one @ symbol, and that the lengths are right
+-  if (!preg_match('/^([^@]{1,64})@([^@]{1,255})$/', $email, $email_array))
++  if (!preg_match('/^([^@]+)@([^@]{1,255})$/', $email, $email_array))
+     return false;
+ 
+   // Check local part

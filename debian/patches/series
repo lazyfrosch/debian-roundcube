@@ -6,3 +6,4 @@ use_pspell.patch
 loginbox-size.patch
 changeset_r3170.patch
 changeset_r3202.patch
+dont-limit-email-local-part.patch
