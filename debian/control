@@ -3,9 +3,9 @@ Section: web
 Priority: extra
 Maintainer: Debian Roundcube Maintainers <pkg-roundcube-maintainers@lists.alioth.debian.org>
 Uploaders: Vincent Bernat <bernat@debian.org>, Romain Beauxis <toots@rastageeks.org>
-Build-Depends: cdbs, debhelper, quilt, patchutils (>= 0.2.25), cdbs (>= 0.4.27), po-debconf
+Build-Depends: cdbs, debhelper (>= 5), quilt, patchutils (>= 0.2.25), cdbs (>= 0.4.27), po-debconf
 Homepage: http://www.roundcube.net/
-Standards-Version: 3.8.3
+Standards-Version: 3.8.4
 Vcs-Svn: svn://svn.debian.org/svn/pkg-roundcube/trunk
 Vcs-Browser: http://svn.debian.org/wsvn/pkg-roundcube/trunk/
 
