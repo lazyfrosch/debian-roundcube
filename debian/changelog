@@ -1,6 +1,20 @@
+roundcube (0.3.1-3) unstable; urgency=high
+
+  * RFC 5321, section 4.5.3.1, asks to not impose any limits on length if
+    possible. We respect this by dropping limitation of the local-part of
+    an email address. Closes: #568360, #568537.
+  * Suggests php-auth-sasl to enable use of SASL mechanisms for mail
+    servers. Closes: #567550.
+  * Disable DNS prefetching to avoid information leakage through links
+    embedded in messages. This fixes CVE-2010-0464. Closes: #569660.
+  * Bump Standards-Version. No changes required.
+
+ -- Vincent Bernat <bernat@debian.org>  Sat, 13 Feb 2010 10:21:49 +0100
+
 roundcube (0.3.1-2) unstable; urgency=low
 
-  * Fix VCS links in debian/control, thanks to Torsten Landschoff. Closes: #555900.
+  * Fix VCS links in debian/control, thanks to Torsten Landschoff.
+    Closes: #555900.
   * Really ship NEWS.Debian.
   * Add changesets 3170 and 3202 from upstream to handle gracefully jQuery
     1.4. Thanks to Volker Gropp for the report. Closes: #565715.
