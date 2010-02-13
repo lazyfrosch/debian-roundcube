@@ -1,4 +1,4 @@
-roundcube (0.3.1-3) UNRELEASED; urgency=high
+roundcube (0.3.1-3) unstable; urgency=high
 
   * RFC 5321, section 4.5.3.1, asks to not impose any limits on length if
     possible. We respect this by dropping limitation of the local-part of
@@ -8,7 +8,7 @@ roundcube (0.3.1-3) UNRELEASED; urgency=high
   * Disable DNS prefetching to avoid information leakage through links
     embedded in messages. This fixes CVE-2010-0464. Closes: #569660.
 
- -- Vincent Bernat <bernat@debian.org>  Fri, 05 Feb 2010 19:50:51 +0100
+ -- Vincent Bernat <bernat@debian.org>  Sat, 13 Feb 2010 10:21:49 +0100
 
 roundcube (0.3.1-2) unstable; urgency=low
 
