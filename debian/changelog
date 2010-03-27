@@ -1,3 +1,11 @@
+roundcube (0.3.1-4) UNRELEASED; urgency=low
+
+  * Update README.Debian to state that the variable to modify is
+    'htmleditor' instead of 'enable_htmleditor'. Thanks to Hans
+    Spaans. Closes: #575556.
+
+ -- Vincent Bernat <bernat@debian.org>  Sat, 27 Mar 2010 01:15:46 +0100
+
 roundcube (0.3.1-3) unstable; urgency=high
 
   * RFC 5321, section 4.5.3.1, asks to not impose any limits on length if
