@@ -3,6 +3,8 @@ roundcube (0.3.1-4) UNRELEASED; urgency=low
   * Update README.Debian to state that the variable to modify is
     'htmleditor' instead of 'enable_htmleditor'. Thanks to Hans
     Spaans. Closes: #575556.
+  * Add Brazilian Portuguese debconf translation, thanks to Eder
+    L. Marques. Closes: #581745.
 
  -- Vincent Bernat <bernat@debian.org>  Sat, 27 Mar 2010 01:15:46 +0100
 
