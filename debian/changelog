@@ -5,6 +5,8 @@ roundcube (0.3.1-4) UNRELEASED; urgency=low
     Spaans. Closes: #575556.
   * Add Brazilian Portuguese debconf translation, thanks to Eder
     L. Marques. Closes: #581745.
+  * Switch default encoding to UTF-8 instead of ISO-8859-1.
+    Closes: #588084.
 
  -- Vincent Bernat <bernat@debian.org>  Sat, 27 Mar 2010 01:15:46 +0100
 
