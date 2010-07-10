@@ -1,3 +1,19 @@
+This package ships with configuration files for Apache and
+lighttpd. However, it is not possible to cover all cases and you still
+need to do some manual steps to adapt the installation to your site
+configuration.
+
+You can uncomment the Alias directives in
+`/etc/roundcube/apache.conf'. You can then access your roundcube
+installation under `/roundcube' in all virtual hosts. If you want to
+create a specific virtual host, just point DocumentRoot to
+`/var/lib/roundcube'.
+
+It is important to keep in mind that the root installation of
+roundcube is `/var/lib/roundcube' and not `/usr/share/roundcube'. You
+also need to keep the configuration file provided. Otherwise, your
+installation will be non functional and insecure.
+
 For better compatibility, the schema used for MySQL is the one
 targeted at MySQL 4.0, not the one for MySQL 4.1 or MySQL 5.x.
 
@@ -8,4 +24,4 @@ To use tinymce editor:
 No plugins are shipped (except core plugins) with this package of
 roundcube. Add your plugin in /var/lib/roundcube/plugins.
 
- -- Vincent Bernat <bernat@debian.org>, Sat, 27 Mar 2010 01:14:08 +0100
+ -- Vincent Bernat <bernat@debian.org>, Sat, 10 Jul 2010 18:19:35 +0200
