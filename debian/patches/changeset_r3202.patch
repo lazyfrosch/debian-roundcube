@@ -1,12 +1,14 @@
 Compatibility with jQuery 1.4.
 
-Index: roundcubemail/program/include/rcube_json_output.php
+Index: b/program/include/rcube_json_output.php
 ===================================================================
---- roundcubemail/program/include/rcube_json_output.php (revision 3175)
-+++ roundcubemail/program/include/rcube_json_output.php (revision 3202)
-@@ -219,5 +219,4 @@
+--- a/program/include/rcube_json_output.php	2010-07-17 17:33:24.000000000 +0200
++++ b/program/include/rcube_json_output.php	2010-07-17 17:33:24.000000000 +0200
+@@ -218,7 +218,6 @@
+             $s_header_sent = true;
              send_nocacheing_headers();
              header('Content-Type: text/plain; charset=' . $this->get_charset());
 -            print '/** ajax response ['.date('d/M/Y h:i:s O')."] **/\n";
          }
  
+         // unset default env vars

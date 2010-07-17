@@ -1,6 +1,8 @@
 To fix #568360 and #568537, don't limit local part size.
---- roundcube-0.3.1/program/include/main.inc~	2009-10-31 14:44:19.751802878 +0100
-+++ roundcube-0.3.1/program/include/main.inc	2010-02-05 19:46:12.000000000 +0100
+Index: b/program/include/main.inc
+===================================================================
+--- a/program/include/main.inc	2009-10-31 14:44:19.000000000 +0100
++++ b/program/include/main.inc	2010-07-17 17:33:25.000000000 +0200
 @@ -1427,7 +1427,7 @@
      return false;
  

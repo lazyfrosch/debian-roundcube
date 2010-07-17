@@ -1,33 +1,35 @@
 Use json_encode to ensure compatibility with JQuery 1.4.
 
-Index: roundcubemail/program/include/rcube_template.php
+Index: b/program/include/rcube_json_output.php
 ===================================================================
---- roundcubemail/program/include/rcube_template.php (revision 2980)
-+++ roundcubemail/program/include/rcube_template.php (revision 3170)
-@@ -415,10 +415,10 @@
-         $out = '';
-         if (!$this->framed && !empty($this->js_env)) {
--            $out .= JS_OBJECT_NAME . '.set_env('.json_serialize($this->js_env).");\n";
-+            $out .= JS_OBJECT_NAME . '.set_env('.json_encode($this->js_env).");\n";
-         }
-         foreach ($this->js_commands as $i => $args) {
+--- a/program/include/rcube_json_output.php	2009-09-01 17:13:45.000000000 +0200
++++ b/program/include/rcube_json_output.php	2010-07-17 17:33:24.000000000 +0200
+@@ -239,7 +239,7 @@
+         if (!empty($this->callbacks))
+           $response['callbacks'] = $this->callbacks;
+ 
+-        echo json_serialize($response);
++        echo json_encode($response);
+     }
+     
+     
+@@ -255,7 +255,7 @@
+         foreach ($this->commands as $i => $args) {
              $method = array_shift($args);
              foreach ($args as $i => $arg) {
 -                $args[$i] = json_serialize($arg);
 +                $args[$i] = json_encode($arg);
              }
-             $parent = $this->framed || preg_match('/^parent\./', $method);
-Index: roundcubemail/program/include/rcube_shared.inc
+ 
+             $out .= sprintf(
+Index: b/program/include/rcube_shared.inc
 ===================================================================
---- roundcubemail/program/include/rcube_shared.inc (revision 3132)
-+++ roundcubemail/program/include/rcube_shared.inc (revision 3170)
-@@ -106,95 +106,4 @@
-     exit;
-     }
--}
--
--
--/**
+--- a/program/include/rcube_shared.inc	2009-10-27 10:43:39.000000000 +0100
++++ b/program/include/rcube_shared.inc	2010-07-17 17:33:24.000000000 +0200
+@@ -109,97 +109,6 @@
+ 
+ 
+ /**
 - * Returns whether an $str is a reserved word for any of the version of Javascript or ECMAScript
 - * @param str String to check
 - * @return boolean True if $str is a reserver word, False if not
@@ -115,45 +117,55 @@ Index: roundcubemail/program/include/rcube_shared.inc
 -function array2js($arr, $type='')
 -{
 -  return json_serialize($arr);
- }
- 
-Index: roundcubemail/program/include/rcube_json_output.php
+-}
+-
+-
+-/**
+  * Similar function as in_array() but case-insensitive
+  *
+  * @param mixed Needle value
+Index: b/program/include/rcube_template.php
 ===================================================================
---- roundcubemail/program/include/rcube_json_output.php (revision 2905)
-+++ roundcubemail/program/include/rcube_json_output.php (revision 3170)
-@@ -240,5 +240,5 @@
-           $response['callbacks'] = $this->callbacks;
- 
--        echo json_serialize($response);
-+        echo json_encode($response);
-     }
-     
-@@ -256,5 +256,5 @@
+--- a/program/include/rcube_template.php	2009-09-22 20:08:45.000000000 +0200
++++ b/program/include/rcube_template.php	2010-07-17 17:33:24.000000000 +0200
+@@ -414,12 +414,12 @@
+     {
+         $out = '';
+         if (!$this->framed && !empty($this->js_env)) {
+-            $out .= JS_OBJECT_NAME . '.set_env('.json_serialize($this->js_env).");\n";
++            $out .= JS_OBJECT_NAME . '.set_env('.json_encode($this->js_env).");\n";
+         }
+         foreach ($this->js_commands as $i => $args) {
              $method = array_shift($args);
              foreach ($args as $i => $arg) {
 -                $args[$i] = json_serialize($arg);
 +                $args[$i] = json_encode($arg);
              }
- 
-Index: roundcubemail/program/steps/mail/func.inc
+             $parent = $this->framed || preg_match('/^parent\./', $method);
+             $out .= sprintf(
+Index: b/program/steps/mail/compose.inc
 ===================================================================
---- roundcubemail/program/steps/mail/func.inc (revision 3099)
-+++ roundcubemail/program/steps/mail/func.inc (revision 3170)
-@@ -523,5 +523,5 @@
-   if (is_array($quota)) {
-     $OUTPUT->add_script('$(document).ready(function(){
--	rcmail.set_quota('.json_serialize($quota).')});', 'foot');
-+	rcmail.set_quota('.json_encode($quota).')});', 'foot');
-     $quota = '';
-     }
-Index: roundcubemail/program/steps/mail/compose.inc
-===================================================================
---- roundcubemail/program/steps/mail/compose.inc (revision 3166)
-+++ roundcubemail/program/steps/mail/compose.inc (revision 3170)
-@@ -507,5 +507,5 @@
+--- a/program/steps/mail/compose.inc	2009-10-06 08:55:08.000000000 +0200
++++ b/program/steps/mail/compose.inc	2010-07-17 17:33:24.000000000 +0200
+@@ -493,7 +493,7 @@
+       JQ(Q(rcube_label('close'))),
        JQ(Q(rcube_label('revertto'))),
        JQ(Q(rcube_label('nospellerrors'))),
 -      json_serialize($spellcheck_langs),
 +      json_encode($spellcheck_langs),
        $lang,
        $attrib['id'],
+       JS_OBJECT_NAME), 'foot');
+Index: b/program/steps/mail/func.inc
+===================================================================
+--- a/program/steps/mail/func.inc	2009-10-24 21:09:23.000000000 +0200
++++ b/program/steps/mail/func.inc	2010-07-17 17:33:24.000000000 +0200
+@@ -522,7 +522,7 @@
+   
+   if (is_array($quota)) {
+     $OUTPUT->add_script('$(document).ready(function(){
+-	rcmail.set_quota('.json_serialize($quota).')});', 'foot');
++	rcmail.set_quota('.json_encode($quota).')});', 'foot');
+     $quota = '';
+     }
+   
