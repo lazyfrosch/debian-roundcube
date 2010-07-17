@@ -9,6 +9,7 @@ roundcube (0.3.1-4) unstable; urgency=low
     Closes: #588084.
   * Add more explanations on how to install roundcube in a Debian system
     in README.Debian. Closes: #584458, #582894.
+  * Bump Standards-Version. No changes required.
 
  -- Vincent Bernat <bernat@debian.org>  Sat, 17 Jul 2010 17:23:30 +0200
 
