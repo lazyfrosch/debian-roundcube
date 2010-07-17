@@ -1,8 +1,10 @@
 Fix size of login box to accommodate sk_SK locale
 
---- r/skins/default/common.css~	2009-09-04 12:42:24.000000000 +0200
-+++ r/skins/default/common.css	2009-09-27 11:27:25.000000000 +0200
-@@ -494,7 +494,7 @@
+Index: b/skins/default/common.css
+===================================================================
+--- a/skins/default/common.css	2009-10-06 12:00:33.000000000 +0200
++++ b/skins/default/common.css	2010-07-17 17:33:24.000000000 +0200
+@@ -506,7 +506,7 @@
    margin-left: auto;
    margin-right: auto;
    margin-top: 50px;

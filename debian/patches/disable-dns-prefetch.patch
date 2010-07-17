@@ -1,9 +1,9 @@
 Disable DNS prefetching to solve CVE-2010-0464.
 
-Index: program/include/rcube_html_page.php
+Index: b/program/include/rcube_html_page.php
 ===================================================================
---- rcube/program/include/rcube_html_page.php	(revision 3214)
-+++ rcube/program/include/rcube_html_page.php	(working copy)
+--- a/program/include/rcube_html_page.php	2009-06-22 18:20:34.000000000 +0200
++++ b/program/include/rcube_html_page.php	2010-07-17 17:33:25.000000000 +0200
 @@ -165,6 +165,13 @@
              $__page_header.= $this->charset . '" />'."\n";
          }

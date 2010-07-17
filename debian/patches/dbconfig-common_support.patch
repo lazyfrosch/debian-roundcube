@@ -1,22 +1,23 @@
 The default db.inc.php is modified to adapt it to the use of dbconfig-common package.
 
---- roundcube_0.1~beta2.2/config/db.inc.php.dist        2006-03-20 23:08:51.000000000 +0100
-+++ roundcube_0.1~beta2.2/config/db.inc.php.dist  2007-03-13 14:33:38.000000000 +0100
+Index: b/config/db.inc.php.dist
+===================================================================
+--- a/config/db.inc.php.dist	2010-07-17 17:33:04.000000000 +0200
++++ b/config/db.inc.php.dist	2010-07-17 17:33:23.000000000 +0200
 @@ -14,15 +14,20 @@
-
+ 
  $rcmail_config = array();
-
+ 
 -// PEAR database DSN for read/write operations
 -// format is db_provider://user:password@host/database 
 -// For examples see http://pear.php.net/manual/en/package.database.mdb2.intro-dsn.php
 -// currently supported db_providers: mysql, mysqli, pgsql, sqlite, mssql
--
++/* Do not set db_dsnw here, use dpkg-reconfigure roundcube to configure database ! */
+ 
 -$rcmail_config['db_dsnw'] = 'mysql://roundcube:pass@localhost/roundcubemail';
 -// postgres example: 'pgsql://roundcube:pass@localhost/roundcubemail';
 -// Warning: for SQLite use absolute path in DSN:
 -// sqlite example: 'sqlite:////full/path/to/sqlite.db?mode=0646';
-+/* Do not set db_dsnw here, use dpkg-reconfigure roundcube to configure database ! */
-+
 +include_once("/etc/roundcube/debian-db.php");
 +
 +switch ($dbtype) {
@@ -29,6 +30,6 @@ The default db.inc.php is modified to adapt it to the use of dbconfig-common pac
 +   $rcmail_config['db_dsnw'] = "$dbtype://$dbuser:$dbpass@$dbserver$dbport/$dbname";
 +   break;
 + }
-
+ 
  // PEAR database DSN for read only operations (if empty write database will be used)
  // useful for database replication
