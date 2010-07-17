@@ -1,4 +1,4 @@
-roundcube (0.3.1-4) UNRELEASED; urgency=low
+roundcube (0.3.1-4) unstable; urgency=low
 
   * Update README.Debian to state that the variable to modify is
     'htmleditor' instead of 'enable_htmleditor'. Thanks to Hans
@@ -10,7 +10,7 @@ roundcube (0.3.1-4) UNRELEASED; urgency=low
   * Add more explanations on how to install roundcube in a Debian system
     in README.Debian. Closes: #584458, #582894.
 
- -- Vincent Bernat <bernat@debian.org>  Sat, 27 Mar 2010 01:15:46 +0100
+ -- Vincent Bernat <bernat@debian.org>  Sat, 17 Jul 2010 17:23:30 +0200
 
 roundcube (0.3.1-3) unstable; urgency=high
 
