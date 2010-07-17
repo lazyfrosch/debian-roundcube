@@ -11,6 +11,8 @@ roundcube (0.3.1-4) unstable; urgency=low
     in README.Debian. Closes: #584458, #582894.
   * Bump Standards-Version. No changes required.
   * Switch to 3.0 (quilt) format.
+  * Use Breaks instead of Conflicts to move files from older roundcube
+    installations.
 
  -- Vincent Bernat <bernat@debian.org>  Sat, 17 Jul 2010 17:23:30 +0200
 
