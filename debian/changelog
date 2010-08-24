@@ -2,8 +2,10 @@ roundcube (0.3.1-5) UNRELEASED; urgency=low
 
   * Depends on php-mail-mime 1.7.0 or more recent to handle correctly
     'mime_param_folding' directive. Closes: #588295.
+  * Add Danish debconf translation, thanks to Joe Dalton.
+    Closes: #593271.
 
- -- Vincent Bernat <bernat@debian.org>  Thu, 05 Aug 2010 08:03:21 +0200
+ -- Vincent Bernat <bernat@debian.org>  Tue, 24 Aug 2010 20:35:54 +0200
 
 roundcube (0.3.1-4) unstable; urgency=low
 
