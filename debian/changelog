@@ -1,3 +1,14 @@
+roundcube (0.3.1-5) unstable; urgency=low
+
+  * Depends on php-mail-mime 1.7.0 or more recent to handle correctly
+    'mime_param_folding' directive. Closes: #588295.
+  * Add Danish debconf translation, thanks to Joe Dalton.
+    Closes: #593271.
+  * Add a patch to fix Received header to behave better with Spam
+    Assassin. Closes: #595204.
+
+ -- Vincent Bernat <bernat@debian.org>  Thu, 02 Sep 2010 07:54:58 +0200
+
 roundcube (0.3.1-4) unstable; urgency=low
 
   * Update README.Debian to state that the variable to modify is
