@@ -1,4 +1,4 @@
-roundcube (0.3.1-5) UNRELEASED; urgency=low
+roundcube (0.3.1-5) unstable; urgency=low
 
   * Depends on php-mail-mime 1.7.0 or more recent to handle correctly
     'mime_param_folding' directive. Closes: #588295.
