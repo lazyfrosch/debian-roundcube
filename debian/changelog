@@ -2,8 +2,10 @@ roundcube (0.3.1-6) UNRELEASED; urgency=low
 
   * Update Arabic debconf translation, thanks to Ossama Khayat.
     Closes: #596181.
+  * Update Portuguese debconf translation, thanks to Christian Perrier.
+    Closes: #599575.
 
- -- Vincent Bernat <bernat@debian.org>  Thu, 09 Sep 2010 08:41:27 +0200
+ -- Vincent Bernat <bernat@debian.org>  Sat, 09 Oct 2010 11:19:15 +0200
 
 roundcube (0.3.1-5) unstable; urgency=low
 

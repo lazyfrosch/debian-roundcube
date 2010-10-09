@@ -11,10 +11,10 @@ msgstr ""
 "PO-Revision-Date: 2008-03-09 14:12+0000\n"
 "Last-Translator: Miguel Figueiredo <elmig@debianpt.org>\n"
 "Language-Team: Portuguese <traduz@debianpt.org>\n"
-"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: pt\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. Type: multiselect
@@ -80,11 +80,9 @@ msgstr "Servidor(es) IMAP utilizado(s) com o RoundCube:"
 #. Type: string
 #. Description
 #: ../templates:4001
-#, fuzzy
-#| msgid "Please select the IMAP server that should be used with RoundCube."
 msgid "Please select the IMAP server(s) that should be used with RoundCube."
 msgstr ""
-"Por favor escolha o servidor IMAP que deve ser utilizado com o RoundCube."
+"Por favor escolha o(s) servidor(es) IMAP que deve ser utilizado(s) com o RoundCube."
 
 #. Type: string
 #. Description
