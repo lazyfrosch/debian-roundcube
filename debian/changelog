@@ -1,4 +1,4 @@
-roundcube (0.3.1-6) UNRELEASED; urgency=low
+roundcube (0.3.1-6) unstable; urgency=low
 
   * Update Arabic debconf translation, thanks to Ossama Khayat.
     Closes: #596181.
@@ -7,7 +7,7 @@ roundcube (0.3.1-6) UNRELEASED; urgency=low
   * Add a patch to avoid duplicate boundaries in headers when adding an
     attachment. Closes: #599586.
 
- -- Vincent Bernat <bernat@debian.org>  Mon, 18 Oct 2010 19:39:09 +0200
+ -- Vincent Bernat <bernat@debian.org>  Mon, 18 Oct 2010 23:14:37 +0200
 
 roundcube (0.3.1-5) unstable; urgency=low
 
