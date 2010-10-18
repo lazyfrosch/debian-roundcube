@@ -4,8 +4,10 @@ roundcube (0.3.1-6) UNRELEASED; urgency=low
     Closes: #596181.
   * Update Portuguese debconf translation, thanks to Christian Perrier.
     Closes: #599575.
+  * Add a patch to avoid duplicate boundaries in headers when adding an
+    attachment. Closes: #599586.
 
- -- Vincent Bernat <bernat@debian.org>  Sat, 09 Oct 2010 11:19:15 +0200
+ -- Vincent Bernat <bernat@debian.org>  Mon, 18 Oct 2010 19:39:09 +0200
 
 roundcube (0.3.1-5) unstable; urgency=low
 
