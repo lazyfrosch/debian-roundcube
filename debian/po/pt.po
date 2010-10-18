@@ -80,11 +80,10 @@ msgstr "Servidor(es) IMAP utilizado(s) com o RoundCube:"
 #. Type: string
 #. Description
 #: ../templates:4001
-#, fuzzy
-#| msgid "Please select the IMAP server that should be used with RoundCube."
 msgid "Please select the IMAP server(s) that should be used with RoundCube."
 msgstr ""
-"Por favor escolha o servidor IMAP que deve ser utilizado com o RoundCube."
+"Por favor escolha o(s) servidor(es) IMAP que deve(m) ser utilizado(s) com o "
+"RoundCube."
 
 #. Type: string
 #. Description
