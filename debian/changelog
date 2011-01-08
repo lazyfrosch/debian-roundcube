@@ -12,6 +12,10 @@ roundcube (0.5~rc-1) UNRELEASED; urgency=low
        use of Mail_Mime 1.8.0 in place of 1.8.1 which is not available in
        Debian. We depends on jQuery 1.4.2 because 1.4.4 is not available in
        Debian.
+     + All folders are correctly checked since 0.4. Closes: #552430.
+     + Also, closes: #553194 since it seems to have been fixed too.
+     + There is also the possibility to not top-quote since 0.4.
+       Closes: #491063.
   * Move .htaccess to /etc/roundcube and use a symlink (Closes: #591369).
   * Don't let www-data overwrite debian-db.php. Closes: #608976.
   * Bump Standards-Version. No changes required.
