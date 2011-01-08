@@ -23,9 +23,11 @@ binary-install/roundcube-core::
 	# Install config files
 	install -m 0640 $(CURDIR)/config/db.inc.php.dist $(CURDIR)/debian/roundcube-core/etc/roundcube/db.inc.php
 	install -m 0640 $(CURDIR)/config/main.inc.php.dist $(CURDIR)/debian/roundcube-core/usr/share/roundcube
+	install -m 0640 $(CURDIR)/.htaccess $(CURDIR)/debian/roundcube-core/etc/roundcube/htaccess
 	for c in $(CURDIR)/debian/roundcube-core/etc/roundcube/*.php; do \
 		dh_link -proundcube-core etc/roundcube/$$(basename $$c) var/lib/roundcube/config/$$(basename $$c) ; \
 	done
+	dh_link -proundcube-core etc/roundube/htaccess var/lib/roundcube/.htaccess
 
 	# Database related files
 	# Install empty tables and updates for each db type
