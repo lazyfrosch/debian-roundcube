@@ -11,6 +11,7 @@ roundcube (0.5~rc-1) UNRELEASED; urgency=low
        Debian. We depends on jQuery 1.4.2 because 1.4.4 is not available in
        Debian.
   * Move .htaccess to /etc/roundcube and use a symlink (Closes: #591369).
+  * Don't let www-data overwrite debian-db.php. Closes: #608976.
   * Bump Standards-Version. No changes required.
 
  -- Vincent Bernat <bernat@debian.org>  Sat, 08 Jan 2011 15:15:56 +0100
