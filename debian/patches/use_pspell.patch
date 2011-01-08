@@ -4,7 +4,7 @@ Index: b/config/main.inc.php.dist
 ===================================================================
 --- a/config/main.inc.php.dist	2010-07-17 17:33:23.000000000 +0200
 +++ b/config/main.inc.php.dist	2010-07-17 17:33:24.000000000 +0200
-@@ -224,7 +224,7 @@
+@@ -376,7 +376,7 @@
  
  // Set the spell checking engine. 'googie' is the default. 'pspell' is also available,
  // but requires the Pspell extensions. When using Nox Spell Server, also set 'googie' here.

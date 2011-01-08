@@ -4,12 +4,12 @@ Index: b/program/include/iniset.php
 ===================================================================
 --- a/program/include/iniset.php	2010-07-17 17:33:04.000000000 +0200
 +++ b/program/include/iniset.php	2010-07-17 17:33:23.000000000 +0200
-@@ -27,7 +27,7 @@
- define('JS_OBJECT_NAME', 'rcmail');
+@@ -42,7 +42,7 @@
+ define('RCMAIL_START', microtime(true));
  
  if (!defined('INSTALL_PATH')) {
--  define('INSTALL_PATH', dirname($_SERVER['SCRIPT_FILENAME']).'/');
-+  define('INSTALL_PATH', '/var/lib/roundcube/');
+-    define('INSTALL_PATH', dirname($_SERVER['SCRIPT_FILENAME']).'/');
++    define('INSTALL_PATH', '/var/lib/roundcube/');
  }
- 
- define('RCMAIL_CONFIG_DIR', INSTALL_PATH . 'config');
+
+ if (!defined('RCMAIL_CONFIG_DIR')) {

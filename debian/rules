@@ -40,15 +40,14 @@ binary-install/roundcube-core::
 	find $(CURDIR)/debian/roundcube-core/usr/share/roundcube -type f -print0 | xargs -r0 chmod -x
 	# Remove useless file
 	rm $(CURDIR)/debian/roundcube-core/usr/share/roundcube/bin/*.sh
-	rm $(CURDIR)/debian/roundcube-core/usr/share/roundcube/bin/decrypt.php
 	find $(CURDIR)/debian/roundcube-core -name '._*' -print0 | xargs -r0 rm
 	find $(CURDIR)/debian/roundcube-core -name '*.js.src' -print0 | xargs -r0 rm
 	# Remove files shipped in tinymce package
 	rm -rf $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/js/tiny_mce
 	dh_link -proundcube-core usr/share/tinymce/www usr/share/roundcube/program/js/tiny_mce
 	# Remove jquery as well
-	rm $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/js/jquery-1.3.min.js
-	dh_link -proundcube-core usr/share/javascript/jquery/jquery.min.js usr/share/roundcube/program/js/jquery-1.3.min.js
+	rm $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/js/jquery-1.4.min.js
+	dh_link -proundcube-core usr/share/javascript/jquery/jquery.min.js usr/share/roundcube/program/js/jquery-1.4.min.js
 
 $(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/% :
 	install -d $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/bug/$(cdbs_curpkg)
