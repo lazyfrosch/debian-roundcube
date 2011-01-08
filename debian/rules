@@ -4,10 +4,6 @@ include /usr/share/cdbs/1/rules/debhelper.mk
 
 DEB_INSTALL_CHANGELOGS_ALL=CHANGELOG
 
-# In order to regenerate 'debian/control' :
-#    DEB_AUTO_UPDATE_DEBIAN_CONTROL=yes fakeroot debian/rules clean
-# Then check manually if everything's ok
-
 binary-install/roundcube-core::
 	# Remove plugins
 	rm -rf $(CURDIR)/debian/roundcube-core/usr/share/roundcube/plugins
