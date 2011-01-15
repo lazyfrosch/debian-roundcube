@@ -1,4 +1,4 @@
-roundcube (0.5~rc-1) UNRELEASED; urgency=low
+roundcube (0.5-1) UNRELEASED; urgency=low
 
   * New upstream release. Closes: #592312.
      + Drop patches included upstream (DNS prefetching, jQuery 1.4
@@ -21,7 +21,7 @@ roundcube (0.5~rc-1) UNRELEASED; urgency=low
   * Don't let www-data overwrite debian-db.php. Closes: #608976.
   * Bump Standards-Version. No changes required.
 
- -- Vincent Bernat <bernat@debian.org>  Sat, 08 Jan 2011 15:15:56 +0100
+ -- Vincent Bernat <bernat@debian.org>  Sat, 15 Jan 2011 12:03:30 +0100
 
 roundcube (0.3.1-6) unstable; urgency=low
 
