@@ -11,8 +11,8 @@ Index: b/config/db.inc.php.dist
 -// PEAR database DSN for read/write operations
 -// format is db_provider://user:password@host/database 
 -// For examples see http://pear.php.net/manual/en/package.database.mdb2.intro-dsn.php
--// currently supported db_providers: mysql, mysqli, pgsql, sqlite, mssql
-+/* Do not set db_dsnw here, use dpkg-reconfigure roundcube to configure database ! */
+-// currently supported db_providers: mysql, mysqli, pgsql, sqlite, mssql or sqlsrv
++/* Do not set db_dsnw here, use dpkg-reconfigure roundcube-core to configure database ! */
  
 -$rcmail_config['db_dsnw'] = 'mysql://roundcube:pass@localhost/roundcubemail';
 -// postgres example: 'pgsql://roundcube:pass@localhost/roundcubemail';

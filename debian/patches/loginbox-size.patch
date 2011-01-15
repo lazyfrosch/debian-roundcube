@@ -4,7 +4,7 @@ Index: b/skins/default/common.css
 ===================================================================
 --- a/skins/default/common.css	2009-10-06 12:00:33.000000000 +0200
 +++ b/skins/default/common.css	2010-07-17 17:33:24.000000000 +0200
-@@ -506,7 +506,7 @@
+@@ -677,7 +677,7 @@
    margin-left: auto;
    margin-right: auto;
    margin-top: 50px;
