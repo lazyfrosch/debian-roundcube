@@ -1,4 +1,4 @@
-roundcube (0.5-1) UNRELEASED; urgency=low
+roundcube (0.5-1) experimental; urgency=low
 
   * New upstream release. Closes: #592312.
      + Drop patches included upstream (DNS prefetching, jQuery 1.4
@@ -7,7 +7,9 @@ roundcube (0.5-1) UNRELEASED; urgency=low
        now correctly states to use dpkg-reconfigure roundcube-core.
        Closes: #608977.
      + Update SQL commands to use to upgrade database.
-       That also closes: #602922.
+       That also closes: #602922. Unfortunately, the user may get some
+       harmless error messages because there is no way to know if
+       0.3.1 was installed from scratch or upgraded from 0.3.
      + Update dependencies to match INSTALL file. Only exception is the
        use of Mail_Mime 1.8.0 in place of 1.8.1 which is not available in
        Debian. We depends on jQuery 1.4.2 because 1.4.4 is not available in
@@ -21,7 +23,7 @@ roundcube (0.5-1) UNRELEASED; urgency=low
   * Don't let www-data overwrite debian-db.php. Closes: #608976.
   * Bump Standards-Version. No changes required.
 
- -- Vincent Bernat <bernat@debian.org>  Sat, 15 Jan 2011 12:03:30 +0100
+ -- Vincent Bernat <bernat@debian.org>  Sat, 15 Jan 2011 12:40:27 +0100
 
 roundcube (0.3.1-6) unstable; urgency=low
 
