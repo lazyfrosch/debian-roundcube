@@ -11,14 +11,14 @@ ALTER TABLE `identities` ENGINE=InnoDB;
 
 TRUNCATE `messages`;
 
-ALTER TABLE `messages`
-    ADD INDEX `index_index` (`user_id`, `cache_key`, `idx`);
+-- ALTER TABLE `messages`
+--    ADD INDEX `index_index` (`user_id`, `cache_key`, `idx`);
 
-ALTER TABLE `session` 
-    CHANGE `vars` `vars` MEDIUMTEXT NOT NULL;
+-- ALTER TABLE `session` 
+--    CHANGE `vars` `vars` MEDIUMTEXT NOT NULL;
 
-ALTER TABLE `contacts`
-    ADD INDEX `user_contacts_index` (`user_id`,`email`);
+-- ALTER TABLE `contacts`
+--    ADD INDEX `user_contacts_index` (`user_id`,`email`);
 
 -- Updates from version 0.3.1
 -- WARNING: Make sure that all tables are using InnoDB engine!!!
