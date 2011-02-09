@@ -21,7 +21,7 @@
  | Author: Ryo Chijiiwa <Ryo@IlohaMail.org>                              |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_imap_generic.php 4399 2011-01-08 08:37:55Z alec $
+ $Id: rcube_imap_generic.php 4516 2011-02-09 12:46:46Z alec $
 
 */
 
@@ -759,6 +759,11 @@ class rcube_imap_generic
             }
         }
 
+        // Send ID info
+        if (!empty($this->prefs['ident']) && $this->getCapability('ID')) {
+            $this->id($this->prefs['ident']);
+        }
+
         $auth_methods = array();
         $result       = null;
 
@@ -1157,6 +1162,44 @@ class rcube_imap_generic
         return false;
     }
 
+    /**
+     * Executes ID command (RFC2971)
+     *
+     * @param array $items Client identification information key/value hash
+     *
+     * @return array Server identification information key/value hash
+     * @access public
+     * @since 0.6
+     */
+    function id($items=array())
+    {
+        if (is_array($items) && !empty($items)) {
+            foreach ($items as $key => $value) {
+                $args[] = $this->escape($key);
+                $args[] = $this->escape($value);
+            }
+        }
+
+        list($code, $response) = $this->execute('ID', array(
+            !empty($args) ? '(' . implode(' ', (array) $args) . ')' : $this->escape(null)
+        ));
+
+
+        if ($code == self::ERROR_OK && preg_match('/\* ID /i', $response)) {
+            $response = substr($response, 5); // remove prefix "* ID "
+            $items    = $this->tokenizeResponse($response);
+            $result   = null;
+
+            for ($i=0, $len=count($items); $i<$len; $i += 2) {
+                $result[$items[$i]] = $items[$i+1];
+            }
+
+            return $result;
+        }
+
+        return false;
+    }
+
     function sort($mailbox, $field, $add='', $is_uid=FALSE, $encoding = 'US-ASCII')
     {
         $field = strtoupper($field);
@@ -1494,7 +1537,7 @@ class rcube_imap_generic
                 // INTERNALDATE "16-Nov-2008 21:08:46 +0100" BODYSTRUCTURE (...)
                 // BODY[HEADER.FIELDS ...
 
-                if (preg_match('/^\* [0-9]+ FETCH \((.*) BODY/s', $line, $matches)) {
+                if (preg_match('/^\* [0-9]+ FETCH \((.*) BODY/sU', $line, $matches)) {
                     $str = $matches[1];
 
                     // swap parents with quotes, then explode
@@ -1531,7 +1574,7 @@ class rcube_imap_generic
 
                     // BODYSTRUCTURE
                     if ($bodystr) {
-                        while (!preg_match('/ BODYSTRUCTURE (.*) BODY\[HEADER.FIELDS/s', $line, $m)) {
+                        while (!preg_match('/ BODYSTRUCTURE (.*) BODY\[HEADER.FIELDS/sU', $line, $m)) {
                             $line2 = $this->readLine(1024);
                             $line .= $this->multLine($line2, true);
                         }
@@ -1631,7 +1674,7 @@ class rcube_imap_generic
                         break;
                         case 'content-type':
                             $ctype_parts = preg_split('/[; ]/', $string);
-                            $result[$id]->ctype = array_shift($ctype_parts);
+                            $result[$id]->ctype = strtolower(array_shift($ctype_parts));
                             if (preg_match('/charset\s*=\s*"?([a-z0-9\-\.\_]+)"?/i', $string, $regs)) {
                                 $result[$id]->charset = $regs[1];
                             }
@@ -3284,10 +3327,11 @@ class rcube_imap_generic
         else if ($string === '') {
             return '""';
         }
+        // need quoted-string? find special chars: SP, CTL, (, ), {, %, *, ", \, ]
+        // plus [ character as a workaround for DBMail's bug (#1487766)
         else if ($force_quotes ||
-            preg_match('/([\x00-\x20\x28-\x29\x7B\x25\x2A\x22\x5C\x5D\x7F]+)/', $string)
+            preg_match('/([\x00-\x20\x28-\x29\x7B\x25\x2A\x22\x5B\x5C\x5D\x7F]+)/', $string)
         ) {
-            // string: special chars: SP, CTL, (, ), {, %, *, ", \, ]
             return '"' . strtr($string, array('"'=>'\\"', '\\' => '\\\\')) . '"';
         }
 

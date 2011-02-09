@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: edit_identity.inc 4328 2010-12-09 19:10:44Z alec $
+ $Id: edit_identity.inc 4509 2011-02-09 10:51:50Z thomasb $
 
 */
 
@@ -94,9 +94,9 @@ function rcube_identity_form($attrib)
     $form['addressing']['content']['email']['class'] = 'disabled';
   }
 
-  $IDENTITY_RECORD['email']    = idn_to_utf8($IDENTITY_RECORD['email']);
-  $IDENTITY_RECORD['reply-to'] = idn_to_utf8($IDENTITY_RECORD['reply-to']);
-  $IDENTITY_RECORD['bcc']      = idn_to_utf8($IDENTITY_RECORD['bcc']);
+  $IDENTITY_RECORD['email']    = rcube_idn_to_utf8($IDENTITY_RECORD['email']);
+  $IDENTITY_RECORD['reply-to'] = rcube_idn_to_utf8($IDENTITY_RECORD['reply-to']);
+  $IDENTITY_RECORD['bcc']      = rcube_idn_to_utf8($IDENTITY_RECORD['bcc']);
 
   // Allow plugins to modify identity form content
   $plugin = $RCMAIL->plugins->exec_hook('identity_form', array(

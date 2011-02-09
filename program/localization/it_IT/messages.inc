@@ -14,7 +14,7 @@
 |         Yusef Maali <contact@yusefmaali.net>                          |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 4386 2011-01-04 08:35:46Z yllar $
+@version $Id: messages.inc 4469 2011-01-29 14:55:12Z thomasb $
 
 */
 
@@ -30,7 +30,7 @@ $messages['errornoperm'] = 'Impossibile eseguire l\'operazione. Permesso negato'
 $messages['invalidrequest'] = 'Richiesta non valida! Nessun dato salvato.';
 $messages['nomessagesfound'] = 'Nessun messaggio trovato in questa cartella';
 $messages['loggedout'] = 'Sessione chiusa correttamente. Arrivederci!';
-$messages['mailboxempty'] = 'La cartella è vuota';
+$messages['mailboxempty'] = 'La casella è vuota';
 $messages['loading'] = 'Caricamento...';
 $messages['uploading'] = 'Caricamento file...';
 $messages['loadingdata'] = 'Caricamento dati...';
@@ -138,5 +138,8 @@ $messages['namecannotbeempty'] = 'Il nome non può essere vuoto';
 $messages['nametoolong'] = 'Nome troppo lungo';
 $messages['folderupdated'] = 'Cartella aggiornata correttamente';
 $messages['foldercreated'] = 'Cartella creata correttamente';
+$messages['invalidimageformat'] = 'Formato non valido';
 
 ?>
+
+

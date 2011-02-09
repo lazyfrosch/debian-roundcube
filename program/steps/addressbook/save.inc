@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: save.inc 4166 2010-11-02 09:27:03Z alec $
+ $Id: save.inc 4509 2011-02-09 10:51:50Z thomasb $
 
 */
 
@@ -49,8 +49,8 @@ foreach ($a_save_cols as $col) {
 }
 
 // Validity checks
-$_email = idn_to_ascii($a_record['email']);
-if (!check_email($_email, false)) {
+$_email = rcube_idn_to_ascii($a_record['email']);
+if (!check_email($_email)) {
   $OUTPUT->show_message('emailformaterror', 'warning', array('email' => $_email));
   rcmail_overwrite_action($return_action);
   return;
@@ -121,6 +121,18 @@ else {
 
 
   if ($insert_id) {
+    // add new contact to the specified group
+    if ($CONTACTS->group_id) {
+      $plugin = $RCMAIL->plugins->exec_hook('group_addmembers', array('group_id' => $CONTACTS->group_id, 'ids' => $insert_id, 'source' => $source));
+
+      if (!$plugin['abort']) {
+        if (($maxnum = $RCMAIL->config->get('max_group_members', 0)) && ($CONTACTS->count()->count + 1 > $maxnum))
+          $OUTPUT->show_message('maxgroupmembersreached', 'warning', array('max' => $maxnum));
+
+        $CONTACTS->add_to_group($gid, $plugin['ids']);
+      }
+    }
+    
     // add contact row or jump to the page where it should appear
     $CONTACTS->reset();
     $result = $CONTACTS->search($CONTACTS->primary_key, $insert_id);

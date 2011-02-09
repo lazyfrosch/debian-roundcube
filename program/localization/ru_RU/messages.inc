@@ -14,7 +14,7 @@
 | Updates: Sergey Dukachev <iam@dukess.ru>                              |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 4368 2010-12-27 08:51:22Z yllar $
+@version $Id: messages.inc 4469 2011-01-29 14:55:12Z thomasb $
 
 */
 
@@ -138,5 +138,6 @@ $messages['namecannotbeempty'] = 'Имя не может быть пустым';
 $messages['nametoolong'] = 'Слишком длинное имя';
 $messages['folderupdated'] = 'Папка обновлена';
 $messages['foldercreated'] = 'Папка создана';
+$messages['invalidimageformat'] = 'Неверный формат изображения';
 
 ?>

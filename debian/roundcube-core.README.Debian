@@ -24,4 +24,13 @@ To use tinymce editor:
 No plugins are shipped (except core plugins) with this package of
 roundcube. Add your plugin in /var/lib/roundcube/plugins.
 
- -- Vincent Bernat <bernat@debian.org>, Sat, 10 Jul 2010 18:19:35 +0200
+This package makes use of dbconfig-common to setup the database. If
+you do not wish to use dbconfig-common, you can find the SQL commands
+to use to install and upgrade the database in
+`/usr/share/dbconfig-common/data/roundcube'. When upgrading, you need
+to apply each upgrade file from the version you are upgrading
+(excluded). For example, if you are using MySQL and want to upgrade
+from 0.3-1, you need to apply `mysql/0.5-1'. If you are upgrading from
+0.2~alpha-5, you need to apply `mysql/0.2~stable-1' and `mysql/0.5-1'.
+
+ -- Vincent Bernat <bernat@debian.org>, Sun, 13 Feb 2011 12:59:27 +0100

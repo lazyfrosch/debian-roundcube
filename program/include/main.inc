@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: main.inc 4334 2010-12-10 11:08:22Z alec $
+ $Id: main.inc 4509 2011-02-09 10:51:50Z thomasb $
 
 */
 
@@ -858,8 +858,8 @@ function rcmail_mod_css_styles($source, $container_id)
   $replacements = new rcube_string_replacer;
 
   // ignore the whole block if evil styles are detected
-  $stripped = preg_replace('/[^a-z\(:]/', '', rcmail_xss_entity_decode($source));
-  if (preg_match('/expression|behavior|url\(|import/', $stripped))
+  $stripped = preg_replace('/[^a-z\(:;]/', '', rcmail_xss_entity_decode($source));
+  if (preg_match('/expression|behavior|url\(|import[^a]/', $stripped))
     return '/* evil! */';
 
   // remove css comments (sometimes used for some ugly hacks)
@@ -1217,6 +1217,19 @@ function rcmail_remote_ip()
         $address .= '(' . implode(',', $remote_ip) . ')';
 
     return $address;
+}
+
+
+/**
+ * Check whether the HTTP referer matches the current request
+ *
+ * @return boolean True if referer is the same host+path, false if not
+ */
+function rcube_check_referer()
+{
+  $uri = parse_url($_SERVER['REQUEST_URI']);
+  $referer = parse_url(rc_request_header('Referer'));
+  return $referer['host'] == rc_request_header('Host') && $referer['path'] == $uri['path'];
 }
 
 
@@ -1768,16 +1781,17 @@ function rcube_sess_unset($var_name=null)
  * Replaces hostname variables
  *
  * @param string $name Hostname
+ * @param string $host Optional IMAP hostname
  * @return string
  */
-function rcube_parse_host($name)
+function rcube_parse_host($name, $host='')
 {
   // %n - host
   $n = preg_replace('/:\d+$/', '', $_SERVER['SERVER_NAME']);
   // %d - domain name without first part, e.g. %d=mail.domain.tld, %m=domain.tld
   $d = preg_replace('/^[^\.]+\./', '', $n);
   // %h - IMAP host
-  $h = $_SESSION['imap_host'];
+  $h = $_SESSION['imap_host'] ? $_SESSION['imap_host'] : $host;
   // %z - IMAP domain without first part, e.g. %h=imap.domain.tld, %z=domain.tld
   $z = preg_replace('/^[^\.]+\./', '', $h);
 
@@ -1857,6 +1871,39 @@ function check_email($email, $dns_check=true)
   }
 
   return false;
+}
+
+/*
+ * Idn_to_ascii wrapper.
+ * Intl/Idn modules version of this function doesn't work with e-mail address
+ */
+function rcube_idn_to_ascii($str)
+{
+  return rcube_idn_convert($str, true);
+}
+
+/*
+ * Idn_to_ascii wrapper.
+ * Intl/Idn modules version of this function doesn't work with e-mail address
+ */
+function rcube_idn_to_utf8($str)
+{
+  return rcube_idn_convert($str, false);
+}
+
+function rcube_idn_convert($input, $is_utf=false)
+{
+  if ($at = strpos($input, '@')) {
+    $user   = substr($input, 0, $at);
+    $domain = substr($input, $at+1);
+  }
+  else {
+    $domain = $input;
+  }
+
+  $domain = $is_utf ? idn_to_ascii($domain) : idn_to_utf8($domain);
+
+  return $at ? $user . '@' . $domain : $domain;
 }
 
 

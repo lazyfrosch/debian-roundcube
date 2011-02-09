@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: func.inc 4389 2011-01-04 11:16:54Z alec $
+ $Id: func.inc 4509 2011-02-09 10:51:50Z thomasb $
 
 */
 
@@ -56,9 +56,9 @@ if (!empty($_GET['_page']))
 
 // set default sort col/order to session
 if (!isset($_SESSION['sort_col']))
-  $_SESSION['sort_col'] = $CONFIG['message_sort_col'];
+  $_SESSION['sort_col'] = !empty($CONFIG['message_sort_col']) ? $CONFIG['message_sort_col'] : '';
 if (!isset($_SESSION['sort_order']))
-  $_SESSION['sort_order'] = $CONFIG['message_sort_order'];
+  $_SESSION['sort_order'] = strtoupper($CONFIG['message_sort_order']) == 'ASC' ? 'ASC' : 'DESC';
 
 // set threads mode
 $a_threading = $RCMAIL->config->get('message_threading', array());
@@ -273,7 +273,7 @@ function rcmail_js_message_list($a_headers, $insert_top=FALSE, $a_show_cols=null
       if (in_array($col, array('from', 'to', 'cc', 'replyto')))
         $cont = Q(rcmail_address_string($header->$col, 3), 'show');
       else if ($col=='subject') {
-        $cont = abbreviate_string(trim($IMAP->decode_header($header->$col)), 160);
+        $cont = trim($IMAP->decode_header($header->$col));
         if (!$cont) $cont = rcube_label('nosubject');
         $cont = Q($cont);
       }
@@ -665,7 +665,8 @@ function rcmail_print_body($part, $p = array())
 
   // trigger plugin hook
   $data = $RCMAIL->plugins->exec_hook('message_part_before',
-    array('type' => $part->ctype_secondary, 'body' => $part->body) + $p + array('safe' => false, 'plain' => false, 'inline_html' => true));
+    array('type' => $part->ctype_secondary, 'body' => $part->body, 'id' => $part->mime_id)
+        + $p + array('safe' => false, 'plain' => false, 'inline_html' => true));
 
   // convert html to text/plain
   if ($data['type'] == 'html' && $data['plain']) {
@@ -698,7 +699,8 @@ function rcmail_print_body($part, $p = array())
     $body = rcmail_plain_body($body, $part->ctype_parameters['format'] == 'flowed');
 
   // allow post-processing of the message body
-  $data = $RCMAIL->plugins->exec_hook('message_part_after', array('type' => $part->ctype_secondary, 'body' => $body) + $data);
+  $data = $RCMAIL->plugins->exec_hook('message_part_after',
+    array('type' => $part->ctype_secondary, 'body' => $body, 'id' => $part->mime_id) + $data);
 
   return $data['type'] == 'html' ? $data['body'] : html::tag('pre', array(), $data['body']);
 }
@@ -827,10 +829,10 @@ function rcmail_washtml_callback($tagname, $attrib, $content)
 
     case 'style':
       // decode all escaped entities and reduce to ascii strings
-      $stripped = preg_replace('/[^a-zA-Z\(:]/', '', rcmail_xss_entity_decode($content));
+      $stripped = preg_replace('/[^a-zA-Z\(:;]/', '', rcmail_xss_entity_decode($content));
 
       // now check for evil strings like expression, behavior or url()
-      if (!preg_match('/expression|behavior|url\(|import/', $stripped)) {
+      if (!preg_match('/expression|behavior|url\(|import[^a]/', $stripped)) {
         $out = html::tag('style', array('type' => 'text/css'), $content);
         break;
       }
@@ -940,16 +942,25 @@ function rcmail_message_headers($attrib, $headers=NULL)
     $table->add(array('class' => 'header '.$hkey), Q($row['value'], ($hkey == 'subject' ? 'strict' : 'show')));
   }
 
-  // all headers division
-  $table->add(array('colspan' => 2, 'class' => "more-headers show-headers", 'onclick' => "return ".JS_OBJECT_NAME.".command('load-headers','',this)"), '');
-  $table->add_row(array('id' => "all-headers"));
-  $table->add(array('colspan' => 2, 'class' => "all"), html::div(array('id' => 'headers-source'), ''));
+  return $table->show($attrib);
+}
+
+
+/**
+ * return block to show full message headers
+ */
+function rcmail_message_full_headers($attrib, $headers=NULL)
+{
+  global $OUTPUT;
+  
+  $html = html::div(array('class' => "more-headers show-headers", 'onclick' => "return ".JS_OBJECT_NAME.".command('load-headers','',this)"), '');
+  $html .= html::div(array('id' => "all-headers", 'class' => "all", 'style' => 'display:none'), html::div(array('id' => 'headers-source'), ''));
   
   $OUTPUT->add_gui_object('all_headers_row', 'all-headers');
   $OUTPUT->add_gui_object('all_headers_box', 'headers-source');
-
-  return $table->show($attrib);
-  }
+  
+  return html::div($attrib, $html);
+}
 
 
 /**
@@ -1183,15 +1194,16 @@ function rcmail_html4inline($body, $container_id, $body_id='', &$attributes=null
  */
 function rcmail_alter_html_link($matches)
 {
-  global $EMAIL_ADDRESS_PATTERN;
+  global $RCMAIL, $EMAIL_ADDRESS_PATTERN;
 
   $tag = $matches[1];
   $attrib = parse_attrib_string($matches[2]);
   $end = '>';
 
   if ($tag == 'link' && preg_match('/^https?:\/\//i', $attrib['href'])) {
-    $attrib['href'] = "?_task=utils&amp;_action=modcss&amp;u=" . urlencode($attrib['href'])
-        . "&amp;c=" . urlencode($GLOBALS['rcmail_html_container_id']);
+    $tempurl = 'tmp-' . md5($attrib['href']) . '.css';
+    $_SESSION['modcssurls'][$tempurl] = $attrib['href'];
+    $attrib['href'] = $RCMAIL->url(array('task' => 'utils', 'action' => 'modcss', 'u' => $tempurl, 'c' => $GLOBALS['rcmail_html_container_id']));
     $end = ' />';
   }
   else if (preg_match('/^mailto:'.$EMAIL_ADDRESS_PATTERN.'(\?[^"\'>]+)?/i', $attrib['href'], $mailto)) {
@@ -1239,10 +1251,10 @@ function rcmail_address_string($input, $max=null, $linked=false, $addicon=null)
 
     // IDNA ASCII to Unicode
     if ($name == $mailto)
-      $name = idn_to_utf8($name);
+      $name = rcube_idn_to_utf8($name);
     if ($string == $mailto)
-      $string = idn_to_utf8($string);
-    $mailto = idn_to_utf8($mailto);
+      $string = rcube_idn_to_utf8($string);
+    $mailto = rcube_idn_to_utf8($mailto);
 
     if ($PRINT_MODE) {
       $out .= sprintf('%s &lt;%s&gt;', Q($name), $mailto);
@@ -1749,6 +1761,7 @@ $OUTPUT->add_handlers(array(
   'quotadisplay' => 'rcmail_quota_display',
   'mailboxname' => 'rcmail_mailbox_name_display',
   'messageheaders' => 'rcmail_message_headers',
+  'messagefullheaders' => 'rcmail_message_full_headers',
   'messagebody' => 'rcmail_message_body',
   'messagecontentframe' => 'rcmail_messagecontent_frame',
   'messagepartframe' => 'rcmail_message_part_frame',

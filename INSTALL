@@ -11,7 +11,7 @@ REQUIREMENTS
 
 * The Apache or Lighttpd Webserver
 * .htaccess support allowing overrides for DirectoryIndex
-* PHP Version 5.2 or greater including
+* PHP Version 5.2.1 or greater including
    - PCRE, DOM, JSON, XML, Session, Sockets (required)
    - Libiconv
    - Multibyte String (mbstring)
@@ -22,6 +22,7 @@ REQUIREMENTS
    - MDB2 2.5.0 or newer
    - Mail_Mime 1.8.1 or newer
    - Net_SMTP 1.4.2 or newer
+   - Net_IDNA2 0.1.1 or newer
    - Auth_SASL 1.0.3 or newer
 * php.ini options (see .htaccess file):
    - error_reporting E_ALL & ~E_NOTICE (or lower)

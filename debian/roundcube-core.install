@@ -1,5 +1,6 @@
 robots.txt index.php .htaccess program/ bin/ usr/share/roundcube
-skins temp var/lib/roundcube
-plugins/filesystem_attachments var/lib/roundcube/plugins
+skins/default/ usr/share/roundcube/skins
+plugins/filesystem_attachments/ usr/share/roundcube/plugins
+
 debian/conf/* etc/roundcube
 config/*.php etc/roundcube

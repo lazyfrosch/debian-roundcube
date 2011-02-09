@@ -15,7 +15,7 @@
 |         Andreas Henriksson <andreas@fatal.se>                         |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 4368 2010-12-27 08:51:22Z yllar $
+@version $Id: messages.inc 4469 2011-01-29 14:55:12Z thomasb $
 
 */
 
@@ -139,5 +139,6 @@ $messages['namecannotbeempty'] = 'Namnet får inte vara tomt';
 $messages['nametoolong'] = 'Namnet är för långt';
 $messages['folderupdated'] = 'Katalog uppdaterad';
 $messages['foldercreated'] = 'Katalog skapad';
+$messages['invalidimageformat'] = 'Ogiltigt bildfilsformat';
 
 ?>

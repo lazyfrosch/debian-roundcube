@@ -13,7 +13,7 @@
 | Author: Marcel Schlesinger <info@marcel-schlesinger.de>               |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4346 2010-12-17 14:36:47Z thomasb $
+@version $Id: labels.inc 4509 2011-02-09 10:51:50Z thomasb $
 
 */
 
@@ -44,9 +44,6 @@ $labels['size'] = 'Größe';
 $labels['priority'] = 'Priorität';
 $labels['organization'] = 'Organisation';
 $labels['readstatus'] = 'Gelesen/Ungelesen';
-$labels['reply-to'] = 'Antwort an';
-$labels['mail-reply-to'] = 'Mail-Reply-To';
-$labels['mail-followup-to'] = 'Mail-Followup-To';
 $labels['mailboxlist'] = 'Ordner';
 $labels['messagesfromto'] = 'Nachrichten $from bis $to von $count';
 $labels['threadsfromto'] = 'Konversationen $from bis $to von $count';
@@ -157,7 +154,6 @@ $labels['listmode'] = 'Anzeigemodus';
 $labels['folderactions'] = 'Ordneraktionen...';
 $labels['compact'] = 'Packen';
 $labels['empty'] = 'Leeren';
-$labels['purge'] = 'Bereinigen';
 $labels['quota'] = 'Speicherplatz';
 $labels['unknown'] = 'unbekannt';
 $labels['unlimited'] = 'unbegrenzt';
@@ -201,22 +197,52 @@ $labels['addcc'] = 'Cc hinzufügen';
 $labels['addbcc'] = 'Bcc hinzufügen';
 $labels['addreplyto'] = 'Antwortadresse hinzufügen';
 $labels['addfollowupto'] = 'Followup-To hinzufügen';
-$labels['mdnrequest'] = 'Der Sender dieser Nachricht möchte gerne eine Lesebestätigung. Wollen Sie dieses bestätigen?';
+$labels['mdnrequest'] = 'Der Sender dieser Nachricht möchte gerne eine Empfangsbestätigung. Wollen Sie dieses bestätigen?';
 $labels['receiptread'] = 'Empfangsbestätigung (gelesen)';
 $labels['yourmessage'] = 'Dies ist eine Empfangsbestätigung für Ihre Nachricht';
 $labels['receiptnote'] = 'Hinweis: Der Empfänger hat den Empfang der Nachricht bestätigt. Dies ist keine Garantie, dass die Nachricht gelesen und verstanden wurde.';
 $labels['name'] = 'Angezeigter Name';
 $labels['firstname'] = 'Vorname';
 $labels['surname'] = 'Nachname';
+$labels['middlename'] = 'zweiter  Vorname';
+$labels['nameprefix'] = 'Anrede';
+$labels['namesuffix'] = 'Namenszusatz';
+$labels['nickname'] = 'Spitzname';
+$labels['jobtitle'] = 'Berufsbezeichnung';
+$labels['department'] = 'Firma';
+$labels['gender'] = 'Geschlecht';
+$labels['maidenname'] = 'Mädchenname';
 $labels['email'] = 'E-Mail';
+$labels['phone'] = 'Telefon';
+$labels['address'] = 'Adresse';
+$labels['street'] = 'Straße';
+$labels['locality'] = 'Ort';
+$labels['zipcode'] = 'PLZ';
+$labels['region'] = 'Region';
+$labels['country'] = 'Land';
+$labels['birthday'] = 'Geburtstag';
+$labels['anniversary'] = 'Jahrestag';
+$labels['website'] = 'Webseite';
+$labels['instantmessenger'] = 'IM-Adresse';
+$labels['notes'] = 'Notizen';
+$labels['male'] = 'männlich';
+$labels['female'] = 'weiblich';
+$labels['manager'] = 'Vorgesetze(r)';
+$labels['assistant'] = 'Assistent';
+$labels['spouse'] = 'Partner/in';
+$labels['addfield'] = 'Feld hinzufügen...';
 $labels['addcontact'] = 'Kontakt hinzufügen';
 $labels['editcontact'] = 'Kontakt bearbeiten';
 $labels['contacts'] = 'Kontakte';
 $labels['contactproperties'] = 'Kontaktdaten';
+$labels['personalinfo'] = 'Persönliche Informationen';
 $labels['edit'] = 'Bearbeiten';
 $labels['cancel'] = 'Abbrechen';
 $labels['save'] = 'Speichern';
 $labels['delete'] = 'Löschen';
+$labels['rename'] = 'umbenennen';
+$labels['addphoto'] = 'Kontaktbild hinzufügen';
+$labels['replacephoto'] = 'Bild ändern';
 $labels['newcontact'] = 'Neuen Kontakt erstellen';
 $labels['deletecontact'] = 'Gewählte Kontakte löschen';
 $labels['composeto'] = 'Nachricht verfassen';
@@ -271,8 +297,8 @@ $labels['serversettings'] = 'Server-Einstellungen';
 $labels['mailboxview'] = 'Mailbox-Ansicht';
 $labels['mdnrequests'] = 'Empfangsbestätigung senden';
 $labels['askuser'] = 'immer fragen';
-$labels['autosend'] = 'Lesebestätigung automatisch senden';
-$labels['autosendknown'] = 'Lesebestätigung nur an meine Kontakte senden';
+$labels['autosend'] = 'automatisch senden';
+$labels['autosendknown'] = 'nur an meine Kontakte senden';
 $labels['autosendknownignore'] = 'für bekannte Absender, sonst ignorieren';
 $labels['ignore'] = 'ignorieren';
 $labels['readwhendeleted'] = 'Beim Löschen als gelesen markieren';
