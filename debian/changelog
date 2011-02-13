@@ -1,6 +1,7 @@
 roundcube (0.5.1-2) unstable; urgency=low
 
   * Add plugins. Closes: #550454.
+  * Update debian/copyright.
 
  -- Vincent Bernat <bernat@debian.org>  Sun, 13 Feb 2011 15:25:45 +0100
 

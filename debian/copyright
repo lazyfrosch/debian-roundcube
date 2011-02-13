@@ -10,12 +10,6 @@ License: GPL
 RoundCube may be redistributed under the terms of the GNU GPL, Version
 2, found on Debian systems in the file /usr/share/common-licenses/GPL-2
 
-The file index.php incorrectly states that it is BSD licensed. This
-was a mistake and this was changed in SVN:
- http://trac.roundcube.net/browser/trunk/roundcubemail/index.php
-More info here:
- http://lists.roundcube.net/mail-archive/dev/2008-05/0000015.html
-
 Some files are taken from other projects :
  - googiespell from amix@amix.dk, MIT license
  - lib/html2text.inc from jon@chuggnutt.com, GPL license
