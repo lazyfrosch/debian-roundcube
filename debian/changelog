@@ -1,4 +1,4 @@
-roundcube (0.5.1-1) UNRELEASED; urgency=low
+roundcube (0.5.1-1) unstable; urgency=low
 
   * New upstream version. Some bugs are corrected in this release or in a
     previous release:
