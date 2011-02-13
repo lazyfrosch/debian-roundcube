@@ -26,6 +26,7 @@ roundcube (0.5-3) UNRELEASED; urgency=low
   * Add instructions on how to install and upgrade when not using
     dbconfig-common. We do not ship UPGRADING file any more since it is
     misleading. Closes: #612511.
+  * Fix MySQL indexes if upgrading from 0.5-2 or lesser. Closes: #610725.
 
  -- Vincent Bernat <bernat@debian.org>  Wed, 09 Feb 2011 07:32:42 +0100
 
