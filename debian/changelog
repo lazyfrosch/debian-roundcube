@@ -5,6 +5,12 @@ roundcube (0.5-3) UNRELEASED; urgency=low
     dbconfig-common. We do not ship UPGRADING file any more since it is
     misleading. Closes: #612511.
   * Fix MySQL indexes if upgrading from 0.5-2 or lesser. Closes: #610725.
+  * Rework how symlinks work. The only directory to use is
+    /var/lib/roundcube. We use symlink from /usr/share/roundcube to
+    /var/lib/roundcube and not the other way. Moreover, plugins and skins
+    are also symlinked. A user should be able to add plugins and skins in
+    /var/lib/roundcube while default ones are in
+    /usr/share/roundcube. Closes: #612553.
 
  -- Vincent Bernat <bernat@debian.org>  Wed, 09 Feb 2011 07:32:42 +0100
 
