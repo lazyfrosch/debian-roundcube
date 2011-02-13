@@ -36,6 +36,23 @@ binary-install/roundcube-core::
 	rm $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/js/jquery-1.4.min.js
 	dh_link -proundcube-core usr/share/javascript/jquery/jquery.min.js usr/share/roundcube/program/js/jquery-1.4.min.js
 
+binary-install/roundcube-plugins::
+	# Plugins are in usr/share/roundcube/plugins, for each plugin
+	# if there is config.inc.php.dist, we symlink a config.inc.php
+	# in /etc/roundcube/plugins with some dummy content.
+	for plugin in $(CURDIR)/debian/roundcube-plugins/usr/share/roundcube/plugins/*; do \
+		dh_link -proundcube-plugins usr/share/roundcube/plugins/$${plugin##*/} \
+			var/lib/roundcube/plugins/$${plugin##*/} ; \
+		if [ ! -f $${plugin}/config.inc.php.dist ]; then continue; fi ; \
+		dh_installdirs -proundcube-plugins etc/roundcube/plugins/$${plugin##*/} ; \
+		(echo "<?php" ; \
+		 echo "// Empty configuration for $${plugin##*/}" ; \
+		 echo "// See /usr/share/roundcube/plugins/$${plugin##*/}/config.inc.php.dist for instructions") > \
+			$(CURDIR)/debian/roundcube-plugins/etc/roundcube/plugins/$${plugin##*/}/config.inc.php ; \
+		dh_link -proundcube-plugins etc/roundcube/plugins/$${plugin##*/}/config.inc.php \
+			usr/share/roundcube/plugins/$${plugin##*/}/config.inc.php ; \
+	done
+
 $(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/% :
 	install -d $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/bug/$(cdbs_curpkg)
 	install -m 644 $(CURDIR)/debian/bug.control $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/bug/$(cdbs_curpkg)/control

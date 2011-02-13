@@ -1,3 +1,9 @@
+roundcube (0.5.1-2) unstable; urgency=low
+
+  * Add plugins. Closes: #550454.
+
+ -- Vincent Bernat <bernat@debian.org>  Sun, 13 Feb 2011 15:25:45 +0100
+
 roundcube (0.5.1-1) unstable; urgency=low
 
   * New upstream version. Some bugs are corrected in this release or in a
