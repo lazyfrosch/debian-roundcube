@@ -1,5 +1,11 @@
-roundcube (0.5-3) UNRELEASED; urgency=low
+roundcube (0.5.1-1) UNRELEASED; urgency=low
 
+  * New upstream version. Some bugs are corrected in this release or in a
+    previous release:
+      + when switching to HTML mode, content type is now correctly set.
+        Closes: #611321.
+      + header delimiters handling has been fixed in 0.5.
+        Closes: #603489.
   * Don't assign "skins" directory to www-data. Closes: #612552.
   * Add instructions on how to install and upgrade when not using
     dbconfig-common. We do not ship UPGRADING file any more since it is
