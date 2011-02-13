@@ -2,8 +2,9 @@ roundcube (0.5.1-2) unstable; urgency=low
 
   * Add plugins. Closes: #550454.
   * Update debian/copyright.
+  * Use of yui-compressor to re-minify Javascript files.
 
- -- Vincent Bernat <bernat@debian.org>  Sun, 13 Feb 2011 15:25:45 +0100
+ -- Vincent Bernat <bernat@debian.org>  Sun, 13 Feb 2011 16:19:33 +0100
 
 roundcube (0.5.1-1) unstable; urgency=low
 

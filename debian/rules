@@ -28,7 +28,11 @@ binary-install/roundcube-core::
 	# Remove useless file
 	rm -rf $(CURDIR)/debian/roundcube-core/usr/share/roundcube/bin
 	find $(CURDIR)/debian/roundcube-core -name '._*' -print0 | xargs -r0 rm
-	find $(CURDIR)/debian/roundcube-core -name '*.js.src' -print0 | xargs -r0 rm
+	# Convert .js.src back to js
+	for js in $$(find $(CURDIR)/debian/roundcube-core -name '*.js.src' -print); do \
+		yui-compressor --type js "$$js" -o "$${js%.*}" ; \
+		rm "$$js" ; \
+	done
 	# Remove files shipped in tinymce package
 	rm -rf $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/js/tiny_mce
 	dh_link -proundcube-core usr/share/tinymce/www usr/share/roundcube/program/js/tiny_mce
