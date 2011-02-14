@@ -1,3 +1,15 @@
+roundcube (0.5.1+dfsg-1) unstable; urgency=low
+
+  * Add plugins. Closes: #550454.
+  * Rewrite (and update) of debian/copyright.
+  * Use of yui-compressor to re-minify Javascript files.
+  * Drop correct-magic-path.patch: libmagic1 now provides a symlink to the
+    correct location since 4.24-4.
+  * Repack orig.tar.gz to remove swf file shipped with TinyMCE with no
+    sources available.
+
+ -- Vincent Bernat <bernat@debian.org>  Mon, 14 Feb 2011 22:33:51 +0100
+
 roundcube (0.5.1-1) unstable; urgency=low
 
   * New upstream version. Some bugs are corrected in this release or in a
@@ -6,22 +18,6 @@ roundcube (0.5.1-1) unstable; urgency=low
         Closes: #611321.
       + header delimiters handling has been fixed in 0.5.
         Closes: #603489.
-  * Don't assign "skins" directory to www-data. Closes: #612552.
-  * Add instructions on how to install and upgrade when not using
-    dbconfig-common. We do not ship UPGRADING file any more since it is
-    misleading. Closes: #612511.
-  * Fix MySQL indexes if upgrading from 0.5-2 or lesser. Closes: #610725.
-  * Rework how symlinks work. The only directory to use is
-    /var/lib/roundcube. We use symlink from /usr/share/roundcube to
-    /var/lib/roundcube and not the other way. Moreover, plugins and skins
-    are also symlinked. A user should be able to add plugins and skins in
-    /var/lib/roundcube while default ones are in
-    /usr/share/roundcube. Closes: #612553.
-
- -- Vincent Bernat <bernat@debian.org>  Wed, 09 Feb 2011 07:32:42 +0100
-
-roundcube (0.5-3) UNRELEASED; urgency=low
-
   * Don't assign "skins" directory to www-data. Closes: #612552.
   * Add instructions on how to install and upgrade when not using
     dbconfig-common. We do not ship UPGRADING file any more since it is
