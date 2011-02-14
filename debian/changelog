@@ -3,8 +3,8 @@ roundcube (0.5.1-2) unstable; urgency=low
   * Add plugins. Closes: #550454.
   * Rewrite (and update) of debian/copyright.
   * Use of yui-compressor to re-minify Javascript files.
-  * Drop magic patch: libmagic1 now provides a symlink to the correct
-    location since 4.24-4.
+  * Drop correct-magic-path.patch: libmagic1 now provides a symlink to the
+    correct location since 4.24-4.
 
  -- Vincent Bernat <bernat@debian.org>  Sun, 13 Feb 2011 16:19:33 +0100
 
