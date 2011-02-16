@@ -55,6 +55,7 @@ case "$1" in
 ALTER TABLE \`messages\` ADD INDEX \`index_index\` (\`user_id\`, \`cache_key\`, \`idx\`);
 ALTER TABLE \`session\` CHANGE \`vars\` \`vars\` MEDIUMTEXT NOT NULL;
 ALTER TABLE \`contacts\`ADD INDEX \`user_contacts_index\` (\`user_id\`,\`email\`);
+ALTER TABLE \`identities\` ADD INDEX \`user_identities_index\` (\`user_id\`, \`del\`);
 EOF
 		fi
 	    fi

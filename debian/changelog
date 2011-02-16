@@ -1,3 +1,11 @@
+roundcube (0.5.1+dfsg-2) unstable; urgency=low
+
+  * Remove all "ADD INDEX" from MySQL 0.5-1 upgrade file and put them in
+    postinst script. Also add a note in NEWS.Debian file about this
+    problem. Closes: #613586.
+
+ -- Vincent Bernat <bernat@debian.org>  Wed, 16 Feb 2011 08:40:34 +0100
+
 roundcube (0.5.1+dfsg-1) unstable; urgency=low
 
   * Add plugins. Closes: #550454.
