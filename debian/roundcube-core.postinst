@@ -40,7 +40,7 @@ case "$1" in
     configure)
 
 	# We try to fix an incomplete upgrade (see #610725)
-	if [ -n "$2" ] && dpkg --compare-versions "$2" le 0.5-2; then
+	if [ -n "$2" ] && dpkg --compare-versions "$2" le 0.5.1+dfsg-2; then
 	    db_get roundcube/dbconfig-upgrade || true
 	    if [ x"$RET" = x"true" ]; then
 		# Ok, we may need to do some upgrade steps. Let's get
