@@ -1,3 +1,9 @@
+roundcube (0.5.1+dfsg-3) UNRELEASED; urgency=low
+
+  * Install show_additional_headers plugin in roundcube-plugins package.
+
+ -- Vincent Bernat <bernat@debian.org>  Thu, 17 Feb 2011 19:14:50 +0100
+
 roundcube (0.5.1+dfsg-2) unstable; urgency=low
 
   * Remove all "ADD INDEX" from MySQL 0.5-1 upgrade file and put them in
