@@ -10,6 +10,7 @@ plugins/managesieve/ usr/share/roundcube/plugins
 plugins/markasjunk/ usr/share/roundcube/plugins
 plugins/new_user_dialog/ usr/share/roundcube/plugins
 plugins/new_user_identity/ usr/share/roundcube/plugins
+plugins/show_additional_headers/ usr/share/roundcube/plugins
 plugins/squirrelmail_usercopy/ usr/share/roundcube/plugins
 plugins/subscriptions_option/ usr/share/roundcube/plugins
 plugins/userinfo/ usr/share/roundcube/plugins
