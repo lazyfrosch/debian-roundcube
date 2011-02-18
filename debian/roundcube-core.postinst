@@ -39,21 +39,31 @@ apache_install() {
 case "$1" in
     configure)
 
-	# We try to fix an incomplete upgrade (see #610725)
+	# We try to fix an incomplete upgrade (see #610725 and #613586)
 	if [ -n "$2" ] && dpkg --compare-versions "$2" le 0.5.1+dfsg-2; then
 	    db_get roundcube/dbconfig-upgrade || true
 	    if [ x"$RET" = x"true" ]; then
-		# Ok, we may need to do some upgrade steps. Let's get
-		# database parameters
-		eval `sed -n 's/^\$\(.*\);$/\1/p' /etc/roundcube/debian-db.php`
-		if [ x"$dbtype" = x"mysql" ]; then
-		    echo "Fixing MySQL indexes (you can ignore errors)..."
-		    MYSQLARGS="-f -u $dbuser -p$dbpass $dbname"
-		    [ -z "$dbserver" ] || MYSQLARGS="-h $dbserver $MYSQLARGS"
-		    [ -z "$dbport" ] || MYSQLARGS="-P $dbport $MYSQLARGS"
-		    cat <<EOF | mysql $MYSQLARGS || true
+		if [ x"$dbc_dbtype" = x"mysql" ]; then
+		    # Ok, we may need to do some upgrade steps.
+		    echo "Fixing MySQL installation..."
+		    if dpkg --compare-versions "$2" ge 0.5; then
+			# Hack (ugly) to replace "mysql" by "mysql -f"
+			real_mysql="$(which mysql)"
+			workdir="$(mktemp -d)"
+			oldpath="$PATH"
+			cat <<EOF > "$workdir/mysql"
+#!/bin/sh
+"$real_mysql" "\$@" -f
+EOF
+			chmod +x "$workdir/mysql"
+			PATH="$workdir:$PATH"
+			dbc_mysql_exec_file \
+			    /usr/share/dbconfig-common/data/roundcube/upgrade/mysql/0.5-1 || true
+			PATH="$oldpath"
+			rm -rf "$workdir"
+                    fi
+		    cat <<EOF | while read command; do dbc_mysql_exec_command "$command" || true ; done
 ALTER TABLE \`messages\` ADD INDEX \`index_index\` (\`user_id\`, \`cache_key\`, \`idx\`);
-ALTER TABLE \`session\` CHANGE \`vars\` \`vars\` MEDIUMTEXT NOT NULL;
 ALTER TABLE \`contacts\`ADD INDEX \`user_contacts_index\` (\`user_id\`,\`email\`);
 ALTER TABLE \`identities\` ADD INDEX \`user_identities_index\` (\`user_id\`, \`del\`);
 EOF

@@ -1,8 +1,11 @@
-roundcube (0.5.1+dfsg-3) UNRELEASED; urgency=low
+roundcube (0.5.1+dfsg-3) unstable; urgency=low
 
   * Install show_additional_headers plugin in roundcube-plugins package.
+  * Use dbconfig-common to force some upgrade commands using some ugly
+    hacks. This should fix any remaining problems with MySQL
+    upgrade. Closes: #613586.
 
- -- Vincent Bernat <bernat@debian.org>  Thu, 17 Feb 2011 19:14:50 +0100
+ -- Vincent Bernat <bernat@debian.org>  Fri, 18 Feb 2011 22:04:12 +0100
 
 roundcube (0.5.1+dfsg-2) unstable; urgency=low
 
