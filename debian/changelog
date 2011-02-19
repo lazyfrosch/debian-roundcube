@@ -1,3 +1,9 @@
+roundcube (0.5.1+dfsg-4) UNRELEASED; urgency=low
+
+  * Fix debian/watch to remove "+dfsg" suffix.
+
+ -- Vincent Bernat <bernat@debian.org>  Sat, 19 Feb 2011 18:47:41 +0100
+
 roundcube (0.5.1+dfsg-3) unstable; urgency=low
 
   * Install show_additional_headers plugin in roundcube-plugins package.
