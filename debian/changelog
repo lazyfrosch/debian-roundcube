@@ -1,8 +1,9 @@
 roundcube (0.5.1+dfsg-4) UNRELEASED; urgency=low
 
   * Fix debian/watch to remove "+dfsg" suffix.
+  * Use awk instead of sed to modify main.inc.php. Closes: #615277.
 
- -- Vincent Bernat <bernat@debian.org>  Sat, 19 Feb 2011 18:47:41 +0100
+ -- Vincent Bernat <bernat@debian.org>  Mon, 28 Feb 2011 21:16:16 +0100
 
 roundcube (0.5.1+dfsg-3) unstable; urgency=low
 

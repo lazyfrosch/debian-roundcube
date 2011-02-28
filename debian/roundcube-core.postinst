@@ -101,9 +101,10 @@ EOF
 
 	# Put hosts, language and key in main.inc.php
 	cat /usr/share/roundcube/main.inc.php.dist | \
-	    sed -e "s+^\(\$rcmail_config\['default_host'\] = \)''\(;\)\$+\1${hosts}\2+" \
-	        -e "s+^\(\$rcmail_config\['des_key'\] = '\).*\(';\)\$+\1$deskey\2+" \
-	        -e "s+^\(\$rcmail_config\['language'\] = \).*\(;\)\$+\1'${language}'\2+" >> $CONFFILE.ucftmp
+	    awk "/^.rcmail_config\['default_host'\] =/ {print \$1\" = ${hosts};\" ; next}
+                 /^.rcmail_config\['des_key'\] =/ {print \$1\" = '${deskey}';\" ; next}
+                 /^.rcmail_config\['language'\] =/ {print \$1\" = '${language}';\" ; next}
+                 {print}" >> $CONFFILE.ucftmp
 
 	ucf --debconf-ok $CONFFILE.ucftmp $CONFFILE
  	chown root:www-data $CONFFILE
