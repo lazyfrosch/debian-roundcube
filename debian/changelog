@@ -1,3 +1,10 @@
+roundcube (0.5.1+dfsg-4) unstable; urgency=low
+
+  * Fix debian/watch to remove "+dfsg" suffix.
+  * Use awk instead of sed to modify main.inc.php. Closes: #615277.
+
+ -- Vincent Bernat <bernat@debian.org>  Tue, 01 Mar 2011 19:59:00 +0100
+
 roundcube (0.5.1+dfsg-3) unstable; urgency=low
 
   * Install show_additional_headers plugin in roundcube-plugins package.
