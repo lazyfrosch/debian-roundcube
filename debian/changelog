@@ -1,3 +1,10 @@
+roundcube (0.5.1+dfsg-5) unstable; urgency=low
+
+  * Don't use awk. Use plain shell to modify main.inc.php.
+    Closes: #616074.
+
+ -- Vincent Bernat <bernat@debian.org>  Fri, 04 Mar 2011 20:46:57 +0100
+
 roundcube (0.5.1+dfsg-4) unstable; urgency=low
 
   * Fix debian/watch to remove "+dfsg" suffix.
