@@ -1,3 +1,10 @@
+roundcube (0.5.1+dfsg-6) unstable; urgency=low
+
+  * Handle incorrect upgrade from 0.3.1-6 when "changed" column already
+    exists for table "identities". Closes: #617312.
+
+ -- Vincent Bernat <bernat@debian.org>  Tue, 08 Mar 2011 07:37:56 +0100
+
 roundcube (0.5.1+dfsg-5) unstable; urgency=low
 
   * Don't use awk. Use plain shell to modify main.inc.php.
