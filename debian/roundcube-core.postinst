@@ -40,7 +40,7 @@ case "$1" in
     configure)
 
 	# We try to fix an incomplete upgrade (see #610725 and #613586)
-	if [ -n "$2" ] && dpkg --compare-versions "$2" le 0.5.1+dfsg-2; then
+	if [ -n "$2" ] && dpkg --compare-versions "$2" le 0.5.1+dfsg-5; then
 	    db_get roundcube/dbconfig-upgrade || true
 	    if [ x"$RET" = x"true" ]; then
 		if [ x"$dbc_dbtype" = x"mysql" ]; then
@@ -65,6 +65,7 @@ EOF
 		    cat <<EOF | while read command; do dbc_mysql_exec_command "$command" || true ; done
 ALTER TABLE \`messages\` ADD INDEX \`index_index\` (\`user_id\`, \`cache_key\`, \`idx\`);
 ALTER TABLE \`contacts\`ADD INDEX \`user_contacts_index\` (\`user_id\`,\`email\`);
+ALTER TABLE \`identities\` ADD \`changed\` datetime NOT NULL DEFAULT '1000-01-01 00:00:00' AFTER \`user_id\`;
 ALTER TABLE \`identities\` ADD INDEX \`user_identities_index\` (\`user_id\`, \`del\`);
 EOF
 		fi
