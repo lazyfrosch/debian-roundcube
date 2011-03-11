@@ -1,3 +1,10 @@
+roundcube (0.5.1+dfsg-7) unstable; urgency=low
+
+  * Make dbconfig-common use sqlite by default to ensure that the package
+    can be configured non-interactively in most cases. Closes: #617754.
+
+ -- Vincent Bernat <bernat@debian.org>  Fri, 11 Mar 2011 09:08:32 +0100
+
 roundcube (0.5.1+dfsg-6) unstable; urgency=low
 
   * Handle incorrect upgrade from 0.3.1-6 when "changed" column already
