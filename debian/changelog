@@ -1,3 +1,9 @@
+roundcube (0.5.1+dfsg-8) unstable; urgency=low
+
+  * Update logrotate configuration. Closes: #619410.
+
+ --
+
 roundcube (0.5.1+dfsg-7) unstable; urgency=low
 
   * Make dbconfig-common use sqlite by default to ensure that the package

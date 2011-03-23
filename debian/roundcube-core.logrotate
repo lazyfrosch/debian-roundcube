@@ -1,6 +1,8 @@
-/var/log/roundcube/sendmail /var/log/roundcube/errors {
-   weekly
-   rotate 4
-   compress
-   missingok
+/var/log/roundcube/errors /var/log/roundcube/sendmail /var/log/roundcube/userlogins {
+  create 0640 www-data adm
+  compress
+  missingok
+  notifempty
+  rotate 52
+  weekly
 }
