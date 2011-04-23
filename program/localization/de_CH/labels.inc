@@ -13,7 +13,7 @@
 | Author:      Thomas Bruederli <roundcube@gmail.com>                   |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4346 2010-12-17 14:36:47Z thomasb $
+@version $Id: labels.inc 4578 2011-02-27 13:58:12Z thomasb $
 
 */
 
@@ -174,7 +174,7 @@ $labels['sendmessage'] = 'Nachricht jetzt senden';
 $labels['addattachment'] = 'Datei anfügen';
 $labels['charset'] = 'Zeichensatz';
 $labels['editortype'] = 'Editor-Typ';
-$labels['returnreceipt'] = 'Empfangsbestätigung (MSN)';
+$labels['returnreceipt'] = 'Empfangsbestätigung (MDN)';
 $labels['dsn'] = 'Übermittlungsbestätigung (DSN)';
 $labels['editidents'] = 'Absender bearbeiten';
 $labels['checkspelling'] = 'Rechtschreibung prüfen';
