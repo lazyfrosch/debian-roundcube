@@ -1,8 +1,9 @@
-roundcube (0.5.2+dfsg-1) UNRELEASED; urgency=low
+roundcube (0.5.2+dfsg-1) unstable; urgency=low
 
   * New upstream release
   * Update logrotate configuration. Closes: #619410.
   * Make debian-db.php owned by root. This really closes: #608976.
+  * Bump Standards-Version. No changes required.
 
  -- Vincent Bernat <bernat@debian.org>  Sun, 24 Apr 2011 00:35:34 +0200
 
