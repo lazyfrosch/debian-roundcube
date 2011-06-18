@@ -15,7 +15,7 @@
 |         Maximilien Cuony <theglu@theglu.org>                          |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4469 2011-01-29 14:55:12Z thomasb $
+@version $Id: labels.inc 4593 2011-03-05 08:10:52Z alec $
 
 */
 
@@ -103,7 +103,7 @@ $labels['replytoallmessage'] = 'Répondre à tous';
 $labels['replyall'] = 'Répondre à tous';
 $labels['replylist'] = 'Répondre à la liste';
 $labels['forwardmessage'] = 'Transmettre le message';
-$labels['deletemessage'] = 'Déplacer le message dans la corbeille';
+$labels['deletemessage'] = 'Supprimer le message';
 $labels['movemessagetotrash'] = 'Déplacer le message dans la corbeille';
 $labels['printmessage'] = 'Imprimer ce message';
 $labels['previousmessage'] = 'Voir le message précédent';
