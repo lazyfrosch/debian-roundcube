@@ -74,6 +74,8 @@ if (!is_array($_SESSION['compose']['attachments'])) {
 // clear all stored output properties (like scripts and env vars)
 $OUTPUT->reset();
 
+$uploadid = get_input_value('_uploadid', RCUBE_INPUT_GET);
+
 if (is_array($_FILES['_attachments']['tmp_name'])) {
   foreach ($_FILES['_attachments']['tmp_name'] as $i => $filepath) {
     $attachment = array(
@@ -109,7 +111,11 @@ if (is_array($_FILES['_attachments']['tmp_name'])) {
 
       $content .= Q($attachment['name']);
       
-      $OUTPUT->command('add2attachment_list', "rcmfile$id", $content);
+      $OUTPUT->command('add2attachment_list', "rcmfile$id", array(
+        'html' => $content,
+        'name' => $attachment['name'],
+        'mimetype' => $attachment['mimetype'],
+        'complete' => true), $uploadid);
     }
     else {  // upload failed
       $err = $_FILES['_attachments']['error'][$i];
@@ -124,15 +130,22 @@ if (is_array($_FILES['_attachments']['tmp_name'])) {
       }
     
       $OUTPUT->command('display_message', $msg, 'error');
+      $OUTPUT->command('remove_from_attachment_list', $uploadid);
     }
   }
 }
 else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $OUTPUT->command('display_message', rcube_label('fileuploaderror'), 'error');
+  // if filesize exceeds post_max_size then $_FILES array is empty,
+  // show filesizeerror instead of fileuploaderror
+  if ($maxsize = ini_get('post_max_size'))
+    $msg = rcube_label(array('name' => 'filesizeerror', 'vars' => array('size' => show_bytes(parse_bytes($maxsize)))));
+  else
+    $msg = rcube_label('fileuploaderror');
+  $OUTPUT->command('display_message', $msg, 'error');
+  $OUTPUT->command('remove_from_attachment_list', $uploadid);
 }
 
 // send html page with JS calls as response
-$OUTPUT->command('show_attachment_form', false);
 $OUTPUT->command('auto_save_start', false);
 $OUTPUT->send('iframe');
 

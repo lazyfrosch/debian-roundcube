@@ -10,7 +10,7 @@ CREATE TABLE `session` (
  `created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
  `changed` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
  `ip` varchar(40) NOT NULL,
- `vars` text NOT NULL,
+ `vars` mediumtext NOT NULL,
  PRIMARY KEY(`sess_id`),
  INDEX `changed_index` (`changed`)
 ) /*!40000 ENGINE=INNODB */ /*!40101 CHARACTER SET utf8 COLLATE utf8_general_ci */;
@@ -53,6 +53,7 @@ CREATE TABLE `messages` (
  `structure` text,
  PRIMARY KEY(`message_id`),
  INDEX `created_index` (`created`),
+ INDEX `index_index` (`user_id`, `cache_key`, `idx`),
  UNIQUE `uniqueness` (`user_id`, `cache_key`, `uid`),
  CONSTRAINT `user_id_fk_messages` FOREIGN KEY (`user_id`)
    REFERENCES `users`(`user_id`)
@@ -94,6 +95,7 @@ CREATE TABLE `contacts` (
  `vcard` text NULL,
  `user_id` int(10) UNSIGNED NOT NULL DEFAULT '0',
  PRIMARY KEY(`contact_id`),
+ INDEX `user_contacts_index` (`user_id`,`email`),
  CONSTRAINT `user_id_fk_contacts` FOREIGN KEY (`user_id`)
    REFERENCES `users`(`user_id`)
    /*!40008

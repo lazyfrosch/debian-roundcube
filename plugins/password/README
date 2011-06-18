@@ -31,6 +31,8 @@
  2.3.	Poppassd/Courierpassd (poppassd)
  2.4.	LDAP (ldap)
  2.5.	DirectAdmin Control Panel
+ 2.6.   cPanel
+ 2.7.   XIMSS (Communigate)
  3.	Driver API
 
 
@@ -156,8 +158,8 @@
  2.3. Poppassd/Courierpassd (poppassd)
  -------------------------------------
 
- You can specify which host to connect to via `password_pop_host` and
- what port via `password_pop_port`. See config.inc.php file for more info.
+ You can specify which host to connect to via 'password_pop_host' and
+ what port via 'password_pop_port'. See config.inc.php file for more info.
 
 
  2.4. LDAP (ldap)
@@ -169,9 +171,23 @@
  2.5. DirectAdmin Control Panel
  -------------------------------------
 
- You can specify which host to connect to via `password_directadmin_host` 
- and what port via `password_direactadmin_port`. See config.inc.php file 
+ You can specify which host to connect to via 'password_directadmin_host' 
+ and what port via 'password_direactadmin_port'. See config.inc.php file 
  for more info.
+
+
+ 2.6. cPanel
+ -----------
+
+ You can specify parameters for HTTP connection to cPanel's admin
+ interface. See config.inc.php file for more info.
+
+
+ 2.7. XIMSS (Communigate)
+ -------------------------------------
+
+ You can specify which host and port to connect to via 'password_ximss_host' 
+ and 'password_ximss_port'. See config.inc.php file for more info.
 
 
  3. Driver API

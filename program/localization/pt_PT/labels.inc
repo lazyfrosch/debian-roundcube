@@ -14,9 +14,10 @@
 |          João Vale <jpvale@gmail.com>                                 |
 |          Fernando Silva <fernando.silva@openquest.pt>                 |
 |          Nuno Costa <nuno@criacaoweb.net>                             |
+|          Teotónio Ricardo <teotonio.ricardo@webtuga.pt>               |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2513 2009-05-21 12:59:19Z alec $
+@version $Id: labels.inc 3019 2009-10-05 19:10:11Z yllar $
 
 */
 
@@ -119,12 +120,15 @@ $labels['markread'] = 'Como lidas';
 $labels['markunread'] = 'Como não lidas';
 $labels['markflagged'] = 'Com sinalização';
 $labels['markunflagged'] = 'Sem sinalização';
+$labels['messageactions'] = 'Mais acções...';
 $labels['select'] = 'Seleccionar';
 $labels['all'] = 'Todas';
 $labels['none'] = 'Nenhuma';
 $labels['unread'] = 'Não lidas';
 $labels['flagged'] = 'Sinalizadas';
 $labels['unanswered'] = 'Não respondidas';
+$labels['deleted'] = 'Eliminado';
+$labels['invert'] = 'Inverter';
 $labels['filter'] = 'Filtro';
 $labels['compact'] = 'Compactar';
 $labels['empty'] = 'Vazio';
@@ -134,8 +138,12 @@ $labels['unknown'] = 'desconhecido';
 $labels['unlimited'] = 'ilimitado';
 $labels['quicksearch'] = 'Pesquisa rápida';
 $labels['resetsearch'] = 'Limpar pesquisa';
+$labels['searchmod'] = 'Modificadores de Pesquisa';
+$labels['msgtext'] = 'Mensagem completa';
 $labels['openinextwin'] = 'Abrir numa nova janela';
+$labels['emlsave'] = 'Descarregar (.eml)';
 $labels['compose'] = 'Escrever mensagem';
+$labels['editasnew'] = 'Editar como novo';
 $labels['savemessage'] = 'Salvar rascunho';
 $labels['sendmessage'] = 'Enviar';
 $labels['addattachment'] = 'Anexar';
@@ -246,6 +254,13 @@ $labels['2047folding'] = 'Total RFC 2047 (outro)';
 $labels['advancedoptions'] = 'Opções avançadas';
 $labels['focusonnewmessage'] = 'Focar janela de navegador na nova mensagem';
 $labels['checkallfolders'] = 'Verificar todas as pastas para novas mensagens';
+$labels['displaynext'] = 'Depois de mover/eliminar uma mensagem, mostrar a próxima mensagem';
+$labels['indexsort'] = 'Utilize o índice de mensagens para ordenar por data';
+$labels['mainoptions'] = 'Opções';
+$labels['section'] = 'Secção';
+$labels['maintenance'] = 'Manutenção';
+$labels['newmessage'] = 'Nova Mensagem';
+$labels['listoptions'] = 'Listar opções';
 $labels['folder'] = 'Pasta';
 $labels['folders'] = 'Pastas';
 $labels['foldername'] = 'Nome da pasta';

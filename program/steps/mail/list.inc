@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: list.inc 2634 2009-06-11 07:53:32Z alec $
+ $Id: list.inc 2983 2009-09-23 12:32:09Z alec $
 
 */
 
@@ -49,18 +49,17 @@ $mbox_name = $IMAP->get_mailbox_name();
 if ($_SESSION['search_filter'] && $_SESSION['search_filter'] != 'ALL')
 {
   $search_request = md5($mbox_name.$_SESSION['search_filter']);
-
   $IMAP->search($mbox_name, $_SESSION['search_filter'], RCMAIL_CHARSET, $sort_col);
   $_SESSION['search'][$search_request] = $IMAP->get_search_set();
   $OUTPUT->set_env('search_request', $search_request);
 }
-			      
 
 // fetch message headers
 if ($count = $IMAP->messagecount($mbox_name, 'ALL', !empty($_REQUEST['_refresh'])))
   $a_headers = $IMAP->list_headers($mbox_name, NULL, $sort_col, $sort_order);
 
-$unseen = $count ? $IMAP->messagecount($mbox_name, 'UNSEEN', !empty($_REQUEST['_refresh'])) : 0;
+// update mailboxlist
+rcmail_send_unread_count($mbox_name, !empty($_REQUEST['_refresh']));
 
 // update message count display
 $pages = ceil($count/$IMAP->page_size);
@@ -80,9 +79,6 @@ else if ($search_request)
   $OUTPUT->show_message('searchnomatch', 'notice');
 else
   $OUTPUT->show_message('nomessagesfound', 'notice');
-  
-// update mailboxlist
-$OUTPUT->command('set_unread_count', $mbox_name, $unseen, ($mbox_name == 'INBOX'));
 
 // send response
 $OUTPUT->send();

@@ -32,6 +32,7 @@ $messages['nomessagesfound'] = 'Brak wiadomości w skrzynce.';
 $messages['loggedout'] = 'Użytkownik wylogował się poprawnie.';
 $messages['mailboxempty'] = 'Skrzynka jest pusta!';
 $messages['loading'] = 'Ładowanie...';
+$messages['uploading'] = 'Zapisywanie pliku...';
 $messages['loadingdata'] = 'Ładowanie danych...';
 $messages['checkingmail'] = 'Sprawdzanie nowych wiadomości...';
 $messages['sendingmessage'] = 'Wysyłanie wiadomości...';
@@ -109,5 +110,6 @@ $messages['smtptoerror'] = 'Błąd SMTP ($code): Nie można dodać odbiorcy "$to
 $messages['smtprecipientserror'] = 'Błąd SMTP: Parsowanie listy odbiorców nie powiodło się';
 $messages['smtperror'] = 'Błąd SMTP: $msg';
 $messages['invalidrequest'] = 'Błędne żądanie! Nie zapisano danych.';
+$messages['emailformaterror'] = 'Błędny adres e-mail: $email';
 
 ?>

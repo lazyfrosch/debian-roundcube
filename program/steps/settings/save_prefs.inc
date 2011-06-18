@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: save_prefs.inc 2873 2009-08-27 06:18:54Z thomasb $
+ $Id: save_prefs.inc 2983 2009-09-23 12:32:09Z alec $
 
 */
 
@@ -32,6 +32,7 @@ switch ($CURR_SECTION)
       'timezone'     => isset($_POST['_timezone']) ? (is_numeric($_POST['_timezone']) ? floatval($_POST['_timezone']) : get_input_value('_timezone', RCUBE_INPUT_POST)) : $CONFIG['timezone'],
       'dst_active'   => isset($_POST['_dst_active']) ? TRUE : FALSE,
       'pagesize'     => is_numeric($_POST['_pagesize']) ? max(2, intval($_POST['_pagesize'])) : $CONFIG['pagesize'],
+      'index_sort'   => isset($_POST['_index_sort']) ? TRUE : FALSE,
       'prettydate'   => isset($_POST['_pretty_date']) ? TRUE : FALSE,
       'skin' 	     => isset($_POST['_skin']) ? get_input_value('_skin', RCUBE_INPUT_POST) : $CONFIG['skin'],
     );

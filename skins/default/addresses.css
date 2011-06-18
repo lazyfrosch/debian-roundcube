@@ -185,19 +185,16 @@
   background-color: #FFFFA6;
 }
 
-
 #contacts-table
 {
   width: 100%;
   table-layout: fixed;
 }
 
-
 #contacts-table tbody td
 {
   cursor: default;
 }
-
 
 #contacts-box
 {
@@ -219,38 +216,10 @@ body.iframe,
 #contact-frame
 {
   border: none;
-/* visibility: hidden; */
-}
-
-#contact-title, #groups-title
-{
-  height: 12px !important;
-/*  height: 20px; */
-  padding: 4px 5px 3px 5px;
-  border-bottom: 1px solid #999;
-  color: #333;
-  font-size: 11px;
-  font-weight: bold;
-  background: url('images/listheader.gif') top left repeat-x #CCC;
-  white-space: nowrap;
-}
-
-#contact-title
-{
-  padding: 4px 10px 3px 10px;
-}
-
-#contact-details
-{
-  padding: 15px 10px 10px 10px;
 }
 
 #contact-details table td.title
 {
-  color: #666;
   font-weight: bold;
   text-align: right;
-  padding-right: 10px;
 }
-
-

@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: compose.inc 2909 2009-09-03 06:49:00Z alec $
+ $Id: compose.inc 3021 2009-10-06 06:55:08Z thomasb $
 
 */
 
@@ -37,7 +37,7 @@ if (!is_array($_SESSION['compose']) || $_SESSION['compose']['id'] != get_input_v
 {
   rcmail_compose_cleanup();
   $_SESSION['compose'] = array(
-    'id' => uniqid(rand()),
+    'id' => uniqid(mt_rand()),
     'param' => request2param(RCUBE_INPUT_GET),
     'mailbox' => $IMAP->get_mailbox_name(),
   );
@@ -92,9 +92,9 @@ if (!is_array($_SESSION['compose']) || $_SESSION['compose']['id'] != get_input_v
 
 
 // add some labels to client
-$OUTPUT->add_label('nosubject', 'nosenderwarning', 'norecipientwarning', 'nosubjectwarning',
-    'nobodywarning', 'notsentwarning', 'savingmessage', 'sendingmessage', 'messagesaved',
-    'converting', 'editorwarning', 'searching');
+$OUTPUT->add_label('nosubject', 'nosenderwarning', 'norecipientwarning', 'nosubjectwarning', 'cancel',
+    'nobodywarning', 'notsentwarning', 'notuploadedwarning', 'savingmessage', 'sendingmessage', 
+    'messagesaved', 'converting', 'editorwarning', 'searching', 'uploading', 'fileuploaderror');
 
 // add config parameters to client script
 if (!empty($CONFIG['drafts_mbox'])) {
@@ -781,6 +781,7 @@ function rcmail_compose_attachment_list($attrib)
     $attrib['id'] = 'rcmAttachmentList';
   
   $out = "\n";
+  $jslist = array();
   
   if (is_array($_SESSION['compose']['attachments']))
   {
@@ -798,18 +799,25 @@ function rcmail_compose_attachment_list($attrib)
       if (empty($a_prop))
         continue;
       
-      $out .= html::tag('li', array('id' => "rcmfile".$id),
+      $out .= html::tag('li', array('id' => 'rcmfile'.$id),
         html::a(array(
             'href' => "#delete",
             'title' => rcube_label('delete'),
             'onclick' => sprintf("return %s.command('remove-attachment','rcmfile%s', this)", JS_OBJECT_NAME, $id)),
           $button) . Q($a_prop['name']));
+        
+        $jslist['rcmfile'.$id] = array('name' => $a_prop['name'], 'complete' => true, 'mimetype' => $a_prop['mimetype']);
     }
   }
 
   if ($attrib['deleteicon'])
     $_SESSION['compose']['deleteicon'] = $CONFIG['skin_path'] . $attrib['deleteicon'];
+  if ($attrib['cancelicon'])
+    $OUTPUT->set_env('cancelicon', $CONFIG['skin_path'] . $attrib['cancelicon']);
+  if ($attrib['loadingicon'])
+    $OUTPUT->set_env('loadingicon', $CONFIG['skin_path'] . $attrib['loadingicon']);
 
+  $OUTPUT->set_env('attachments', $jslist);
   $OUTPUT->add_gui_object('attachmentlist', $attrib['id']);
     
   return html::tag('ul', $attrib, $out, html::$common_attrib);
@@ -823,16 +831,23 @@ function rcmail_compose_attachment_form($attrib)
   // add ID if not given
   if (!$attrib['id'])
     $attrib['id'] = 'rcmUploadbox';
+
+  // find max filesize value
+  $max_filesize = parse_bytes(ini_get('upload_max_filesize'));
+  $max_postsize = parse_bytes(ini_get('post_max_size'));
+  if ($max_postsize && $max_postsize < $max_filesize)
+    $max_filesize = $max_postsize;
+  $max_filesize = show_bytes($max_filesize);
   
-  $button = new html_inputfield(array('type' => 'button', 'class' => 'button'));
+  $button = new html_inputfield(array('type' => 'button'));
   
   $out = html::div($attrib,
     $OUTPUT->form_tag(array('name' => 'form', 'method' => 'post', 'enctype' => 'multipart/form-data'),
-      html::div(null, rcmail_compose_attachment_field(array())) .
-      html::div('hint', rcube_label(array('name' => 'maxuploadsize', 'vars' => array('size' => show_bytes(parse_bytes(ini_get('upload_max_filesize'))))))) .
+      html::div(null, rcmail_compose_attachment_field(array('size' => $attrib[attachmentfieldsize]))) .
+      html::div('hint', rcube_label(array('name' => 'maxuploadsize', 'vars' => array('size' => $max_filesize)))) .
       html::div('buttons',
-        $button->show(rcube_label('close'), array('onclick' => "document.getElementById('$attrib[id]').style.visibility='hidden'")) . ' ' .
-        $button->show(rcube_label('upload'), array('onclick' => JS_OBJECT_NAME . ".command('send-attachment', this.form)"))
+        $button->show(rcube_label('close'), array('class' => 'button', 'onclick' => "document.getElementById('$attrib[id]').style.visibility='hidden'")) . ' ' .
+        $button->show(rcube_label('upload'), array('class' => 'button mainaction', 'onclick' => JS_OBJECT_NAME . ".command('send-attachment', this.form)"))
       )
     )
   );

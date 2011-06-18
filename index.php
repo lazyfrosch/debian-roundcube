@@ -2,7 +2,7 @@
 /*
  +-------------------------------------------------------------------------+
  | RoundCube Webmail IMAP Client                                           |
- | Version 0.3-stable                                                      |
+ | Version 0.3.1-20091031                                                  |
  |                                                                         |
  | Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                   |
  |                                                                         |
@@ -23,7 +23,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                          |
  +-------------------------------------------------------------------------+
 
- $Id: index.php 2916 2009-09-04 10:58:29Z thomasb $
+ $Id: index.php 3081 2009-10-31 13:20:02Z thomasb $
 
 */
 
@@ -64,16 +64,18 @@ if ($RCMAIL->action=='error' && !empty($_GET['_code'])) {
 }
 
 // check if https is required (for login) and redirect if necessary
-if ($RCMAIL->config->get('force_https', false) && empty($_SESSION['user_id']) && !(isset($_SERVER['HTTPS']) || $_SERVER['SERVER_PORT'] == 443)) {
-  header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-  exit;
+if (empty($_SESSION['user_id']) && ($force_https = $RCMAIL->config->get('force_https', false))) {
+  $https_port = is_bool($force_https) ? 443 : $force_https;
+  if (!rcube_https_check($https_port)) {
+    header('Location: https://' . $_SERVER['HTTP_HOST'] . ($https_port != 443 ? ':' . $https_port : '') . $_SERVER['REQUEST_URI']);
+    exit;
+  }
 }
 
 // trigger startup plugin hook
 $startup = $RCMAIL->plugins->exec_hook('startup', array('task' => $RCMAIL->task, 'action' => $RCMAIL->action));
 $RCMAIL->set_task($startup['task']);
 $RCMAIL->action = $startup['action'];
-
 
 // try to log in
 if ($RCMAIL->action=='login' && $RCMAIL->task=='mail') {
@@ -149,7 +151,7 @@ $request_check_whitelist = array('login'=>1, 'spell'=>1);
 
 // check client X-header to verify request origin
 if ($OUTPUT->ajax_call) {
-  if (!$RCMAIL->config->get('devel_mode') && rc_request_header('X-RoundCube-Request') != $RCMAIL->get_request_token()) {
+  if (!$RCMAIL->config->get('devel_mode') && rc_request_header('X-RoundCube-Request') != $RCMAIL->get_request_token() && !empty($RCMAIL->user->ID)) {
     header('HTTP/1.1 404 Not Found');
     die("Invalid Request");
   }
@@ -160,13 +162,14 @@ else if (!empty($_POST) && !$request_check_whitelist[$RCMAIL->action] && !$RCMAI
   $OUTPUT->send($RCMAIL->task);
 }
 
-
 // not logged in -> show login page
 if (empty($RCMAIL->user->ID)) {
-  
   if ($OUTPUT->ajax_call)
     $OUTPUT->redirect(array(), 2000);
   
+  if (!empty($_REQUEST['_framed']))
+    $OUTPUT->command('redirect', '?');
+
   // check if installer is still active
   if ($RCMAIL->config->get('enable_installer') && is_readable('./installer/index.php')) {
     $OUTPUT->add_footer(html::div(array('style' => "background:#ef9398; border:2px solid #dc5757; padding:0.5em; margin:2em auto; width:50em"),

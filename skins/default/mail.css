@@ -94,24 +94,31 @@
 }
 
 #messagetoolbar a.messagemenu {
-  width: 36px;
   background-position: -288px 0;
 }
 
 #messagetoolbar a.spellcheck {
-  background-position: -386px 0;
+  background-position: -384px 0;
 }
 
 #messagetoolbar a.spellcheckSel {
-  background-position: -386px -32px;
+  background-position: -384px -32px;
 }
 
 #messagetoolbar a.attach {
-  background-position: -354px 0;
+  background-position: -352px 0;
 }
 
 #messagetoolbar a.attachSel {
-  background-position: -354px -32px;
+  background-position: -352px -32px;
+}
+
+#messagetoolbar a.insertsig {
+  background-position: -448px 0;
+}
+
+#messagetoolbar a.insertsigSel {
+  background-position: -448px -32px;
 }
 
 #messagetoolbar a.savedraft {
@@ -123,11 +130,11 @@
 }
 
 #messagetoolbar a.send {
-  background-position: -418px 0;
+  background-position: -416px 0;
 }
 
 #messagetoolbar a.sendSel {
-  background-position: -418px -32px;
+  background-position: -416px -32px;
 }
 
 
@@ -176,69 +183,6 @@
 #searchmenu
 {
   width: 172px;
-}
-
-ul.toolbarmenu
-{
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-ul.toolbarmenu li
-{
-  font-size: 11px;
-  white-space: nowrap;
-  min-width: 130px;
-}
-
-ul.toolbarmenu li a
-{
-  display: block;
-  color: #a0a0a0;
-  padding: 2px 8px 3px 22px;
-  text-decoration: none;
-  min-height: 14px;
-}
-
-ul.toolbarmenu li a.active,
-ul.toolbarmenu li a.active:active,
-ul.toolbarmenu li a.active:visited
-{
-  color: #333;
-}
-
-ul.toolbarmenu li input
-{
-  vertical-align: middle;
-}
-
-ul.toolbarmenu li hr
-{
-  color: #ccc;
-  width: 130px;
-  height: 1px;
-  margin: 2px 1px 2px 1px;
-}
-
-ul.toolbarmenu li img
-{
-  float: left;
-  margin: 0 2px;
-}
-
-ul.toolbarmenu li.separator_below
-{
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 2px;
-  padding-bottom: 2px;
-}
-
-ul.toolbarmenu li.separator_above
-{
-  border-top: 1px solid #ccc;
-  margin-top: 2px;
-  padding-top: 2px;
 }
 
 #messagemenu li a.active:hover,
@@ -312,12 +256,6 @@ ul.toolbarmenu li.separator_above
   font-size: 11px;
 }
 
-#listcontrols a,
-#listcontrols a:active,
-#listcontrols a:visited,
-#mailboxcontrols a,
-#mailboxcontrols a:active,
-#mailboxcontrols a:visited,
 td.formlinks a,
 td.formlinks a:visited
 {
@@ -326,44 +264,10 @@ td.formlinks a:visited
   text-decoration: none;
 }
 
-#listcontrols a.active,
-#listcontrols a.active:active,
-#listcontrols a.active:visited,
-#mailboxcontrols a.active,
-#mailboxcontrols a.active:active,
-#mailboxcontrols a.active:visited,
 td.formlinks a,
 td.formlinks a:visited
 {
   color: #CC0000;
-}
-
-#listcontrols a.active:hover,
-#mailboxcontrols a.active:hover
-{
-  text-decoration: underline;
-}
-
-#listcontrols
-{
-  padding-right: 2em;
-}
-
-#messagecountbar
-{
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
-  width: 300px;
-  height: 16px;
-  text-align: right;
-  white-space: nowrap;
-}
-
-#messagecountbar span
-{
-  font-size: 11px;
-  color: #333333;
 }
 
 #mainscreen
@@ -391,6 +295,7 @@ td.formlinks a:visited
   left: 170px;
   bottom: 0px;
   right: 0px;
+  min-width: 600px;
 }
 
 #mailrightcontent
@@ -629,48 +534,111 @@ td.formlinks a:visited
   font-weight: normal;
 }
 
-#mailfooter
-{
-  position: absolute;
-  left: 0px;
-  bottom: 0px;
-  height: 16px;
-  width: 100%;
-}
-
-#mailfooter table tr td
-{
-  white-space: nowrap;
-  vertical-align: bottom;
-}
-
+#listcontrols,
 #mailboxcontrols
 {
   position: absolute;
+  white-space: nowrap;
   left: 0px;
   bottom: 0px;
-  height: 16px;
+  height: 15px;
   width: auto;
+  min-width: 300px;
+}
+
+#listcontrols a,
+#listcontrols span,
+#mailboxcontrols a,
+#mailboxcontrols span
+{
+  display: block;
+  float: left;
   font-size: 11px;
 }
 
-#listcontrols,
-#countcontrols,
-#quotabox
+#listcontrols a.button,
+#listcontrols a.buttonPas,
+#mailboxcontrols a.button,
+#mailboxcontrols a.buttonPas
 {
-  white-space: nowrap;
-  font-size: 11px;
+  display: block;
+  float: left;
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  margin-right: 2px;
+  overflow: hidden;
+  background: url('images/mail_footer.png') 0 0 no-repeat transparent;
+  opacity: 0.99; /* this is needed to make buttons appear correctly in Chrome */
+}
+
+#listcontrols a.buttonPas,
+#mailboxcontrols a.buttonPas
+{
+  opacity: 0.35;
+}
+
+#mailboxcontrols a.expunge {
+  background-position: 0 0;
+}
+
+#mailboxcontrols a.expungesel {
+  background-position: 0 -15px;
+}
+
+#mailboxcontrols a.purge {
+  background-position: -15px 0;
+}
+
+#mailboxcontrols a.purgesel {
+  background-position: -15px -15px;
+}
+
+#listcontrols a.all {
+  background-position: -30px 0;
+}
+
+#listcontrols a.allsel {
+  background-position: -30px -15px;
+}
+
+#listcontrols a.unread {
+  background-position: -45px 0;
+}
+
+#listcontrols a.unreadsel {
+  background-position: -45px -15px;
+}
+
+#listcontrols a.invert {
+  background-position: -60px 0;
+}
+
+#listcontrols a.invertsel {
+  background-position: -60px -15px;
+}
+
+#listcontrols a.none {
+  background-position: -75px 0;
+}
+
+#listcontrols a.nonesel {
+  background-position: -75px -15px;
 }
 
 #countcontrols
 {
+  height: 15px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
   min-width: 25em;
+  white-space: nowrap;
+  font-size: 11px;
 }
 
 #countcontrols a.button,
-#countcontrols a.buttonPas,
-#messagecountbar a.button,
-#messagecountbar a.buttonPas
+#countcontrols a.buttonPas
 {
   float: right;
 }
@@ -871,19 +839,21 @@ body.messagelist
   color: #CCCCCC;
 }
 
-#quotadisplay
-{
-  color: #666666;
-  font-size: 11px;
-}
-
-#quotadisplay img
-{
-  vertical-align: middle;
-  margin-left: 4px;
+.quota_text {
+  text-align: center;
+  font-size: 10px;
+  color: #666;
   border: 1px solid #999;
+  cursor: default;
 }
-
+.quota_bg { background-color: white; }
+.quota_high { background-color: #F33131; }
+.quota_mid { background-color: #F5AD3C; }
+.quota_low { background-color: #91E164; }
+.quota_text_high { color: white; }
+.quota_text_mid { color: #666; }
+.quota_text_low { color: #666; }
+	  
 
 /** message view styles */
 
@@ -898,18 +868,6 @@ body.messagelist
   background-color: #FFF;
   overflow: auto;
   z-index: 1;
-}
-
-#printmessageframe
-{
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  border: 1px solid #999;
-  background-color: #FFF;
-  overflow: auto;
 }
 
 div.messageheaderbox
@@ -1221,7 +1179,7 @@ div.message-htmlpart div.rcmBody
   position: absolute;
   top: 100px;
   left: 20px;
-  width: 170px;
+  width: 175px;
 }
 
 #compose-attachments ul
@@ -1254,8 +1212,12 @@ div.message-htmlpart div.rcmBody
 
 #attachment-title
 {
+  color: #666666;
+  font-weight: bold;
+  font-size: 11px;
   background: url(images/icons/attachment.png) top left no-repeat;
-  padding: 0px 0px 3px 22px;
+  padding: 0px 0px 3px 18px;
+  margin-left: 3px;
 }
 
 #attachment-form

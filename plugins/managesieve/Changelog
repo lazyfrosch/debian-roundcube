@@ -1,3 +1,19 @@
+* version 1.7 [2009-09-20]
+-----------------------------------------------------------
+- Support multiple managesieve hosts using %h variable
+  in managesieve_host option
+- Fix first rule deleting (#1486140) 
+
+* version 1.6 [2009-09-08]
+-----------------------------------------------------------
+- Fix warning when importing squirrelmail rules
+- Fix handling of "true" as "anyof (true)" test
+
+* version 1.5 [2009-09-04]
+-----------------------------------------------------------
+- Added es_ES, ua_UA localizations
+- Added 'managesieve_mbox_encoding' option
+
 * version 1.4 [2009-07-29]
 -----------------------------------------------------------
 - Updated PEAR::Net_Sieve to 1.1.7

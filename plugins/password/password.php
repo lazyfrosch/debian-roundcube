@@ -79,20 +79,36 @@ class password extends rcube_plugin
     $rcmail->output->set_pagetitle($this->gettext('changepasswd'));
 
     $confirm = $rcmail->config->get('password_confirm_current');
+    $required_length = intval($rcmail->config->get('password_minimum_length'));
+    $check_strength = $rcmail->config->get('password_require_nonalpha');
 
     if (($confirm && !isset($_POST['_curpasswd'])) || !isset($_POST['_newpasswd'])) {
       $rcmail->output->command('display_message', $this->gettext('nopassword'), 'error');
     }
     else {
+
       $curpwd = get_input_value('_curpasswd', RCUBE_INPUT_POST);
       $newpwd = get_input_value('_newpasswd', RCUBE_INPUT_POST);
+      $conpwd = get_input_value('_confpasswd', RCUBE_INPUT_POST);
 
-      if ($confirm && $rcmail->decrypt($_SESSION['password']) != $curpwd)
+      if ($conpwd != $newpwd) {
+        $rcmail->output->command('display_message', $this->gettext('passwordinconsistency'), 'error');
+      }
+      else if ($confirm && $rcmail->decrypt($_SESSION['password']) != $curpwd) {
         $rcmail->output->command('display_message', $this->gettext('passwordincorrect'), 'error');
+      }
+      else if ($required_length && strlen($newpwd) < $required_length) {
+        $rcmail->output->command('display_message', $this->gettext(
+	  array('name' => 'passwordshort', 'vars' => array('length' => $required_length))), 'error');
+      }
+      else if ($check_strength && (!preg_match("/[0-9]/", $newpwd) || !preg_match("/[^A-Za-z0-9]/", $newpwd))) {
+        $rcmail->output->command('display_message', $this->gettext('passwordweak'), 'error');
+      }
       else if (!($res = $this->_save($curpwd,$newpwd))) {
         $rcmail->output->command('display_message', $this->gettext('successfullysaved'), 'confirmation');
         $_SESSION['password'] = $rcmail->encrypt($newpwd);
-      } else
+      }
+      else
         $rcmail->output->command('display_message', $res, 'error');
     }
 
@@ -142,9 +158,9 @@ class password extends rcube_plugin
     $table->add('title', html::label($field_id, Q($this->gettext('confpasswd'))));
     $table->add(null, $input_confpasswd->show());
 
-    $out = html::div(array('class' => "settingsbox", 'style' => "margin:0"),
-      html::div(array('id' => "prefs-title"), $this->gettext('changepasswd')) .
-      html::div(array('style' => "padding:15px"), $table->show() .
+    $out = html::div(array('class' => 'settingsbox', 'style' => 'margin:0'),
+      html::div(array('id' => 'prefs-title', 'class' => 'boxtitle'), $this->gettext('changepasswd')) .
+      html::div(array('class' => 'boxcontent'), $table->show() .
         html::p(null,
           $rcmail->output->button(array(
             'command' => 'plugin.password-save',
