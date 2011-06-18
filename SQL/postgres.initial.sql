@@ -25,7 +25,10 @@ CREATE TABLE users (
     preferences text DEFAULT ''::text NOT NULL
 );
 
+CREATE INDEX users_username_id_idx ON users (username);
+CREATE INDEX users_alias_id_idx ON users (alias);
 
+  
 --
 -- Table "session"
 -- Name: session; Type: TABLE; Schema: public; Owner: postgres

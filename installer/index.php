@@ -1,3 +1,31 @@
+<?php
+ini_set('error_reporting', E_ALL&~E_NOTICE);
+ini_set('display_errors', 1);
+
+define('INSTALL_PATH', realpath(dirname(__FILE__) . '/../').'/');
+$include_path  = INSTALL_PATH . 'program/lib' . PATH_SEPARATOR;
+$include_path .= INSTALL_PATH . 'program' . PATH_SEPARATOR;
+$include_path .= INSTALL_PATH . 'program/include' . PATH_SEPARATOR;
+$include_path .= ini_get('include_path');
+
+set_include_path($include_path);
+
+session_start();
+
+/**
+ * Use PHP5 autoload for dynamic class loading
+ * (copy from program/incllude/iniset.php)
+ */
+function __autoload($classname)
+{
+  $filename = preg_replace(
+      array('/MDB2_(.+)/', '/Mail_(.+)/', '/^html_.+/', '/^utf8$/'),
+      array('MDB2/\\1', 'Mail/\\1', 'html', 'utf8.class'),
+      $classname
+  );
+  include_once $filename. '.php';
+}
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -23,22 +51,13 @@
 <div id="content">
 
 <?php
-  ini_set('error_reporting', E_ALL&~E_NOTICE);
-  ini_set('display_errors', 1);
-  
-  session_start();
 
-  $docroot = realpath(dirname(__FILE__) . '/../');
-  $include_path  = $docroot . '/program/lib' . PATH_SEPARATOR . $docroot . '/program' . PATH_SEPARATOR . ini_get('include_path');
-  set_include_path($include_path);
-
-  require_once 'rcube_install.php';
   $RCI = rcube_install::get_instance();
   $RCI->load_config();
 
   // exit if installation is complete
   if ($RCI->configured && !$RCI->getprop('enable_installer') && !$_SESSION['allowinstaller']) {
-    header("HTTP/1.0 404 Not Found");
+    // header("HTTP/1.0 404 Not Found");
     echo '<h2 class="error">The installer is disabled!</h2>';
     echo '<p>To enable it again, set <tt>$rcmail_config[\'enable_installer\'] = true;</tt> in config/main.inc.php</p>';
     echo '</div></body></html>';

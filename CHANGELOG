@@ -1,6 +1,57 @@
 CHANGELOG RoundCube Webmail
 ---------------------------
 
+- Added option to disable autocompletion from selected LDAP address books (#1484922)
+- TLS support in LDAP connections: 'use_tls' property (#1485104)
+- Fixed removing messages from search set after deleting them (#1485106)
+- imap.inc: Fixed iil_C_FetchStructureString() to handle many 
+  literal strings in response (#1484969)
+- Support for subfolders in default/protected folders (#1484665)
+- Disallowed delimiter in folder name (#1484803)
+- Support " and \ in folder names
+- Escape \ in login (#1484614)
+- Better HTML sanitization with the DOM-based washtml script (#1484701)
+- Fixed sorting of folders with non-ascii characters
+- Fixed Mysql DDL for default identities creation (#1485070)
+- In Preferences added possibility to configure 'read_when_deleted',
+  'mdn_requests', 'flag_for_deletion' options
+- Made IMAP auth type configurable (#1483825)
+- Fixed empty values with FROM_UNIXTIME() in rcube_mdb2 (#1485055)
+- Fixed attachment list on IE 6/7 (#1484807)
+- Fixed JavaScript in compose.html that shows cc/bcc fields if populated
+- Make password input fields of type password in installer (#1484886)
+- Don't attempt to delete cache entries if enable_caching is FALSE (#1485051)
+- Optimized messages sorting on servers without sort capability (#1485049)
+- Corrected message headers decoding when charset isn't specified and improved
+  support for native languages (#1485050, #1485048)
+- Expanded LDAP configuration options to support LDAP server writes.
+- Installer: encode special characters in DB username/password (#1485042)
+- Fixed management of folders with national characters in names (#1485036, #1485001)
+- Fixed identities saving when using MDB2 pgsql driver (#1485032)
+- Fixed BCC header reset (#1484997)
+- Improved messages list performance - patch from Justin Heesemann
+- Append skin_path to images location only when it starts with '/' sign (#1484859)
+- Fix IMAP response in message body when message has no body (#1484964)
+- Fixed non-RFC dates formatting (#1484901)
+- Fixed typo in set_charset() (#1484991)
+- Decode entities when inserting HTML signature to plain text message (#1484990)
+- HTML editing is now working with PHP5 updates and TinyMCE v3.0.6
+- Fixed signature loading on Windows (#1484545)
+- Added language support to HTML editing (#1484862)
+- Fixed remove signature when replying (#1333167)
+- Fixed problem with line with a space at the end (#1484916)
+- Fixed <!DOCTYPE> tag filtering (#1484391)
+- Fixed <?xml> tag filtering (#1484403)
+- Added sections (fieldset+label) in Settings interface
+- Mark as read in one action with message preview (#1484972)
+- Deleted redundant quota reads (#1484972)
+- Added options for empty trash and expunge inbox on logout (#1483863)
+- Removed lines wrapping when displaying message
+- Fixed month localization
+- Changed codebase to PHP5 with autoloader
+
+RELEASE 0.1.1
+
 - Clear selection when selecting single item (#1484942)
 - Remove hard-coded image size in skin templates (#1484893)
 - Database schema improvements (dropped unnecessary indexes)

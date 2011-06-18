@@ -102,7 +102,7 @@ class rcube_install
   {
     $value = $this->is_post && (isset($_POST["_$name"]) || $this->config_props[$name]) ? $_POST["_$name"] : $this->config[$name];
     
-    if ($name == 'des_key' && !isset($_REQUEST["_$name"]))
+    if ($name == 'des_key' && !$this->configured && !isset($_REQUEST["_$name"]))
       $value = rcube_install::random_key(24);
     
     return $value !== null && $value !== '' ? $value : $default;
@@ -137,7 +137,9 @@ class rcube_install
         if ($_POST['_dbtype'] == 'sqlite')
           $value = sprintf('%s://%s?mode=0646', $_POST['_dbtype'], $_POST['_dbname']{0} == '/' ? '/' . $_POST['_dbname'] : $_POST['_dbname']);
         else
-          $value = sprintf('%s://%s:%s@%s/%s', $_POST['_dbtype'], $_POST['_dbuser'], $_POST['_dbpass'], $_POST['_dbhost'], $_POST['_dbname']);
+          $value = sprintf('%s://%s:%s@%s/%s', $_POST['_dbtype'], 
+		    rawurlencode($_POST['_dbuser']), rawurlencode($_POST['_dbpass']),
+		    $_POST['_dbhost'], $_POST['_dbname']);
       }
       else if ($prop == 'smtp_auth_type' && $value == '0') {
         $value = '';
@@ -146,6 +148,9 @@ class rcube_install
         $value = rcube_install::_clean_array($value);
         if (count($value) <= 1)
           $value = $value[0];
+      }
+      else if ($prop == 'pagesize') {
+        $value = max(2, intval($value));
       }
       else if ($prop == 'smtp_user' && !empty($_POST['_smtp_user_u'])) {
         $value = '%u';

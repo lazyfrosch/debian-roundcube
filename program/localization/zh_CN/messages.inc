@@ -11,9 +11,10 @@
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Xue zhong sheng <xue.zhongsheng@gmail.com>                    |
+ |         Zhang Huang bin <michaelbibby@gmail.com>                      |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 1255 2008-04-05 12:49:21Z thomasb $
+ @version $Id: messages.inc 1415 2008-05-21 13:23:00Z alec $
 
 */
 
