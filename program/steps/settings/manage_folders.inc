@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: manage_folders.inc 1159 2008-02-29 11:49:09Z thomasb $
+ $Id: manage_folders.inc 1255 2008-04-05 12:49:21Z thomasb $
 
 */
 
@@ -28,8 +28,8 @@ $OUTPUT->include_script('list.js');
 // subscribe to one or more mailboxes
 if ($_action=='subscribe')
   {
-  if ($mboxes = get_input_value('_mboxes', RCUBE_INPUT_POST))
-    $IMAP->subscribe($mboxes);
+  if ($mbox = get_input_value('_mbox', RCUBE_INPUT_POST))
+    $IMAP->subscribe(array($mbox));
 
   if ($OUTPUT->ajax_call)
     $OUTPUT->remote_response('// subscribed');
@@ -38,8 +38,8 @@ if ($_action=='subscribe')
 // unsubscribe one or more mailboxes
 else if ($_action=='unsubscribe')
   {
-  if ($mboxes = get_input_value('_mboxes', RCUBE_INPUT_POST))
-    $IMAP->unsubscribe($mboxes);
+  if ($mbox = get_input_value('_mbox', RCUBE_INPUT_POST))
+    $IMAP->unsubscribe(array($mbox));
 
   if ($OUTPUT->ajax_call)
     $OUTPUT->remote_response('// unsubscribed');

@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: index.inc 1160 2008-03-01 15:32:44Z yllar $
+ $Id: index.inc 1255 2008-04-05 12:49:21Z thomasb $
 
 */
  
@@ -54,6 +54,7 @@
      'it'    => 'Italiano',
      'ja'    => 'Japanese (日本語)',
      'kr'    => 'Korean',
+     'ku'    => 'Kurdish (Kurmancî)',
      'lv'    => 'Latvian',
      'lt'    => 'Lithuanian',
      'mk'    => 'Macedonian',

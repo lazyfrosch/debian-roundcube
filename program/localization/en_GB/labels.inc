@@ -13,7 +13,7 @@
  | Author: Weiran Zhang (weiran@weiran.co.uk)                            |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 1091 2008-02-15 15:13:38Z tomekp $
+ @version $Id: labels.inc 1255 2008-04-05 12:49:21Z thomasb $
 
 */
 
@@ -167,7 +167,7 @@ $labels['language'] = 'Language';
 $labels['timezone'] = 'Time zone';
 $labels['pagesize'] = 'Rows per page';
 $labels['signature'] = 'Signature';
-$labels['dstactive'] = 'Daylight savings';
+$labels['dstactive'] = 'Summer time';
 $labels['htmleditor'] = 'Compose HTML messages';
 $labels['htmlsignature'] = 'HTML signature';
 $labels['previewpane'] = 'Show preview pane';
