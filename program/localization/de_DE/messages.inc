@@ -6,14 +6,14 @@
 | language/de_DE/messages.inc                                           |
 |                                                                       |
 | Language file of the RoundCube Webmail client                         |
-| Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
+| Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
 | Author: Marcel Schlesinger <info@marcel-schlesinger.de>               |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 2063 2008-11-17 18:52:43Z alec $
+@version $Id: messages.inc 2237 2009-01-17 01:55:39Z till $
 
 */
 

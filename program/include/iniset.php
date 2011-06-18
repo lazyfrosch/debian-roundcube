@@ -5,7 +5,7 @@
  | program/include/iniset.php                                            |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2008, RoundCube Dev, - Switzerland                      |
+ | Copyright (C) 2008-2009, RoundCube Dev, - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -22,7 +22,7 @@
 
 
 // application constants
-define('RCMAIL_VERSION', '0.2-stable');
+define('RCMAIL_VERSION', '0.2.1');
 define('RCMAIL_CHARSET', 'UTF-8');
 define('JS_OBJECT_NAME', 'rcmail');
 
@@ -50,11 +50,15 @@ if (set_include_path($include_path) === false) {
   die('Fatal error: ini_set/set_include_path does not work.');
 }
 
+ini_set('error_reporting', E_ALL&~E_NOTICE);
+if  (isset($_SERVER['HTTPS'])) {
+   ini_set('session.cookie_secure', ($_SERVER['HTTPS'] && ($_SERVER['HTTPS'] != 'off'))?1:0);
+} else {
+   ini_set('session.cookie_secure', 0);
+}
 ini_set('session.name', 'roundcube_sessid');
 ini_set('session.use_cookies', 1);
 ini_set('session.only_use_cookies', 1);
-ini_set('session.cookie_secure', ($_SERVER['HTTPS'] && ($_SERVER['HTTPS'] != 'off')));
-ini_set('error_reporting', E_ALL&~E_NOTICE);
 set_magic_quotes_runtime(0);
 
 // increase maximum execution time for php scripts
@@ -72,6 +76,7 @@ if(extension_loaded('mbstring'))
  * Use PHP5 autoload for dynamic class loading
  * 
  * @todo Make Zend, PEAR etc play with this
+ * @todo Make our classes conform to a more straight forward CS.
  */
 function __autoload($classname)
 {
@@ -90,7 +95,7 @@ function __autoload($classname)
 	),
       $classname
   );
-  include_once $filename. '.php';
+  include $filename. '.php';
 }
 
 /**
@@ -112,4 +117,3 @@ require_once 'include/rcube_shared.inc';
 
 // set PEAR error handling (will also load the PEAR main class)
 PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 'rcube_pear_error');
-

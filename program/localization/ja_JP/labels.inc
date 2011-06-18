@@ -6,7 +6,7 @@
 | language/ja_JP/labels.inc                                             |
 |                                                                       |
 | Language file of the RoundCube Webmail client                         |
-| Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
+| Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -14,7 +14,7 @@
 |         Takashi Takamatsu <taka717@gmail.com>                         |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2115 2008-12-04 10:21:34Z alec $
+@version $Id: labels.inc 2237 2009-01-17 01:55:39Z till $
 
 */
 
@@ -123,12 +123,13 @@ $labels['none'] = 'なし';
 $labels['unread'] = '未読';
 $labels['flagged'] = 'フラグあり';
 $labels['unanswered'] = '未返信';
+$labels['filter'] = 'フィルタ';
 $labels['compact'] = 'コンパクト';
 $labels['empty'] = '空';
 $labels['purge'] = '破棄';
 $labels['quota'] = 'ディスク使用量';
 $labels['unknown'] = '不明';
-$labels['unlimited'] = '無制限';
+$labels['unlimited'] = '制限なし';
 $labels['quicksearch'] = '検索';
 $labels['resetsearch'] = '検索の解除';
 $labels['openinextwin'] = '新しいウィンドウで開く';
@@ -225,9 +226,12 @@ $labels['ignore'] = '無視する';
 $labels['readwhendeleted'] = '削除したメールを既読にする';
 $labels['flagfordeletion'] = '実際に削除せずに削除済みフラグを付ける';
 $labels['skipdeleted'] = '削除済みメールを表示しない';
+$labels['showremoteimages'] = 'リモート画像の表示';
+$labels['fromknownsenders'] = '既知の送信者';
+$labels['always'] = '常に';
 $labels['showinlineimages'] = 'メールに添付された画像を表示する';
 $labels['autosavedraft'] = '自動的に下書きを保存';
-$labels['everynminutes'] = ' $n 分毎';
+$labels['everynminutes'] = '$n 分毎';
 $labels['keepaliveevery'] = '$n 分毎';
 $labels['keepalive'] = '新着メールの確認間隔';
 $labels['never'] = 'しない';
@@ -239,6 +243,7 @@ $labels['miscfolding'] = 'RFC 2047/2231 (MS Outlook)';
 $labels['2047folding'] = 'RFC 2047 準拠 (other)';
 $labels['advancedoptions'] = '高度な設定';
 $labels['focusonnewmessage'] = '新しいメールが届いたらブラウザにフォーカスを移す';
+$labels['checkallfolders'] = 'すべてのフォルダの新着メールを確認する';
 $labels['folder'] = 'フォルダ';
 $labels['folders'] = 'フォルダ一覧';
 $labels['foldername'] = 'フォルダ名';
@@ -254,5 +259,9 @@ $labels['specialfolders'] = '特殊なフォルダ';
 $labels['sortby'] = '整列の基準にする';
 $labels['sortasc'] = '昇順で整列';
 $labels['sortdesc'] = '降順で整列';
+$labels['B'] = 'B';
+$labels['KB'] = 'KB';
+$labels['MB'] = 'MB';
+$labels['GB'] = 'GB';
 
 ?>

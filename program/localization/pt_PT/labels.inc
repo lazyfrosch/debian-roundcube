@@ -6,7 +6,7 @@
 | language/pt_PT/labels.inc                                             |
 |                                                                       |
 | Language file of the RoundCube Webmail client                         |
-| Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
+| Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -16,7 +16,7 @@
 |          Nuno Costa <nuno@criacaoweb.net>                             |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2115 2008-12-04 10:21:34Z alec $
+@version $Id: labels.inc 2254 2009-01-22 19:52:46Z yllar $
 
 */
 
@@ -123,6 +123,9 @@ $labels['select'] = 'Seleccionar';
 $labels['all'] = 'Todas';
 $labels['none'] = 'Nenhuma';
 $labels['unread'] = 'Não lidas';
+$labels['flagged'] = 'Sinalizadas';
+$labels['unanswered'] = 'Não respondidas';
+$labels['filter'] = 'Filtro';
 $labels['compact'] = 'Compactar';
 $labels['empty'] = 'Vazio';
 $labels['purge'] = 'Apagar';
@@ -226,6 +229,9 @@ $labels['ignore'] = 'ignorar';
 $labels['readwhendeleted'] = 'Marcar a mensagem como lida ao excluir';
 $labels['flagfordeletion'] = 'Marcar a mensagem de eliminação, em vez de a excluir';
 $labels['skipdeleted'] = 'Não mostrar mensagens apagadas';
+$labels['showremoteimages'] = 'Mostrar imagens externas';
+$labels['fromknownsenders'] = 'de remetentes conhecidos';
+$labels['always'] = 'sempre';
 $labels['showinlineimages'] = 'Mostrar imagens anexadas abaixo da mensagem';
 $labels['autosavedraft'] = 'Salvar rascunho automaticamente';
 $labels['everynminutes'] = 'a cada $n minutos';
@@ -240,6 +246,7 @@ $labels['miscfolding'] = 'RFC 2047/2231 (MS Outlook)';
 $labels['2047folding'] = 'Total RFC 2047 (outro)';
 $labels['advancedoptions'] = 'Opções avançadas';
 $labels['focusonnewmessage'] = 'Focar janela de navegador na nova mensagem';
+$labels['checkallfolders'] = 'Verificar todas as pastas para novas mensagens';
 $labels['folder'] = 'Pasta';
 $labels['folders'] = 'Pastas';
 $labels['foldername'] = 'Nome da pasta';

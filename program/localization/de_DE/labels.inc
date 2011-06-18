@@ -6,14 +6,14 @@
 | language/de_DE/labels.inc                                             |
 |                                                                       |
 | Language file of the RoundCube Webmail client                         |
-| Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
+| Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
 | Author: Marcel Schlesinger <info@marcel-schlesinger.de>               |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2124 2008-12-06 17:59:26Z thomasb $
+@version $Id: labels.inc 2316 2009-02-27 10:54:17Z thomasb $
 
 */
 
@@ -157,7 +157,7 @@ $labels['htmltoggle'] = 'HTML';
 $labels['plaintoggle'] = 'Nur-Text';
 $labels['savesentmessagein'] = 'Nachricht speichern in';
 $labels['dontsave'] = 'nicht speichern';
-$labels['maxuploadsize'] = 'Maximal erlaubte Dateigrösse ist $size';
+$labels['maxuploadsize'] = 'Maximal erlaubte Dateigröße ist $size';
 $labels['addcc'] = 'Cc hinzufügen';
 $labels['addbcc'] = 'Bcc hinzufügen';
 $labels['addreplyto'] = 'Antwortadresse hinzufügen';
@@ -210,9 +210,9 @@ $labels['timezone'] = 'Zeitzone';
 $labels['pagesize'] = 'Einträge pro Seite';
 $labels['signature'] = 'Signatur';
 $labels['dstactive'] = 'Sommerzeit';
-$labels['htmleditor'] = 'HTML-Nachrichten erstellen';
+$labels['htmleditor'] = 'HTML-Nachrichten verfassen';
 $labels['htmlsignature'] = 'HTML-Signatur';
-$labels['previewpane'] = 'Vorschaufenster anzeigen';
+$labels['previewpane'] = 'Nachrichtenvorschau anzeigen';
 $labels['skin'] = 'Oberflächendesign';
 $labels['logoutclear'] = 'Papierkorb beim Abmelden leeren';
 $labels['logoutcompact'] = 'Posteingang beim Abmelden packen';
@@ -226,10 +226,10 @@ $labels['ignore'] = 'ignorieren';
 $labels['readwhendeleted'] = 'Beim Löschen als gelesen markieren';
 $labels['flagfordeletion'] = 'Als gelöscht markieren anstatt in den Papierkorb verschieben';
 $labels['skipdeleted'] = 'Zeige keine gelöschten Nachrichten an';
-$labels['showremoteimages'] = 'Zeige entfernte eingebettete Bilder an';
+$labels['showremoteimages'] = 'Eingebettete Bilder vom Internet laden';
 $labels['fromknownsenders'] = 'bei bekannten Absendern';
 $labels['always'] = 'immer';
-$labels['showinlineimages'] = 'Stelle angehängte Bilder unter der Nachricht dar';
+$labels['showinlineimages'] = 'Angehängte Bilder unter der Nachricht anzeigen';
 $labels['autosavedraft'] = 'Entwurf automatisch speichern';
 $labels['everynminutes'] = 'alle $n Minuten';
 $labels['keepaliveevery'] = '$n Minute(n)';

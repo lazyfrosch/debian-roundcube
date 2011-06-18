@@ -4,7 +4,7 @@
  | program/include/rcube_ldap.php                                        |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2006-2008, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2006-2009, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -14,7 +14,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_ldap.php 2157 2008-12-16 15:28:07Z thomasb $
+ $Id: rcube_ldap.php 2237 2009-01-17 01:55:39Z till $
 
 */
 
@@ -71,7 +71,7 @@ class rcube_ldap
     global $RCMAIL;
     
     if (!function_exists('ldap_connect'))
-      raise_error(array('type' => 'ldap', 'message' => "No ldap support in this installation of PHP"), true);
+      raise_error(array('code' => 100, 'type' => 'ldap', 'message' => "No ldap support in this installation of PHP"), true);
 
     if (is_resource($this->conn))
       return true;
@@ -122,7 +122,7 @@ class rcube_ldap
         $this->ready = $this->bind($this->prop['bind_dn'], $this->prop['bind_pass']);
     }
     else
-      raise_error(array('type' => 'ldap', 'message' => "Could not connect to any LDAP server, tried $host:{$this->prop[port]} last"), true);
+      raise_error(array('code' => 100, 'type' => 'ldap', 'message' => "Could not connect to any LDAP server, tried $host:{$this->prop[port]} last"), true);
 
     // See if the directory is writeable.
     if ($this->prop['writable']) {

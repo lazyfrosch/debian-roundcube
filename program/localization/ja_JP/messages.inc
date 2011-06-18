@@ -6,7 +6,7 @@
 | language/ja_JP/messages.inc                                           |
 |                                                                       |
 | Language file of the RoundCube Webmail client                         |
-| Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
+| Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -14,7 +14,7 @@
 |         Takashi Takamatsu <taka717@gmail.com>                         |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 2093 2008-11-27 11:12:38Z alec $
+@version $Id: messages.inc 2237 2009-01-17 01:55:39Z till $
 
 */
 
@@ -36,7 +36,7 @@ $messages['messagesaved'] = 'メールを下書きに保存しました。';
 $messages['successfullysaved'] = '保存しました。';
 $messages['addedsuccessfully'] = 'アドレス帳への連絡先の追加しました。';
 $messages['contactexists'] = 'このメールアドレスは既にアドレス帳に存在します。';
-$messages['blockedimages'] = 'プライバシーを保護するため、このメールに含まれるリモート画像はブロックされました。';
+$messages['blockedimages'] = 'プライバシー保護のため、このメールに含まれるリモート画像をブロックしました。';
 $messages['encryptedmessage'] = 'このメールは暗号化されているため表示できません。';
 $messages['nocontactsfound'] = '連絡先がありません。';
 $messages['contactnotfound'] = '要求された連絡先が見つかりません。';

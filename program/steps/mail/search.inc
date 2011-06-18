@@ -42,7 +42,7 @@ if (preg_match("/^from:.*/i", $str))
   $subject = "HEADER FROM";
   $search = trim($srch);
 }
-else if (preg_match("/^to.*:/i", $str))
+else if (preg_match("/^to:.*/i", $str))
 {
   list(,$srch) = explode(":", $str);
   $subject = "HEADER TO";
@@ -96,15 +96,17 @@ $count = $IMAP->messagecount();
 if (!is_array($_SESSION['search']))
   $_SESSION['search'] = array();
 
+if ($search_str) {
+  $_SESSION['search'][$search_request] = $IMAP->get_search_set();
+  $_SESSION['last_text_search'] = $str;
+}
+
 // Make sure we got the headers
 if (!empty($result_h))
 {
   rcmail_js_message_list($result_h);
-  if ($search_str) {
-    $_SESSION['search'][$search_request] = $IMAP->get_search_set();
-    $_SESSION['last_text_search'] = $str;
+  if ($search_str)
     $OUTPUT->show_message('searchsuccessful', 'confirmation', array('nr' => $count));
-  }
 }
 else
 {

@@ -6,14 +6,14 @@
 | language/en_GB/labels.inc                                             |
 |                                                                       |
 | Language file of the RoundCube Webmail client                         |
-| Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
+| Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
 | Author: Weiran Zhang (weiran@weiran.co.uk)                            |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2136 2008-12-08 20:44:46Z yllar $
+@version $Id: labels.inc 2237 2009-01-17 01:55:39Z till $
 
 */
 

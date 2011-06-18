@@ -4,7 +4,7 @@
  | bin/quotaimg.php                                                      |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -14,7 +14,7 @@
  | Author: Brett Patterson <brett2@umbc.edu>                             |
  +-----------------------------------------------------------------------+
 
- $Id: quotaimg.php 2187 2008-12-24 14:19:27Z thomasb $
+ $Id: quotaimg.php 2237 2009-01-17 01:55:39Z till $
 
 */
 

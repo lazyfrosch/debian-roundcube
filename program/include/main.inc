@@ -5,7 +5,7 @@
  | program/include/main.inc                                              |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005-2008, RoundCube Dev, - Switzerland                 |
+ | Copyright (C) 2005-2009, RoundCube Dev, - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: main.inc 2187 2008-12-24 14:19:27Z thomasb $
+ $Id: main.inc 2321 2009-03-01 08:14:14Z alec $
 
 */
 
@@ -182,6 +182,12 @@ function rcube_charset_convert($str, $from, $to=NULL)
   $to = $to==NULL ? strtoupper(RCMAIL_CHARSET) : strtoupper($to);
   $error = false; $conv = null;
 
+  # RFC1642
+  if ($from == 'UNICODE-1-1-UTF-7')
+    $from = 'UTF-7';
+  if ($to == 'UNICODE-1-1-UTF-7')
+    $to = 'UTF-7';
+
   if ($from==$to || $str=='' || empty($from))
     return $str;
     
@@ -197,23 +203,19 @@ function rcube_charset_convert($str, $from, $to=NULL)
   );
 
   // convert charset using iconv module  
-  if (function_exists('iconv') && $from != 'UTF-7' && $to != 'UTF-7')
-    {
+  if (function_exists('iconv') && $from != 'UTF-7' && $to != 'UTF-7') {
     $aliases['GB2312'] = 'GB18030';
     $_iconv = iconv(($aliases[$from] ? $aliases[$from] : $from), ($aliases[$to] ? $aliases[$to] : $to) . "//IGNORE", $str);
-    if ($_iconv !== false)
-      {
+    if ($_iconv !== false) {
         return $_iconv;
-      }
     }
-
+  }
 
   if (is_null($mbstring_loaded))
     $mbstring_loaded = extension_loaded('mbstring');
     
   // convert charset using mbstring module
-  if ($mbstring_loaded)
-    {
+  if ($mbstring_loaded) {
     $aliases['UTF-7'] = 'UTF7-IMAP';
     $aliases['WINDOWS-1257'] = 'ISO-8859-13';
     
@@ -226,45 +228,48 @@ function rcube_charset_convert($str, $from, $to=NULL)
     $mb_to = $aliases[$to] ? $aliases[$to] : $to;
     
     // return if encoding found, string matches encoding and convert succeeded
-    if (in_array($mb_from, $mbstring_list) && in_array($mb_to, $mbstring_list))
-      if (mb_check_encoding($str, $mb_from))
-	if ($out = mb_convert_encoding($str, $mb_to, $mb_from))
-          return $out;
+    if (in_array($mb_from, $mbstring_list) && in_array($mb_to, $mbstring_list)) {
+      if (mb_check_encoding($str, $mb_from) && ($out = mb_convert_encoding($str, $mb_to, $mb_from)))
+        return $out;
     }
-    
-  
+  }
+
+  # try to convert with custom classes
   if (class_exists('utf8'))
     $conv = new utf8();
 
   // convert string to UTF-8
-  if ($from == 'UTF-7')
-    $str = utf7_to_utf8($str);
-  else if (($from == 'ISO-8859-1') && function_exists('utf8_encode'))
+  if ($from == 'UTF-7') {
+    if ($_str = utf7_to_utf8($str))
+      $str = $_str;
+  }
+  else if (($from == 'ISO-8859-1') && function_exists('utf8_encode')) {
     $str = utf8_encode($str);
-  else if ($from != 'UTF-8' && $conv)
-    {
+  }
+  else if ($from != 'UTF-8' && $conv) {
     $conv->loadCharset($from);
     $str = $conv->strToUtf8($str);
-    }
-  else if ($from != 'UTF-8')
+  }
+  else if ($from != 'UTF-8') {}
     $error = true;
 
   // encode string for output
-  if ($to == 'UTF-7')
+  if ($to == 'UTF-7') {
     return utf8_to_utf7($str);
-  else if ($to == 'ISO-8859-1' && function_exists('utf8_decode'))
+  }
+  else if ($to == 'ISO-8859-1' && function_exists('utf8_decode')) {
     return utf8_decode($str);
-  else if ($to != 'UTF-8' && $conv)
-    {
+  }
+  else if ($to != 'UTF-8' && $conv) {
     $conv->loadCharset($to);
     return $conv->utf8ToStr($str);
-    }
-  else if ($to != 'UTF-8')
+  }
+  else if ($to != 'UTF-8') {
     $error = true;
-
+  }
+  
   // report error
-  if ($error && !$convert_warning)
-    {
+  if ($error && !$convert_warning){
     raise_error(array(
       'code' => 500,
       'type' => 'php',
@@ -273,7 +278,7 @@ function rcube_charset_convert($str, $from, $to=NULL)
       ), true, false);
     
     $convert_warning = true;
-    }
+  }
   
   // return UTF-8 string
   return $str;
@@ -583,25 +588,24 @@ function rcmail_get_edit_field($col, $value, $attrib, $type='text')
  * @param string Container ID to use as prefix
  * @return string Modified CSS source
  */
-function rcmail_mod_css_styles($source, $container_id, $base_url = '')
+function rcmail_mod_css_styles($source, $container_id)
   {
-  $a_css_values = array();
   $last_pos = 0;
+  $replacements = new rcube_string_replacer;
   
   // ignore the whole block if evil styles are detected
   $stripped = preg_replace('/[^a-z\(:]/', '', rcmail_xss_entitiy_decode($source));
   if (preg_match('/expression|behavior|url\(|import/', $stripped))
-    return '';
+    return '/* evil! */';
 
   // cut out all contents between { and }
   while (($pos = strpos($source, '{', $last_pos)) && ($pos2 = strpos($source, '}', $pos)))
   {
-    $key = sizeof($a_css_values);
-    $a_css_values[$key] = substr($source, $pos+1, $pos2-($pos+1));
-    $source = substr($source, 0, $pos+1) . "<<str_replacement[$key]>>" . substr($source, $pos2, strlen($source)-$pos2);
+    $key = $replacements->add(substr($source, $pos+1, $pos2-($pos+1)));
+    $source = substr($source, 0, $pos+1) . $replacements->get_replacement($key) . substr($source, $pos2, strlen($source)-$pos2);
     $last_pos = $pos+2;
   }
-
+  
   // remove html comments and add #container to each tag selector.
   // also replace body definition because we also stripped off the <body> tag
   $styles = preg_replace(
@@ -617,17 +621,8 @@ function rcmail_mod_css_styles($source, $container_id, $base_url = '')
     ),
     $source);
   
-  // replace all @import statements to modify the imported CSS sources too
-  $styles = preg_replace_callback(
-    '/@import\s+(url\()?[\'"]?([^\)\'"]+)[\'"]?(\))?/im',
-    create_function('$matches', "return sprintf(\"@import url('./bin/modcss.php?u=%s&c=%s')\", urlencode(make_absolute_url(\$matches[2],'$base_url')), urlencode('$container_id'));"),
-    $styles);
-  
   // put block contents back in
-  $styles = preg_replace_callback(
-    '/<<str_replacement\[([0-9]+)\]>>/',
-    create_function('$matches', "\$values = ".var_export($a_css_values, true)."; return \$values[\$matches[1]];"),
-    $styles);
+  $styles = $replacements->resolve($styles);
 
   return $styles;
   }
@@ -643,11 +638,22 @@ function rcmail_mod_css_styles($source, $container_id, $base_url = '')
 function rcmail_xss_entitiy_decode($content)
 {
   $out = html_entity_decode(html_entity_decode($content));
-  $out = preg_replace_callback('/\\\([0-9a-f]{4})/i', create_function('$matches', 'return chr(hexdec($matches[1]));'), $out);
+  $out = preg_replace_callback('/\\\([0-9a-f]{4})/i', 'rcmail_xss_entitiy_decode_callback', $out);
   $out = preg_replace('#/\*.*\*/#Um', '', $out);
   return $out;
 }
 
+
+/**
+ * preg_replace_callback callback for rcmail_xss_entitiy_decode_callback
+ *
+ * @param array matches result from preg_replace_callback
+ * @return string decoded entity
+ */ 
+function rcmail_xss_entitiy_decode_callback($matches)
+{ 
+  return chr(hexdec($matches[1]));
+}
 
 /**
  * Compose a valid attribute string for HTML tags
@@ -708,6 +714,8 @@ function format_date($date, $format=NULL)
     $ts = $date;
   else if (!empty($date))
     {
+    // support non-standard "GMTXXXX" literal
+    $date = preg_replace('/GMT\s*([+-][0-9]+)/', '\\1', $date);
     // if date parsing fails, we have a date in non-rfc format.
     // remove token from the end and try again
     while ((($ts = @strtotime($date))===false) || ($ts < 0))
@@ -1203,6 +1211,27 @@ function rcube_html_editor($mode='')
   $OUTPUT->include_script('tiny_mce/tiny_mce.js');
   $OUTPUT->include_script('editor.js');
   $OUTPUT->add_script('rcmail_editor_init("$__skin_path", "'.JQ($tinylang).'", '.intval($CONFIG['enable_spellcheck']).', "'.$mode.'");');
+}
+
+
+
+/**
+ * Helper class to turn relative urls into absolute ones
+ * using a predefined base
+ */
+class rcube_base_replacer
+{
+  private $base_url;
+  
+  public function __construct($base)
+  {
+    $this->base_url = $base;
+  }
+  
+  public function callback($matches)
+  {
+    return $matches[1] . '="' . make_absolute_url($matches[3], $this->base_url) . '"';
+  }
 }
 
 ?>
