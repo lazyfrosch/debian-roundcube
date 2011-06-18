@@ -15,7 +15,7 @@
  |		   Jonas Näsholm <hostmaster@bitfuse.net>                        |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 1143 2008-02-26 20:50:10Z yllar $
+ @version $Id: labels.inc 1255 2008-04-05 12:49:21Z thomasb $
 
 */
 
@@ -136,7 +136,7 @@ $labels['receiptnote'] = 'Notera: Det här kvittot berättar bara att meddelande
 $labels['name'] = 'Visa namn';
 $labels['firstname'] = 'Förnamn';
 $labels['surname'] = 'Efternamn';
-$labels['email'] = 'Meddelande';
+$labels['email'] = 'E-post';
 $labels['addcontact'] = 'Lägg till ny kontakt';
 $labels['editcontact'] = 'Redigera kontakt';
 $labels['edit'] = 'Redigera';

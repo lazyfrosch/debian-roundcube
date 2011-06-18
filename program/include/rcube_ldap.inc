@@ -14,7 +14,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_ldap.inc 1152 2008-02-28 20:01:57Z thomasb $
+ $Id: rcube_ldap.inc 1255 2008-04-05 12:49:21Z thomasb $
 
 */
 
@@ -119,20 +119,20 @@ class rcube_ldap
    */
   function bind($dn, $pass)
   {
-    if (!$this->conn)
+    if (!$this->conn) {
       return false;
+    }
     
-    if (@ldap_bind($this->conn, $dn, $pass))
+    if (ldap_bind($this->conn, $dn, $pass)) {
       return true;
-    else
-    {
-      raise_error(array(
+    }
+
+    raise_error(array(
         'code' => ldap_errno($this->conn),
         'type' => 'ldap',
         'message' => "Bind failed for dn=$dn: ".ldap_error($this->conn)),
-      true);
-    }
-    
+        true);
+
     return false;
   }
 

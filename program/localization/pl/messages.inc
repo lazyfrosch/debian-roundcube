@@ -17,7 +17,7 @@
  |         Wojciech Szczepucha <donkoyote@gmail.com>                     |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 1086 2008-02-15 05:43:32Z tomekp $
+ @version $Id: messages.inc 1255 2008-04-05 12:49:21Z thomasb $
 
 */
 
@@ -52,8 +52,8 @@ $messages['deletemessagesconfirm'] = 'Czy na pewno chcesz usunąć wybrane wiado
 $messages['deletefolderconfirm'] = 'Czy na pewno chcesz usunąć wybrany folder?';
 $messages['purgefolderconfirm'] = 'Czy na pewno chcesz usunąć wszystkie wiadomości w tym folderze?';
 $messages['formincomplete'] = 'Uzupełnij formularz!';
-$messages['noemailwarning'] = 'Wpisz poprawny adres e-mail!';
-$messages['nonamewarning'] = 'Podaj imię!';
+$messages['noemailwarning'] = 'Podaj poprawny adres e-mail!';
+$messages['nonamewarning'] = 'Podaj nazwę!';
 $messages['nopagesizewarning'] = 'Podaj poprawną wartość!';
 $messages['norecipientwarning'] = 'Podaj co najmniej jednego odbiorcę!';
 $messages['nosubjectwarning'] = 'Nie podano tematu wiadomości. Czy chcesz go teraz uzupełnić?';

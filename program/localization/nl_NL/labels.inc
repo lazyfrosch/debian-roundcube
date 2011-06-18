@@ -13,7 +13,7 @@
  | Author: Mark Moses <mark@katmoda.com>                                 |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 1183 2008-03-04 22:10:15Z yllar $
+ @version $Id: labels.inc 1255 2008-04-05 12:49:21Z thomasb $
 
 */
 

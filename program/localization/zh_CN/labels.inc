@@ -13,7 +13,7 @@
  | Author: Xue zhong sheng <xue.zhongsheng@gmail.com>                    |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 1143 2008-02-26 20:50:10Z yllar $
+ @version $Id: labels.inc 1255 2008-04-05 12:49:21Z thomasb $
 
 */
 
@@ -30,8 +30,8 @@ $labels['addressbook'] = '通讯录';
 $labels['inbox'] = '收件箱';
 $labels['drafts'] = '草稿箱';
 $labels['sent'] = '已发送邮件';
-$labels['trash'] = '垃圾邮件';
-$labels['junk'] = '回收箱';
+$labels['trash'] = '回收站';
+$labels['junk'] = '垃圾邮件';
 $labels['subject'] = '主题';
 $labels['from'] = '发件人';
 $labels['to'] = '收件人';
@@ -99,8 +99,8 @@ $labels['unlimited'] = '无限制';
 $labels['quicksearch'] = '快速查找';
 $labels['resetsearch'] = '重新查找';
 $labels['compose'] = '写新邮件';
-$labels['sendmessage'] = '立即发送';
 $labels['savemessage'] = '暂存至草稿箱';
+$labels['sendmessage'] = '立即发送';
 $labels['addattachment'] = '添加附件';
 $labels['charset'] = '字符集';
 $labels['editortype'] = '编辑器类型';
@@ -154,7 +154,7 @@ $labels['edititem'] = '修改条目';
 $labels['setdefault'] = '默认值';
 $labels['language'] = '语言';
 $labels['timezone'] = '时区';
-$labels['pagesize'] = '第页邮件数量';
+$labels['pagesize'] = '每页邮件数量';
 $labels['signature'] = '签名';
 $labels['dstactive'] = '夏令时';
 $labels['htmleditor'] = '使用HTML编辑器';
