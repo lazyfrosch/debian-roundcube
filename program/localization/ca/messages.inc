@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /*
 
@@ -14,7 +14,7 @@
  |         Simo <sim6@graciasensefils.net>                               |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 560 2007-05-17 15:01:26Z thomasb $
+ @version $Id: messages.inc 872 2007-10-16 09:27:16Z yllar $
 
 */
 
@@ -74,5 +74,6 @@ $messages['copysuccess'] = 'S\'ha copiat $nr adreces correctament';
 $messages['copyerror'] = 'No s\'ha pogut copiar cap adreça';
 $messages['sourceisreadonly'] = 'Aquesta adreça és només de lectura.';
 $messages['errorsavingcontact'] = 'No s\'ha pogut guardar l\'adreça de contacte';
+$messages['movingmessage'] = 'Movent el missatge...';
 
 ?>

@@ -1,6 +1,5 @@
 RoundCube Webmail (http://roundcube.net)
 
-
 Introduction:
 -------------
 RoundCube Webmail is a browser-based multilingual IMAP client with an
@@ -44,6 +43,24 @@ already have a corresponding entry in the user's table (username and hostname)
 will be allowed.
 
 
+Code Layout:
+------------
+Basic sequence (index.php):
+  - index.php -> rcmail_load_gui -> new rcmail_template -> rcmail_template::send
+  - authentication details in this sequence
+
+Tasks
+  - index.php limits tasks to set list
+  - can see task in roundcube link when you mouse over it
+  - task templates stored in skins/default/templates
+  - templates "roundcube:" tokens that get replaced in rcmail_template class
+
+program/include/rcube_shared.inc
+  - defines rcube_html_page, class that lays out a roundcube web page
+  - defines form control classes
+  - provides common functions
+
+
 Contact:
 --------
 For any bug reports or feature requests please refer to the tracking system
@@ -52,6 +69,6 @@ subscribe to our mailing list. See http://www.roundcube.net/?p=mailinglists
 for details.
 
 You're always welcome to send a message to the project admin:
-roundcube@gmail.com
+hello@roundcube.net
 
 

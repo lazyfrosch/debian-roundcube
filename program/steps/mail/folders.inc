@@ -5,7 +5,7 @@
  | program/steps/mail/folders.inc                                        |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005, RoundCube Dev. - Switzerland                      |
+ | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: folders.inc 573 2007-05-18 11:29:25Z thomasb $
+ $Id: folders.inc 850 2007-10-03 00:13:32Z ihug $
 */
 
 $mbox_name = $IMAP->get_mailbox_name();

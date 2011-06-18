@@ -14,7 +14,7 @@
  |         Takashi Takamatsu <taka717@gmail.com>                         |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 619 2007-06-13 07:09:09Z thomasb $
+ @version $Id: labels.inc 842 2007-10-01 13:55:02Z tomekp $
 
 */
 

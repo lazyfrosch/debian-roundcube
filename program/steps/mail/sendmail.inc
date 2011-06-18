@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: sendmail.inc 556 2007-05-13 18:25:52Z thomasb $
+ $Id: sendmail.inc 816 2007-09-26 08:13:21Z thomasb $
 
 */
 
@@ -186,7 +186,9 @@ $headers['Subject'] = trim(get_input_value('_subject', RCUBE_INPUT_POST, FALSE, 
 if (!empty($identity_arr['organization']))
   $headers['Organization'] = $identity_arr['organization'];
 
-if (!empty($identity_arr['reply-to']))
+if (!empty($_POST['_replyto']))
+  $headers['Reply-To'] = preg_replace($mailto_regexp, $mailto_replace, get_input_value('_replyto', RCUBE_INPUT_POST, TRUE, $message_charset));
+else if (!empty($identity_arr['reply-to']))
   $headers['Reply-To'] = $identity_arr['reply-to'];
 
 if (!empty($_SESSION['compose']['reply_msgid']))
@@ -220,16 +222,8 @@ if (!empty($CONFIG['useragent']))
 $message_body = get_input_value('_message', RCUBE_INPUT_POST, TRUE, $message_charset);
 
 // append generic footer to all messages
-if (!empty($CONFIG['generic_message_footer']))
-  {
-  $file = realpath($CONFIG['generic_message_footer']);
-  if($fp = fopen($file, 'r'))
-    {
-    $content = fread($fp, filesize($file));
-    fclose($fp);
-    $message_body .= "\r\n" . rcube_charset_convert($content, 'UTF-8', $message_charset);
-    }
-  }
+if (!$savedraft && !empty($CONFIG['generic_message_footer']) && ($footer = file_get_contents(realpath($CONFIG['generic_message_footer']))))
+  $message_body .= "\r\n" . rcube_charset_convert($footer, 'UTF-8', $message_charset);
 
 // try to autodetect operating system and use the correct line endings
 // use the configured delimiter for headers
@@ -333,7 +327,7 @@ if (!$savedraft) {
   
     // send message
     $smtp_response = array();
-    $sent = smtp_mail($from, $a_recipients, $MAIL_MIME->txtHeaders($send_headers), $msg_body, $smtp_response);
+    $sent = smtp_mail($from, $a_recipients, ($foo = $MAIL_MIME->txtHeaders($send_headers)), $msg_body, $smtp_response);
   
     // log error
     if (!$sent)

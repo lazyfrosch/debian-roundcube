@@ -5,7 +5,7 @@
  | program/steps/mail/list.inc                                           |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005, RoundCube Dev. - Switzerland                      |
+ | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: list.inc 575 2007-05-18 12:35:28Z thomasb $
+ $Id: list.inc 850 2007-10-03 00:13:32Z ihug $
 
 */
 
@@ -58,7 +58,8 @@ $OUTPUT->command('set_unread_count', $mbox_name, $unseen);
 // add message rows
 if (isset($a_headers) && count($a_headers))
   rcmail_js_message_list($a_headers);
-
+else
+  $OUTPUT->show_message('nomessagesfound', 'notice');
   
 // send response
 $OUTPUT->send();

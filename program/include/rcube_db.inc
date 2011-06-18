@@ -17,7 +17,7 @@
  |         Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_db.inc 543 2007-04-28 18:07:12Z thomasb $
+ $Id: rcube_db.inc 666 2007-08-07 21:02:12Z thomasb $
 
 */
 
@@ -33,7 +33,7 @@ require_once('DB.php');
  *
  * This is a wrapper for the PEAR::DB class
  *
- * @package    RoundCube Webmail
+ * @package    Database
  * @author     David Saez Padros <david@ols.es>
  * @author     Thomas Bruederli <roundcube@gmail.com>
  * @version    1.17

@@ -14,7 +14,7 @@
  |         Andreas Henriksson <andreas@fatal.se>                         |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 557 2007-05-15 06:41:32Z yllar $
+ @version $Id: labels.inc 842 2007-10-01 13:55:02Z tomekp $
 
 */
 
@@ -160,7 +160,7 @@ $labels['signature'] = 'Signatur';
 $labels['dstactive'] = 'Sommartid';
 $labels['htmleditor'] = 'Skriv HTML-meddelanden';
 $labels['htmlsignature'] = 'HTML-signatur';
-$labels['previewpane'] = 'Visa föregående panel';
+$labels['previewpane'] = 'Visa delad vy i inbox';
 $labels['autosavedraft'] = 'Spara utkast automatiskt';
 $labels['everynminutes'] = 'var $n minut';
 $labels['never'] = 'aldrig';

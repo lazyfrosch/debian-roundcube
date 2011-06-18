@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: func.inc 578 2007-05-18 13:06:01Z thomasb $
+ $Id: func.inc 582 2007-05-18 14:38:11Z thomasb $
 
 */
 
