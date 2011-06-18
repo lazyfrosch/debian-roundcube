@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_shared.inc 1078 2008-02-14 01:33:02Z till $
+ $Id: rcube_shared.inc 1255 2008-04-05 12:49:21Z thomasb $
 
 */
 
@@ -262,7 +262,10 @@ function send_modified_header($mdate, $etag=null)
     header("Etag: $etag");
   
   if ($iscached)
+    {
+    ob_end_clean();
     exit;
+    }
 }
 
 

@@ -17,7 +17,7 @@
  |         Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_db.inc 1089 2008-02-15 13:20:07Z till $
+ $Id: rcube_db.inc 1255 2008-04-05 12:49:21Z thomasb $
 
 */
 
@@ -153,8 +153,18 @@ class rcube_db
     $this->db_handle = $this->dsn_connect($dsn);
     $this->db_connected = $this->db_handle ? TRUE : FALSE;
     }
+
+
+  /**
+   * Activate/deactivate debug mode
+   * (not implemented)
+   */
+  function set_debug($dbg = true)
+  {
     
-    
+  }
+
+
   /**
    * Getter for error state
    *

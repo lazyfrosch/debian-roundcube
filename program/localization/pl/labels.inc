@@ -17,7 +17,7 @@
  |         Wojciech Szczepucha <donkoyote@gmail.com>                     |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 1160 2008-03-01 15:32:44Z yllar $
+ @version $Id: labels.inc 1255 2008-04-05 12:49:21Z thomasb $
 
 */
 
@@ -131,8 +131,8 @@ $labels['plaintoggle'] = 'Zwykły tekst';
 $labels['addcc'] = 'Dodaj Cc';
 $labels['addbcc'] = 'Dodaj Bcc';
 $labels['addreplyto'] = 'Dodaj Reply-To';
-$labels['mdnrequest'] = 'Nadawca poprosił o potwierdzenie przeczytania tej wiadomości. Czy chcesz go powiadomić?';
-$labels['receiptread'] = 'Potwierdzenie odbioru';
+$labels['mdnrequest'] = 'Nadawca zażądał potwierdzenia przeczytania tej wiadomości. Czy chcesz go powiadomić?';
+$labels['receiptread'] = 'Potwierdzenie otrzymania';
 $labels['yourmessage'] = 'To jest potwierdzenie dostarczenia Twojej wiadomości';
 $labels['receiptnote'] = 'Uwaga: To potwierdzenie dostarczenia wiadomości oznacza tylko, że wiadomość została wyświetlona na komputerze adresata. Nie ma żadnej gwarancji, że odbiorca przeczytał czy też zrozumiał treść wiadomości.';
 $labels['name'] = 'Nazwa';

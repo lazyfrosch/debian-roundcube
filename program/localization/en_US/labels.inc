@@ -13,7 +13,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 1052 2008-02-12 18:41:53Z thomasb $
+ @version $Id: labels.inc 1255 2008-04-05 12:49:21Z thomasb $
 
 */
 
@@ -218,7 +218,7 @@ $labels['language']  = 'Language';
 $labels['timezone']  = 'Time zone';
 $labels['pagesize']  = 'Rows per page';
 $labels['signature'] = 'Signature';
-$labels['dstactive']  = 'Daylight savings';
+$labels['dstactive']  = 'Daylight saving time';
 $labels['htmleditor'] = 'Compose HTML messages';
 $labels['htmlsignature'] = 'HTML signature';
 $labels['previewpane'] = 'Show preview pane';

@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: show.inc 1046 2008-02-11 23:07:44Z thomasb $
+ $Id: show.inc 1255 2008-04-05 12:49:21Z thomasb $
 
 */
 
@@ -29,6 +29,10 @@ if ($_GET['_uid'])
   {
   $MESSAGE = array('UID' => get_input_value('_uid', RCUBE_INPUT_GET));
   $MESSAGE['headers'] = $IMAP->get_headers($MESSAGE['UID']);
+  
+  // set message charset as default
+  if (!empty($MESSAGE['headers']->charset))
+    $IMAP->set_charset($MESSAGE['headers']->charset);
   
   // go back to list if message not found (wrong UID)
   if (!$MESSAGE['headers'])
