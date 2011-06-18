@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: func.inc 587 2007-05-28 19:21:36Z thomasb $
+ $Id: func.inc 875 2007-10-17 06:50:28Z thomasb $
 
 */
 
@@ -73,223 +73,12 @@ if ($CONFIG['junk_mbox'])
   $OUTPUT->set_env('junk_mailbox', $CONFIG['junk_mbox']);
 
 if (!$OUTPUT->ajax_call)
-  rcube_add_label('checkingmail');
+  rcube_add_label('checkingmail', 'deletemessage', 'movemessagetotrash');
 
+// set page title
+if (empty($_action) || $_action == 'list')
+  $OUTPUT->set_pagetitle(rcube_charset_convert($IMAP->get_mailbox_name(), 'UTF-7'));
 
-// return the mailboxlist in HTML
-function rcmail_mailbox_list($attrib)
-  {
-  global $IMAP, $CONFIG, $OUTPUT, $COMM_PATH;
-  static $s_added_script = FALSE;
-  static $a_mailboxes;
-
-  // add some labels to client
-  rcube_add_label('purgefolderconfirm');
-  rcube_add_label('deletemessagesconfirm');
-  
-// $mboxlist_start = rcube_timer();
-  
-  $type = $attrib['type'] ? $attrib['type'] : 'ul';
-  $add_attrib = $type=='select' ? array('style', 'class', 'id', 'name', 'onchange') :
-                                  array('style', 'class', 'id');
-                                  
-  if ($type=='ul' && !$attrib['id'])
-    $attrib['id'] = 'rcmboxlist';
-
-  // allow the following attributes to be added to the <ul> tag
-  $attrib_str = create_attrib_string($attrib, $add_attrib);
- 
-  $out = '<' . $type . $attrib_str . ">\n";
-  
-  // add no-selection option
-  if ($type=='select' && $attrib['noselection'])
-    $out .= sprintf('<option value="0">%s</option>'."\n",
-                    rcube_label($attrib['noselection']));
-  
-  // get mailbox list
-  $mbox_name = $IMAP->get_mailbox_name();
-  
-  // for these mailboxes we have localized labels
-  $special_mailboxes = array('inbox', 'sent', 'drafts', 'trash', 'junk');
-
-
-  // build the folders tree
-  if (empty($a_mailboxes))
-    {
-    // get mailbox list
-    $a_folders = $IMAP->list_mailboxes();
-    $delimiter = $IMAP->get_hierarchy_delimiter();
-    $a_mailboxes = array();
-
-// rcube_print_time($mboxlist_start, 'list_mailboxes()');
-
-    foreach ($a_folders as $folder)
-      rcmail_build_folder_tree($a_mailboxes, $folder, $delimiter);
-    }
-
-// var_dump($a_mailboxes);
-
-  if ($type=='select')
-    $out .= rcmail_render_folder_tree_select($a_mailboxes, $special_mailboxes, $mbox_name, $attrib['maxlength']);
-   else
-    $out .= rcmail_render_folder_tree_html($a_mailboxes, $special_mailboxes, $mbox_name, $attrib['maxlength']);
-
-// rcube_print_time($mboxlist_start, 'render_folder_tree()');
-
-
-  if ($type=='ul')
-    $OUTPUT->add_gui_object('mailboxlist', $attrib['id']);
-
-  return $out . "</$type>";
-  }
-
-
-
-
-// create a hierarchical array of the mailbox list
-function rcmail_build_folder_tree(&$arrFolders, $folder, $delm='/', $path='')
-  {
-  $pos = strpos($folder, $delm);
-  if ($pos !== false)
-    {
-    $subFolders = substr($folder, $pos+1);
-    $currentFolder = substr($folder, 0, $pos);
-    }
-  else
-    {
-    $subFolders = false;
-    $currentFolder = $folder;
-    }
-
-  $path .= $currentFolder;
-
-  if (!isset($arrFolders[$currentFolder]))
-    {
-    $arrFolders[$currentFolder] = array('id' => $path,
-                                        'name' => rcube_charset_convert($currentFolder, 'UTF-7'),
-                                        'folders' => array());
-    }
-
-  if (!empty($subFolders))
-    rcmail_build_folder_tree($arrFolders[$currentFolder]['folders'], $subFolders, $delm, $path.$delm);
-  }
-  
-
-// return html for a structured list <ul> for the mailbox tree
-function rcmail_render_folder_tree_html(&$arrFolders, &$special, &$mbox_name, $maxlength, $nestLevel=0)
-  {
-  global $COMM_PATH, $IMAP, $CONFIG, $OUTPUT;
-
-  $idx = 0;
-  $out = '';
-  foreach ($arrFolders as $key => $folder)
-    {
-    $zebra_class = ($nestLevel*$idx)%2 ? 'even' : 'odd';
-    $title = '';
-
-    $folder_lc = strtolower($folder['id']);
-    if (in_array($folder_lc, $special))
-      $foldername = rcube_label($folder_lc);
-    else
-      {
-      $foldername = $folder['name'];
-
-      // shorten the folder name to a given length
-      if ($maxlength && $maxlength>1)
-        {
-        $fname = abbrevate_string($foldername, $maxlength);
-        if ($fname != $foldername)
-          $title = ' title="'.Q($foldername).'"';
-        $foldername = $fname;
-        }
-      }
-
-    // add unread message count display
-    if ($unread_count = $IMAP->messagecount($folder['id'], 'RECENT', ($folder['id']==$mbox_name)))
-      $foldername .= sprintf(' (%d)', $unread_count);
-
-    // make folder name safe for ids and class names
-    $folder_id = preg_replace('/[^A-Za-z0-9\-_]/', '', $folder['id']);
-    $class_name = preg_replace('/[^a-z0-9\-_]/', '', $folder_lc);
-
-    // set special class for Sent, Drafts, Trash and Junk
-    if ($folder['id']==$CONFIG['sent_mbox'])
-      $class_name = 'sent';
-    else if ($folder['id']==$CONFIG['drafts_mbox'])
-      $class_name = 'drafts';
-    else if ($folder['id']==$CONFIG['trash_mbox'])
-      $class_name = 'trash';
-    else if ($folder['id']==$CONFIG['junk_mbox'])
-      $class_name = 'junk';
-
-    $js_name = htmlspecialchars(JQ($folder['id']));
-    $out .= sprintf('<li id="rcmli%s" class="mailbox %s %s%s%s"><a href="%s"'.
-                    ' onclick="return %s.command(\'list\',\'%s\',this)"'.
-                    ' onmouseover="return %s.focus_folder(\'%s\')"' .
-                    ' onmouseout="return %s.unfocus_folder(\'%s\')"' .
-                    ' onmouseup="return %s.folder_mouse_up(\'%s\')"%s>%s</a>',
-                    $folder_id,
-                    $class_name,
-                    $zebra_class,
-                    $unread_count ? ' unread' : '',
-                    $folder['id']==$mbox_name ? ' selected' : '',
-                    Q(rcmail_url('', array('_mbox' => $folder['id']))),
-                    JS_OBJECT_NAME,
-                    $js_name,
-                    JS_OBJECT_NAME,
-                    $js_name,
-                    JS_OBJECT_NAME,
-                    $js_name,
-                    JS_OBJECT_NAME,
-                    $js_name,
-                    $title,
-                    Q($foldername));
-
-    if (!empty($folder['folders']))
-      $out .= "\n<ul>\n" . rcmail_render_folder_tree_html($folder['folders'], $special, $mbox_name, $maxlength, $nestLevel+1) . "</ul>\n";
-
-    $out .= "</li>\n";
-    $idx++;
-    }
-
-  return $out;
-  }
-
-
-// return html for a flat list <select> for the mailbox tree
-function rcmail_render_folder_tree_select(&$arrFolders, &$special, &$mbox_name, $maxlength, $nestLevel=0)
-  {
-  global $IMAP, $OUTPUT;
-
-  $idx = 0;
-  $out = '';
-  foreach ($arrFolders as $key=>$folder)
-    {
-    $folder_lc = strtolower($folder['id']);
-    if (in_array($folder_lc, $special))
-      $foldername = rcube_label($folder_lc);
-    else
-      {
-      $foldername = $folder['name'];
-      
-      // shorten the folder name to a given length
-      if ($maxlength && $maxlength>1)
-        $foldername = abbrevate_string($foldername, $maxlength);
-      }
-
-    $out .= sprintf('<option value="%s">%s%s</option>'."\n",
-                    htmlspecialchars($folder['id']),
-                    str_repeat('&nbsp;', $nestLevel*4),
-                    Q($foldername));
-
-    if (!empty($folder['folders']))
-      $out .= rcmail_render_folder_tree_select($folder['folders'], $special, $mbox_name, $maxlength, $nestLevel+1);
-
-    $idx++;
-    }
-
-  return $out;
-  }
 
 
 // return the message list as HTML table
@@ -404,11 +193,7 @@ function rcmail_message_list($attrib)
 
   // no messages in this mailbox
   if (!sizeof($a_headers))
-    {
-    $out .= sprintf('<tr><td colspan="%d">%s</td></tr>',
-                    sizeof($a_show_cols)+2,
-                    Q(rcube_label('nomessagesfound')));
-    }
+    $OUTPUT->show_message('nomessagesfound', 'notice');
 
 
   $a_js_message_arr = array();
@@ -529,11 +314,13 @@ function rcmail_js_message_list($a_headers, $insert_top=FALSE)
   $OUTPUT->command('set_message_coltypes', $a_show_cols);
 
   // loop through message headers
-  for ($n=0; $a_headers[$n]; $n++)
+  foreach ($a_headers as $n => $header)
     {
-    $header = $a_headers[$n];
     $a_msg_cols = array();
     $a_msg_flags = array();
+    
+    if (empty($header))
+      continue;
 
     // format each col; similar as in rcmail_message_list()
     foreach ($a_show_cols as $col)
@@ -861,6 +648,7 @@ function rcmail_parse_message(&$structure, $arg=array(), $recursive=FALSE)
     
     foreach ($structure->parts as $p => $sub_part)
       {
+      $rel_parts = $attachmnts = null;
       $sub_ctype_primary = strtolower($sub_part->ctype_primary);
       $sub_ctype_secondary = strtolower($sub_part->ctype_secondary);
 
@@ -871,19 +659,22 @@ function rcmail_parse_message(&$structure, $arg=array(), $recursive=FALSE)
         $html_part = $p;
       else if ($sub_ctype_primary=='text' && $sub_ctype_secondary=='enriched')
         $enriched_part = $p;
-      else if ($sub_ctype_primary=='multipart' && $sub_ctype_secondary=='related')
+      else if ($sub_ctype_primary=='multipart' && ($sub_ctype_secondary=='related' || $sub_ctype_secondary=='mixed'))
         $related_part = $p;
       }
-
+      
     // parse related part (alternative part could be in here)
-    if ($related_part!==NULL && $prefer_html)
-      {
-      list($parts, $attachmnts) = rcmail_parse_message($structure->parts[$related_part], $arg, TRUE);
-      $a_return_parts = array_merge($a_return_parts, $parts);
+    if ($related_part!==NULL)
+    {
+      list($rel_parts, $attachmnts) = rcmail_parse_message($structure->parts[$related_part], $arg, TRUE);
       $a_attachments = array_merge($a_attachments, $attachmnts);
-      }
+    }
+    
+    // merge related parts if any
+    if ($rel_parts && $prefer_html && !$html_part)
+      $a_return_parts = array_merge($a_return_parts, $rel_parts);
 
-    // print html/plain part
+    // choose html/plain part to print
     else if ($html_part!==NULL && $prefer_html)
       $print_part = &$structure->parts[$html_part];
     else if ($enriched_part!==NULL)
@@ -898,7 +689,7 @@ function rcmail_parse_message(&$structure, $arg=array(), $recursive=FALSE)
       $a_return_parts[] = $print_part;
       }
     // show plaintext warning
-    else if ($html_part!==NULL)
+    else if ($html_part!==NULL && empty($a_return_parts))
       {
       $c = new stdClass;
       $c->type = 'content';
@@ -1128,8 +919,8 @@ function rcmail_message_body($attrib)
   $ctype_secondary = strtolower($MESSAGE['structure']->ctype_secondary);
   
   // list images after mail body
-  if (get_boolean($attrib['showimages']) && $ctype_primary=='multipart' && $ctype_secondary=='mixed' &&
-      sizeof($MESSAGE['attachments']) && !strstr($message_body, '<html') && strlen($GET_URL))
+  if (get_boolean($attrib['showimages']) && $ctype_primary=='multipart' &&
+      !empty($MESSAGE['attachments']) && !strstr($message_body, '<html') && strlen($GET_URL))
     {
     foreach ($MESSAGE['attachments'] as $attach_prop)
       {
@@ -1157,8 +948,13 @@ function rcmail_sanitize_html($body, $container_id)
   // remove any null-byte characters before parsing
   $body = preg_replace('/\x00/', '', $body);
   
+  $base_url = "";
   $last_style_pos = 0;
   $body_lc = strtolower($body);
+  
+  // check for <base href>
+  if (preg_match(($base_reg = '/(<base.*href=["\']?)([hftps]{3,5}:\/{2}[^"\'\s]+)([^<]*>)/i'), $body, $base_regs))
+    $base_url = $base_regs[2];
   
   // find STYLE tags
   while (($pos = strpos($body_lc, '<style', $last_style_pos)) && ($pos2 = strpos($body_lc, '</style>', $pos)))
@@ -1166,7 +962,7 @@ function rcmail_sanitize_html($body, $container_id)
     $pos = strpos($body_lc, '>', $pos)+1;
 
     // replace all css definitions with #container [def]
-    $styles = rcmail_mod_css_styles(substr($body, $pos, $pos2-$pos), $container_id);
+    $styles = rcmail_mod_css_styles(substr($body, $pos, $pos2-$pos), $container_id, $base_url);
 
     $body = substr($body, 0, $pos) . $styles . substr($body, $pos2);
     $body_lc = strtolower($body);
@@ -1194,17 +990,15 @@ function rcmail_sanitize_html($body, $container_id)
     }
 
   // resolve <base href>
-  $base_reg = '/(<base.*href=["\']?)([hftps]{3,5}:\/{2}[^"\'\s]+)([^<]*>)/i';
-  if (preg_match($base_reg, $body, $regs))
+  if ($base_url)
     {
-    $base_url = $regs[2];
     $body = preg_replace('/(src|background|href)=(["\']?)([\.\/]+[^"\'\s]+)(\2|\s|>)/Uie', "'\\1=\"'.make_absolute_url('\\3', '$base_url').'\"'", $body);
     $body = preg_replace('/(url\s*\()(["\']?)([\.\/]+[^"\'\)\s]+)(\2)\)/Uie', "'\\1\''.make_absolute_url('\\3', '$base_url').'\')'", $body);
     $body = preg_replace($base_reg, '', $body);
     }
     
   // modify HTML links to open a new window if clicked
-  $body = preg_replace('/<a\s+([^>]+)>/Uie', "rcmail_alter_html_link('\\1');", $body);
+  $body = preg_replace('/<(a|link)\s+([^>]+)>/Uie', "rcmail_alter_html_link('\\1','\\2', '$container_id');", $body);
 
   // add comments arround html and other tags
   $out = preg_replace(array(
@@ -1216,11 +1010,16 @@ function rcmail_sanitize_html($body, $container_id)
     '<!--\\1-->',
     $body);
 
-  $out = preg_replace(array('/<body([^>]*)>/i',
-                            '/<\/body>/i'),
-                      array('<div class="rcmBody"\\1>',
-                            '</div>'),
-                      $out);
+  $out = preg_replace(
+    array(
+      '/<body([^>]*)>/i',
+      '/<\/body>/i',
+    ),
+    array(
+      '<div class="rcmBody"\\1>',
+      '</div>',
+    ),
+    $out);
 
   // quote <? of php and xml files that are specified as text/html
   $out = preg_replace(array('/<\?/', '/\?>/'), array('&lt;?', '?&gt;'), $out);
@@ -1230,44 +1029,24 @@ function rcmail_sanitize_html($body, $container_id)
 
 
 // parse link attributes and set correct target
-function rcmail_alter_html_link($in)
+function rcmail_alter_html_link($tag, $attrs, $container_id)
   {
   $in = preg_replace('/=([^("|\'|\s)]+)(\s|$)/', '="\1"', $in);
-  $attrib = parse_attrib_string($in);
+  $attrib = parse_attrib_string($attrs);
+  
+  if ($tag == 'link' && preg_match('/^https?:\/\//i', $attrib['href']))
+    $attrib['href'] = "./bin/modcss.php?u=" . urlencode($attrib['href']) . "&amp;c=" . urlencode($container_id);
 
-  if (stristr((string)$attrib['href'], 'mailto:'))
-    $attrib['onclick'] = sprintf("return %s.command('compose','%s',this)",
-                                 JS_OBJECT_NAME,
-                                 JQ(substr($attrib['href'], 7)));
+  else if (stristr((string)$attrib['href'], 'mailto:'))
+    $attrib['onclick'] = sprintf(
+      "return %s.command('compose','%s',this)",
+      JS_OBJECT_NAME,
+      JQ(substr($attrib['href'], 7)));
+  
   else if (!empty($attrib['href']) && $attrib['href']{0}!='#')
     $attrib['target'] = '_blank';
-  
-  return '<a' . create_attrib_string($attrib, array('href', 'name', 'target', 'onclick', 'id', 'class', 'style', 'title')) . '>';
-  }
 
-
-// replace all css definitions with #container [def]
-function rcmail_mod_css_styles($source, $container_id)
-  {
-  $a_css_values = array();
-  $last_pos = 0;
-  
-  // cut out all contents between { and }
-  while (($pos = strpos($source, '{', $last_pos)) && ($pos2 = strpos($source, '}', $pos)))
-    {
-    $key = sizeof($a_css_values);
-    $a_css_values[$key] = substr($source, $pos+1, $pos2-($pos+1));
-    $source = substr($source, 0, $pos+1) . "<<str_replacement[$key]>>" . substr($source, $pos2, strlen($source)-$pos2);
-    $last_pos = $pos+2;
-    }
-
-  // remove html commends and add #container to each tag selector.
-  // also replace body definition because we also stripped off the <body> tag
-  $styles = preg_replace(array('/(^\s*<!--)|(-->\s*$)/', '/(^\s*|,\s*|\}\s*)([a-z0-9\._][a-z0-9\.\-_]*)/im', '/<<str_replacement\[([0-9]+)\]>>/e', "/$container_id\s+body/i"),
-                         array('', "\\1#$container_id \\2", "\$a_css_values[\\1]", "$container_id div.rcmBody"),
-                         $source);
-
-  return $styles;
+  return "<$tag" . create_attrib_string($attrib, array('href','name','target','onclick','id','class','style','title','rel','type','media')) . ' />';
   }
 
 
@@ -1454,7 +1233,7 @@ function rcmail_message_part_frame($attrib)
   $part = $MESSAGE['parts'][$_GET['_part']];
   $ctype_primary = strtolower($part->ctype_primary);
 
-  $attrib['src'] = './?'.str_replace('_frame=', ($ctype_primary=='text' ? '_show=' : '_preload='), $_SERVER['QUERY_STRING']);
+  $attrib['src'] = Q('./?'.str_replace('_frame=', ($ctype_primary=='text' ? '_show=' : '_preload='), $_SERVER['QUERY_STRING']));
 
   $attrib_str = create_attrib_string($attrib, array('id', 'class', 'style', 'src', 'width', 'height'));
   $out = '<iframe '. $attrib_str . "></iframe>";

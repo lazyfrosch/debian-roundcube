@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: show.inc 543 2007-04-28 18:07:12Z thomasb $
+ $Id: show.inc 668 2007-08-10 08:27:40Z thomasb $
 
 */
 
@@ -48,7 +48,7 @@ if ($_GET['_uid'])
   // allow caching, unless remote images are present
   if ((bool)get_input_value('_safe', RCUBE_INPUT_GET))
     send_nocacheing_headers();
-  else
+  else if (empty($CONFIG['devel_mode']))
     send_modified_header($_SESSION['login_time'], $etag);
 
   $MESSAGE['subject'] = rcube_imap::decode_mime_string($MESSAGE['headers']->subject, $MESSAGE['headers']->charset);

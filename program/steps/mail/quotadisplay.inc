@@ -5,7 +5,7 @@
  | program/steps/mail/quotadisplay.inc                                   |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005, RoundCube Dev. - Switzerland                      |
+ | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Robin Elfrink <robin@15augustus.nl>                           |
  +-----------------------------------------------------------------------+
 
- $Id: quotadisplay.inc 543 2007-04-28 18:07:12Z thomasb $
+ $Id: quotadisplay.inc 850 2007-10-03 00:13:32Z ihug $
 
 */
 

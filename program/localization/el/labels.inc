@@ -14,7 +14,7 @@
  |         John Economou <hsoc@irc.gr>                                   | 
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 619 2007-06-13 07:09:09Z thomasb $
+ @version $Id: labels.inc 612 2007-06-12 18:17:21Z thomasb $
 
 */
 

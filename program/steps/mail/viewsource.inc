@@ -5,7 +5,7 @@
  | program/steps/mail/viewsource.inc                                     |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005, RoundCube Dev. - Switzerland                      |
+ | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: viewsource.inc 320 2006-08-18 12:48:33Z thomasb $
+ $Id: viewsource.inc 850 2007-10-03 00:13:32Z ihug $
 
 */
 

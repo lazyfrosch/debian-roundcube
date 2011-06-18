@@ -5,7 +5,7 @@
  | program/steps/mail/get.inc                                            |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005, RoundCube Dev. - Switzerland                      |
+ | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: get.inc 511 2007-03-19 22:36:24Z thomasb $
+ $Id: get.inc 884 2007-10-18 09:10:35Z thomasb $
 
 */
 
@@ -29,7 +29,7 @@ if ($_GET['_preload'])
   $message = rcube_label('loadingdata');
 
   print "<html>\n<head>\n" .
-        '<meta http-equiv="refresh" content="0; url='.htmlspecialchars($url).'">' .
+        '<meta http-equiv="refresh" content="0; url='.Q($url).'">' .
         "\n</head>\n<body>" .
         $message .
         "\n</body>\n</html>";
@@ -55,7 +55,7 @@ if ($_GET['_frame'])
 
 else if ($pid = get_input_value('_part', RCUBE_INPUT_GET))
   {
-  if ($part = $MESSAGE['parts'][$pid]);
+  if ($part = $MESSAGE['parts'][$pid])
     {
     $ctype_primary = strtolower($part->ctype_primary);
     $ctype_secondary = strtolower($part->ctype_secondary);
@@ -107,7 +107,7 @@ else if ($pid = get_input_value('_part', RCUBE_INPUT_GET))
     else
       {
       header(sprintf('Content-Disposition: %s; filename="%s";',
-                     $part->disposition ? $part->disposition : 'attachment',
+                     $_GET['_download'] ? 'attachment' : 'inline',
                      $part->filename ? $part->filename : "roundcube.$ctype_secondary"));
 
       // turn off output buffering and print part content

@@ -10,7 +10,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
  
- $Id: common.js 543 2007-04-28 18:07:12Z thomasb $
+ $Id: common.js 811 2007-09-25 07:33:37Z robin $
 */
 
 // Constants
@@ -624,3 +624,11 @@ var bw = new roundcube_browser();
 
 if (!window.console)
   console = new rcube_console();
+
+
+// Add escape() method to RegExp object
+// http://dev.rubyonrails.org/changeset/7271
+RegExp.escape = function(str)
+  {
+  return String(str).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
+  }
