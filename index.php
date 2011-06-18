@@ -2,7 +2,7 @@
 /*
  +-------------------------------------------------------------------------+
  | RoundCube Webmail IMAP Client                                           |
- | Version 0.2-alpha                                                       |
+ | Version 0.2-stable                                                      |
  |                                                                         |
  | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                   |
  |                                                                         |
@@ -23,15 +23,18 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                          |
  +-------------------------------------------------------------------------+
 
- $Id: index.php 1499 2008-06-09 20:57:53Z thomasb $
+ $Id: index.php 2201 2008-12-30 14:33:28Z thomasb $
 
 */
 
 // include environment
 require_once 'program/include/iniset.php';
 
-// define global vars
-$OUTPUT_TYPE = 'html';
+// init application and start session with requested task
+$RCMAIL = rcmail::get_instance();
+
+// init output class
+$OUTPUT = !empty($_REQUEST['_remote']) ? $RCMAIL->init_json() : $RCMAIL->load_gui(!empty($_REQUEST['_framed']));
 
 // set output buffering
 if ($RCMAIL->action != 'get' && $RCMAIL->action != 'viewsource') {
@@ -46,13 +49,13 @@ if ($RCMAIL->action != 'get' && $RCMAIL->action != 'viewsource') {
   }
 }
 
-
-// init application and start session with requested task
-$RCMAIL = rcmail::get_instance();
-
-// init output class
-$OUTPUT = (!empty($_GET['_remote']) || !empty($_POST['_remote'])) ? $RCMAIL->init_json() : $RCMAIL->load_gui((!empty($_GET['_framed']) || !empty($_POST['_framed'])));
-
+// check if config files had errors
+if ($err_str = $RCMAIL->config->get_error()) {
+  raise_error(array(
+    'code' => 601,
+    'type' => 'php',
+    'message' => $err_str), false, true);
+}
 
 // check DB connections and exit on failure
 if ($err_str = $DB->is_error()) {
@@ -61,7 +64,6 @@ if ($err_str = $DB->is_error()) {
     'type' => 'db',
     'message' => $err_str), FALSE, TRUE);
 }
-
 
 // error steps
 if ($RCMAIL->action=='error' && !empty($_GET['_code'])) {
@@ -76,29 +78,29 @@ if ($RCMAIL->action=='login' && $RCMAIL->task=='mail') {
   if (empty($_COOKIE)) {
     $OUTPUT->show_message("cookiesdisabled", 'warning');
   }
-  else if ($_SESSION['temp'] && !empty($_POST['_user']) && isset($_POST['_pass']) &&
+  else if ($_SESSION['temp'] && !empty($_POST['_user']) && !empty($_POST['_pass']) &&
            $RCMAIL->login(trim(get_input_value('_user', RCUBE_INPUT_POST), ' '),
               get_input_value('_pass', RCUBE_INPUT_POST, true, 'ISO-8859-1'), $host)) {
     // create new session ID
     unset($_SESSION['temp']);
-    sess_regenerate_id();
+    rcube_sess_regenerate_id();
 
     // send auth cookie if necessary
     $RCMAIL->authenticate_session();
 
     // log successful login
-    if ($RCMAIL->config->get('log_logins') && $RCMAIL->config->get('debug_level') & 1)
-      console(sprintf('Successful login for %s (id %d) from %s',
-                      trim(get_input_value('_user', RCUBE_INPUT_POST), ' '),
-                      $_SESSION['user_id'],
-                      $_SERVER['REMOTE_ADDR']));
+    if ($RCMAIL->config->get('log_logins')) {
+      write_log('userlogins', sprintf('Successful login for %s (id %d) from %s',
+        $RCMAIL->user->get_username(),
+        $RCMAIL->user->ID,
+        $_SERVER['REMOTE_ADDR']));
+    }
 
     // send redirect
-    header("Location: {$RCMAIL->comm_path}");
-    exit;
+    $OUTPUT->redirect();
   }
   else {
-    $OUTPUT->show_message($IMAP->error_code == -1 ? 'imaperror' : 'loginfailed', 'warning');
+    $OUTPUT->show_message($IMAP->error_code < -1 ? 'imaperror' : 'loginfailed', 'warning');
     $RCMAIL->kill_session();
   }
 }
@@ -119,26 +121,9 @@ else if ($RCMAIL->action != 'login' && $_SESSION['user_id'] && $RCMAIL->action !
 }
 
 
-// log in to imap server
-if (!empty($RCMAIL->user->ID) && $RCMAIL->task == 'mail') {
-  if (!$RCMAIL->imap_connect()) {
-    $RCMAIL->kill_session();
-  }
-}
-
-
-// not logged in -> set task to 'login
-if (empty($RCMAIL->user->ID)) {
-  if ($OUTPUT->ajax_call)
-    $OUTPUT->remote_response("setTimeout(\"location.href='\"+this.env.comm_path+\"'\", 2000);");
-  
-  $RCMAIL->set_task('login');
-}
-
-
 // check client X-header to verify request origin
 if ($OUTPUT->ajax_call) {
-  if (empty($CONFIG['devel_mode']) && !rc_request_header('X-RoundCube-Referer')) {
+  if (!$RCMAIL->config->get('devel_mode') && !rc_request_header('X-RoundCube-Referer')) {
     header('HTTP/1.1 404 Not Found');
     die("Invalid Request");
   }
@@ -147,8 +132,12 @@ if ($OUTPUT->ajax_call) {
 
 // not logged in -> show login page
 if (empty($RCMAIL->user->ID)) {
+  
+  if ($OUTPUT->ajax_call)
+    $OUTPUT->redirect(array(), 2000);
+  
   // check if installer is still active
-  if ($CONFIG['enable_installer'] && is_readable('./installer/index.php')) {
+  if ($RCMAIL->config->get('enable_installer') && is_readable('./installer/index.php')) {
     $OUTPUT->add_footer(html::div(array('style' => "background:#ef9398; border:2px solid #dc5757; padding:0.5em; margin:2em auto; width:50em"),
       html::tag('h2', array('style' => "margin-top:0.2em"), "Installer script is still accessible") .
       html::p(null, "The install script of your RoundCube installation is still stored in its default location!") .
@@ -160,135 +149,74 @@ if (empty($RCMAIL->user->ID)) {
   }
   
   $OUTPUT->set_env('task', 'login');
-  $OUTPUT->task = 'login';
   $OUTPUT->send('login');
-  exit;
 }
 
 
 // handle keep-alive signal
-if ($RCMAIL->action=='keep-alive') {
+if ($RCMAIL->action == 'keep-alive') {
   $OUTPUT->reset();
-  $OUTPUT->send('');
-  exit;
+  $OUTPUT->send();
+}
+// save preference value
+else if ($RCMAIL->action == 'save-pref') {
+  $RCMAIL->user->save_prefs(array(get_input_value('_name', RCUBE_INPUT_POST) => get_input_value('_value', RCUBE_INPUT_POST)));
+  $OUTPUT->reset();
+  $OUTPUT->send();
 }
 
-// include task specific files
-if ($RCMAIL->task=='mail') {
-  include_once('program/steps/mail/func.inc');
+
+// map task/action to a certain include file
+$action_map = array(
+  'mail' => array(
+    'preview' => 'show.inc',
+    'print'   => 'show.inc',
+    'moveto'  => 'move_del.inc',
+    'delete'  => 'move_del.inc',
+    'send'    => 'sendmail.inc',
+    'expunge' => 'folders.inc',
+    'purge'   => 'folders.inc',
+    'remove-attachment'  => 'attachments.inc',
+    'display-attachment' => 'attachments.inc',
+    'upload' => 'attachments.inc',
+  ),
   
-  if ($RCMAIL->action=='show' || $RCMAIL->action=='preview' || $RCMAIL->action=='print')
-    include('program/steps/mail/show.inc');
+  'addressbook' => array(
+    'add' => 'edit.inc',
+  ),
+  
+  'settings' => array(
+    'folders'       => 'manage_folders.inc',
+    'create-folder' => 'manage_folders.inc',
+    'rename-folder' => 'manage_folders.inc',
+    'delete-folder' => 'manage_folders.inc',
+    'subscribe'     => 'manage_folders.inc',
+    'unsubscribe'   => 'manage_folders.inc',
+    'add-identity'  => 'edit_identity.inc',
+  )
+);
 
-  if ($RCMAIL->action=='get')
-    include('program/steps/mail/get.inc');
+// include task specific functions
+include_once 'program/steps/'.$RCMAIL->task.'/func.inc';
 
-  if ($RCMAIL->action=='moveto' || $RCMAIL->action=='delete')
-    include('program/steps/mail/move_del.inc');
-
-  if ($RCMAIL->action=='mark')
-    include('program/steps/mail/mark.inc');
-
-  if ($RCMAIL->action=='viewsource')
-    include('program/steps/mail/viewsource.inc');
-
-  if ($RCMAIL->action=='sendmdn')
-    include('program/steps/mail/sendmdn.inc');
-
-  if ($RCMAIL->action=='send')
-    include('program/steps/mail/sendmail.inc');
-
-  if ($RCMAIL->action=='upload')
-    include('program/steps/mail/upload.inc');
-
-  if ($RCMAIL->action=='compose' || $RCMAIL->action=='remove-attachment' || $RCMAIL->action=='display-attachment')
-    include('program/steps/mail/compose.inc');
-
-  if ($RCMAIL->action=='addcontact')
-    include('program/steps/mail/addcontact.inc');
-
-  if ($RCMAIL->action=='expunge' || $RCMAIL->action=='purge')
-    include('program/steps/mail/folders.inc');
-
-  if ($RCMAIL->action=='check-recent')
-    include('program/steps/mail/check_recent.inc');
-
-  if ($RCMAIL->action=='getunread')
-    include('program/steps/mail/getunread.inc');
+// allow 5 "redirects" to another action
+$redirects = 0; $incstep = null;
+while ($redirects < 5) {
+  $stepfile = !empty($action_map[$RCMAIL->task][$RCMAIL->action]) ?
+    $action_map[$RCMAIL->task][$RCMAIL->action] : strtr($RCMAIL->action, '-', '_') . '.inc';
     
-  if ($RCMAIL->action=='list' && isset($_REQUEST['_remote']))
-    include('program/steps/mail/list.inc');
-
-   if ($RCMAIL->action=='search')
-     include('program/steps/mail/search.inc');
-     
-  if ($RCMAIL->action=='spell')
-    include('program/steps/mail/spell.inc');
-
-  if ($RCMAIL->action=='rss')
-    include('program/steps/mail/rss.inc');
-    
-  // make sure the message count is refreshed
-  $IMAP->messagecount($_SESSION['mbox'], 'ALL', true);
+  // try to include the step file
+  if (is_file(($incfile = 'program/steps/'.$RCMAIL->task.'/'.$stepfile))) {
+    include($incfile);
+    $redirects++;
+  }
+  else {
+    break;
+  }
 }
 
 
-// include task specific files
-if ($RCMAIL->task=='addressbook') {
-  include_once('program/steps/addressbook/func.inc');
-
-  if ($RCMAIL->action=='save')
-    include('program/steps/addressbook/save.inc');
-  
-  if ($RCMAIL->action=='edit' || $RCMAIL->action=='add')
-    include('program/steps/addressbook/edit.inc');
-  
-  if ($RCMAIL->action=='delete')
-    include('program/steps/addressbook/delete.inc');
-
-  if ($RCMAIL->action=='show')
-    include('program/steps/addressbook/show.inc');  
-
-  if ($RCMAIL->action=='list' && $_REQUEST['_remote'])
-    include('program/steps/addressbook/list.inc');
-
-  if ($RCMAIL->action=='search')
-    include('program/steps/addressbook/search.inc');
-
-  if ($RCMAIL->action=='copy')
-    include('program/steps/addressbook/copy.inc');
-
-  if ($RCMAIL->action=='mailto')
-    include('program/steps/addressbook/mailto.inc');
-}
-
-
-// include task specific files
-if ($RCMAIL->task=='settings') {
-  include_once('program/steps/settings/func.inc');
-
-  if ($RCMAIL->action=='save-identity')
-    include('program/steps/settings/save_identity.inc');
-
-  if ($RCMAIL->action=='add-identity' || $RCMAIL->action=='edit-identity')
-    include('program/steps/settings/edit_identity.inc');
-
-  if ($RCMAIL->action=='delete-identity')
-    include('program/steps/settings/delete_identity.inc');
-  
-  if ($RCMAIL->action=='identities')
-    include('program/steps/settings/identities.inc');  
-
-  if ($RCMAIL->action=='save-prefs')
-    include('program/steps/settings/save_prefs.inc');  
-
-  if ($RCMAIL->action=='folders' || $RCMAIL->action=='subscribe' || $RCMAIL->action=='unsubscribe' ||
-      $RCMAIL->action=='create-folder' || $RCMAIL->action=='rename-folder' || $RCMAIL->action=='delete-folder')
-    include('program/steps/settings/manage_folders.inc');
-}
-
-
-// parse main template
+// parse main template (default)
 $OUTPUT->send($RCMAIL->task);
 
 

@@ -15,19 +15,16 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: delete_identity.inc 1035 2008-02-10 17:08:40Z till $
+ $Id: delete_identity.inc 2008 2008-10-24 08:30:52Z alec $
 
 */
 
 if (($ids = get_input_value('_iid', RCUBE_INPUT_GET)) && preg_match('/^[0-9]+(,[0-9]+)*$/', $ids))
 {
-
-  if ($USER->delete_identity($ids))
-  {
+  if ($USER->delete_identity($ids)) {
     $OUTPUT->show_message('deletedsuccessfully', 'confirmation');
   }
-  else 
-  {
+  else {
     $OUTPUT->show_message('nodeletelastidentity', 'error');
   }
   // send response
@@ -35,10 +32,8 @@ if (($ids = get_input_value('_iid', RCUBE_INPUT_GET)) && preg_match('/^[0-9]+(,[
     $OUTPUT->send();
 }
 
-
 if ($OUTPUT->ajax_call)
   exit;
-
 
 // go to identities page
 rcmail_overwrite_action('identities');

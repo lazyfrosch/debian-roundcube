@@ -29,11 +29,11 @@ class html
 {
     protected $tagname;
     protected $attrib = array();
-    protected $allowed;
+    protected $allowed = array();
     protected $content;
 
     public static $common_attrib = array('id','class','style','title','align');
-    public static $containers = array('div','span','p','h1','h2','h3','form','textarea');
+    public static $containers = array('iframe','div','span','p','h1','h2','h3','form','textarea','table','tr','th','td','style');
     public static $lc_tags = true;
 
     /**
@@ -55,7 +55,7 @@ class html
      */
     public function show()
     {
-        return self::tag($this->tagname, $this->attrib, $this->content, $this->allowed);
+        return self::tag($this->tagname, $this->attrib, $this->content, array_merge(self::$common_attrib, $this->allowed));
     }
 
     /****** STATIC METHODS *******/
@@ -98,7 +98,7 @@ class html
         if (is_string($attr)) {
             $attr = array('class' => $attr);
         }
-        return self::tag('div', $attr, $cont, self::$common_attrib);
+        return self::tag('div', $attr, $cont, array_merge(self::$common_attrib, array('onclick')));
     }
 
     /**
@@ -145,7 +145,7 @@ class html
         if (is_string($attr)) {
             $attr = array('href' => $attr);
         }
-        return self::tag('a', $attr, $cont, array_merge(self::$common_attrib, array('href','target','name','onclick','onmouseover','onmouseout')));
+        return self::tag('a', $attr, $cont, array_merge(self::$common_attrib, array('href','target','name','onclick','onmouseover','onmouseout','onmousedown','onmouseup')));
     }
 
     /**
@@ -178,6 +178,21 @@ class html
             $attr = array('for' => $attr);
         }
         return self::tag('label', $attr, $cont, array_merge(self::$common_attrib, array('for')));
+    }
+
+    /**
+     * Derrived method to create <iframe></iframe>
+     *
+     * @param mixed Hash array with tag attributes or string with frame source (src)
+     * @return string HTML code
+     * @see html::tag()
+     */
+    public static function iframe($attr = null, $cont = null)
+    {
+        if (is_string($attr)) {
+            $attr = array('src' => $attr);
+        }
+        return self::tag('iframe', $attr, $cont, array_merge(self::$common_attrib, array('src','name','width','height','border','frameborder')));
     }
 
     /**
@@ -248,6 +263,7 @@ class html_inputfield extends html
 {
     protected $tagname = 'input';
     protected $type = 'text';
+    protected $allowed = array('type','name','value','size','tabindex','autocomplete','checked','onchange','onclick','disabled','readonly','spellcheck','results');
 
     public function __construct($attrib = array())
     {
@@ -415,7 +431,7 @@ class html_checkbox extends html_inputfield
 class html_textarea extends html
 {
     protected $tagname = 'textarea';
-    protected $allowed_attrib = array('name','rows','cols','wrap','tabindex');
+    protected $allowed = array('name','rows','cols','wrap','tabindex','onchange','disabled','readonly','spellcheck');
 
     /**
      * Get HTML code for this object
@@ -441,10 +457,11 @@ class html_textarea extends html
             unset($this->attrib['value']);
         }
 
-        if (!empty($value) && !isset($this->attrib['mce_editable'])) {
+        if (!empty($value) && !ereg('mce_editor', $this->attrib['class'])) {
             $value = Q($value, 'strict', false);
         }
-        return self::tag($this->tagname, $this->attrib, $value, array_merge(self::$common_attrib, $this->allowed_attrib));
+
+        return self::tag($this->tagname, $this->attrib, $value, array_merge(self::$common_attrib, $this->allowed));
     }
 }
 
@@ -471,6 +488,7 @@ class html_select extends html
 {
     protected $tagname = 'select';
     protected $options = array();
+    protected $allowed = array('name','size','tabindex','autocomplete','multiple','onchange','disabled');
     
     /**
      * Add a new option to this drop-down
@@ -511,7 +529,7 @@ class html_select extends html
             $attr = array(
                 'value' => $option['value'],
                 'selected' => (in_array($option['value'], $select, true) ||
-            in_array($option['text'], $select, true)) ? 1 : null);
+                  in_array($option['text'], $select, true)) ? 1 : null);
 
             $this->content .= self::tag('option', $attr, Q($option['text']));
         }
@@ -570,10 +588,10 @@ class html_table extends html
      * @param array Cell attributes
      * @param string Cell content
      */
-    private function add_header($attr, $cont)
+    public function add_header($attr, $cont)
     {
         if (is_string($attr))
-        $attr = array('class' => $attr);
+    	    $attr = array('class' => $attr);
 
         $cell = new stdClass;
         $cell->attrib = $attr;
@@ -586,7 +604,7 @@ class html_table extends html
      *
      * @param array Row attributes
      */
-    private function add_row($attr = array())
+    public function add_row($attr = array())
     {
         $this->rowindex++;
         $this->colindex = 0;
@@ -595,6 +613,18 @@ class html_table extends html
         $this->rows[$this->rowindex]->cells = array();
     }
 
+    /**
+     * Set current row attrib
+     *
+     * @param array Row attributes
+     */
+    public function set_row_attribs($attr = array())
+    {
+        if (is_string($attr))
+    	    $attr = array('class' => $attr);
+
+        $this->rows[$this->rowindex]->attrib = $attr;
+    }
 
     /**
      * Build HTML output of the table data
@@ -602,16 +632,18 @@ class html_table extends html
      * @param array Table attributes
      * @return string The final table HTML code
      */
-    public function show($attr = array())
+    public function show($attrib = null)
     {
-        $this->attrib = array_merge($this->attrib, $attr);
+        if (is_array($attrib))
+            $this->attrib = array_merge($this->attrib, $attrib);
+        
         $thead = $tbody = "";
 
         // include <thead>
         if (!empty($this->header)) {
             $rowcontent = '';
             foreach ($this->header as $c => $col) {
-                $rowcontent .= self::tag('th', $col->attrib, $col->content);
+                $rowcontent .= self::tag('td', $col->attrib, $col->content);
             }
             $thead = self::tag('thead', null, self::tag('tr', null, $rowcontent));
         }
@@ -623,7 +655,7 @@ class html_table extends html
             }
 
             if ($r < $this->rowindex || count($row->cells)) {
-                $tbody .= self::tag('tr', $rows->attrib, $rowcontent);
+                $tbody .= self::tag('tr', $row->attrib, $rowcontent);
             }
         }
 
@@ -636,6 +668,16 @@ class html_table extends html
 
         unset($this->attrib['cols'], $this->attrib['rowsonly']);
         return parent::show();
+    }
+    
+    /**
+     * Count number of rows
+     *
+     * @return The number of rows
+     */
+    public function size()
+    {
+      return count($this->rows);
     }
 }
 

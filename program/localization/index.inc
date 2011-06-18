@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: index.inc 1491 2008-06-07 19:31:56Z alec $
+ $Id: index.inc 2039 2008-11-04 20:10:28Z alec $
 
 */
 
@@ -27,9 +27,11 @@ $rcube_languages = array(
   'sq_AL' => 'Albanian',
   'ar_SA' => 'Arabic',
   'hy_AM' => 'Armenian',
+  'az_AZ' => 'Azerbaijani',
   'bs_BA' => 'Bosnian (Serbian Latin)',
   'bg_BG' => 'Bulgarian',
   'ca_ES' => 'Català',
+  'cy_GB' => 'Cymraeg',
   'zh_CN' => 'Chinese (Simplified)',
   'zh_TW' => 'Chinese (Traditional)',
   'hr_HR' => 'Croatian (Hrvatski)',
@@ -72,21 +74,22 @@ $rcube_languages = array(
   'pt_BR' => 'Portuguese (Brazilian)',
   'pt_PT' => 'Portuguese (Standard)',
   'ro_RO' => 'Romanian',
-  'ru_RU' => 'Russian',
+  'ru_RU' => 'Русский',
   'sr_CS' => 'Serbian (Cyrillic)',
   'si_LK' => 'Sinhala',
   'sk_SK' => 'Slovak',
   'sl_SI' => 'Slovenian',
   'sv_SE' => 'Swedish (Svenska)',
   'th_TH' => 'Thai',
-  'tr_TR' => 'Turkish',
+  'tr_TR' => 'Türkçe',
   'uk_UA' => 'Ukrainian',
   'vi_VN' => 'Vietnamese',
 );
 
 $rcube_language_aliases = array(
-  'ar' => 'ar_SA',
   'am' => 'hy_AM',
+  'ar' => 'ar_SA',
+  'az' => 'az_AZ',
   'bg' => 'bg_BG',
   'bs' => 'bs_BA',
   'ca' => 'ca_ES',
@@ -125,6 +128,5 @@ $rcube_language_aliases = array(
   'vi' => 'vi_VN',
   'zh' => 'zh_CN',
 );
-
 
 ?>

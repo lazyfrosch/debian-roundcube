@@ -34,7 +34,7 @@ class rcube_contacts
   var $result = null;
   var $search_fields;
   var $search_string;
-  var $table_cols = array('name', 'email', 'firstname', 'surname');
+  var $table_cols = array('name', 'email', 'firstname', 'surname', 'vcard');
   
   /** public properties */
   var $primary_key = 'contact_id';
@@ -56,16 +56,6 @@ class rcube_contacts
     $this->db_name = get_table_name('contacts');
     $this->user_id = $user;
     $this->ready = $this->db && !$this->db->is_error();
-  }
-
-  /**
-   * PHP 4 object constructor
-   *
-   * @see rcube_contacts::__construct()
-   */
-  function rcube_contacts($dbconn, $user)
-  {
-    $this->__construct($dbconn, $user);
   }
 
 
@@ -196,12 +186,12 @@ class rcube_contacts
       if ($col == 'ID' || $col == $this->primary_key)
       {
         $ids = !is_array($value) ? split(',', $value) : $value;
-        $add_where[] = $this->primary_key." IN (".join(',', $ids).")";
+        $add_where[] = $this->primary_key.' IN ('.join(',', $ids).')';
       }
       else if ($strict)
-        $add_where[] = $this->db->quoteIdentifier($col)."=".$this->db->quote($value);
+        $add_where[] = $this->db->quoteIdentifier($col).'='.$this->db->quote($value);
       else
-        $add_where[] = $this->db->quoteIdentifier($col)." LIKE ".$this->db->quote(strlen($value)>2 ? "%$value%" : "$value%");
+        $add_where[] = $this->db->ilike($col, '%'.$value.'%');
     }
     
     if (!empty($add_where))
