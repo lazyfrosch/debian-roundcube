@@ -5,7 +5,7 @@
  | program/include/rcube_user.inc                                        |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -31,7 +31,7 @@ class rcube_user
 {
   public $ID = null;
   public $data = null;
-  public $language = 'en_US';
+  public $language = null;
   
   private $db = null;
   
@@ -59,17 +59,7 @@ class rcube_user
     }
   }
 
-  /**
-   * PHP 4 object constructor
-   *
-   * @see  rcube_user::__construct
-   */
-  function rcube_user($id = null, $sql_arr = null)
-  {
-    $this->__construct($id, $sql_arr);
-  }
-  
-  
+
   /**
    * Build a user name string (as e-mail address)
    *
@@ -88,41 +78,52 @@ class rcube_user
    */
   function get_prefs()
   {
+    if (!empty($this->language))
+      $prefs = array('language' => $this->language);
+    
     if ($this->ID && $this->data['preferences'])
-      return array('language' => $this->language) + unserialize($this->data['preferences']);
-    else
-      return array();
+      $prefs += (array)unserialize($this->data['preferences']);
+    
+    return $prefs;
   }
   
   
   /**
    * Write the given user prefs to the user's record
    *
-   * @param mixed User prefs to save
+   * @param array User prefs to save
    * @return boolean True on success, False on failure
    */
   function save_prefs($a_user_prefs)
   {
     if (!$this->ID)
       return false;
+      
+    $config = rcmail::get_instance()->config;
+    $old_prefs = (array)$this->get_prefs();
 
     // merge (partial) prefs array with existing settings
-    $a_user_prefs += (array)$this->get_prefs();
-    unset($a_user_prefs['language']);
-
+    $save_prefs = $a_user_prefs + $old_prefs;
+    unset($save_prefs['language']);
+    
+    // don't save prefs with default values if they haven't been changed yet
+    foreach ($a_user_prefs as $key => $value) {
+      if (!isset($old_prefs[$key]) && ($value == $config->get($key)))
+        unset($save_prefs[$key]);
+    }
+    
     $this->db->query(
       "UPDATE ".get_table_name('users')."
        SET    preferences=?,
               language=?
        WHERE  user_id=?",
-      serialize($a_user_prefs),
+      serialize($save_prefs),
       $_SESSION['language'],
       $this->ID);
 
     $this->language = $_SESSION['language'];
-    if ($this->db->affected_rows())
-    {
-      rcmail::get_instance()->config->merge($a_user_prefs);
+    if ($this->db->affected_rows()) {
+      $config->merge($a_user_prefs);
       return true;
     }
 
@@ -156,7 +157,7 @@ class rcube_user
        WHERE  del<>1
        AND    user_id=?
        $sql_add
-       ORDER BY ".$this->db->quoteIdentifier('standard')." DESC, name ASC",
+       ORDER BY ".$this->db->quoteIdentifier('standard')." DESC, name ASC, identity_id ASC",
       $this->ID);
     
     return $sql_result;
@@ -318,16 +319,18 @@ class rcube_user
   {
     $dbh = rcmail::get_instance()->get_dbh();
     
-    // query if user already registered
-    $sql_result = $dbh->query(
-      "SELECT * FROM ".get_table_name('users')."
-       WHERE  mail_host=? AND (username=? OR alias=?)",
-      $host,
-      $user,
-      $user);
-      
+    // query for matching user name
+    $query = "SELECT * FROM ".get_table_name('users')." WHERE mail_host=? AND %s=?";
+    $sql_result = $dbh->query(sprintf($query, 'username'), $host, $user);
+    
+    // query for matching alias
+    if (!($sql_arr = $dbh->fetch_assoc($sql_result))) {
+      $sql_result = $dbh->query(sprintf($query, 'alias'), $host, $user);
+      $sql_arr = $dbh->fetch_assoc($sql_result);
+    }
+    
     // user already registered -> overwrite username
-    if ($sql_arr = $dbh->fetch_assoc($sql_result))
+    if ($sql_arr)
       return new rcube_user($sql_arr['user_id'], $sql_arr);
     else
       return false;
@@ -362,7 +365,7 @@ class rcube_user
 
     if ($user_id = $dbh->insert_id(get_sequence_name('users')))
     {
-      $mail_domain = rcmail_mail_domain($host);
+      $mail_domain = $rcmail->config->mail_domain($host);
 
       if ($user_email=='')
         $user_email = strpos($user, '@') ? $user : sprintf('%s@%s', $user, $mail_domain);
@@ -370,19 +373,22 @@ class rcube_user
       $user_name = $user != $user_email ? $user : '';
 
       // try to resolve the e-mail address from the virtuser table
-      if ($virtuser_query = $rcmail->config->get('virtuser_query') &&
-          ($sql_result = $dbh->query(preg_replace('/%u/', $dbh->escapeSimple($user), $virtuser_query))) &&
-          ($dbh->num_rows() > 0))
+      if (($virtuser_query = $rcmail->config->get('virtuser_query'))
+    	&& ($sql_result = $dbh->query(preg_replace('/%u/', $dbh->escapeSimple($user), $virtuser_query)))
+	&& ($dbh->num_rows() > 0))
       {
+        $standard = 1;
         while ($sql_arr = $dbh->fetch_array($sql_result))
         {
           $dbh->query(
             "INSERT INTO ".get_table_name('identities')."
               (user_id, del, standard, name, email)
-             VALUES (?, 0, 1, ?, ?)",
+             VALUES (?, 0, ?, ?, ?)",
             $user_id,
+	    $standard,
             strip_newlines($user_name),
             preg_replace('/^@/', $user . '@', $sql_arr[0]));
+	  $standard = 0;
         }
       }
       else
@@ -420,11 +426,11 @@ class rcube_user
   static function email2user($email)
   {
     $user = $email;
-    $r = rcmail_findinvirtual("^$email");
+    $r = self::findinvirtual('^' . quotemeta($email) . '[[:space:]]');
 
     for ($i=0; $i<count($r); $i++)
     {
-      $data = $r[$i];
+      $data = trim($r[$i]);
       $arr = preg_split('/\s+/', $data);
       if (count($arr) > 0)
       {
@@ -445,8 +451,8 @@ class rcube_user
    */
   static function user2email($user)
   {
-    $email = "";
-    $r = rcmail_findinvirtual("$user$");
+    $email = '';
+    $r = self::findinvirtual('[[:space:]]' . quotemeta($user) . '[[:space:]]*$');
 
     for ($i=0; $i<count($r); $i++)
     {
@@ -461,6 +467,39 @@ class rcube_user
 
     return $email;
   }
+  
+  
+  /**
+   * Find matches of the given pattern in virtuser table
+   * 
+   * @param string Regular expression to search for
+   * @return array Matching entries
+   */
+  private static function findinvirtual($pattern)
+  {
+    $result = array();
+    $virtual = null;
+    
+    if ($virtuser_file = rcmail::get_instance()->config->get('virtuser_file'))
+      $virtual = file($virtuser_file);
+    
+    if (empty($virtual))
+      return $result;
+    
+    // check each line for matches
+    foreach ($virtual as $line)
+    {
+      $line = trim($line);
+      if (empty($line) || $line{0}=='#')
+        continue;
+        
+      if (eregi($pattern, $line))
+        $result[] = $line;
+    }
+    
+    return $result;
+  }
+
 
 }
 

@@ -1,14 +1,13 @@
 <form action="index.php" method="get">
 <?php
 
-$required_php_exts = array('PCRE' => 'pcre', 'Session' => 'session',
-    'DOM XML' => 'dom');
+$required_php_exts = array('PCRE' => 'pcre', 'DOM' => 'dom', 'Session' => 'session');
 
 $optional_php_exts = array('FileInfo' => 'fileinfo', 'Libiconv' => 'iconv',
     'Multibyte' => 'mbstring', 'OpenSSL' => 'openssl', 'Mcrypt' => 'mcrypt',
     'GD' => 'gd');
 
-$required_libs = array('PEAR' => 'PEAR.php', 'DB' => 'DB.php', 'MDB2' => 'MDB2.php',
+$required_libs = array('PEAR' => 'PEAR.php', 'MDB2' => 'MDB2.php',
     'Net_SMTP' => 'Net/SMTP.php', 'Mail_mime' => 'Mail/mime.php',
     'iilConnection' => 'lib/imap.inc');
 
@@ -16,7 +15,7 @@ $supported_dbs = array('MySQL' => 'mysql', 'MySQLi' => 'mysqli',
     'PostgreSQL' => 'pgsql', 'SQLite (v2)' => 'sqlite');
 
 $ini_checks = array('file_uploads' => 1, 'session.auto_start' => 0,
-    'magic_quotes_gpc' => 0, 'magic_quotes_sybase' => 0);
+    'zend.ze1_compatibility_mode' => 0, 'mbstring.func_overload' => 0);
 
 $source_urls = array(
     'Sockets' => 'http://www.php.net/manual/en/ref.sockets.php',
@@ -31,7 +30,8 @@ $source_urls = array(
     'PEAR' => 'http://pear.php.net',
     'MDB2' => 'http://pear.php.net/package/MDB2',
     'Net_SMTP' => 'http://pear.php.net/package/Net_SMTP',
-    'Mail_mime' => 'http://pear.php.net/package/Mail_mime'
+    'Mail_mime' => 'http://pear.php.net/package/Mail_mime',
+    'DOM' => 'http://www.php.net/manual/en/intro.dom.php'
 );
 
 echo '<input type="hidden" name="_step" value="' . ($RCI->configured ? 3 : 2) . '" />';
@@ -114,9 +114,6 @@ foreach ($required_libs as $classname => $file) {
     @include_once $file;
     if (class_exists($classname)) {
         $RCI->pass($classname);
-    }
-    else if ($classname == 'DB' || ($classname == 'MDB2' && class_exists('DB'))) {
-        $RCI->na($classname, 'Use ' . ($classname == 'DB' ? 'MDB2' : 'DB') . ' instead');
     }
     else {
         $RCI->fail($classname, "Failed to load $file", $source_urls[$classname]);

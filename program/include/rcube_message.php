@@ -42,9 +42,23 @@ class rcube_message
   public $mime_parts = array();
   public $attachments = array();
   public $subject = '';
+  public $sender = null;
   public $is_safe = false;
   
-  
+
+  /**
+   * __construct
+   *
+   * Provide a uid, and parse message structure.
+   *
+   * @param string $uid The message UID.
+   *
+   * @uses rcmail::get_instance()
+   * @uses rcube_imap::decode_mime_string()
+   * @uses self::set_safe()
+   *
+   * @see self::$app, self::$imap, self::$opt, self::$structure
+   */
   function __construct($uid)
   {
     $this->app = rcmail::get_instance();
@@ -53,16 +67,16 @@ class rcube_message
     $this->uid = $uid;
     $this->headers = $this->imap->get_headers($uid);
     $this->subject = rcube_imap::decode_mime_string($this->headers->subject, $this->headers->charset);
+    list(, $this->sender) = each($this->imap->decode_address_list($this->headers->from));
     
-    $this->is_safe = (intval($_GET['_safe']) || $_SESSION['safe_messages'][$uid]) ? true : false;
-    $_SESSION['safe_messages'][$uid] = $this->is_safe;
+    $this->set_safe((intval($_GET['_safe']) || $_SESSION['safe_messages'][$uid]));
     
     $this->opt = array(
       'safe' => $this->is_safe,
       'prefer_html' => $this->app->config->get('prefer_html'),
       'get_url' => rcmail_url('get', array('_mbox' => $this->imap->get_mailbox_name(), '_uid' => $uid))
     );
-    
+
     if ($this->structure = $this->imap->get_structure($uid)) {
       $this->get_mime_numbers($this->structure);
       $this->parse_structure($this->structure);
@@ -86,6 +100,16 @@ class rcube_message
     return $raw ? $value : $this->imap->decode_header($value);
   }
   
+  /**
+   * Set is_safe var and session data
+   *
+   * @param bool enable/disable
+   */
+  public function set_safe($safe = true)
+  {
+    $this->is_safe = $safe;
+    $_SESSION['safe_messages'][$this->uid] = $this->is_safe;
+  }
   
   /**
    * Compose a valid URL for getting a message part
@@ -106,12 +130,13 @@ class rcube_message
    * Get content of a specific part of this message
    *
    * @param string Part MIME-ID
+   * @param resource File pointer to save the message part
    * @return string Part content
    */
-  public function get_part_content($mime_id)
+  public function get_part_content($mime_id, $fp=NULL)
   {
     if ($part = $this->mime_parts[$mime_id])
-      return $this->imap->get_message_part($this->uid, $mime_id, $part);
+      return $this->imap->get_message_part($this->uid, $mime_id, $part, NULL, $fp);
     else
       return null;
   }
@@ -219,6 +244,11 @@ class rcube_message
       $structure->type = 'content';
       $this->parts[] = &$structure;
     }
+    // the same for pgp signed messages
+    else if ($message_ctype_primary == 'application' && $message_ctype_secondary == 'pgp' && !$recursive) {
+      $structure->type = 'content';
+      $this->parts[] = &$structure;
+    }
     // message contains alternative parts
     else if ($message_ctype_primary == 'multipart' && ($message_ctype_secondary == 'alternative') && is_array($structure->parts)) {
       // get html/plaintext parts
@@ -268,7 +298,7 @@ class rcube_message
         $this->parts[] = $print_part;
       }
       // show plaintext warning
-      else if ($html_part !== nullL && empty($this->parts)) {
+      else if ($html_part !== null && empty($this->parts)) {
         $c = new stdClass;
         $c->type = 'content';
         $c->body = rcube_label('htmlmessage');
@@ -320,7 +350,7 @@ class rcube_message
             $mail_part->type = 'content';
             $this->parts[] = $mail_part;
           }
-          
+
           // list as attachment as well
           if (!empty($mail_part->filename))
             $this->attachments[] = $mail_part;
@@ -328,6 +358,10 @@ class rcube_message
         // part message/*
         else if ($primary_type=='message') {
           $this->parse_structure($mail_part, true);
+          
+          // list as attachment as well (mostly .eml)
+          if (!empty($mail_part->filename))
+            $this->attachments[] = $mail_part;
         }
         // ignore "virtual" protocol parts
         else if ($primary_type == 'protocol')
@@ -341,10 +375,16 @@ class rcube_message
             continue;
 
           // part belongs to a related message
-          if ($message_ctype_secondary == 'related' && $mail_part->headers['content-id']) {
-            $mail_part->content_id = preg_replace(array('/^</', '/>$/'), '', $mail_part->headers['content-id']);
-            $this->inline_parts[] = $mail_part;
-          }
+          if ($message_ctype_secondary == 'related') {
+            if ($mail_part->headers['content-id'])
+              $mail_part->content_id = preg_replace(array('/^</', '/>$/'), '', $mail_part->headers['content-id']);
+            if ($mail_part->headers['content-location'])
+              $mail_part->content_location = $mail_part->headers['content-base'] . $mail_part->headers['content-location'];
+            
+	    if ($mail_part->content_id || $mail_part->content_location) {
+              $this->inline_parts[] = $mail_part;
+            }
+	  }
           // is regular attachment
           else {
             if (!$mail_part->filename)
@@ -359,7 +399,11 @@ class rcube_message
         $a_replaces = array();
 
         foreach ($this->inline_parts as $inline_object) {
-          $a_replaces['cid:'.$inline_object->content_id] = $this->get_part_url($inline_object->mime_id);
+          $part_url = $this->get_part_url($inline_object->mime_id);
+          if ($inline_object->content_id)
+            $a_replaces['cid:'.$inline_object->content_id] = $part_url;
+          if ($inline_object->content_location)
+            $a_replaces[$inline_object->content_location] = $part_url;
         }
 
         // add replace array to each content part

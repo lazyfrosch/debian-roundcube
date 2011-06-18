@@ -34,7 +34,7 @@ class rcube_json_output
     private $texts = array();
     private $commands = array();
 
-    public $task = '';
+    public $type = 'js';
     public $ajax_call = true;
     
     
@@ -43,7 +43,6 @@ class rcube_json_output
      */
     public function __construct($task)
     {
-        $this->task   = $task;
         $this->config = rcmail::get_instance()->config;
     }
     
@@ -60,12 +59,14 @@ class rcube_json_output
     }
     
     /**
-     * @ignore
+     * Issue command to set page title
+     *
+     * @param string New page title
      */
     public function set_pagetitle($title)
     {
-	$name = $this->config->get('product_name');
-	$this->command('set_pagetitle', JQ(empty($name) ? $title : $name.' :: '.$title));
+        $name = $this->config->get('product_name');
+        $this->command('set_pagetitle', JQ(empty($name) ? $title : $name.' :: '.$title));
     }
 
     /**
@@ -156,11 +157,24 @@ class rcube_json_output
     /**
      * Delete all stored env variables and commands
      */
-    public public function reset()
+    public function reset()
     {
         $this->env = array();
         $this->texts = array();
         $this->commands = array();
+    }
+    
+    /**
+     * Redirect to a certain url
+     *
+     * @param mixed Either a string with the action or url parameters as key-value pairs
+     * @see rcmail::url()
+     */
+    public function redirect($p = array(), $delay = 1)
+    {
+        $location = rcmail::get_instance()->url($p);
+        $this->remote_response("window.setTimeout(\"location.href='{$location}'\", $delay);");
+        exit;
     }
     
     

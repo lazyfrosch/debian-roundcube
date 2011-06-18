@@ -19,9 +19,28 @@ ALTER TABLE `users`
 -- Updates from version 0.1.1
 
 ALTER TABLE `identities`
-    MODIFY `signature` text NOT NULL DEFAULT '', 
+    MODIFY `signature` text, 
     MODIFY `bcc` varchar(128) NOT NULL DEFAULT '', 
     MODIFY `reply-to` varchar(128) NOT NULL DEFAULT '', 
     MODIFY `organization` varchar(128) NOT NULL DEFAULT '',
     MODIFY `name` varchar(128) NOT NULL, 
     MODIFY `email` varchar(128) NOT NULL; 
+
+-- Updates from version 0.2-alpha
+
+ALTER TABLE `messages`
+    ADD INDEX `created_index` (`created`);
+
+-- Updates from version 0.2-beta (InnoDB only)
+
+ALTER TABLE `cache`
+    DROP `session_id`;
+    
+ALTER TABLE `session`
+    ADD INDEX `changed_index` (`changed`);
+
+ALTER TABLE `cache`
+    ADD INDEX `created_index` (`created`);
+
+ALTER TABLE `users`
+    CHANGE `language` `language` varchar(5);
