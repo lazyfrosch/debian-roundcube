@@ -7,12 +7,12 @@
  * It's clickable interface which operates on text scripts and communicates
  * with server using managesieve protocol. Adds Filters tab in Settings.
  *
- * @version 2.10
+ * @version 3.0
  * @author Aleksander 'A.L.E.C' Machniak <alec@alec.pl>
  *
  * Configuration (see config.inc.php.dist)
  *
- * $Id: managesieve.php 4241 2010-11-20 17:59:50Z alec $
+ * $Id: managesieve.php 4555 2011-02-16 10:48:11Z alec $
  */
 
 class managesieve extends rcube_plugin
@@ -66,7 +66,7 @@ class managesieve extends rcube_plugin
         $host = rcube_parse_host($this->rc->config->get('managesieve_host', 'localhost'));
         $port = $this->rc->config->get('managesieve_port', 2000);
 
-        $host = idn_to_ascii($host);
+        $host = rcube_idn_to_ascii($host);
 
         // try to connect to managesieve server and to fetch the script
         $this->sieve = new rcube_sieve($_SESSION['username'],

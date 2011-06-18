@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_user.php 4290 2010-11-30 13:43:04Z alec $
+ $Id: rcube_user.php 4554 2011-02-16 09:42:31Z alec $
 
 */
 
@@ -359,16 +359,15 @@ class rcube_user
         $dbh = rcmail::get_instance()->get_dbh();
 
         // use BINARY (case-sensitive) comparison on MySQL, other engines are case-sensitive
-        $prefix = preg_match('/^mysql/', $dbh->db_provider) ? 'BINARY ' : '';
+        $mod = preg_match('/^mysql/', $dbh->db_provider) ? 'BINARY' : '';
 
         // query for matching user name
-        $query = "SELECT * FROM ".get_table_name('users')." WHERE mail_host = ? AND %s = ?";
-
-        $sql_result = $dbh->query(sprintf($query, $prefix.'username'), $host, $user);
+        $query = "SELECT * FROM ".get_table_name('users')." WHERE mail_host = ? AND %s = $mod ?";
+        $sql_result = $dbh->query(sprintf($query, 'username'), $host, $user);
 
         // query for matching alias
         if (!($sql_arr = $dbh->fetch_assoc($sql_result))) {
-            $sql_result = $dbh->query(sprintf($query, $prefix.'alias'), $host, $user);
+            $sql_result = $dbh->query(sprintf($query, 'alias'), $host, $user);
             $sql_arr = $dbh->fetch_assoc($sql_result);
         }
 
