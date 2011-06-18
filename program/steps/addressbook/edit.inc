@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: edit.inc 1361 2008-05-07 22:16:00Z richs $
+ $Id: edit.inc 1939 2008-10-05 07:18:15Z alec $
 
 */
 
@@ -43,8 +43,7 @@ function rcmail_contact_editform($attrib)
   }
 
   // add some labels to client
-  rcube_add_label('noemailwarning');
-  rcube_add_label('nonamewarning');
+  $OUTPUT->add_label('noemailwarning', 'nonamewarning');
 
   list($form_start, $form_end) = get_form_tags($attrib);
   unset($attrib['form']);
@@ -90,8 +89,9 @@ function get_form_tags($attrib)
   if (!strlen($EDIT_FORM))
     {
     $hiddenfields = new html_hiddenfield(array('name' => '_task', 'value' => $RCMAIL->task));
-    $hiddenfields->add(array('name' => '_action', 'value' => 'save', 'source' => get_input_value('_source', RCUBE_INPUT_GPC)));
+    $hiddenfields->add(array('name' => '_action', 'value' => 'save'));
     $hiddenfields->add(array('name' => '_source', 'value' => get_input_value('_source', RCUBE_INPUT_GPC)));
+    $hiddenfields->add(array('name' => '_framed', 'value' => (empty($_REQUEST['_framed']) ? 0 : 1)));
     
     if (($result = $CONTACTS->get_result()) && ($record = $result->first()))
       $hiddenfields->add(array('name' => '_cid', 'value' => $record['ID']));
@@ -113,7 +113,7 @@ function get_form_tags($attrib)
 
 
 
-if (!$CONTACTS->get_result() && template_exists('addcontact'))
+if (!$CONTACTS->get_result() && $OUTPUT->template_exists('addcontact'))
   $OUTPUT->send('addcontact');
 
 // this will be executed if no template for addcontact exists

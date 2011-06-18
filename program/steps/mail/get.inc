@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: get.inc 1400 2008-05-17 17:46:43Z thomasb $
+ $Id: get.inc 2182 2008-12-19 07:20:50Z alec $
 
 */
 
@@ -54,53 +54,52 @@ else if ($pid = get_input_value('_part', RCUBE_INPUT_GET)) {
     $ctype_primary = strtolower($part->ctype_primary);
     $ctype_secondary = strtolower($part->ctype_secondary);
     $mimetype = sprintf('%s/%s', $ctype_primary, $ctype_secondary);
+    
+    $browser = new rcube_browser;
 
-    header("Expires: 0");
-    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-    header("Cache-Control: private", false);
-    header("Content-Transfer-Encoding: binary");
-
+    send_nocacheing_headers();
+    
     // send download headers
     if ($_GET['_download']) {
-      header("Cache-Control: private", false);
       header("Content-Type: application/octet-stream");
+      if ($browser->ie)
+        header("Content-Type: application/force-download");
     }
-    else
+    else if ($ctype_primary == 'text') {
+      header("Content-Type: text/$ctype_secondary; charset=" . ($part->charset ? $part->charset : RCMAIL_CHARSET));
+    }
+    else {
       header("Content-Type: $mimetype");
-
-    // We need to set the following headers to make downloads work using IE in HTTPS mode.
-    if (isset($_SERVER['HTTPS'])) {
-      header('Pragma: ');
-      header('Cache-Control: ');
+      header("Content-Transfer-Encoding: binary");
     }
 
     // deliver part content
     if ($ctype_primary == 'text' && $ctype_secondary == 'html') {
-      // we have to analyze the whole structure again to find inline objects
-      /* what was this good for again ?
-      list($new_parts, $new_attachments) =
-        rcmail_parse_message($MESSAGE['structure'],
-                             array('safe' => intval($_GET['_safe']),
-                                   'prefer_html' => TRUE,
-                                   'get_url' => $GET_URL.'&_part=%s'));
-
-      $all_parts = array_merge($new_parts, $new_attachments);
-      for ($partix = 0; $partix < sizeof($all_parts); $partix++)
-        if ($all_parts[$partix]->mime_id == $pid)
-          $part = &$all_parts[$partix];
-      */
-
       // get part body if not available
       if (!$part->body)
         $part->body = $MESSAGE->get_part_content($part->mime_id);
 
       $OUTPUT = new rcube_html_page();
-      $OUTPUT->write(rcmail_print_body($part, $MESSAGE->is_safe));
+      $OUTPUT->write(rcmail_print_body($part, array('safe' => $MESSAGE->is_safe, 'inline_html' => false)));
     }
     else {
-      header(sprintf('Content-Disposition: %s; filename="%s";',
-                     $_GET['_download'] ? 'attachment' : 'inline',
-                     $part->filename ? abbreviate_string($part->filename, 55) : "roundcube.$ctype_secondary"));
+      // don't kill the connection if download takes more than 30 sec.
+      if (!ini_get('safe_mode')) {
+          set_time_limit(0);
+      }
+      
+      $filename = $part->filename ? $part->filename : ($MESSAGE->subject ? $MESSAGE->subject : 'roundcube') . '.'.$ctype_secondary;
+      
+      if ($browser->ie && $browser->ver < 7)
+        $filename = rawurlencode(abbreviate_string($filename, 55));
+      else if ($browser->ie)
+        $filename = rawurlencode($filename);
+      else
+        $filename = addcslashes($filename, '"');
+      
+      $disposition = !empty($_GET['_download']) ? 'attachment' : 'inline';
+      
+      header("Content-Disposition: $disposition; filename=\"$filename\"");
 
       // turn off output buffering and print part content
       $IMAP->get_message_part($MESSAGE->uid, $part->mime_id, $part, true);

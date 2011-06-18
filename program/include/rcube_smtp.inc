@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_smtp.inc 1360 2008-05-07 09:38:44Z thomasb $
+ $Id: rcube_smtp.inc 2155 2008-12-16 13:00:55Z alec $
 
 */
 
@@ -76,13 +76,14 @@ function smtp_mail($from, $recipients, &$headers, &$body, &$response)
   // create Net_SMTP object and connect to server
   if (!is_object($SMTP_CONN))
     {
-    $helo_host = empty($CONFIG['smtp_helo_host']) ? (empty($_SERVER['SERVER_NAME']) ? 'localhost' : $_SERVER['SERVER_NAME']) : $CONFIG['smtp_helo_host'];
+    if (!empty($CONFIG['smtp_helo_host']))
+      $helo_host = $CONFIG['smtp_helo_host'];
+    else if (!empty($_SERVER['SERVER_NAME']))
+      $helo_host = preg_replace('/:\d+$/', '', $_SERVER['SERVER_NAME']);
+    else
+      $helo_host = 'localhost';
+
     $SMTP_CONN = new Net_SMTP($smtp_host, $smtp_port, $helo_host);
-
-    // set debugging
-    if ($CONFIG['debug_level'] & 8)
-      $SMTP_CONN->setDebug(TRUE);
-
 
     // try to connect to server and exit on failure
     $result = $SMTP_CONN->connect($smtp_timeout);

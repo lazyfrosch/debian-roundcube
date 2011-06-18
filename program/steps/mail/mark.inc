@@ -14,7 +14,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: mark.inc 1292 2008-04-12 17:37:22Z alec $
+ $Id: mark.inc 1962 2008-10-09 06:25:43Z alec $
 
 */
 
@@ -22,7 +22,9 @@ $a_flags_map = array(
   'undelete' => 'UNDELETED',
   'delete' => 'DELETED',
   'read' => 'SEEN',
-  'unread' => 'UNSEEN');
+  'unread' => 'UNSEEN',
+  'flagged' => 'FLAGGED',
+  'unflagged' => 'UNFLAGGED');
 
 if (($uids = get_input_value('_uid', RCUBE_INPUT_POST)) && ($flag = get_input_value('_flag', RCUBE_INPUT_POST)))
 {
@@ -38,12 +40,13 @@ if (($uids = get_input_value('_uid', RCUBE_INPUT_POST)) && ($flag = get_input_va
       $OUTPUT->command('flag_deleted_as_read', $uids);
     }
 
-  if ($marked != -1)
+  if ($marked != -1 && ($flag == 'SEEN' || $flag == 'UNSEEN'))
   {
     $mbox_name = $IMAP->get_mailbox_name();
     $OUTPUT->command('set_unread_count', $mbox_name, $IMAP->messagecount($mbox_name, 'UNSEEN'), ($mbox_name == 'INBOX'));
-    $OUTPUT->send();
   }
+
+  $OUTPUT->send();
 }
   
 exit;

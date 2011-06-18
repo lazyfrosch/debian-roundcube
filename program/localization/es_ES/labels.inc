@@ -3,7 +3,7 @@
 /*
 
 +-----------------------------------------------------------------------+
-| language/es/labels.inc                                                |
+| language/es_ES/labels.inc                                             |
 |                                                                       |
 | Language file of the RoundCube Webmail client                         |
 | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
@@ -16,7 +16,7 @@
 |         http://david.grajal.net                                       |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 1417 2008-05-22 06:54:28Z alec $
+@version $Id: labels.inc 2115 2008-12-04 10:21:34Z alec $
 
 */
 
@@ -117,6 +117,8 @@ $labels['viewsource'] = 'Mostrar código';
 $labels['markmessages'] = 'Marcar mensajes';
 $labels['markread'] = 'Como leído';
 $labels['markunread'] = 'Como no leído';
+$labels['markflagged'] = 'Como marcado';
+$labels['markunflagged'] = 'Como no marcado';
 $labels['select'] = 'Elija';
 $labels['all'] = 'Todos';
 $labels['none'] = 'Ninguno';
@@ -149,6 +151,7 @@ $labels['high'] = 'Alto';
 $labels['highest'] = 'Altísimo';
 $labels['nosubject'] = '(sin asunto)';
 $labels['showimages'] = 'Mostrar imágenes';
+$labels['alwaysshow'] = 'Muestra siempre imágenes de $sender';
 $labels['htmltoggle'] = 'HTML';
 $labels['plaintoggle'] = 'Texto';
 $labels['addcc'] = 'Añadir Cc';
@@ -198,6 +201,7 @@ $labels['dstactive'] = 'Cambio de horario';
 $labels['htmleditor'] = 'Componer mensaje en HTML';
 $labels['htmlsignature'] = 'Firma HTML';
 $labels['previewpane'] = 'Mostrar vista preliminar';
+$labels['skin'] = 'Apariencia de la interfaz';
 $labels['logoutclear'] = 'Vaciar papelera al cerrar sesión';
 $labels['logoutcompact'] = 'Compactar la bandeja de entrada al cerrar sesión';
 $labels['uisettings'] = 'Interfaz de usuario';
@@ -209,9 +213,12 @@ $labels['autosend'] = 'enviar automáticamente';
 $labels['ignore'] = 'ignorar';
 $labels['readwhendeleted'] = 'Marcar el mensage como leido al borrarlo';
 $labels['flagfordeletion'] = 'Marcar el mensage para borrarse en vez de borrarlo';
+$labels['showinlineimages'] = 'Mostrar imágenes adjuntas debajo del mensaje';
 $labels['autosavedraft'] = 'Guardar borrador automáticamente';
 $labels['everynminutes'] = 'cada $n minutos';
 $labels['never'] = 'nunca';
+$labels['messagesdisplaying'] = 'Vista de mensajes';
+$labels['messagescomposition'] = 'Composición de mensajes';
 $labels['folder'] = 'Bandeja';
 $labels['folders'] = 'Bandejas';
 $labels['foldername'] = 'Nombre de bandeja';
@@ -228,4 +235,3 @@ $labels['sortasc'] = 'Orden ascendente';
 $labels['sortdesc'] = 'Orden descendente';
 
 ?>
-

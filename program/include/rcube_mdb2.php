@@ -16,7 +16,7 @@
  | Author: Lukas Kahwe Smith <smith@pooteeweet.org>                      |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_mdb2.php 1390 2008-05-15 11:15:58Z thomasb $
+ $Id: rcube_mdb2.php 1978 2008-10-14 12:49:44Z thomasb $
 
 */
 
@@ -69,17 +69,6 @@ class rcube_mdb2
 
 
   /**
-   * PHP 4 object constructor
-   *
-   * @see  rcube_mdb2::__construct
-   */
-  function rcube_db($db_dsnw,$db_dsnr='')
-    {
-    $this->__construct($db_dsnw,$db_dsnr);
-    }
-
-
-  /**
    * Connect to specific database
    *
    * @param  string  DSN for DB connections
@@ -89,12 +78,19 @@ class rcube_mdb2
   function dsn_connect($dsn)
     {
     // Use persistent connections if available
-    $dbh = MDB2::connect($dsn, array(
+    $db_options = array(
         'persistent' => $this->db_pconn,
         'emulate_prepared' => $this->debug_mode,
         'debug' => $this->debug_mode,
         'debug_handler' => 'mdb2_debug_handler',
-        'portability' => MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_EMPTY_TO_NULL));
+        'portability' => MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_EMPTY_TO_NULL);
+
+    if ($this->db_provider == 'pgsql') {
+      $db_options['disable_smart_seqname'] = true;
+      $db_options['seqname_format'] = '%s';
+    }
+
+    $dbh = MDB2::connect($dsn, $db_options);
 
     if (MDB2::isError($dbh))
       {
@@ -509,6 +505,27 @@ class rcube_mdb2
 
 
   /**
+   * Return SQL statement for case insensitive LIKE
+   *
+   * @param  string  Field name
+   * @param  string  Search value
+   * @return string  SQL statement to use in query
+   * @access public
+   */
+  function ilike($column, $value)
+    {
+    // TODO: use MDB2's matchPattern() function
+    switch($this->db_provider)
+      {
+      case 'pgsql':
+        return $this->quote_identifier($column).' ILIKE '.$this->quote($value);
+      default:
+        return $this->quote_identifier($column).' LIKE '.$this->quote($value);
+      }
+    }
+
+
+  /**
    * Adds a query result and returns a handle ID
    *
    * @param  object  Query handle
@@ -566,12 +583,7 @@ class rcube_mdb2
     if (empty($file_name) || !is_string($file_name))
       return;
 
-    $data = '';
-    if ($fd = fopen($file_name, 'r'))
-      {
-      $data = fread($fd, filesize($file_name));
-      fclose($fd);
-      }
+    $data = file_get_contents($file_name);
 
     if (strlen($data))
       sqlite_exec($dbh->connection, $data);

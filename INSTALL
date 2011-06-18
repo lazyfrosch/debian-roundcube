@@ -13,20 +13,22 @@ REQUIREMENTS
 * .htaccess support allowing overrides for DirectoryIndex
 * PHP Version 5.2 or greater including
    - PCRE (perl compatible regular expression)
+   - DOM (xml document object model)
    - Libiconv
    - Multibyte String (mbstring)
    - Mcrypt (supporting Triple DES)
    - Database driver for either MySQL, Postgres or SQLite
 * php.ini options:
    - error_reporting E_ALL & ~E_NOTICE (or lower)
-   - file_uploads on (for attachment upload features)
    - memory_limit (increase as suitable to support large attachments)
-   - session.auto_start needs to be off/0
+   - file_uploads enabled (for attachment upload features)
+   - session.auto_start disabled
+   - zend.ze1_compatibility_mode disabled
 * The PEAR framework with the following packages installed
-   - MDB2
-   - Mail_Mime (1.3.1)
-   - Net_SMTP (1.2.10)
-* PHP compiled with Open SSL to connect to IMAPS and to use the spell checker
+   - MDB2 (2.4.1)
+   - Mail_Mime (1.5.2)
+   - Net_SMTP (1.2.11)
+* PHP compiled with OpenSSL to connect to IMAPS and to use the spell checker
 * A MySQL or PostgreSQL database engine or the SQLite extension for PHP
 * One of the above databases with permission to create tables
 * An SMTP server or PHP configured for mail delivery
@@ -50,8 +52,8 @@ INSTALLATION
 DATABASE SETUP
 ==============
 
-* MySQL 4.0.x
--------------
+* MySQL
+-------
 Setting up the mysql database can be done by creating an empty database,
 importing the table layout and granting the proper permissions to the
 roundcube user. Here is an example of that procedure:
@@ -61,25 +63,15 @@ roundcube user. Here is an example of that procedure:
 > GRANT ALL PRIVILEGES ON roundcubemail.* TO roundcube@localhost
     IDENTIFIED BY 'password';
 > quit
+
 # mysql roundcubemail < SQL/mysql.initial.sql
 
-
-* MySQL 4.1.x/5.x
------------------
-For MySQL version 4.1 and up, it's recommended to create the database for
-RoundCube with utf-8 charset. Here's an example of the init procedure:
-
-# mysql
-> CREATE DATABASE roundcubemail DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-> GRANT ALL PRIVILEGES ON roundcubemail.* TO roundcube@localhost
-    IDENTIFIED BY 'password';
-> quit
-
-# mysql roundcubemail < SQL/mysql5.initial.sql
-
-Note: 'password' is the master password for the roundcube user. It is strongly
+Note 1: 'password' is the master password for the roundcube user. It is strongly
 recommended you replace this with a more secure password. Please keep in
 mind: You need to specify this password later in 'config/db.inc.php'.
+
+Note 2: For MySQL version 4.1 and up, it's recommended to create the database for
+RoundCube with utf-8 charset.
 
 
 * SQLite
