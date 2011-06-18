@@ -14,7 +14,7 @@
 |         Yusef Maali <contact@yusefmaali.net>                          |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2900 2009-09-01 11:47:46Z yllar $
+@version $Id: labels.inc 3025 2009-10-07 10:05:48Z alec $
 
 */
 
@@ -168,7 +168,7 @@ $labels['addbcc'] = 'Aggiungi Bcc';
 $labels['addreplyto'] = 'Aggiungi Rispondi a';
 $labels['mdnrequest'] = 'Il mittente ha richiesto di ricevere una notifica dell\'avvenuta lettura del messaggio. Si desidera inviare tale notifica?';
 $labels['receiptread'] = 'Ricevuta di ritorno (letto)';
-$labels['yourmessage'] = 'Questa è la ricevuta di ritorno del mesaggio inviato';
+$labels['yourmessage'] = 'Questa è la ricevuta di ritorno del messaggio inviato';
 $labels['receiptnote'] = 'Nota: questa Ricevuta di ritorno attesta solamente che il messaggio è stato visualizzato nel computer del destinatario. Non c\'è pertanto alcuna garanzia che il destinatario abbia letto o compreso il suo contenuto.';
 $labels['name'] = 'Nome visualizzato';
 $labels['firstname'] = 'Nome';

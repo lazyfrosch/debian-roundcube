@@ -17,7 +17,7 @@
 |         Victor Benincasa <vbenincasa@gmail.com>                       |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 2799 2009-07-26 11:42:46Z yllar $
+@version $Id: messages.inc 3061 2009-10-26 21:42:58Z yllar $
 
 */
 
@@ -32,6 +32,7 @@ $messages['nomessagesfound'] = 'Nenhuma mensagem foi encontrada';
 $messages['loggedout'] = 'Sua sessão foi finalizada com sucesso. Até breve!';
 $messages['mailboxempty'] = 'A caixa de mensagens está vazia';
 $messages['loading'] = 'Carregando...';
+$messages['uploading'] = 'Enviando anexo...';
 $messages['loadingdata'] = 'Carregando informações...';
 $messages['checkingmail'] = 'Verificando se há novas mensagens...';
 $messages['sendingmessage'] = 'Enviando mensagem...';
@@ -72,6 +73,7 @@ $messages['notsentwarning'] = 'A mensagem não foi enviada, deseja excluí-la?';
 $messages['noldapserver'] = 'Por favor, selecione um servidor LDAP para a pesquisa';
 $messages['nocontactsreturned'] = 'Nenhum contato foi encontrado';
 $messages['nosearchname'] = 'Por favor, informe o nome do contado ou seu endereço de e-mail';
+$messages['notuploadedwarning'] = 'Há anexos ainda não enviados. Aguarde ou cancele o envio.';
 $messages['searchsuccessful'] = '$nr mensagens encontradas';
 $messages['searchnomatch'] = 'A pesquisa não encontrou resultados';
 $messages['searching'] = 'Pesquisando...';
@@ -108,5 +110,6 @@ $messages['smtpfromerror'] = 'Erro SMTP ($code): Falha ao definir o remetente "$
 $messages['smtptoerror'] = 'Erro SMTP ($code): Falha ao adicionar o destinatário "$to"';
 $messages['smtprecipientserror'] = 'Erro SMTP: Não é possível analisar a lista destinatários';
 $messages['smtperror'] = 'Erro SMTP: $msg';
+$messages['emailformaterror'] = 'Endereço de Email incorreto: $email';
 
 ?>

@@ -124,7 +124,7 @@ echo $check_spell->show(intval($RCI->getprop('enable_spellcheck')), array('value
 $select_spell = new html_select(array('name' => '_spellcheck_engine', 'id' => "cfgspellcheckengine"));
 if (extension_loaded('pspell'))
   $select_spell->add('pspell', 'pspell');
-$select_spell->add('Googlie', 'googlie');
+$select_spell->add('Googie', 'googie');
 
 echo $select_spell->show($RCI->is_post ? $_POST['_spellcheck_engine'] : 'pspell');
 
@@ -269,7 +269,7 @@ echo '<label for="cfgdbtype">Database type</label><br />';
 echo $input_dbhost->show($RCI->is_post ? $_POST['_dbhost'] : $dsnw['hostspec']);
 echo '<label for="cfgdbhost">Database server (omit for sqlite)</label><br />';
 echo $input_dbname->show($RCI->is_post ? $_POST['_dbname'] : $dsnw['database']);
-echo '<label for="cfgdbname">Database name (use a path and filename for sqlite)</label><br />';
+echo '<label for="cfgdbname">Database name (use absolute path and filename for sqlite)</label><br />';
 echo $input_dbuser->show($RCI->is_post ? $_POST['_dbuser'] : $dsnw['username']);
 echo '<label for="cfgdbuser">Database user name (needs write permissions)(omit for sqlite)</label><br />';
 echo $input_dbpass->show($RCI->is_post ? $_POST['_dbpass'] : $dsnw['password']);

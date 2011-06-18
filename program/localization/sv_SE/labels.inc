@@ -15,7 +15,7 @@
 |         Andreas Henriksson <andreas@fatal.se>                         |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2850 2009-08-07 21:17:12Z yllar $
+@version $Id: labels.inc 3043 2009-10-14 11:45:28Z yllar $
 
 */
 
@@ -113,12 +113,12 @@ $labels['lastmessage'] = 'Visa sista meddelandet';
 $labels['lastmessages'] = 'Visa sista gruppen av meddelanden';
 $labels['backtolist'] = 'Tillbaka till meddelandelistan';
 $labels['viewsource'] = 'Visa källkod';
-$labels['markmessages'] = 'Markera meddelande';
+$labels['markmessages'] = 'Märk meddelande';
 $labels['markread'] = 'Läst';
 $labels['markunread'] = 'Oläst';
 $labels['markflagged'] = 'Flaggat';
 $labels['markunflagged'] = 'Oflaggat';
-$labels['messageactions'] = 'Fler hanteringsalternativ...';
+$labels['messageactions'] = 'Hanteringsalternativ';
 $labels['select'] = 'Välj';
 $labels['all'] = 'Alla';
 $labels['none'] = 'Ingen';
@@ -253,6 +253,7 @@ $labels['advancedoptions'] = 'Avancerade inställningar';
 $labels['focusonnewmessage'] = 'Fokusera webbläsarens fönster vid nytt meddelande';
 $labels['checkallfolders'] = 'Genomsök samtliga kataloger efter nya meddelanden';
 $labels['displaynext'] = 'Visa nästa meddelande efter radering/flyttning av meddelande';
+$labels['indexsort'] = 'Använd meddelandets index vid sortering i datumordning';
 $labels['mainoptions'] = 'Huvudalternativ';
 $labels['section'] = 'Avdelning';
 $labels['maintenance'] = 'Underhåll';

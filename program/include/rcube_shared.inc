@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_shared.inc 2789 2009-07-23 12:14:17Z alec $
+ $Id: rcube_shared.inc 3063 2009-10-27 09:43:39Z alec $
 
 */
 
@@ -41,7 +41,7 @@ function send_nocacheing_headers()
   header("Pragma: no-cache");
   
   // We need to set the following headers to make downloads work using IE in HTTPS mode.
-  if (isset($_SERVER['HTTPS'])) {
+  if (rcube_https_check()) {
     header('Pragma: ');
     header('Cache-Control: ');
   }
@@ -554,7 +554,6 @@ function rc_mime_content_type($path, $name, $failover = 'application/octet-strea
     return $mime_type;
 }
 
-
 /**
  * A method to guess encoding of a string.
  *
@@ -585,6 +584,75 @@ function rc_detect_encoding($string, $failover='')
     return $result ? $result : $failover;
 }
 
+/**
+ * Removes non-unicode characters from input
+ *
+ * @param mixed $input String or array.
+ * @return string
+ */
+function rc_utf8_clean($input)
+{
+  // handle input of type array
+  if (is_array($input)) {
+    foreach ($input as $idx => $val)
+      $input[$idx] = rc_utf8_clean($val);
+    return $input;
+  }
+  
+  if (!is_string($input) || $input == '')
+    return $input;
+  
+  // iconv/mbstring are much faster (especially with long strings)
+  if (function_exists('mb_convert_encoding') && ($res = mb_convert_encoding($input, 'UTF8', 'UTF8')))
+    return $res;
+
+  if (function_exists('iconv') && ($res = iconv('UTF8', 'UTF8//IGNORE', $input)))
+    return $res;
+
+  $regexp = '/^('.
+//    '[\x00-\x7F]'.                                  // UTF8-1
+    '|[\xC2-\xDF][\x80-\xBF]'.                      // UTF8-2
+    '|\xE0[\xA0-\xBF][\x80-\xBF]'.                  // UTF8-3
+    '|[\xE1-\xEC][\x80-\xBF][\x80-\xBF]'.           // UTF8-3
+    '|\xED[\x80-\x9F][\x80-\xBF]'.                  // UTF8-3
+    '|[\xEE-\xEF][\x80-\xBF][\x80-\xBF]'.           // UTF8-3
+    '|\xF0[\x90-\xBF][\x80-\xBF][\x80-\xBF]'.       // UTF8-4
+    '|[\xF1-\xF3][\x80-\xBF][\x80-\xBF][\x80-\xBF]'.// UTF8-4
+    '|\xF4[\x80-\x8F][\x80-\xBF][\x80-\xBF]'.       // UTF8-4
+    ')$/';
+  
+  $seq = '';
+  $out = '';
+
+  for ($i = 0, $len = strlen($input)-1; $i < $len; $i++) {
+    $chr = $input[$i];
+    $ord = ord($chr);
+    // 1-byte character
+    if ($ord <= 0x7F) {
+      if ($seq)
+        $out .= preg_match($regexp, $seq) ? $seq : '';
+      $seq = '';
+      $out .= $chr;
+    // first (or second) byte of multibyte sequence
+    } else if ($ord >= 0xC0) {
+      if (strlen($seq)>1) {
+	$out .= preg_match($regexp, $seq) ? $seq : '';
+        $seq = '';
+      } else if ($seq && ord($seq) < 0xC0) {
+        $seq = '';
+      }
+      $seq .= $chr;
+    // next byte of multibyte sequence
+    } else if ($seq) {
+      $seq .= $chr;
+    }
+  }
+
+  if ($seq)
+    $out .= preg_match($regexp, $seq) ? $seq : '';
+
+  return $out;
+}
 
 /**
  * Explode quoted string

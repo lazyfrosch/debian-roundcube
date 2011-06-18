@@ -43,14 +43,15 @@ $rcmail_config['plugins'] = array();
 
 // enable caching of messages and mailbox data in the local database.
 // this is recommended if the IMAP server does not run on the same machine
-$rcmail_config['enable_caching'] = TRUE;
+$rcmail_config['enable_caching'] = FALSE;
 
 // lifetime of message cache
 // possible units: s, m, h, d, w
 $rcmail_config['message_cache_lifetime'] = '10d';
 
 // enforce connections over https
-// with this option enabled, all non-secure connections will be redirected
+// with this option enabled, all non-secure connections will be redirected.
+// set the port for the ssl connection as value of this option if it differs from the default 443
 $rcmail_config['force_https'] = FALSE;
 
 // automatically create a new RoundCube user when log-in the first time.
@@ -129,6 +130,9 @@ $rcmail_config['sql_debug'] = false;
 
 // Log IMAP conversation to <log_dir>/imap or to syslog
 $rcmail_config['imap_debug'] = false;
+
+// Log LDAP conversation to <log_dir>/ldap or to syslog
+$rcmail_config['ldap_debug'] = false;
 
 // Log SMTP conversation to <log_dir>/smtp or to syslog
 $rcmail_config['smtp_debug'] = false;
@@ -365,6 +369,9 @@ $rcmail_config['delete_always'] = false;
 // Must be less than 'session_lifetime'
 $rcmail_config['min_keep_alive'] = 60;
 
+// Enable DNS checking for e-mail address validation
+$rcmail_config['email_dns_check'] = false;
+
 /***** these settings can be overwritten by user's preferences *****/
 
 // skin name: folder from skins/
@@ -439,6 +446,9 @@ $rcmail_config['check_all_folders'] = FALSE;
 
 // If true, after message delete/move, the next message will be displayed
 $rcmail_config['display_next'] = FALSE;
+
+// If true, messages list will be sorted by message index instead of message date
+$rcmail_config['index_sort'] = TRUE;
 
 // end of config file
 ?>

@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: main.inc 2852 2009-08-10 21:32:44Z thomasb $
+ $Id: main.inc 3063 2009-10-27 09:43:39Z alec $
 
 */
 
@@ -942,7 +942,7 @@ function format_date($date, $format=NULL)
 
 
 /**
- * Compose a valid representaion of name and e-mail address
+ * Compose a valid representation of name and e-mail address
  *
  * @param string E-mail address
  * @param string Person name
@@ -953,10 +953,10 @@ function format_email_recipient($email, $name='')
   if ($name && $name != $email)
     {
     // Special chars as defined by RFC 822 need to in quoted string (or escaped).
-    return sprintf('%s <%s>', preg_match('/[\(\)\<\>\\\.\[\]@,;:"]/', $name) ? '"'.addcslashes($name, '"').'"' : $name, $email);
+    return sprintf('%s <%s>', preg_match('/[\(\)\<\>\\\.\[\]@,;:"]/', $name) ? '"'.addcslashes($name, '"').'"' : $name, trim($email));
     }
   else
-    return $email;
+    return trim($email);
   }
 
 
@@ -1022,7 +1022,7 @@ function write_log($name, $line)
     $line = $log['line'];
     $date = $log['date'];
     if ($log['abort'])
-      return;
+      return true;
   }
  
   $log_entry = sprintf("[%s]: %s\n", $date, $line);
@@ -1038,12 +1038,15 @@ function write_log($name, $line)
       $CONFIG['log_dir'] = INSTALL_PATH.'logs';
 
     // try to open specific log file for writing
-    if ($fp = @fopen($CONFIG['log_dir'].'/'.$name, 'a')) {
+    $logfile = $CONFIG['log_dir'].'/'.$name;
+    if ($fp = @fopen($logfile, 'a')) {
       fwrite($fp, $log_entry);
       fflush($fp);
       fclose($fp);
       return true;
     }
+    else
+      trigger_error("Error writing to log file $logfile; Please check permissions", E_USER_WARNING);
   }
   return false;
 }
@@ -1148,11 +1151,12 @@ function rcmail_mailbox_select($p = array())
 {
   global $RCMAIL;
   
-  $p += array('maxlength' => 100, 'relanames' => false);
+  $p += array('maxlength' => 100, 'realnames' => false);
   $a_mailboxes = array();
   
   foreach ($RCMAIL->imap->list_mailboxes() as $folder)
-    rcmail_build_folder_tree($a_mailboxes, $folder, $RCMAIL->imap->get_hierarchy_delimiter());
+    if (empty($p['exceptions']) || !in_array($folder, $p['exceptions']))
+      rcmail_build_folder_tree($a_mailboxes, $folder, $RCMAIL->imap->get_hierarchy_delimiter());
 
   $select = new html_select($p);
   
@@ -1374,17 +1378,95 @@ function rcmail_localize_foldername($name)
  */
 function rcube_html_editor($mode='')
 {
-  global $OUTPUT, $CONFIG;
+  global $RCMAIL, $CONFIG;
 
-  $lang = $tinylang = strtolower(substr($_SESSION['language'], 0, 2));
-  if (!file_exists(INSTALL_PATH . 'program/js/tiny_mce/langs/'.$tinylang.'.js'))
-    $tinylang = 'en';
+  $hook = $RCMAIL->plugins->exec_hook('hmtl_editor', array('mode' => $mode));
 
-  $OUTPUT->include_script('tiny_mce/tiny_mce.js');
-  $OUTPUT->include_script('editor.js');
-  $OUTPUT->add_script('rcmail_editor_init("$__skin_path", "'.JQ($tinylang).'", '.intval($CONFIG['enable_spellcheck']).', "'.$mode.'");');
+  if ($hook['abort'])
+    return;  
+
+  $lang = strtolower(substr($_SESSION['language'], 0, 2));
+  if (!file_exists(INSTALL_PATH . 'program/js/tiny_mce/langs/'.$lang.'.js'))
+    $lang = 'en';
+
+  $RCMAIL->output->include_script('tiny_mce/tiny_mce.js');
+  $RCMAIL->output->include_script('editor.js');
+  $RCMAIL->output->add_script('rcmail_editor_init("$__skin_path",
+    "'.JQ($lang).'", '.intval($CONFIG['enable_spellcheck']).', "'.$mode.'");');
 }
 
+
+/**
+ * Check if working in SSL mode
+ *
+ * @param integer HTTPS port number
+ * @param boolean Enables 'use_https' option checking
+ */
+function rcube_https_check($port=null, $use_https=true)
+{
+  global $RCMAIL;
+  
+  if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off')
+    return true;
+  if ($port && $_SERVER['SERVER_PORT'] == $port)
+    return true;
+  if ($use_https && $RCMAIL->config->get('use_https'))
+    return true;
+
+  return false;
+}
+
+
+/**
+ * E-mail address validation
+ */
+function check_email($email)
+{
+  // Check for invalid characters
+  if (preg_match('/[\x00-\x1F\x7F-\xFF]/', $email))
+    return false;
+
+  // Check that there's one @ symbol, and that the lengths are right
+  if (!preg_match('/^([^@]{1,64})@([^@]{1,255})$/', $email, $email_array))
+    return false;
+
+  // Check local part
+  $local_array = explode('.', $email_array[1]);
+  foreach ($local_array as $local_part)
+    if (!preg_match('/^(([A-Za-z0-9!#$%&\'*+\/=?^_`{|}~-]+)|("[^"]+"))$/', $local_part))
+      return false;
+
+  // Check domain part
+  if (preg_match('/^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])){3}$/', $email_array[2]) 
+      || preg_match('/^\[(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])){3}\]$/', $email_array[2]))
+    return true; // If an IP address
+  else {
+    // If not an IP address
+    $domain_array = explode('.', $email_array[2]);
+    if (sizeof($domain_array) < 2)
+      return false; // Not enough parts to be a valid domain
+
+    foreach ($domain_array as $domain_part)
+      if (!preg_match('/^(([A-Za-z0-9][A-Za-z0-9-]{0,61}[A-Za-z0-9])|([A-Za-z0-9]))$/', $domain_part))
+        return false;
+
+    if (!rcmail::get_instance()->config->get('email_dns_check'))
+      return true;
+
+    if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN' && version_compare(PHP_VERSION, '5.3.0', '<'))
+      return true;
+
+    // find MX record(s)
+    if (getmxrr($email_array[2], $mx_records))
+      return true;
+
+    // find any DNS record
+    if (checkdnsrr($email_array[2], 'ANY'))
+      return true;
+  }
+
+  return false;
+}
 
 
 /**
