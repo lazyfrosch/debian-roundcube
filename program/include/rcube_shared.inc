@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_shared.inc 2483 2009-05-15 10:22:29Z thomasb $
+ $Id: rcube_shared.inc 2789 2009-07-23 12:14:17Z alec $
 
 */
 
@@ -170,7 +170,7 @@ function json_serialize($var)
       foreach ($var as $key => $value)
       {
         // enclose key with quotes if it is not variable-name conform
-        if (!ereg("^[_a-zA-Z]{1}[_a-zA-Z0-9]*$", $key) || is_js_reserved_word($key))
+        if (!preg_match('/^[_a-zA-Z]{1}[_a-zA-Z0-9]*$/', $key) || is_js_reserved_word($key))
           $key = "'$key'";
 
         $pairs[] = sprintf("%s%s", $is_assoc ? "$key:" : '', json_serialize($value));
@@ -185,7 +185,6 @@ function json_serialize($var)
     return $var ? '1' : '0';
   else
     return "'".JQ($var)."'";
-
 }
 
 
@@ -209,9 +208,9 @@ function array2js($arr, $type='')
  */
 function in_array_nocase($needle, $haystack)
 {
-  $needle = rc_strtolower($needle);
+  $needle = mb_strtolower($needle);
   foreach ($haystack as $value)
-    if ($needle===rc_strtolower($value))
+    if ($needle===mb_strtolower($value))
       return true;
   
   return false;
@@ -227,7 +226,7 @@ function in_array_nocase($needle, $haystack)
 function get_boolean($str)
 {
   $str = strtolower($str);
-  if(in_array($str, array('false', '0', 'no', 'nein', ''), TRUE))
+  if (in_array($str, array('false', '0', 'no', 'nein', ''), TRUE))
     return FALSE;
   else
     return TRUE;
@@ -238,12 +237,12 @@ function get_boolean($str)
  * Parse a human readable string for a number of bytes
  *
  * @param string Input string
- * @return int Number of bytes
+ * @return float Number of bytes
  */
 function parse_bytes($str)
 {
   if (is_numeric($str))
-    return intval($str);
+    return floatval($str);
     
   if (preg_match('/([0-9]+)([a-z])/i', $str, $regs))
   {
@@ -262,7 +261,7 @@ function parse_bytes($str)
     }
   }
 
-  return intval($bytes);
+  return floatval($bytes);
 }
     
 /**
@@ -338,81 +337,11 @@ function make_absolute_url($path, $base_url)
   return $abs_path;
 }
 
-
-/**
- * Wrapper function for strlen
- */
-function rc_strlen($str)
-{
-  if (function_exists('mb_strlen'))
-    return mb_strlen($str);
-  else
-    return strlen($str);
-}
-  
-/**
- * Wrapper function for strtolower
- */
-function rc_strtolower($str)
-{
-  if (function_exists('mb_strtolower'))
-    return mb_strtolower($str);
-  else
-    return strtolower($str);
-}
-
-/**
- * Wrapper function for strtoupper
- */
-function rc_strtoupper($str)
-{
-  if (function_exists('mb_strtoupper'))
-    return mb_strtoupper($str);
-  else
-    return strtoupper($str);
-}
-
-/**
- * Wrapper function for substr
- */
-function rc_substr($str, $start, $len=null)
-{
-  if (function_exists('mb_substr'))
-    return mb_substr($str, $start, $len);
-  else
-    return substr($str, $start, $len);
-}
-
-/**
- * Wrapper function for strpos
- */
-function rc_strpos($haystack, $needle, $offset=0)
-{
-  if (function_exists('mb_strpos'))
-    return mb_strpos($haystack, $needle, $offset);
-  else
-    return strpos($haystack, $needle, $offset);
-}
-
-/**
- * Wrapper function for strrpos
- */
-function rc_strrpos($haystack, $needle, $offset=0)
-{
-  if (function_exists('mb_strrpos'))
-    return mb_strrpos($haystack, $needle, $offset);
-  else
-    return strrpos($haystack, $needle, $offset);
-}
-
 /**
  * Wrapper function for wordwrap
  */
 function rc_wordwrap($string, $width=75, $break="\n", $cut=false)
 {
-  if (!function_exists('mb_substr') || !function_exists('mb_strlen'))
-    return wordwrap($string, $width, $break, $cut);
-    
   $para = explode($break, $string);
   $string = '';
   while (count($para)) {
@@ -425,7 +354,7 @@ function rc_wordwrap($string, $width=75, $break="\n", $cut=false)
 
       if ($newlen <= $width) {
         $string .= ($len ? ' ' : '').$line;
-        $len += ($len ? 1 : 0) + $l;
+        $len += (1 + $l);
       } else {
 	if ($l > $width) {
 	  if ($cut) {
@@ -476,30 +405,6 @@ function rc_request_header($name)
 
   return $hdrs[$key];
   }
-
-
-/**
- * Replace the middle part of a string with ...
- * if it is longer than the allowed length
- *
- * @param string Input string
- * @param int    Max. length
- * @param string Replace removed chars with this
- * @return string Abbreviated string
- */
-function abbreviate_string($str, $maxlength, $place_holder='...')
-{
-  $length = rc_strlen($str);
-  $first_part_length = floor($maxlength/2) - rc_strlen($place_holder);
-  
-  if ($length > $maxlength)
-  {
-    $second_starting_location = $length - $maxlength + $first_part_length + 1;
-    $str = rc_substr($str, 0, $first_part_length) . $place_holder . rc_substr($str, $second_starting_location, $length);
-  }
-
-  return $str;
-}
 
 
 /**
@@ -578,6 +483,29 @@ function get_offset_time($offset_str, $factor=1)
   return $ts;
 }
 
+
+/**
+ * Replace the middle part of a string with ...
+ * if it is longer than the allowed length
+ *
+ * @param string Input string
+ * @param int    Max. length
+ * @param string Replace removed chars with this
+ * @return string Abbreviated string
+ */
+function abbreviate_string($str, $maxlength, $place_holder='...')
+{
+  $length = mb_strlen($str);
+  $first_part_length = floor($maxlength/2) - mb_strlen($place_holder);
+  
+  if ($length > $maxlength)
+  {
+    $second_starting_location = $length - $maxlength + $first_part_length + 1;
+    $str = mb_substr($str, 0, $first_part_length) . $place_holder . mb_substr($str, $second_starting_location, $length);
+  }
+
+  return $str;
+}
 
 /**
  * A method to guess the mime_type of an attachment.
@@ -681,6 +609,44 @@ function rcube_explode_quoted_string($delimiter, $string)
   
   $result[] = substr($string, $p);
   return $result;
+}
+
+
+/**
+ * mbstring replacement functions
+ */
+
+if (!extension_loaded('mbstring'))
+{
+    function mb_strlen($str)
+    {
+	return strlen($str);
+    }
+
+    function mb_strtolower($str)
+    {
+        return strtolower($str);
+    }
+
+    function mb_strtoupper($str)
+    {
+        return strtoupper($str);
+    }
+
+    function mb_substr($str, $start, $len=null)
+    {
+        return substr($str, $start, $len);
+    }
+
+    function mb_strpos($haystack, $needle, $offset=0)
+    {
+        return strpos($haystack, $needle, $offset);
+    }
+
+    function mb_strrpos($haystack, $needle, $offset=0)
+    {
+        return strrpos($haystack, $needle, $offset);
+    }
 }
 
 ?>

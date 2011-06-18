@@ -14,7 +14,7 @@
  | Author: Brett Patterson <brett2@umbc.edu>                             |
  +-----------------------------------------------------------------------+
 
- $Id: quotaimg.php 2237 2009-01-17 01:55:39Z till $
+ $Id: quotaimg.php 2453 2009-05-04 08:31:55Z alec $
 
 */
 
@@ -102,7 +102,7 @@ function genQuota($used, $total, $width, $height)
 	 ***********************************/
 
 	// @todo: Set to "??" instead?
-	if (ereg("^[^0-9?]*$", $used) || ereg("^[^0-9?]*$", $total)) {
+	if (preg_match('/^[^0-9?]*$/', $used) || preg_match('/^[^0-9?]*$/', $total)) {
 		return false; 
 	}
 
@@ -172,7 +172,8 @@ function genQuota($used, $total, $width, $height)
 		}
 
 		$quota_width = $quota / 100 * $width;
-		imagefilledrectangle($im, $border, 0, $quota_width, $height-2*$border, $fill);
+		if ($quota_width)
+			imagefilledrectangle($im, $border, 0, $quota_width, $height-2*$border, $fill);
 
 		$string = $quota . '%';
 		$mid    = floor(($width-(strlen($string)*imagefontwidth($font)))/2)+1;

@@ -14,7 +14,7 @@
 |         Laurens Vets <laurens@daemon.be>                              |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
+@version $Id: labels.inc 2513 2009-05-21 12:59:19Z alec $
 
 */
 
@@ -233,7 +233,6 @@ $labels['always'] = 'altijd';
 $labels['showinlineimages'] = 'Toon bijgevoegde afbeeldingen onder het bericht';
 $labels['autosavedraft'] = 'Automatisch als concept opslaan';
 $labels['everynminutes'] = 'elke $n minuten';
-$labels['keepaliveevery'] = 'elke $n minuten';
 $labels['keepalive'] = 'Controleer op nieuwe berichten';
 $labels['never'] = 'nooit';
 $labels['messagesdisplaying'] = 'Berichten weergave';

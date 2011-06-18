@@ -136,10 +136,10 @@ class rcube_install
    */
   function create_config($which, $force = false)
   {
-    $out = file_get_contents(RCMAIL_CONFIG_DIR . "/{$which}.inc.php.dist");
+    $out = @file_get_contents(RCMAIL_CONFIG_DIR . "/{$which}.inc.php.dist");
     
     if (!$out)
-      return '[Warning: could not read the template file]';
+      return '[Warning: could not read the config template file]';
 
     foreach ($this->config as $prop => $default) {
       $value = (isset($_POST["_$prop"]) || $this->bool_config_props[$prop]) ? $_POST["_$prop"] : $default;
@@ -175,6 +175,18 @@ class rcube_install
       }
       else if ($prop == 'smtp_pass' && !empty($_POST['_smtp_user_u'])) {
         $value = '%p';
+      }
+      else if ($prop == 'default_imap_folders'){
+	$value = Array();
+	foreach($this->config['default_imap_folders'] as $_folder){
+	  switch($_folder) {
+	  case 'Drafts': $_folder = $this->config['drafts_mbox']; break;
+	  case 'Sent':   $_folder = $this->config['sent_mbox']; break;
+	  case 'Junk':   $_folder = $this->config['junk_mbox']; break;
+	  case 'Trash':  $_folder = $this->config['trash_mbox']; break;
+          }
+	  if (!in_array($_folder, $value))  $value[] = $_folder;
+        }
       }
       else if (is_bool($default)) {
         $value = (bool)$value;
@@ -244,9 +256,11 @@ class rcube_install
         $out['dependencies'][] = array('prop' => 'spellcheck_engine',
           'explain' => 'This requires the <tt>pspell</tt> extension which could not be loaded.');
       }
-      if (empty($this->config['spellcheck_languages'])) {
-        $out['dependencies'][] = array('prop' => 'spellcheck_languages',
-          'explain' => 'You should specify the list of languages supported by your local pspell installation.');
+      if (!empty($this->config['spellcheck_languages'])) {
+        foreach ($this->config['spellcheck_languages'] as $lang => $descr)
+	  if (!pspell_new($lang))
+            $out['dependencies'][] = array('prop' => 'spellcheck_languages',
+              'explain' => "You are missing pspell support for language $lang ($descr)");
       }
     }
     
@@ -453,6 +467,20 @@ class rcube_install
     echo Q($name) . ':&nbsp; <span class="fail">NOT OK</span>';
     $this->_showhint($message, $url);
   }
+
+
+  /**
+   * Display an error status for optional settings/features
+   *
+   * @param string Test name
+   * @param string Error message
+   * @param string URL for details
+   */
+  function optfail($name, $message = '', $url = '')
+  {
+    echo Q($name) . ':&nbsp; <span class="na">NOT OK</span>';
+    $this->_showhint($message, $url);
+  }
   
   
   /**
@@ -537,11 +565,11 @@ class rcube_install
     if ($lines = @file($fname, FILE_SKIP_EMPTY_LINES)) {
       $buff = '';
       foreach ($lines as $i => $line) {
-        if (eregi('^--', $line))
+        if (preg_match('/^--/', $line))
           continue;
           
         $buff .= $line . "\n";
-        if (eregi(';$', trim($line))) {
+        if (preg_match('/;$/', trim($line))) {
           $DB->query($buff);
           $buff = '';
           if ($this->get_error())

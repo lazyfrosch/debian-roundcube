@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: get.inc 2282 2009-02-08 20:38:54Z thomasb $
+ $Id: get.inc 2912 2009-09-04 10:38:18Z thomasb $
 
 */
 
@@ -25,14 +25,15 @@ if (!empty($_GET['_preload'])) {
   $url = str_replace('&_preload=1', '', $_SERVER['REQUEST_URI']);
   $message = rcube_label('loadingdata');
 
-  print "<html>\n<head>\n" .
-        '<meta http-equiv="refresh" content="0; url='.Q($url).'">' .
-        "\n</head>\n<body>" .
-        $message .
-        "\n</body>\n</html>";
+  header('Content-Type: text/html; charset=' . RCMAIL_CHARSET);
+  print "<html>\n<head>\n"
+        . '<meta http-equiv="refresh" content="0; url='.Q($url).'">' . "\n"
+        . '<meta http-equiv="content-type" content="text/html; charset='.RCMAIL_CHARSET.'">' . "\n"
+        . "</head>\n<body>\n$message\n</body>\n</html>";
   exit;
 }
 
+ob_end_clean();
 
 // similar code as in program/steps/mail/show.inc
 if (!empty($_GET['_uid'])) {
@@ -112,7 +113,7 @@ else if ($pid = get_input_value('_part', RCUBE_INPUT_GET)) {
       // turn off output buffering and print part content
       if ($part->body)
         echo $part->body;
-      else
+      else if ($part->size)
         $IMAP->get_message_part($MESSAGE->uid, $part->mime_id, $part, true);
     }
 

@@ -84,6 +84,9 @@ class rcube_message
     else {
       $this->body = $this->imap->get_body($uid);
     }
+    
+    // notify plugins and let them analyze this structured message object
+    $this->app->plugins->exec_hook('message_load', array('object' => $this));
   }
   
   
@@ -320,8 +323,16 @@ class rcube_message
       $p->ctype_primary = 'text';
       $p->ctype_secondary = 'plain';
       $p->body = rcube_label('encryptedmessage');
+      $p->size = strlen($p->body);
       
-      $this->parts[] = $p;
+      // maybe some plugins are able to decode this encrypted message part
+      $data = $this->app->plugins->exec_hook('message_part_encrypted', array('object' => $this, 'struct' => $structure, 'part' => $p));
+      if (is_array($data['parts'])) {
+        $this->parts = array_merge($this->parts, $data['parts']);
+      }
+      else if ($data['part']) {
+        $this->parts[] = $p;
+      }
     }
     // message contains multiple parts
     else if (is_array($structure->parts) && !empty($structure->parts)) {
@@ -338,7 +349,7 @@ class rcube_message
         // part text/[plain|html] OR message/delivery-status
         else if (($primary_type == 'text' && ($secondary_type == 'plain' || $secondary_type == 'html') && $mail_part->disposition != 'attachment') ||
                  ($primary_type == 'message' && ($secondary_type == 'delivery-status' || $secondary_type == 'disposition-notification'))) {
-          
+
           // add text part if we're not in alternative mode or if it matches the prefs
           if (!$this->parse_alternative ||
               ($secondary_type == 'html' && $this->opt['prefer_html']) ||
@@ -363,7 +374,7 @@ class rcube_message
         else if ($primary_type == 'protocol')
           continue;
           
-        // part is Microsoft outlook TNEF (winmail.dat)
+        // part is Microsoft Outlook TNEF (winmail.dat)
         else if ($primary_type == 'application' && $secondary_type == 'ms-tnef') {
           foreach ((array)$this->imap->tnef_decode($mail_part, $structure->headers['uid']) as $tnef_part) {
             $this->mime_parts[$tnef_part->mime_id] = $tnef_part;
@@ -371,26 +382,27 @@ class rcube_message
           }
         }
 
-        // part is file/attachment
-        else if ($mail_part->disposition == 'attachment' || $mail_part->disposition == 'inline' ||
+        // part is a file/attachment
+        else if (preg_match('/^(inline|attach)/', $mail_part->disposition) ||
                  $mail_part->headers['content-id'] || (empty($mail_part->disposition) && $mail_part->filename)) {
+
           // skip apple resource forks
           if ($message_ctype_secondary == 'appledouble' && $secondary_type == 'applefile')
             continue;
 
-          // part belongs to a related message
-          if ($message_ctype_secondary == 'related') {
+          // part belongs to a related message and is linked
+          if ($message_ctype_secondary == 'related'
+              && preg_match('!^image/!', $mail_part->mimetype)
+              && ($mail_part->headers['content-id'] || $mail_part->headers['content-location'])) {
             if ($mail_part->headers['content-id'])
               $mail_part->content_id = preg_replace(array('/^</', '/>$/'), '', $mail_part->headers['content-id']);
             if ($mail_part->headers['content-location'])
               $mail_part->content_location = $mail_part->headers['content-base'] . $mail_part->headers['content-location'];
-            
-            if ($mail_part->content_id || $mail_part->content_location) {
-              $this->inline_parts[] = $mail_part;
-            }
+              
+            $this->inline_parts[] = $mail_part;
           }
-          // is regular attachment
-          else {
+          // is a regular attachment
+          else if (preg_match('!^[a-z]+/[a-z0-9-.]+$!i', $mail_part->mimetype)) {
             if (!$mail_part->filename)
               $mail_part->filename = 'Part '.$mail_part->mime_id;
             $this->attachments[] = $mail_part;

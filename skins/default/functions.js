@@ -8,24 +8,16 @@
 
 function rcube_init_settings_tabs()
 {
+  var tab = '#settingstabdefault';
   if (window.rcmail && rcmail.env.action)
-    {
-    var action = rcmail.env.action=='preferences' ? 'default' : (rcmail.env.action.indexOf('identity')>0 ? 'identities' : rcmail.env.action);
-    var tab = document.getElementById('settingstab'+action);
-    }
-  else 
-    var tab = document.getElementById('settingstabdefault');
-  
-  if (tab)
-    tab.className = 'tablink-selected';
+    tab = '#settingstab' + (rcmail.env.action=='preferences' ? 'default' : (rcmail.env.action.indexOf('identity')>0 ? 'identities' : rcmail.env.action.replace(/\./g, '')));
+
+  $(tab).addClass('tablink-selected');
 }
 
 function rcube_show_advanced(visible)
 {
-  var rows = document.getElementsByTagName('TR');
-  for(var i=0; i<rows.length; i++)
-    if(rows[i].className && rows[i].className.match(/advanced/))
-      rows[i].style.display = visible ? (bw.ie ? 'block' : 'table-row') : 'none';
+  $('tr.advanced').css('display', (visible ? (bw.ie ? 'block' : 'table-row') : 'none'));
 }
 
 /**
@@ -65,7 +57,7 @@ function rcmail_hide_header_form(id)
   link.style.display = '';
   
   parent = link.parentNode;
-  links = parent.getElementsByTagName('A');
+  links = parent.getElementsByTagName('a');
 
   for (var i=0; i<links.length; i++)
     if (links[i].style.display != 'none')
@@ -128,7 +120,9 @@ function rcmail_init_compose_form()
 
 function rcube_mail_ui()
 {
-  this.markmenu = new rcube_layer('markmessagemenu');
+  this.markmenu = $('#markmessagemenu');
+  this.searchmenu = $('#searchmenu');
+  this.messagemenu = $('#messagemenu');
 }
 
 rcube_mail_ui.prototype = {
@@ -136,25 +130,86 @@ rcube_mail_ui.prototype = {
 show_markmenu: function(show)
 {
   if (typeof show == 'undefined')
-    show = this.markmenu.visible ? false : true;
+    show = this.markmenu.is(':visible') ? false : true;
   
   var ref = rcube_find_object('markreadbutton');
   if (show && ref)
-    this.markmenu.move(ref.offsetLeft, ref.offsetTop + ref.offsetHeight);
+    this.markmenu.css({ left:ref.offsetLeft, top:(ref.offsetTop + ref.offsetHeight) });
   
-  this.markmenu.show(show);
+  this.markmenu[show?'show':'hide']();
+},
+
+show_messagemenu: function(show)
+{
+  if (typeof show == 'undefined')
+    show = this.messagemenu.is(':visible') ? false : true;
+
+  var ref = rcube_find_object('messagemenulink');
+  if (show && ref)
+    this.messagemenu.css({ left:ref.offsetLeft, top:(ref.offsetTop + ref.offsetHeight) });
+
+  this.messagemenu[show?'show':'hide']();
+},
+
+show_searchmenu: function(show)
+{
+  if (typeof show == 'undefined')
+    show = this.searchmenu.is(':visible') ? false : true;
+
+  var ref = rcube_find_object('searchmod');
+  if (show && ref) {
+    var pos = $(ref).offset();
+    this.searchmenu.css({ left:pos.left, top:(pos.top + ref.offsetHeight + 2)});
+
+    if (rcmail.env.search_mods) {
+      for (var n in rcmail.env.search_mods) {
+        box = rcube_find_object('s_mod_' + n);
+        box.checked = 'checked';
+      }
+    }
+  }
+  this.searchmenu[show?'show':'hide']();
+},
+ 
+set_searchmod: function(elem)
+{
+  if (!rcmail.env.search_mods)
+    rcmail.env.search_mods = new Object();
+  
+  if (!elem.checked)
+    delete(rcmail.env.search_mods[elem.value]);
+  else
+    rcmail.env.search_mods[elem.value] = elem.value;
 },
 
 body_mouseup: function(evt, p)
 {
-  if (this.markmenu && this.markmenu.visible && rcube_event.get_target(evt) != rcube_find_object('markreadbutton'))
+  if (this.markmenu && this.markmenu.is(':visible') && rcube_event.get_target(evt) != rcube_find_object('markreadbutton'))
     this.show_markmenu(false);
+  else if (this.messagemenu && this.messagemenu.is(':visible') && rcube_event.get_target(evt) != rcube_find_object('messagemenulink'))
+    this.show_messagemenu(false);
+  else if (this.searchmenu && this.searchmenu.is(':visible') && rcube_event.get_target(evt) != rcube_find_object('searchmod')) {
+    var menu = rcube_find_object('searchmenu');
+    var target = rcube_event.get_target(evt);
+    while (target.parentNode) {
+      if (target.parentNode == menu)
+        return;
+      target = target.parentNode;
+    }
+    this.show_searchmenu(false);
+  }
 },
 
 body_keypress: function(evt, p)
 {
-  if (rcube_event.get_keycode(evt) == 27 && this.markmenu && this.markmenu.visible)
-    this.show_markmenu(false);
+  if (rcube_event.get_keycode(evt) == 27) {
+    if (this.markmenu && this.markmenu.is(':visible'))
+      this.show_markmenu(false);
+    if (this.searchmenu && this.searchmenu.is(':visible'))
+      this.show_searchmenu(false);
+    if (this.messagemenu && this.messagemenu.is(':visible'))
+      this.show_messagemenu(false);
+  }
 }
 
 };

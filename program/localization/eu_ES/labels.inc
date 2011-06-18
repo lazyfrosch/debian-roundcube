@@ -13,7 +13,7 @@
 |         Bihar <gaurdabihar@gmail.com>                                 |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2237 2009-01-17 01:55:39Z till $
+@version $Id: labels.inc 2513 2009-05-21 12:59:19Z alec $
 
 */
 
@@ -214,7 +214,6 @@ $labels['readwhendeleted'] = 'Markatu mezua irakurrita bezala ezabatzerakoan';
 $labels['flagfordeletion'] = 'Markatu mezua ezabatzeko ezabatu beharrean';
 $labels['showinlineimages'] = 'Erakutsi erantzitako irudiak mezuaren azpian';
 $labels['autosavedraft'] = 'Zirriborroa automatikoki gorde';
-$labels['everynminutes'] = '$n minuturo';
 $labels['never'] = 'inoiz ez';
 $labels['messagesdisplaying'] = 'Mezuak ikusi';
 $labels['messagescomposition'] = 'Mezuak sortu';

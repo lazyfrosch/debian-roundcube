@@ -13,7 +13,7 @@
  | Author: Begzudin Omerovic <Begzudin.Omerovic@gmail.com>               |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 2237 2009-01-17 01:55:39Z till $
+ @version $Id: labels.inc 2513 2009-05-21 12:59:19Z alec $
 
 */
 
@@ -213,7 +213,6 @@ $labels['htmleditor']= 'Pisi HTML poruke';
 $labels['htmlsignature'] ='HTML potpis';
 $labels['previewpane'] ='Pokaži prethodu poruku';
 $labels['autosavedraft'] ='Automatski spasi predlozak';
-$labels['everynminutes'] ='svakih $n minuta';
 $labels['never'] ='nikada';
 
 $labels['folder']  = 'Fascikla';

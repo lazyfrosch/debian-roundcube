@@ -13,7 +13,7 @@
 | Author: Martynas Bendorius <martynas@evanet.lt>                       |
 +-----------------------------------------------------------------------+'
 
-@version $Id: labels.inc 2237 2009-01-17 01:55:39Z till $
+@version $Id: labels.inc 2891 2009-08-29 18:56:48Z yllar $
 
 */
 
@@ -47,7 +47,7 @@ $labels['mailboxlist'] = 'Aplankai';
 $labels['messagesfromto'] = 'Laiškai nuo $from iki $to iš $count';
 $labels['messagenrof'] = 'Laiškas $nr iš $count';
 $labels['moveto'] = 'perkelti į ...';
-$labels['download'] = 'parsisiųsti';
+$labels['download'] = 'Parsisiųsti';
 $labels['filename'] = 'Bylos vardas';
 $labels['filesize'] = 'Bylos dydis';
 $labels['preferhtml'] = 'Rodyti HTML';
@@ -116,12 +116,15 @@ $labels['markread'] = 'Kaip perskaitytus';
 $labels['markunread'] = 'Kaip neperskaitytus';
 $labels['markflagged'] = 'Kaip pažymėtą';
 $labels['markunflagged'] = 'Kaip nepažymėtą';
+$labels['messageactions'] = 'Daugiau veiksmų';
 $labels['select'] = 'Pažymėti';
 $labels['all'] = 'Visus';
 $labels['none'] = 'Nieko';
 $labels['unread'] = 'Neskaitytas';
 $labels['flagged'] = 'Pažymėtas';
 $labels['unanswered'] = 'Neatsakytas';
+$labels['deleted'] = 'Pašalintas';
+$labels['invert'] = 'Invertuoti';
 $labels['filter'] = 'Filtruoti';
 $labels['compact'] = 'Suspausti';
 $labels['empty'] = 'Ištuštinti';
@@ -131,8 +134,12 @@ $labels['unknown'] = 'nežinomas';
 $labels['unlimited'] = 'neribotas';
 $labels['quicksearch'] = 'Greita paieška';
 $labels['resetsearch'] = 'Atšaukti paiešką';
+$labels['searchmod'] = 'Paieškos modifikatoriai';
+$labels['msgtext'] = 'Visas laiškas';
 $labels['openinextwin'] = 'Atidaryti naujame lange';
+$labels['emlsave'] = 'Parsiųsti (.eml)';
 $labels['compose'] = 'Rašyti nauja laiška';
+$labels['editasnew'] = 'Redaguoti kaip naują';
 $labels['savemessage'] = 'Išsaugoti šį juodraštį';
 $labels['sendmessage'] = 'Išsiųsti laiską';
 $labels['addattachment'] = 'Prisegti bylą';
@@ -231,8 +238,7 @@ $labels['fromknownsenders'] = 'iš žinomų siuntėjų';
 $labels['always'] = 'visada';
 $labels['showinlineimages'] = 'Rodyti prisegtus paveikslėlius žemiau laiško';
 $labels['autosavedraft'] = 'Automatiškai išsaugoti juodraščius';
-$labels['everynminutes'] = 'kas $n minutes(-čių)';
-$labels['keepaliveevery'] = 'kas $n minutę(-čių)';
+$labels['everynminutes'] = 'kas $n minutę(-čių)';
 $labels['keepalive'] = 'Tikrinti ar nėra naujų pranešimus';
 $labels['never'] = 'niekada';
 $labels['messagesdisplaying'] = 'Laiškų rodymas';
@@ -244,6 +250,12 @@ $labels['2047folding'] = 'Pilnas RFC 2047 (kita)';
 $labels['advancedoptions'] = 'Papildomi nustatymai';
 $labels['focusonnewmessage'] = 'Fokusuoti naršyklės langą gavus naują laišką';
 $labels['checkallfolders'] = 'Tikrinti ar nėra naujų laiškų visuose aplankuose';
+$labels['displaynext'] = 'Po laiško pašalinimo/perkėlimo rodyti pranešimą';
+$labels['mainoptions'] = 'Pagrindiniai nustatymai';
+$labels['section'] = 'Sekcija';
+$labels['maintenance'] = 'Priežiūra';
+$labels['newmessage'] = 'Naujas laiškas';
+$labels['listoptions'] = 'Rodyti nustatymus';
 $labels['folder'] = 'Aplankas';
 $labels['folders'] = 'Aplankai';
 $labels['foldername'] = 'Aplanko vardas';

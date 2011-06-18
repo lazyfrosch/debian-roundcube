@@ -12,7 +12,7 @@
 | Author: Vahan Yerkanian <vahan@arminco.com>                           |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
+@version $Id: labels.inc 2513 2009-05-21 12:59:19Z alec $
 
 */
 
@@ -231,7 +231,6 @@ $labels['always'] = 'միշտ';
 $labels['showinlineimages'] = 'Ցուցադրել կցված պատկերները հաղորդագրության տակ';
 $labels['autosavedraft'] = 'Սևագրի ավտոմատ գրանցում';
 $labels['everynminutes'] = 'ամեն $n րոպեն';
-$labels['keepaliveevery'] = 'ամեն $n րոպեն';
 $labels['keepalive'] = 'Ստուգել նոր նամակները';
 $labels['never'] = 'երբեք';
 $labels['messagesdisplaying'] = 'նամակները ցուցադրելիս';

@@ -11,7 +11,7 @@
 +-----------------------------------------------------------------------+
 | Author: Moshe Leibovitch    <moish@mln.co.il>                         |
 | Updates: Noor Dawod <noor@comrax.com>                                 |
-| Updates: Moshe Leibovitch  <moish@mln.co.il>  06122008                |
+| Updates: Moshe Leibovitch  <moish@mln.co.il>  30072009                |
 +-----------------------------------------------------------------------+
 
 */
@@ -21,6 +21,8 @@ $messages['loginfailed'] = 'הכניסה נכשלה';
 $messages['cookiesdisabled'] = 'הדפדפן אינו מקבל עוגיות';
 $messages['sessionerror'] = 'כניסתך למערכת אינה חוקית או שפג תוקפה';
 $messages['imaperror'] = 'הקשר לשרת הדואר נכשל';
+$messages['servererror'] = '! שגיאת שרת';
+$messages['invalidrequest'] = 'בקשה לא חוקית. המידע לא נשמר';
 $messages['nomessagesfound'] = 'לא נמצאו הודעות בתיבה זו';
 $messages['loggedout'] = 'הקשר הסתיים. להתראות!';
 $messages['mailboxempty'] = 'רשימת ההודעות ריקה';
@@ -44,6 +46,7 @@ $messages['errorsavingsent'] = 'נגרמה שגיאה במהלך שמירת הה
 $messages['errorsaving'] = 'נגרמה שגיאה במהלך השמירה';
 $messages['errormoving'] = 'לא ניתן לתייק את ההודעה';
 $messages['errordeleting'] = 'לא ניתן למחוק את ההודעה';
+$messages['errormarking'] = 'לא ניתן לסמן ההודעה';
 $messages['deletecontactconfirm'] = 'האם למחוק את איש הקשר?';
 $messages['deletemessagesconfirm'] = 'האם למחוק את ההודעות המסומנות?';
 $messages['deletefolderconfirm'] = 'האם למחוק תיק זה?';
@@ -93,5 +96,12 @@ $messages['importconfirm'] = '<b>יובאו $inserted אנשי קשר, $skipped 
 $messages['opnotpermitted'] = 'פעולה אסורה!';
 $messages['nofromaddress'] = 'לזהות שנבחרה חסרה כתובת דואר';
 $messages['editorwarning'] = 'המעבר לעורך רגיל יגרום לאיבוד את העריכה הקיימת. האם להמשיך?';
+$messages['httpreceivedencrypterror'] = 'ארעה שגיאת תצורה חמורה. נא להודיע מייד למנהל/ת המערכת. <B> הודעתך לא תשלח <B> ';
+$messages['smtpconnerror'] = 'SMTP ($code): אבד הקשר לשרת';
+$messages['smtpautherror'] = 'SMTP ($code): ההזדהות נכשלה';
+$messages['smtpfromerror'] = 'SMTP ($code): "$from" לא נרשמה כתובת השולח';
+$messages['smtptoerror'] = 'SMTP ($code): "$to" לא נרשמה כתובת המקבל';
+$messages['smtprecipientserror'] = 'SMTP : לא ניתן לפענח רשימת נמענים';
+$messages['smtperror'] = 'SMTP: $msg';
 
 ?>

@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: main.inc 2483 2009-05-15 10:22:29Z thomasb $
+ $Id: main.inc 2852 2009-08-10 21:32:44Z thomasb $
 
 */
 
@@ -84,9 +84,9 @@ function get_sequence_name($sequence)
  * @return string Localized text
  * @see rcmail::gettext()
  */
-function rcube_label($p)
+function rcube_label($p, $domain=null)
 {
-  return rcmail::get_instance()->gettext($p);
+  return rcmail::get_instance()->gettext($p, $domain);
 }
 
 
@@ -124,7 +124,9 @@ function rcmail_url($action, $p=array(), $task=null)
  */
 function rcmail_temp_gc()
   {
-  $tmp = unslashify($CONFIG['temp_dir']);
+  $rcmail = rcmail::get_instance();
+
+  $tmp = unslashify($rcmail->config->get('temp_dir'));
   $expire = mktime() - 172800;  // expire in 48 hours
 
   if ($dir = opendir($tmp))
@@ -177,35 +179,19 @@ function rcube_charset_convert($str, $from, $to=NULL)
   static $mbstring_loaded = null;
   static $mbstring_list = null;
   static $convert_warning = false;
+  static $conv = null;
+  
+  $error = false;
 
-  $from = strtoupper($from);
-  $to = $to==NULL ? strtoupper(RCMAIL_CHARSET) : strtoupper($to);
-  $error = false; $conv = null;
-
-  # RFC1642
-  if ($from == 'UNICODE-1-1-UTF-7')
-    $from = 'UTF-7';
-  if ($to == 'UNICODE-1-1-UTF-7')
-    $to = 'UTF-7';
+  $to = empty($to) ? $to = strtoupper(RCMAIL_CHARSET) : rcube_parse_charset($to);
+  $from = rcube_parse_charset($from);
 
   if ($from == $to || empty($str) || empty($from))
     return $str;
-    
-  $aliases = array(
-    'US-ASCII'         => 'ISO-8859-1',
-    'ANSI_X3.110-1983' => 'ISO-8859-1',
-    'ANSI_X3.4-1968'   => 'ISO-8859-1',
-    'UNKNOWN-8BIT'     => 'ISO-8859-15',
-    'X-UNKNOWN'        => 'ISO-8859-15',
-    'X-USER-DEFINED'   => 'ISO-8859-15',
-    'ISO-8859-8-I'     => 'ISO-8859-8',
-    'KS_C_5601-1987'   => 'EUC-KR',
-  );
 
   // convert charset using iconv module  
   if (function_exists('iconv') && $from != 'UTF-7' && $to != 'UTF-7') {
-    $aliases['GB2312'] = 'GB18030';
-    $_iconv = iconv(($aliases[$from] ? $aliases[$from] : $from), ($aliases[$to] ? $aliases[$to] : $to) . "//IGNORE", $str);
+    $_iconv = iconv($from, $to . '//IGNORE', $str);
     if ($_iconv !== false) {
         return $_iconv;
     }
@@ -216,14 +202,13 @@ function rcube_charset_convert($str, $from, $to=NULL)
     
   // convert charset using mbstring module
   if ($mbstring_loaded) {
-    $aliases['UTF-7'] = 'UTF7-IMAP';
     $aliases['WINDOWS-1257'] = 'ISO-8859-13';
     
     if (is_null($mbstring_list)) {
       $mbstring_list = mb_list_encodings();
       $mbstring_list = array_map('strtoupper', $mbstring_list);
     }
-    
+
     $mb_from = $aliases[$from] ? $aliases[$from] : $from;
     $mb_to = $aliases[$to] ? $aliases[$to] : $to;
     
@@ -234,57 +219,209 @@ function rcube_charset_convert($str, $from, $to=NULL)
     }
   }
 
-  # try to convert with custom classes
-  if (class_exists('utf8'))
-    $conv = new utf8();
+  // convert charset using bundled classes/functions
+  if ($to == 'UTF-8') {
+    if ($from == 'UTF7-IMAP') {
+      if ($_str = utf7_to_utf8($str))
+        return $_str;
+    }
+    else if ($from == 'UTF-7') {
+      if ($_str = rcube_utf7_to_utf8($str))
+        return $_str;
+    }
+    else if (($from == 'ISO-8859-1') && function_exists('utf8_encode')) {
+      return utf8_encode($str);
+    }
+    else if (class_exists('utf8')) {
+      if (!$conv)
+        $conv = new utf8($from);
+      else
+        $conv->loadCharset($from);
 
-  // convert string to UTF-8
-  if ($from == 'UTF-7') {
-    if ($_str = utf7_to_utf8($str))
-      $str = $_str;
-    else
-      $error = true;
-  }
-  else if (($from == 'ISO-8859-1') && function_exists('utf8_encode')) {
-    $str = utf8_encode($str);
-  }
-  else if ($from != 'UTF-8' && $conv) {
-    $conv->loadCharset($from);
-    $str = $conv->strToUtf8($str);
-  }
-  else if ($from != 'UTF-8')
+      if($_str = $conv->strToUtf8($str))
+        return $_str;
+    }
     $error = true;
-
+  }
+  
   // encode string for output
-  if ($to == 'UTF-7') {
-    return utf8_to_utf7($str);
-  }
-  else if ($to == 'ISO-8859-1' && function_exists('utf8_decode')) {
-    return utf8_decode($str);
-  }
-  else if ($to != 'UTF-8' && $conv) {
-    $conv->loadCharset($to);
-    return $conv->utf8ToStr($str);
-  }
-  else if ($to != 'UTF-8') {
+  if ($from == 'UTF-8') {
+    // @TODO: we need a function for UTF-7 (RFC2152) conversion
+    if ($to == 'UTF7-IMAP' || $to == 'UTF-7') {
+      if ($_str = utf8_to_utf7($str))
+        return $_str;
+    }
+    else if ($to == 'ISO-8859-1' && function_exists('utf8_decode')) {
+      return utf8_decode($str);
+    }
+    else if (class_exists('utf8')) {
+      if (!$conv)
+        $conv = new utf8($to);
+      else
+        $conv->loadCharset($from);
+
+      if ($_str = $conv->strToUtf8($str))
+        return $_str;
+    }
     $error = true;
   }
   
   // report error
-  if ($error && !$convert_warning){
+  if ($error && !$convert_warning) {
     raise_error(array(
       'code' => 500,
       'type' => 'php',
       'file' => __FILE__,
-      'message' => "Could not convert string from $from to $to. Make sure iconv is installed or lib/utf8.class is available"
+      'line' => __LINE__,
+      'message' => "Could not convert string from $from to $to. Make sure iconv/mbstring is installed or lib/utf8.class is available."
       ), true, false);
     
     $convert_warning = true;
   }
   
-  // return UTF-8 string
+  // return UTF-8 or original string
   return $str;
   }
+
+
+/**
+ * Parse and validate charset name string (see #1485758).
+ * Sometimes charset string is malformed, there are also charset aliases 
+ * but we need strict names for charset conversion (specially utf8 class)
+ *
+ * @param  string  Input charset name
+ * @return The validated charset name
+ */
+function rcube_parse_charset($charset)
+  {
+  $charset = strtoupper($charset);
+
+  # RFC1642
+  $charset = str_replace('UNICODE-1-1-', '', $charset);
+
+  # Aliases: some of them from HTML5 spec.
+  $aliases = array(
+    'USASCII'       => 'WINDOWS-1252',
+    'ANSIX31101983' => 'WINDOWS-1252',
+    'ANSIX341968'   => 'WINDOWS-1252',
+    'UNKNOWN8BIT'   => 'ISO-8859-15',
+    'UNKNOWN'       => 'ISO-8859-15',
+    'USERDEFINED'   => 'ISO-8859-15',
+    'KSC56011987'   => 'EUC-KR',
+    'GB2312' 	    => 'GBK',
+    'GB231280'	    => 'GBK',
+    'UNICODE'	    => 'UTF-8',
+    'UTF7IMAP'	    => 'UTF7-IMAP',
+    'TIS620'	    => 'WINDOWS-874',
+    'ISO88599'	    => 'WINDOWS-1254',
+    'ISO885911'	    => 'WINDOWS-874',
+  );
+
+  // allow a-z and 0-9 only and remove X- prefix (e.g. X-ROMAN8 => ROMAN8)
+  $str = preg_replace(array('/[^a-z0-9]/i', '/^x+/i'), '', $charset);
+
+  if (isset($aliases[$str]))
+    return $aliases[$str];
+
+  if (preg_match('/UTF(7|8|16|32)(BE|LE)*/', $str, $m))
+    return 'UTF-' . $m[1] . $m[2];
+
+  if (preg_match('/ISO8859([0-9]{0,2})/', $str, $m)) {
+    $iso = 'ISO-8859-' . ($m[1] ? $m[1] : 1);
+    # some clients sends windows-1252 text as latin1,
+    # it is safe to use windows-1252 for all latin1
+    return $iso == 'ISO-8859-1' ? 'WINDOWS-1252' : $iso;
+    }
+
+  return $charset;
+  }
+
+
+/**
+ * Converts string from standard UTF-7 (RFC 2152) to UTF-8.
+ *
+ * @param  string  Input string
+ * @return The converted string
+ */
+function rcube_utf7_to_utf8($str)
+{
+  $Index_64 = array(
+    0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0,
+    0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0,
+    0,0,0,0, 0,0,0,0, 0,0,0,1, 0,0,0,0,
+    1,1,1,1, 1,1,1,1, 1,1,0,0, 0,0,0,0,
+    0,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1,
+    1,1,1,1, 1,1,1,1, 1,1,1,0, 0,0,0,0,
+    0,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1,
+    1,1,1,1, 1,1,1,1, 1,1,1,0, 0,0,0,0,
+  );
+
+  $u7len = strlen($str);
+  $str = strval($str);
+  $res = '';
+
+  for ($i=0; $u7len > 0; $i++, $u7len--)
+  {
+    $u7 = $str[$i];
+    if ($u7 == '+')
+    {
+      $i++;
+      $u7len--;
+      $ch = '';
+
+      for (; $u7len > 0; $i++, $u7len--)
+      {
+        $u7 = $str[$i];
+
+        if (!$Index_64[ord($u7)])
+          break;
+
+	$ch .= $u7;
+      }
+
+      if ($ch == '') {
+        if ($u7 == '-')
+          $res .= '+';
+        continue;
+      }
+
+      $res .= rcube_utf16_to_utf8(base64_decode($ch));
+    }
+    else
+    {
+      $res .= $u7;
+    }
+  }
+
+  return $res;
+}
+
+/**
+ * Converts string from UTF-16 to UTF-8 (helper for utf-7 to utf-8 conversion)
+ *
+ * @param  string  Input string
+ * @return The converted string
+ */
+function rcube_utf16_to_utf8($str)
+{
+  $len = strlen($str);
+  $dec = '';
+
+  for ($i = 0; $i < $len; $i += 2) {
+    $c = ord($str[$i]) << 8 | ord($str[$i + 1]);
+    if ($c >= 0x0001 && $c <= 0x007F) {
+      $dec .= chr($c);
+    } else if ($c > 0x07FF) {
+      $dec .= chr(0xE0 | (($c >> 12) & 0x0F));
+      $dec .= chr(0x80 | (($c >>  6) & 0x3F));
+      $dec .= chr(0x80 | (($c >>  0) & 0x3F));
+    } else {
+      $dec .= chr(0xC0 | (($c >>  6) & 0x1F));
+      $dec .= chr(0x80 | (($c >>  0) & 0x3F));
+    }
+  }
+  return $dec;
+}
 
 
 /**
@@ -298,22 +435,12 @@ function rcube_charset_convert($str, $from, $to=NULL)
  */
 function rep_specialchars_output($str, $enctype='', $mode='', $newlines=TRUE)
   {
-  global $OUTPUT;
   static $html_encode_arr = false;
   static $js_rep_table = false;
   static $xml_rep_table = false;
 
-  $charset = $OUTPUT->get_charset();
-  $is_iso_8859_1 = false;
-  if ($charset == 'ISO-8859-1') {
-    $is_iso_8859_1 = true;
-  }
   if (!$enctype)
     $enctype = $OUTPUT->type;
-
-  // encode for plaintext
-  if ($enctype=='text')
-    return str_replace("\r\n", "\n", $mode=='remove' ? strip_tags($str) : $str);
 
   // encode for HTML output
   if ($enctype=='html')
@@ -344,9 +471,6 @@ function rep_specialchars_output($str, $enctype='', $mode='', $newlines=TRUE)
     return $newlines ? nl2br($out) : $out;
     }
 
-  if ($enctype=='url')
-    return rawurlencode($str);
-
   // if the replace tables for XML and JS are not yet defined
   if ($js_rep_table===false)
     {
@@ -354,12 +478,7 @@ function rep_specialchars_output($str, $enctype='', $mode='', $newlines=TRUE)
     $xml_rep_table['&'] = '&amp;';
 
     for ($c=160; $c<256; $c++)  // can be increased to support more charsets
-      {
       $xml_rep_table[Chr($c)] = "&#$c;";
-      
-      if ($is_iso_8859_1)
-        $js_rep_table[Chr($c)] = sprintf("\\u%04x", $c);
-      }
 
     $xml_rep_table['"'] = '&quot;';
     $js_rep_table['"'] = '\\"';
@@ -367,18 +486,20 @@ function rep_specialchars_output($str, $enctype='', $mode='', $newlines=TRUE)
     $js_rep_table["\\"] = "\\\\";
     }
 
+  // encode for javascript use
+  if ($enctype=='js')
+    return preg_replace(array("/\r?\n/", "/\r/", '/<\\//'), array('\n', '\n', '<\\/'), strtr($str, $js_rep_table));
+
+  // encode for plaintext
+  if ($enctype=='text')
+    return str_replace("\r\n", "\n", $mode=='remove' ? strip_tags($str) : $str);
+
+  if ($enctype=='url')
+    return rawurlencode($str);
+
   // encode for XML
   if ($enctype=='xml')
     return strtr($str, $xml_rep_table);
-
-  // encode for javascript use
-  if ($enctype=='js')
-    {
-    if ($charset!='UTF-8')
-      $str = rcube_charset_convert($str, RCMAIL_CHARSET,$charset);
-      
-    return preg_replace(array("/\r?\n/", "/\r/", '/<\\//'), array('\n', '\n', '<\\/'), strtr($str, $js_rep_table));
-    }
 
   // no encoding given -> return original string
   return $str;
@@ -420,7 +541,7 @@ function JQ($str)
  * @return string   Field value or NULL if not available
  */
 function get_input_value($fname, $source, $allow_html=FALSE, $charset=NULL)
-  {
+{
   global $OUTPUT;
   $value = NULL;
   
@@ -437,7 +558,10 @@ function get_input_value($fname, $source, $allow_html=FALSE, $charset=NULL)
     else if (isset($_COOKIE[$fname]))
       $value = $_COOKIE[$fname];
     }
-  
+
+  if (empty($value))
+    return $value;
+
   // strip single quotes if magic_quotes_sybase is enabled
   if (ini_get('magic_quotes_sybase'))
     $value = str_replace("''", "'", $value);
@@ -454,16 +578,35 @@ function get_input_value($fname, $source, $allow_html=FALSE, $charset=NULL)
     return rcube_charset_convert($value, $OUTPUT->get_charset(), $charset);
   else
     return $value;
+}
+
+/**
+ * Convert array of request parameters (prefixed with _)
+ * to a regular array with non-prefixed keys.
+ *
+ * @param  int   Source to get value from (GPC)
+ * @return array Hash array with all request parameters
+ */
+function request2param($mode = RCUBE_INPUT_GPC)
+{
+  $out = array();
+  $src = $mode == RCUBE_INPUT_GET ? $_GET : ($mode == RCUBE_INPUT_POST ? $_POST : $_REQUEST);
+  foreach ($src as $key => $value) {
+    $fname = $key[0] == '_' ? substr($key, 1) : $key;
+    $out[$fname] = get_input_value($key, $mode);
   }
+  
+  return $out;
+}
 
 /**
  * Remove all non-ascii and non-word chars
- * except . and -
+ * except ., -, _
  */
-function asciiwords($str, $css_id = false)
+function asciiwords($str, $css_id = false, $replace_with = '')
 {
   $allowed = 'a-z0-9\_\-' . (!$css_id ? '\.' : '');
-  return preg_replace("/[^$allowed]/i", '', $str);
+  return preg_replace("/[^$allowed]/i", $replace_with, $str);
 }
 
 /**
@@ -516,7 +659,7 @@ function rcube_table_output($attrib, $table_data, $a_show_cols, $id_col)
     while ($table_data && ($sql_arr = $db->fetch_assoc($table_data)))
     {
       $zebra_class = $c % 2 ? 'even' : 'odd';
-      $table->add_row(array('id' => 'rcmrow' . $sql_arr[$id_col], 'class' => "contact $zebra_class"));
+      $table->add_row(array('id' => 'rcmrow' . $sql_arr[$id_col], 'class' => $zebra_class));
 
       // format each col
       foreach ($a_show_cols as $col)
@@ -530,7 +673,7 @@ function rcube_table_output($attrib, $table_data, $a_show_cols, $id_col)
     foreach ($table_data as $row_data)
     {
       $zebra_class = $c % 2 ? 'even' : 'odd';
-      $table->add_row(array('id' => 'rcmrow' . $row_data[$id_col], 'class' => "contact $zebra_class"));
+      $table->add_row(array('id' => 'rcmrow' . $row_data[$id_col], 'class' => $zebra_class));
 
       // format each col
       foreach ($a_show_cols as $col)
@@ -596,7 +739,7 @@ function rcmail_mod_css_styles($source, $container_id)
   $replacements = new rcube_string_replacer;
   
   // ignore the whole block if evil styles are detected
-  $stripped = preg_replace('/[^a-z\(:]/', '', rcmail_xss_entitiy_decode($source));
+  $stripped = preg_replace('/[^a-z\(:]/', '', rcmail_xss_entity_decode($source));
   if (preg_match('/expression|behavior|url\(|import/', $stripped))
     return '/* evil! */';
 
@@ -637,22 +780,22 @@ function rcmail_mod_css_styles($source, $container_id)
  * @param string CSS content to decode
  * @return string Decoded string
  */
-function rcmail_xss_entitiy_decode($content)
+function rcmail_xss_entity_decode($content)
 {
   $out = html_entity_decode(html_entity_decode($content));
-  $out = preg_replace_callback('/\\\([0-9a-f]{4})/i', 'rcmail_xss_entitiy_decode_callback', $out);
+  $out = preg_replace_callback('/\\\([0-9a-f]{4})/i', 'rcmail_xss_entity_decode_callback', $out);
   $out = preg_replace('#/\*.*\*/#Um', '', $out);
   return $out;
 }
 
 
 /**
- * preg_replace_callback callback for rcmail_xss_entitiy_decode_callback
+ * preg_replace_callback callback for rcmail_xss_entity_decode_callback
  *
  * @param array matches result from preg_replace_callback
  * @return string decoded entity
  */ 
-function rcmail_xss_entitiy_decode_callback($matches)
+function rcmail_xss_entity_decode_callback($matches)
 { 
   return chr(hexdec($matches[1]));
 }
@@ -688,11 +831,11 @@ function parse_attrib_string($str)
   preg_match_all('/\s*([-_a-z]+)=(["\'])??(?(2)([^\2]*)\2|(\S+?))/Ui', stripslashes($str), $regs, PREG_SET_ORDER);
 
   // convert attributes to an associative array (name => value)
-  if ($regs)
-    foreach ($regs as $attr)
-      {
-      $attrib[strtolower($attr[1])] = $attr[3] . $attr[4];
-      }
+  if ($regs) {
+    foreach ($regs as $attr) {
+      $attrib[strtolower($attr[1])] = html_entity_decode($attr[3] . $attr[4]);
+    }
+  }
 
   return $attrib;
   }
@@ -761,6 +904,9 @@ function format_date($date, $format=NULL)
   else if (!$format)
     $format = $CONFIG['date_long'] ? $CONFIG['date_long'] : 'd.m.Y H:i';
 
+  // strftime() format
+  if (preg_match('/%[a-z]+/i', $format))
+    return strftime($format, $timestamp);
 
   // parse format string manually in order to provide localized weekday and month names
   // an alternative would be to convert the date() format string to fit with strftime()
@@ -825,8 +971,16 @@ function format_email_recipient($email, $name='')
  */
 function console()
   {
+  $args = func_get_args();
+
+  if (class_exists('rcmail', false)) {
+    $rcmail = rcmail::get_instance();
+    if (is_object($rcmail->plugins))
+      $rcmail->plugins->exec_hook('console', $args);
+  }
+
   $msg = array();
-  foreach (func_get_args() as $arg)
+  foreach ($args as $arg)
     $msg[] = !is_string($arg) ? var_export($arg, true) : $arg;
 
   if (!($GLOBALS['CONFIG']['debug_level'] & 4))
@@ -851,22 +1005,34 @@ function console()
  */
 function write_log($name, $line)
   {
-  global $CONFIG;
+  global $CONFIG, $RCMAIL;
 
   if (!is_string($line))
     $line = var_export($line, true);
+ 
+  if (empty($CONFIG['log_date_format']))
+    $CONFIG['log_date_format'] = 'd-M-Y H:i:s O';
   
-  $log_entry = sprintf("[%s]: %s\n",
-                 date("d-M-Y H:i:s O", mktime()),
-                 $line);
+  $date = date($CONFIG['log_date_format']);
+  
+  // trigger logging hook
+  if (is_object($RCMAIL) && is_object($RCMAIL->plugins)) {
+    $log = $RCMAIL->plugins->exec_hook('write_log', array('name' => $name, 'date' => $date, 'line' => $line));
+    $name = $log['name'];
+    $line = $log['line'];
+    $date = $log['date'];
+    if ($log['abort'])
+      return;
+  }
+ 
+  $log_entry = sprintf("[%s]: %s\n", $date, $line);
 
   if ($CONFIG['log_driver'] == 'syslog') {
-    if ($name == 'errors')
-      $prio = LOG_ERR;
-    else
-      $prio = LOG_INFO;
+    $prio = $name == 'errors' ? LOG_ERR : LOG_INFO;
     syslog($prio, $log_entry);
-  } else {
+    return true;
+  }
+  else {
     // log_driver == 'file' is assumed here
     if (empty($CONFIG['log_dir']))
       $CONFIG['log_dir'] = INSTALL_PATH.'logs';
@@ -876,8 +1042,10 @@ function write_log($name, $line)
       fwrite($fp, $log_entry);
       fflush($fp);
       fclose($fp);
+      return true;
     }
   }
+  return false;
 }
 
 
@@ -885,17 +1053,16 @@ function write_log($name, $line)
  * @access private
  */
 function rcube_timer()
-  {
-  list($usec, $sec) = explode(" ", microtime());
-  return ((float)$usec + (float)$sec);
-  }
+{
+  return microtime(true);
+}
   
 
 /**
  * @access private
  */
-function rcube_print_time($timer, $label='Timer')
-  {
+function rcube_print_time($timer, $label='Timer', $dest='console')
+{
   static $print_count = 0;
   
   $print_count++;
@@ -905,8 +1072,8 @@ function rcube_print_time($timer, $label='Timer')
   if (empty($label))
     $label = 'Timer '.$print_count;
   
-  console(sprintf("%s: %0.4f sec", $label, $diff));
-  }
+  write_log($dest, sprintf("%s: %0.4f sec", $label, $diff));
+}
 
 
 /**
@@ -944,6 +1111,9 @@ function rcmail_mailbox_list($attrib)
     foreach ($a_folders as $folder)
       rcmail_build_folder_tree($a_mailboxes, $folder, $delimiter);
   }
+  
+  // allow plugins to alter the folder tree or to localize folder names
+  $hook = $RCMAIL->plugins->exec_hook('render_mailboxlist', array('list' => $a_mailboxes, 'delimiter' => $delimiter));
 
   if ($type=='select') {
     $select = new html_select($attrib);
@@ -952,12 +1122,12 @@ function rcmail_mailbox_list($attrib)
     if ($attrib['noselection'])
       $select->add(rcube_label($attrib['noselection']), '0');
     
-    rcmail_render_folder_tree_select($a_mailboxes, $mbox_name, $attrib['maxlength'], $select, $attrib['realnames']);
+    rcmail_render_folder_tree_select($hook['list'], $mbox_name, $attrib['maxlength'], $select, $attrib['realnames']);
     $out = $select->show();
   }
   else {
     $js_mailboxlist = array();
-    $out = html::tag('ul', $attrib, rcmail_render_folder_tree_html($a_mailboxes, $mbox_name, $js_mailboxlist, $attrib), html::$common_attrib);
+    $out = html::tag('ul', $attrib, rcmail_render_folder_tree_html($hook['list'], $mbox_name, $js_mailboxlist, $attrib), html::$common_attrib);
     
     $RCMAIL->output->add_gui_object('mailboxlist', $attrib['id']);
     $RCMAIL->output->set_env('mailboxes', $js_mailboxlist);
@@ -1018,7 +1188,7 @@ function rcmail_build_folder_tree(&$arrFolders, $folder, $delm='/', $path='')
   if (!isset($arrFolders[$currentFolder])) {
     $arrFolders[$currentFolder] = array(
       'id' => $path,
-      'name' => rcube_charset_convert($currentFolder, 'UTF-7'),
+      'name' => rcube_charset_convert($currentFolder, 'UTF7-IMAP'),
       'virtual' => $virtual,
       'folders' => array());
   }
@@ -1064,7 +1234,7 @@ function rcmail_render_folder_tree_html(&$arrFolders, &$mbox_name, &$jslist, $at
     }
 
     // make folder name safe for ids and class names
-    $folder_id = asciiwords($folder['id'], true);
+    $folder_id = asciiwords($folder['id'], true, '_');
     $classes = array('mailbox');
 
     // set special class for Sent, Drafts, Trash and Junk
@@ -1193,7 +1363,7 @@ function rcmail_localize_foldername($name)
   if ($folder_class = rcmail_folder_classname($name))
     return rcube_label($folder_class);
   else
-    return rcube_charset_convert($name, 'UTF-7');
+    return rcube_charset_convert($name, 'UTF7-IMAP');
 }
 
 

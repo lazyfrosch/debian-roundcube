@@ -51,15 +51,11 @@ class rcube_config
     ob_start();
     
     // load main config file
-    if (include(RCMAIL_CONFIG_DIR . '/main.inc.php'))
-      $this->prop = (array)$rcmail_config;
-    else
+    if (!$this->load_from_file(RCMAIL_CONFIG_DIR . '/main.inc.php'))
       $this->errors[] = 'main.inc.php was not found.';
 
     // load database config
-    if (include(RCMAIL_CONFIG_DIR . '/db.inc.php'))
-      $this->prop += (array)$rcmail_config;
-    else
+    if (!$this->load_from_file(RCMAIL_CONFIG_DIR . '/db.inc.php'))
       $this->errors[] = 'db.inc.php was not found.';
     
     // load host-specific configuration
@@ -77,11 +73,11 @@ class rcube_config
 
     // fix default imap folders encoding
     foreach (array('drafts_mbox', 'junk_mbox', 'sent_mbox', 'trash_mbox') as $folder)
-      $this->prop[$folder] = rcube_charset_convert($this->prop[$folder], RCMAIL_CHARSET, 'UTF-7');
+      $this->prop[$folder] = rcube_charset_convert($this->prop[$folder], RCMAIL_CHARSET, 'UTF7-IMAP');
 
     if (!empty($this->prop['default_imap_folders']))
       foreach ($this->prop['default_imap_folders'] as $n => $folder)
-        $this->prop['default_imap_folders'][$n] = rcube_charset_convert($folder, RCMAIL_CHARSET, 'UTF-7');
+        $this->prop['default_imap_folders'][$n] = rcube_charset_convert($folder, RCMAIL_CHARSET, 'UTF7-IMAP');
 
     // set PHP error logging according to config
     if ($this->prop['debug_level'] & 1) {
@@ -123,10 +119,30 @@ class rcube_config
       $fname = preg_replace('/[^a-z0-9\.\-_]/i', '', $_SERVER['HTTP_HOST']) . '.inc.php';
     }
 
-    if ($fname && is_file(RCMAIL_CONFIG_DIR . '/' . $fname)) {
-      include(RCMAIL_CONFIG_DIR . '/' . $fname);
-      $this->prop = array_merge($this->prop, (array)$rcmail_config);
+    if ($fname) {
+      $this->load_from_file(RCMAIL_CONFIG_DIR . '/' . $fname);
     }
+  }
+  
+  
+  /**
+   * Read configuration from a file
+   * and merge with the already stored config values
+   *
+   * @param string Full path to the config file to be loaded
+   * @return booelan True on success, false on failure
+   */
+  public function load_from_file($fpath)
+  {
+    if (is_file($fpath) && is_readable($fpath)) {
+      include($fpath);
+      if (is_array($rcmail_config)) {
+        $this->prop = array_merge($this->prop, $rcmail_config);
+        return true;
+      }
+    }
+    
+    return false;
   }
   
   
@@ -175,28 +191,42 @@ class rcube_config
   {
     return $this->prop;
   }
-  
-  
-  /**
-   * Return a 24 byte key for the DES encryption
-   *
-   * @return string DES encryption key
-   */
-  public function get_des_key()
-  {
-    $key = !empty($this->prop['des_key']) ? $this->prop['des_key'] : 'rcmail?24BitPwDkeyF**ECB';
-    $len = strlen($key);
 
-    // make sure the key is exactly 24 chars long
-    if ($len<24)
-      $key .= str_repeat('_', 24-$len);
-    else if ($len>24)
-      substr($key, 0, 24);
+  /**
+   * Return requested DES crypto key.
+   *
+   * @param string Crypto key name
+   * @return string Crypto key
+   */
+  public function get_crypto_key($key)
+  {
+    // Bomb out if the requested key does not exist
+    if (!array_key_exists($key, $this->prop))
+    {
+      raise_error(array(
+        'code' => 500,
+        'type' => 'php',
+        'file' => __FILE__,
+        'message' => "Request for unconfigured crypto key \"$key\""
+      ), true, true);
+    }
+  
+    $key = $this->prop[$key];
+  
+    // Bomb out if the configured key is not exactly 24 bytes long
+    if (strlen($key) != 24)
+    {
+      raise_error(array(
+        'code' => 500,
+        'type' => 'php',
+        'file' => __FILE__,
+        'message' => "Configured crypto key \"$key\" is not exactly 24 bytes long"
+      ), true, true);
+    }
 
     return $key;
   }
-  
-  
+
   /**
    * Try to autodetect operating system and find the correct line endings
    *
@@ -207,9 +237,9 @@ class rcube_config
     // use the configured delimiter for headers
     if (!empty($this->prop['mail_header_delimiter']))
       return $this->prop['mail_header_delimiter'];
-    else if (strtolower(substr(PHP_OS, 0, 3) == 'win'))
+    else if (strtolower(substr(PHP_OS, 0, 3)) == 'win')
       return "\r\n";
-    else if (strtolower(substr(PHP_OS, 0, 3) == 'mac'))
+    else if (strtolower(substr(PHP_OS, 0, 3)) == 'mac')
       return "\r\n";
     else
       return "\n";

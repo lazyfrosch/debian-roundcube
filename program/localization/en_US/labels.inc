@@ -13,7 +13,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
+ @version $Id: labels.inc 2831 2009-08-03 18:42:57Z alec $
 
 */
 
@@ -29,7 +29,7 @@ $labels['login']     = 'Login';
 // taskbar
 $labels['logout']   = 'Logout';
 $labels['mail']     = 'E-Mail';
-$labels['settings'] = 'Personal Settings';
+$labels['settings'] = 'Settings';
 $labels['addressbook'] = 'Address Book';
 
 // mailbox names
@@ -140,8 +140,9 @@ $labels['viewsource']       = 'Show source';
 $labels['markmessages']     = 'Mark messages';
 $labels['markread']         = 'As read';
 $labels['markunread']       = 'As unread';
-$labels['markflagged']         = 'As flagged';
-$labels['markunflagged']       = 'As unflagged';
+$labels['markflagged']      = 'As flagged';
+$labels['markunflagged']    = 'As unflagged';
+$labels['messageactions']   = 'More actions...';
 
 $labels['select'] = 'Select';
 $labels['all'] = 'All';
@@ -149,6 +150,8 @@ $labels['none'] = 'None';
 $labels['unread'] = 'Unread';
 $labels['flagged'] = 'Flagged';
 $labels['unanswered'] = 'Unanswered';
+$labels['deleted'] = 'Deleted';
+$labels['invert'] = 'Invert';
 $labels['filter'] = 'Filter';
 
 $labels['compact'] = 'Compact';
@@ -165,9 +168,11 @@ $labels['searchmod']  = 'Search modifiers';
 $labels['msgtext']  = 'Entire message';
 
 $labels['openinextwin'] = 'Open in new window';
+$labels['emlsave'] = 'Download (.eml)';
 
 // message compose
 $labels['compose']        = 'Compose a message';
+$labels['editasnew']      = 'Edit as new';
 $labels['savemessage']    = 'Save this draft';
 $labels['sendmessage']    = 'Send now';
 $labels['addattachment']  = 'Attach a file';
@@ -288,8 +293,7 @@ $labels['fromknownsenders'] = 'from known senders';
 $labels['always'] = 'always';
 $labels['showinlineimages'] = 'Display attached images below the message';
 $labels['autosavedraft']  = 'Automatically save draft';
-$labels['everynminutes']  = 'every $n minutes';
-$labels['keepaliveevery']  = 'every $n minute(s)';
+$labels['everynminutes']  = 'every $n minute(s)';
 $labels['keepalive']  = 'Check for new messages on';
 $labels['never']  = 'never';
 $labels['messagesdisplaying'] = 'Displaying Messages';
@@ -301,6 +305,12 @@ $labels['2047folding'] = 'Full RFC 2047 (other)';
 $labels['advancedoptions'] = 'Advanced options';
 $labels['focusonnewmessage'] = 'Focus browser window on new message';
 $labels['checkallfolders'] = 'Check all folders for new messages';
+$labels['displaynext'] = 'After message delete/move display the next message';
+$labels['mainoptions'] = 'Main Options';
+$labels['section'] = 'Section';
+$labels['maintenance'] = 'Maintenance';
+$labels['newmessage'] = 'New Message';
+$labels['listoptions'] = 'List Options';
 
 $labels['folder']  = 'Folder';
 $labels['folders']  = 'Folders';

@@ -16,7 +16,7 @@
 |          Nuno Costa <nuno@criacaoweb.net>                             |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
+@version $Id: labels.inc 2513 2009-05-21 12:59:19Z alec $
 
 */
 
@@ -234,8 +234,7 @@ $labels['fromknownsenders'] = 'de remetentes conhecidos';
 $labels['always'] = 'sempre';
 $labels['showinlineimages'] = 'Mostrar imagens anexadas abaixo da mensagem';
 $labels['autosavedraft'] = 'Salvar rascunho automaticamente';
-$labels['everynminutes'] = 'a cada $n minutos';
-$labels['keepaliveevery'] = 'cada $n minuto(s)';
+$labels['everynminutes'] = 'cada $n minuto(s)';
 $labels['keepalive'] = 'Verificar novas mensagens em';
 $labels['never'] = 'nunca';
 $labels['messagesdisplaying'] = 'A exibir mensagens';

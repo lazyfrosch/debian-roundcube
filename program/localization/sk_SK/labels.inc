@@ -15,7 +15,7 @@
 |         Peter Mann   <peter.mann@tuke.sk>                             |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2237 2009-01-17 01:55:39Z till $
+@version $Id: labels.inc 2513 2009-05-21 12:59:19Z alec $
 
 */
 
@@ -227,7 +227,6 @@ $labels['flagfordeletion'] = 'Pri odstránení správy iba označiť správu ako
 $labels['skipdeleted'] = 'Nezobrazovať zmazané správy';
 $labels['showinlineimages'] = 'Zobraziť pripojené obrázky pod správou';
 $labels['autosavedraft'] = 'Automaticky uložiť koncept';
-$labels['everynminutes'] = 'každých $n minút';
 $labels['keepalive'] = 'Kontrolovať nové správy';
 $labels['never'] = 'nikdy';
 $labels['messagesdisplaying'] = 'Zobrazovanie správ';

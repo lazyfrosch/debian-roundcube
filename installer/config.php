@@ -112,14 +112,26 @@ echo $check_caching->show(intval($RCI->getprop('enable_caching')), array('value'
 <dt class="propname">enable_spellcheck</dt>
 <dd>
 <?php
+$check_spell = new html_checkbox(array('name' => '_enable_spellcheck', 'id' => "cfgspellcheck"));
+echo $check_spell->show(intval($RCI->getprop('enable_spellcheck')), array('value' => 1));
+?>
+<label for="cfgspellcheck">Make use of the spell checker</label><br />
+</dd>
 
-$check_caching = new html_checkbox(array('name' => '_enable_spellcheck', 'id' => "cfgspellcheck"));
-echo $check_caching->show(intval($RCI->getprop('enable_spellcheck')), array('value' => 1));
+<dt class="propname">spellcheck_engine</dt>
+<dd>
+<?php
+$select_spell = new html_select(array('name' => '_spellcheck_engine', 'id' => "cfgspellcheckengine"));
+if (extension_loaded('pspell'))
+  $select_spell->add('pspell', 'pspell');
+$select_spell->add('Googlie', 'googlie');
+
+echo $select_spell->show($RCI->is_post ? $_POST['_spellcheck_engine'] : 'pspell');
 
 ?>
-<label for="cfgspellcheck">Make use of the built-in spell checker</label><br />
+<label for="cfgspellcheckengine">Which spell checker to use</label><br />
 
-<p class="hint">It is based on GoogieSpell what implies that the message content will be sent to Google in order to check the spelling.</p>
+<p class="hint">GoogieSpell implies that the message content will be sent to Google in order to check the spelling.</p>
 </dd>
 
 <dt class="propname">identities_level</dt>
@@ -255,13 +267,13 @@ $dsnw = MDB2::parseDSN($RCI->getprop('db_dsnw'));
 echo $select_dbtype->show($RCI->is_post ? $_POST['_dbtype'] : $dsnw['phptype']);
 echo '<label for="cfgdbtype">Database type</label><br />';
 echo $input_dbhost->show($RCI->is_post ? $_POST['_dbhost'] : $dsnw['hostspec']);
-echo '<label for="cfgdbhost">Database server</label><br />';
+echo '<label for="cfgdbhost">Database server (omit for sqlite)</label><br />';
 echo $input_dbname->show($RCI->is_post ? $_POST['_dbname'] : $dsnw['database']);
-echo '<label for="cfgdbname">Database name</label><br />';
+echo '<label for="cfgdbname">Database name (use a path and filename for sqlite)</label><br />';
 echo $input_dbuser->show($RCI->is_post ? $_POST['_dbuser'] : $dsnw['username']);
-echo '<label for="cfgdbuser">Database user name (needs write permissions)</label><br />';
+echo '<label for="cfgdbuser">Database user name (needs write permissions)(omit for sqlite)</label><br />';
 echo $input_dbpass->show($RCI->is_post ? $_POST['_dbpass'] : $dsnw['password']);
-echo '<label for="cfgdbpass">Database password</label><br />';
+echo '<label for="cfgdbpass">Database password (omit for sqlite)</label><br />';
 
 ?>
 </dd>
@@ -417,7 +429,7 @@ $text_smtpport = new html_inputfield(array('name' => '_smtp_port', 'size' => 6, 
 echo $text_smtpport->show($RCI->getprop('smtp_port'));
 
 ?>
-<div>SMTP port (default is 25; 465 for SSL)</div>
+<div>SMTP port (default is 25; 465 for SSL; 587 for submission)</div>
 </dd>
 
 <dt class="propname">smtp_user/smtp_pass</dt>
@@ -473,7 +485,7 @@ echo $check_smtplog->show(intval($RCI->getprop('smtp_log')), array('value' => 1)
 <legend>Display settings &amp; user prefs</legend>
 <dl class="configblock" id="cgfblockdisplay">
 
-<dt class="propname">language</dt>
+<dt class="propname">language <span class="userconf">*</span></dt>
 <dd>
 <?php
 
@@ -547,7 +559,7 @@ echo $check_htmlcomp->show(intval($RCI->getprop('htmleditor')));
 
 $select_autosave = new html_select(array('name' => '_draft_autosave', 'id' => 'cfgautosave'));
 $select_autosave->add('never', 0);
-foreach (array(3, 5, 10) as $i => $min)
+foreach (array(1, 3, 5, 10) as $i => $min)
   $select_autosave->add("$min min", $min*60);
 
 echo $select_autosave->show(intval($RCI->getprop('draft_autosave')));

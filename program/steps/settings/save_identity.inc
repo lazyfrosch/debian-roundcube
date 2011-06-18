@@ -5,7 +5,7 @@
  | program/steps/settings/save_identity.inc                              |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: save_identity.inc 2483 2009-05-15 10:22:29Z thomasb $
+ $Id: save_identity.inc 2778 2009-07-21 16:02:33Z thomasb $
 
 */
 
@@ -60,7 +60,11 @@ if (IDENTITIES_LEVEL == 1 || IDENTITIES_LEVEL == 3)
 // update an existing contact
 if ($_POST['_iid'])
 {
-  if ($updated = $USER->update_identity(get_input_value('_iid', RCUBE_INPUT_POST), $save_data))
+  $iid = get_input_value('_iid', RCUBE_INPUT_POST);
+  $plugin = $RCMAIL->plugins->exec_hook('save_identity', array('id' => $iid, 'record' => $save_data));
+  $save_data = $plugin['record'];
+
+  if (!$plugin['abort'] && ($updated = $USER->update_identity($iid, $save_data)))
   {
     $OUTPUT->show_message('successfullysaved', 'confirmation');
     
@@ -73,10 +77,10 @@ if ($_POST['_iid'])
       // ...      
     }
   }
-  else if ($DB->is_error())
+  else if ($plugin['abort'] || $DB->is_error())
   {
     // show error message
-    $OUTPUT->show_message('errorsaving', 'error');
+    $OUTPUT->show_message('errorsaving', 'error', null, false);
     rcmail_overwrite_action('edit-identity');
     return;
   }
@@ -88,9 +92,12 @@ else if (IDENTITIES_LEVEL < 2)
   if (IDENTITIES_LEVEL == 1)
     $save_data['email'] = $RCMAIL->user->get_username();
 
-  if ($save_data['email'] && ($insert_id = $USER->insert_identity($save_data)))
+  $plugin = $RCMAIL->plugins->exec_hook('create_identity', array('record' => $save_data));
+  $save_data = $plugin['record'];
+
+  if (!$plugin['abort'] && $save_data['email'] && ($insert_id = $USER->insert_identity($save_data)))
   {
-    $OUTPUT->show_message('successfullysaved', 'confirmation');
+    $OUTPUT->show_message('successfullysaved', 'confirmation', null, false);
     
     $_GET['_iid'] = $insert_id;
 
@@ -100,7 +107,7 @@ else if (IDENTITIES_LEVEL < 2)
   else
   {
     // show error message
-    $OUTPUT->show_message('errorsaving', 'error');
+    $OUTPUT->show_message('errorsaving', 'error', null, false);
     rcmail_overwrite_action('edit-identity');
     return;
   }

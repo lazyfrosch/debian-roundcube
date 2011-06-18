@@ -14,7 +14,7 @@
 |         Simo <sim6@graciasensefils.net>                               |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2237 2009-01-17 01:55:39Z till $
+@version $Id: labels.inc 2850 2009-08-07 21:17:12Z yllar $
 
 */
 
@@ -117,12 +117,15 @@ $labels['markread'] = 'Com a llegits';
 $labels['markunread'] = 'Com a no llegits';
 $labels['markflagged'] = 'Com marcat';
 $labels['markunflagged'] = 'Com no marcat';
+$labels['messageactions'] = 'Més accions...';
 $labels['select'] = 'Seleccionar';
 $labels['all'] = 'Tots';
 $labels['none'] = 'Cap';
 $labels['unread'] = 'No llegits';
 $labels['flagged'] = 'Marcat';
 $labels['unanswered'] = 'No respost';
+$labels['deleted'] = 'Esborrat';
+$labels['invert'] = 'Invertir';
 $labels['filter'] = 'Filtre';
 $labels['compact'] = 'Compacta';
 $labels['empty'] = 'Buida';
@@ -132,8 +135,12 @@ $labels['unknown'] = 'desconegut';
 $labels['unlimited'] = 'il·limitat';
 $labels['quicksearch'] = 'Cerca ràpida';
 $labels['resetsearch'] = 'Neteja cerca';
+$labels['searchmod'] = 'Cercar modificadors';
+$labels['msgtext'] = 'Missatge sencer';
 $labels['openinextwin'] = 'Obrir a una nova finestra';
+$labels['emlsave'] = 'Descarregar (.eml)';
 $labels['compose'] = 'Escriure un missatge';
+$labels['editasnew'] = 'Editar com a nou';
 $labels['savemessage'] = 'Desa aquest esborrany';
 $labels['sendmessage'] = 'Enviar ara el missatge';
 $labels['addattachment'] = 'Afegir un fitxer';
@@ -232,8 +239,7 @@ $labels['fromknownsenders'] = 'de remitent conegut';
 $labels['always'] = 'sempre';
 $labels['showinlineimages'] = 'Mostra les imatges adjuntes sota el missatge';
 $labels['autosavedraft'] = 'Desar esborrany automàticament';
-$labels['everynminutes'] = 'cada $n minuts';
-$labels['keepaliveevery'] = 'cada $n minut(s)';
+$labels['everynminutes'] = 'cada $n minut(s)';
 $labels['keepalive'] = 'Comprovar nous missatges a';
 $labels['never'] = 'mai';
 $labels['messagesdisplaying'] = 'Vista de missatges';
@@ -245,6 +251,12 @@ $labels['2047folding'] = 'Complet RFC 2047 (un altre)';
 $labels['advancedoptions'] = 'Opcions avançades';
 $labels['focusonnewmessage'] = 'Enviar el focus al navegador quan hi hagi un nou missatge';
 $labels['checkallfolders'] = 'Comprovar totes les carpetes per missatges nous';
+$labels['displaynext'] = 'Mostrar el següent missatge després de esborrar-ne o moure\'n un';
+$labels['mainoptions'] = 'Opcions principals';
+$labels['section'] = 'Secció';
+$labels['maintenance'] = 'Manteniment';
+$labels['newmessage'] = 'Missatge nou';
+$labels['listoptions'] = 'Opcions de llista';
 $labels['folder'] = 'Carpeta';
 $labels['folders'] = 'Carpetes';
 $labels['foldername'] = 'Nom de carpeta';

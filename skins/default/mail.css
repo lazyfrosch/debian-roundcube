@@ -5,32 +5,146 @@
 {
   position: absolute;
   top: 47px;
-  left: 200px;
-  right: 200px;
+  left: 205px;
+  right: 10px;
   height: 35px;
+  min-width: 650px;
   white-space: nowrap;
 /*  border: 1px solid #cccccc; */
-  /* css hack for IE */
-  width: expression((parseInt(document.documentElement.clientWidth)-400)+'px');
 }
 
-#messagetoolbar a
+#messagetoolbar > a
 {
+  display: block;
+  float: left;
   padding-right: 10px;
 }
 
-#messagetoolbar select
+#messagetoolbar a.button,
+#messagetoolbar a.buttonPas {
+  display: block;
+  float: left;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin-right: 10px;
+  overflow: hidden;
+  background: url('images/mail_toolbar.png') 0 0 no-repeat transparent;
+  opacity: 0.99; /* this is needed to make buttons appear correctly in Chrome */
+}
+
+#messagetoolbar a.buttonPas {
+  opacity: 0.35;
+}
+
+#messagetoolbar a.checkmailSel {
+  background-position: 0 -32px;
+}
+
+#messagetoolbar a.back {
+  background-position: -32px 0;
+}
+
+#messagetoolbar a.backSel {
+  background-position: -32px -32px;
+}
+
+#messagetoolbar a.compose {
+  background-position: -64px 0;
+}
+
+#messagetoolbar a.composeSel {
+  background-position: -64px -32px;
+}
+
+#messagetoolbar a.reply {
+  background-position: -96px 0;
+}
+
+#messagetoolbar a.replySel {
+  background-position: -96px -32px;
+}
+
+#messagetoolbar a.replyAll {
+  background-position: -128px 0;
+}
+
+#messagetoolbar a.replyAllSel {
+  background-position: -128px -32px;
+}
+
+#messagetoolbar a.forward {
+  background-position: -160px 0;
+}
+
+#messagetoolbar a.forwardSel {
+  background-position: -160px -32px;
+}
+
+#messagetoolbar a.delete {
+  background-position: -192px 0;
+}
+
+#messagetoolbar a.deleteSel {
+  background-position: -192px -32px;
+}
+
+#messagetoolbar a.markmessage {
+  background-position: -256px 0;
+}
+
+#messagetoolbar a.messagemenu {
+  width: 36px;
+  background-position: -288px 0;
+}
+
+#messagetoolbar a.spellcheck {
+  background-position: -386px 0;
+}
+
+#messagetoolbar a.spellcheckSel {
+  background-position: -386px -32px;
+}
+
+#messagetoolbar a.attach {
+  background-position: -354px 0;
+}
+
+#messagetoolbar a.attachSel {
+  background-position: -354px -32px;
+}
+
+#messagetoolbar a.savedraft {
+  background-position: -322px 0;
+}
+
+#messagetoolbar a.savedraftSel {
+  background-position: -322px -32px;
+}
+
+#messagetoolbar a.send {
+  background-position: -418px 0;
+}
+
+#messagetoolbar a.sendSel {
+  background-position: -418px -32px;
+}
+
+
+#messagetoolbar select,
+#compose-container select
 {
   font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
   font-size: 11px;
   color: #333333;
+  height: 21px;
 }
 
 #messagetoolbar select.mboxlist
 {
-  position: absolute;
-  left: 375px;
-  top: 8px;
+  position: relative;
+  margin: 0 8px;
+  top: 6px;
 }
 
 #messagetoolbar select.mboxlist option
@@ -43,19 +157,25 @@
   padding-left: 2px;
 }
 
-#markmessagemenu
+#markmessagemenu,
+#searchmenu,
+#messagemenu
 {
   position: absolute;
   top: 32px;
   left: 90px;
   width: auto;
-  visibility: hidden;
+  display: none;
   background-color: #F9F9F9;
   border: 1px solid #CCC;
   padding: 1px;
   opacity: 0.9;
-  filter:alpha(opacity=90);
   z-index: 240;
+}
+
+#searchmenu
+{
+  width: 172px;
 }
 
 ul.toolbarmenu
@@ -70,29 +190,121 @@ ul.toolbarmenu li
   font-size: 11px;
   white-space: nowrap;
   min-width: 130px;
-  width: auto !important;
-  width: 130px;
 }
 
 ul.toolbarmenu li a
 {
   display: block;
   color: #a0a0a0;
-  padding: 2px 8px 3px 12px;
+  padding: 2px 8px 3px 22px;
   text-decoration: none;
+  min-height: 14px;
 }
 
-ul.toolbarmenu li a.active:hover
+ul.toolbarmenu li a.active,
+ul.toolbarmenu li a.active:active,
+ul.toolbarmenu li a.active:visited
 {
-  background-color: #ddd;
+  color: #333;
+}
+
+ul.toolbarmenu li input
+{
+  vertical-align: middle;
+}
+
+ul.toolbarmenu li hr
+{
+  color: #ccc;
+  width: 130px;
+  height: 1px;
+  margin: 2px 1px 2px 1px;
+}
+
+ul.toolbarmenu li img
+{
+  float: left;
+  margin: 0 2px;
+}
+
+ul.toolbarmenu li.separator_below
+{
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 2px;
+  padding-bottom: 2px;
+}
+
+ul.toolbarmenu li.separator_above
+{
+  border-top: 1px solid #ccc;
+  margin-top: 2px;
+  padding-top: 2px;
+}
+
+#messagemenu li a.active:hover,
+#markmessagemenu li a.active:hover
+{
+  color: #fff;
+  background-color: #c00;
+}
+
+#messagemenu li a
+{
+  background: url('images/messageactions.png') no-repeat 1px 0;
+  background-position: 0px 20px;
+}
+
+#messagemenu li a.printlink
+{
+  background-position: 1px 1px;
+}
+
+#messagemenu li a.downloadlink
+{
+  background-position: 1px -17px;
+}
+
+#messagemenu li a.sourcelink
+{
+  background-position: 1px -35px;
+}
+
+#messagemenu li a.openlink
+{
+  background-position: 1px -53px;
+}
+
+#messagemenu li a.editlink
+{
+  background-position: 1px -71px;
+}
+
+#markmessagemenu a.readlink
+{
+  background: url('images/icons/dot.png') no-repeat 2px;
+}
+
+#markmessagemenu a.unreadlink
+{
+  background: url('images/icons/unread.png') no-repeat 2px;
+}
+
+#markmessagemenu a.flaggedlink
+{
+  background: url('images/icons/flagged.png') no-repeat 2px;
+}
+
+#markmessagemenu a.unflaggedlink
+{
+  background: url('images/icons/unflagged.png') no-repeat 2px;
 }
 
 #searchfilter
 {
+  white-space: nowrap;
   position: absolute;
-  right: 18px;
-  top: 8px;
-  text-align: right;
+  right: 190px;
+  vertical-align: middle;
 }
 
 #searchfilter label
@@ -120,9 +332,6 @@ td.formlinks a:visited
 #mailboxcontrols a.active,
 #mailboxcontrols a.active:active,
 #mailboxcontrols a.active:visited,
-ul.toolbarmenu li a.active,
-ul.toolbarmenu li a.active:active,
-ul.toolbarmenu li a.active:visited,
 td.formlinks a,
 td.formlinks a:visited
 {
@@ -135,8 +344,7 @@ td.formlinks a:visited
   text-decoration: underline;
 }
 
-#listcontrols,
-#mailboxcontrols
+#listcontrols
 {
   padding-right: 2em;
 }
@@ -144,10 +352,10 @@ td.formlinks a:visited
 #messagecountbar
 {
   position: absolute;
-  bottom: 16px;
-  right: 20px;
+  bottom: 0px;
+  right: 0px;
   width: 300px;
-  height: 20px;
+  height: 16px;
   text-align: right;
   white-space: nowrap;
 }
@@ -158,16 +366,22 @@ td.formlinks a:visited
   color: #333333;
 }
 
-#mainscreen 
+#mainscreen
 {
   position: absolute;
   top: 85px;
   right: 20px;
-  bottom: 40px;
+  bottom: 16px;
   left: 20px;
-  /* css hack for IE */
-  width: expression((parseInt(document.documentElement.clientWidth)-40)+'px');
-  height: expression((parseInt(document.documentElement.clientHeight)-125)+'px');
+}
+
+#mailleftcontainer
+{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  width: 195px;
 }
 
 #mailrightcontainer
@@ -177,11 +391,17 @@ td.formlinks a:visited
   left: 170px;
   bottom: 0px;
   right: 0px;
-  /* css hack for IE */
-  width: expression((parseInt(this.parentNode.offsetWidth)-170)+'px');
-  height: expression(parseInt(this.parentNode.offsetHeight)+'px');
 }
-	  
+
+#mailrightcontent
+{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 20px;
+}
+
 #messagepartcontainer
 {
   position: absolute;
@@ -189,9 +409,6 @@ td.formlinks a:visited
   left: 20px;
   right: 20px;
   bottom: 20px;
-  /* css hack for IE */
-  width: expression((parseInt(document.documentElement.clientWidth)-40)+'px');
-  height: expression((parseInt(document.documentElement.clientHeight)-100)+'px');
 }
 
 #mailcontframe
@@ -203,8 +420,8 @@ td.formlinks a:visited
   border: 1px solid #999999;
   background-color: #F9F9F9;
   overflow: auto;
-  /* css hack for IE */
-  height: expression(parseInt(this.parentNode.offsetHeight)+'px');
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #mailpreviewframe
@@ -215,8 +432,6 @@ td.formlinks a:visited
   bottom: 0px;
   border: 1px solid #999999;
   background-color: #F9F9F9;
-  /* css hack for IE */
-  height: expression((parseInt(this.parentNode.offsetHeight)-205)+'px');
 }
 
 #messagecontframe
@@ -246,8 +461,6 @@ td.formlinks a:visited
   left: 220px;
   right: 20px;
   height: 40px;
-  /* css hack for IE */
-  width: expression((parseInt(document.documentElement.clientWidth)-240)+'px');
 }
 
 #partheader table td
@@ -273,8 +486,7 @@ td.formlinks a:visited
   height: 12px;
   margin: 0;
   padding: 3px 10px 4px 10px;
-  background-color: #EBEBEB;
-  background-image: url(images/listheader_aqua.gif); 
+  background: url('images/listheader.gif') top left repeat-x #CCC;
   border-bottom: 1px solid #999;
   color: #333333;
   font-size: 11px;
@@ -286,13 +498,11 @@ td.formlinks a:visited
   position: absolute;
   top: 0px;
   left: 0px;
-  width: 160px;
-  bottom: 0px;
+  width: 100%;
+  bottom: 20px;
   border: 1px solid #999;
   background-color: #F9F9F9;
   overflow: auto;
-  /* css hack for IE */
-  height: expression(parseInt(this.parentNode.offsetHeight)+'px');
 }
 
 #mailboxlist
@@ -312,8 +522,7 @@ td.formlinks a:visited
   display: block;
   position: relative;
   font-size: 11px;
-  background: url(images/icons/folder-closed.png) no-repeat;
-  background-position: 5px 1px;
+  background: url('images/icons/folders.png') 5px 1px no-repeat;
   border-bottom: 1px solid #EBEBEB;
 }
 
@@ -335,37 +544,37 @@ td.formlinks a:visited
 
 #mailboxlist li div.collapsed
 {
-  background: url(images/icons/collapsed.png) bottom right no-repeat;
+  background: url('images/icons/collapsed.png') bottom right no-repeat;
 }
 
 #mailboxlist li div.expanded
 {
-  background: url(images/icons/expanded.png) bottom right no-repeat;
+  background: url('images/icons/expanded.png') bottom right no-repeat;
 }
 
 #mailboxlist li.inbox
 {
-  background-image: url(images/icons/folder-inbox.png);
+  background-position: 5px -19px;
 }
 
 #mailboxlist li.drafts
 {
-  background-image: url(images/icons/folder-drafts.png);
+  background-position: 5px -40px;
 }
 
 #mailboxlist li.sent
 {
-  background-image: url(images/icons/folder-sent.png);
+  background-position: 5px -60px;
 }
 
 #mailboxlist li.junk
 {
-  background-image: url(images/icons/folder-junk.png);
+  background-position: 5px -80px;
 }
 
 #mailboxlist li.trash
 {
-  background-image: url(images/icons/folder-trash.png);
+  background-position: 5px -100px;
 }
 
 #mailboxlist li a
@@ -420,16 +629,13 @@ td.formlinks a:visited
   font-weight: normal;
 }
 
-
 #mailfooter
 {
   position: absolute;
-  left: 20px;
-  right: 20px;
-  bottom: 18px;
-  height: 20px;
-  /* css hack for IE */
-  width: expression((parseInt(document.documentElement.clientWidth)-40)+'px');
+  left: 0px;
+  bottom: 0px;
+  height: 16px;
+  width: 100%;
 }
 
 #mailfooter table tr td
@@ -438,13 +644,35 @@ td.formlinks a:visited
   vertical-align: bottom;
 }
 
-#mailboxcontrols,
+#mailboxcontrols
+{
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  height: 16px;
+  width: auto;
+  font-size: 11px;
+}
+
 #listcontrols,
 #countcontrols,
 #quotabox
 {
   white-space: nowrap;
   font-size: 11px;
+}
+
+#countcontrols
+{
+  min-width: 25em;
+}
+
+#countcontrols a.button,
+#countcontrols a.buttonPas,
+#messagecountbar a.button,
+#messagecountbar a.buttonPas
+{
+  float: right;
 }
 
 
@@ -461,13 +689,11 @@ body.messagelist
   width: 100%;
   display: table;
   table-layout: fixed;
-  /* css hack for IE */
-  width: expression('auto');
 }
 
 #messagelist thead tr td
 {
-  height: 20px;
+  height: 19px;
   padding-top: 0px;
   padding-bottom: 0px;
   padding-left: 2px;
@@ -475,8 +701,7 @@ body.messagelist
   vertical-align: middle;
   border-bottom: 1px solid #999999;
   color: #333333;
-  background-color: #EBEBEB;
-  background-image: url(images/listheader_aqua.gif); 
+  background: url('images/listheader.gif') top left repeat-x #CCC;
   font-size: 11px;
   font-weight: bold;
 }
@@ -484,17 +709,17 @@ body.messagelist
 #messagelist thead tr td.sortedASC,
 #messagelist thead tr td.sortedDESC
 {
-  background-image: url(images/listheader_dark.gif); 
+  background-position: 0 -20px;
 }
 
 #messagelist thead tr td.sortedASC a
 {
-  background: url(images/sort_asc.gif) top right no-repeat;
+  background: url('images/icons/sort.gif') right 0 no-repeat;
 }
 
 #messagelist thead tr td.sortedDESC a
 {
-  background: url(images/sort_desc.gif) top right no-repeat;
+  background: url('images/icons/sort.gif') right -14px no-repeat;
 }
 
 #messagelist thead tr td a
@@ -515,6 +740,7 @@ body.messagelist
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
   border-bottom: 1px solid #EBEBEB;
   cursor: default;
 }
@@ -539,10 +765,18 @@ body.messagelist
   vertical-align: middle;
 }
 
-#messagelist tr td.icon,
-#messagelist tr td.flag
+#messagelist thead tr td.icon,
+#messagelist thead tr td.flag
 {
-  width: 16px;
+  width: 22px;
+  padding: 0;
+  text-align: center;
+}
+
+#messagelist tbody tr td.icon,
+#messagelist tbody tr td.flag
+{
+  padding: 2px 3px 2px 3px;
   vertical-align: middle;
   cursor: pointer;
 }
@@ -557,6 +791,7 @@ body.messagelist
 {
   overflow: hidden;
   vertical-align: middle;
+  width: 99%;
 }
 
 #messagelist tr td.size
@@ -636,13 +871,6 @@ body.messagelist
   color: #CCCCCC;
 }
 
-/* safari hacks \*/
-html>body*#messagelist[id$="messagelist"]:not([class="none"]) { width: 99.8%; }
-html>body*#messagelist[id$="messagelist"]:not([class="none"]) tr td.flag,
-html>body*#messagelist[id$="messagelist"]:not([class="none"]) tr td.icon { width: 20px; }
-html>body*input[type$="file"]:not([class="none"]) { background-color: transparent; border: 0; }
-/**/
-
 #quotadisplay
 {
   color: #666666;
@@ -663,21 +891,13 @@ html>body*input[type$="file"]:not([class="none"]) { background-color: transparen
 {
   position: absolute;
   top: 0px;
-  left: 170px;
+  left: 180px;
   right: 0px;
-  bottom: 0px;
+  bottom: 20px;
   border: 1px solid #999;
   background-color: #FFF;
   overflow: auto;
-  /* css hack for IE */
-  width: expression((parseInt(this.parentNode.offsetWidth)-170)+'px');
-  height: expression((parseInt(this.parentNode.offsetHeight))+'px');
-}
-
-#messagecanvas 
-{
-  /* css hack for IE */
-  width: expression((parseInt(this.parentNode.offsetWidth)-20)+'px');
+  z-index: 1;
 }
 
 #printmessageframe
@@ -690,9 +910,6 @@ html>body*input[type$="file"]:not([class="none"]) { background-color: transparen
   border: 1px solid #999;
   background-color: #FFF;
   overflow: auto;
-  /* css hack for IE */
-  width: expression((parseInt(document.documentElement.clientWidth)-220)+'px');
-  height: expression((parseInt(document.documentElement.clientHeight)-125)+'px');
 }
 
 div.messageheaderbox
@@ -749,8 +966,17 @@ table.headers-table tr td.all
   color: #666666;
   text-align: left;
   padding-right: 10px;
-  vertical-align: center;
   text-align: center;
+  padding: 2px 6px 4px 6px;
+  border-bottom: 0;
+}
+
+table.headers-table tr td.more-headers
+{
+  cursor: pointer;
+  width: 100%;
+  height: 8px;
+  border-bottom: 0;
 }
 
 #attachment-list
@@ -761,8 +987,6 @@ table.headers-table tr td.all
   list-style-image: none;
   list-style-type: none;
   background: url(images/icons/attachment.png) 60px 2px no-repeat #DFDFDF;
-  /* IE6 hack */    
-  _height: expression(Math.min(16, parseInt(document.documentElement.clientHeight))+'px');
 }
 
 #attachment-list:after
@@ -827,10 +1051,13 @@ div.message-part div.pre
   padding: 0px;
   font-family: monospace;
   white-space: -moz-pre-wrap !important;
-  white-space: -o-pre-wrap !important;
   white-space: pre-wrap !important;
   white-space: pre;
-  word-wrap: break-word; /* IE (and Safari) */
+}
+
+div.message-part span.sig
+{
+  color: #666666;
 }
 
 div.message-part blockquote
@@ -855,12 +1082,6 @@ div.message-part blockquote blockquote blockquote
   color: #990000;
   border-left: 2px solid #bb0000;
   border-right: 2px solid #bb0000;
-}
-
-body.iframe 
-{
-  /* css hack for IE */
-  width: expression((parseInt(document.documentElement.clientWidth))+'px');
 }
 
 body.iframe div.message-htmlpart
@@ -913,28 +1134,38 @@ div.message-htmlpart div.rcmBody
 #receipt-selector
 {
   padding-left: 30px;
+  white-space: nowrap;
 }
 
 #compose-container
 {
   position: absolute;
   top: 90px;
-  left: 190px;
+  left: 205px;
   right: 25px;
   bottom: 30px;
   margin: 0px;
-  /* css hack for IE */
-  width: expression((parseInt(document.documentElement.clientWidth)-210)+'px');
-  height: expression((parseInt(document.documentElement.clientHeight)-120)+'px');
+}
+
+#spellcheck-control
+{
+  text-align: right;
+  padding-top: 3px;
+}
+
+#editor-select
+{
+  float: left;
 }
 
 #compose-div
 {
   position: absolute;
-  top: 110px;
-  bottom: 40px;
+  top: 130px;
+  bottom: 30px;
   width: 100%;
   vertical-align: top;
+  padding-top: 2px;
 }
 
 #compose-headers
@@ -963,7 +1194,6 @@ div.message-htmlpart div.rcmBody
 #compose-headers td input
 {
   width: 100%;
-  width: expression('99%');
 }
 
 #compose-headers td textarea
@@ -991,7 +1221,7 @@ div.message-htmlpart div.rcmBody
   position: absolute;
   top: 100px;
   left: 20px;
-  width: 160px;
+  width: 170px;
 }
 
 #compose-attachments ul
@@ -1014,6 +1244,12 @@ div.message-htmlpart div.rcmBody
   border-bottom: 1px solid #EBEBEB;
   white-space: nowrap;
   overflow: hidden;
+}
+
+#compose-attachments ul li img
+{
+  padding-right: 2px;
+  vertical-align: middle;
 }
 
 #attachment-title
@@ -1042,20 +1278,6 @@ div.message-htmlpart div.rcmBody
 #attachment-form div.buttons
 {
   margin-top: 4px;
-}
-
-table.headers-table tr td.more-headers
-{
-  cursor: pointer;
-  width: 100%;
-  height: 8px;
-  border-bottom: 0;
-}
-
-table.headers-table tr td.all
-{
-  padding: 2px 6px 4px 6px;
-  border-bottom: 0;
 }
 
 td.show-headers

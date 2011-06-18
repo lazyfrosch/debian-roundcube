@@ -14,7 +14,7 @@
 |         Søren Aggeboe <soren@aggeboe.dk>                              |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
+@version $Id: labels.inc 2513 2009-05-21 12:59:19Z alec $
 
 */
 
@@ -232,7 +232,6 @@ $labels['always'] = 'altid';
 $labels['showinlineimages'] = 'Vis vedhæftede billeder under beskeden';
 $labels['autosavedraft'] = 'Gem kladde automatisk';
 $labels['everynminutes'] = 'hver $n. minut';
-$labels['keepaliveevery'] = 'hver $n. minut';
 $labels['never'] = 'aldrig';
 $labels['messagesdisplaying'] = 'Viser beskeder';
 $labels['messagescomposition'] = 'Skriver nye beskeder';
@@ -264,4 +263,3 @@ $labels['MB'] = 'MB';
 $labels['GB'] = 'GB';
 
 ?>
-

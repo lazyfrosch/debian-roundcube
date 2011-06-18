@@ -28,7 +28,7 @@ foreach ($a_mailboxes as $mbox_name) {
       // refresh saved search set
       if (($search_request = get_input_value('_search', RCUBE_INPUT_GPC)) && isset($_SESSION['search'][$search_request])) {
         $_SESSION['search'][$search_request] = $IMAP->refresh_search();
-	$all_count = $IMAP->messagecount();
+        $all_count = $IMAP->messagecount();
       } else {
         $all_count = $IMAP->messagecount(NULL, 'ALL', TRUE);
       }
@@ -47,6 +47,9 @@ foreach ($a_mailboxes as $mbox_name) {
       if (!empty($_GET['_quota']))
         $OUTPUT->command('set_quota', rcmail_quota_content($IMAP->get_quota()));
 
+      // trigger plugin hook
+      $RCMAIL->plugins->exec_hook('new_messages', array('mailbox' => $mbox_name, 'count' => $unread_count));
+
       // "No-list" mode, don't get messages
       if (empty($_GET['_list']))
         continue;
@@ -62,7 +65,7 @@ foreach ($a_mailboxes as $mbox_name) {
         // get the headers
         $result_h = $IMAP->list_headers($mbox_name, 1, 'date', 'DESC');
         // add to the list
-	rcmail_js_message_list($result_h, TRUE);
+        rcmail_js_message_list($result_h, true, false);
       }
     }
   }

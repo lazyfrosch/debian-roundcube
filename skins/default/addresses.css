@@ -4,13 +4,73 @@
 {
   position: absolute;
   top: 45px;
-  left: 200px;
+  left: 205px;
   height: 35px;
 }
 
 #abooktoolbar a
 {
   padding-right: 10px;
+}
+
+#abooktoolbar a.button,
+#abooktoolbar a.buttonPas,
+#abooktoolbar span.separator {
+  display: block;
+  float: left;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin-right: 10px;
+  overflow: hidden;
+  background: url('images/abook_toolbar.png') 0 0 no-repeat transparent;
+  opacity: 0.99; /* this is needed to make buttons appear correctly in Chrome */
+}
+
+#abooktoolbar a.buttonPas {
+  opacity: 0.35;
+}
+
+#abooktoolbar a.addcontactSel {
+  background-position: 0 -32px;
+}
+
+#abooktoolbar a.compose {
+  background-position: -32px 0;
+}
+
+#abooktoolbar a.composeSel {
+  background-position: -32px -32px;
+}
+
+#abooktoolbar a.delete {
+  background-position: -64px 0;
+}
+
+#abooktoolbar a.deleteSel {
+  background-position: -64px -32px;
+}
+
+#abooktoolbar a.import {
+  background-position: -96px 0;
+}
+
+#abooktoolbar a.importSel {
+  background-position: -96px -32px;
+}
+
+#abooktoolbar a.export {
+  background-position: -128px 0;
+}
+
+#abooktoolbar a.exportSel {
+  background-position: -128px -32px;
+}
+
+#abooktoolbar span.separator {
+  width: 5px;
+  background-image: url('images/abook_toolbar.png');
+  background-position: -162px 0;
 }
 
 #abookcountbar
@@ -29,16 +89,13 @@
   color: #333333;
 }
 
-#mainscreen
+#addressscreen
 {
   position: absolute;
   top: 85px;
   right: 20px;
   bottom: 40px;
-  left: 200px;
-  /* css hack for IE */
-  width: expression((parseInt(document.documentElement.clientWidth)-220)+'px');
-  height: expression((parseInt(document.documentElement.clientHeight)-125)+'px');
+  left: 205px;
 }
 
 #directorylist
@@ -47,12 +104,10 @@
   top: 85px;
   bottom: 40px;
   left: 20px;
-  width: 170px;
+  width: 175px;
   border: 1px solid #999999;
   background-color: #F9F9F9;
   overflow: hidden;
-  /* css hack for IE */
-  height: expression((parseInt(document.documentElement.clientHeight)-125)+'px');  
 }
 
 #addresslist
@@ -63,8 +118,6 @@
   border: 1px solid #999999;
   background-color: #F9F9F9;
   overflow: auto;
-  /* css hack for IE */
-  height: expression(parseInt(this.parentNode.offsetHeight)+'px');
 }
 
 #importbox
@@ -78,8 +131,6 @@
   background-color: #F9F9F9;
   padding-bottom: 4ex;
   overflow: auto;
-  /* css hack for IE */
-  height: expression((parseInt(document.documentElement.clientHeight)-135)+'px');  
 }
 
 #addresslist
@@ -139,8 +190,6 @@
 {
   width: 100%;
   table-layout: fixed;
-  /* css hack for IE */
-  width: expression(document.getElementById('addresslist').clientWidth);
 }
 
 
@@ -159,9 +208,6 @@
   bottom: 0px;
   border: 1px solid #999999;
   overflow: hidden;
-  /* css hack for IE */
-  height: expression(parseInt(this.parentNode.offsetHeight)+'px');
-  width: expression((parseInt(this.parentNode.offsetWidth)-555)+'px');
 }
 
 body.iframe,
@@ -185,8 +231,7 @@ body.iframe,
   color: #333;
   font-size: 11px;
   font-weight: bold;
-  background-color: #EBEBEB;
-  background-image: url(images/listheader_aqua.gif);
+  background: url('images/listheader.gif') top left repeat-x #CCC;
   white-space: nowrap;
 }
 

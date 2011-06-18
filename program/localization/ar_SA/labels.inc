@@ -13,7 +13,7 @@
 | Author: Ossama Khayat <okhayat@yahoo.com>                             |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2237 2009-01-17 01:55:39Z till $
+@version $Id: labels.inc 2513 2009-05-21 12:59:19Z alec $
 
 */
 
@@ -226,7 +226,6 @@ $labels['skipdeleted'] = 'لا تظهر الرسائل المحذوفة';
 $labels['showinlineimages'] = 'أظهر الصّور المرفقة أسفل الرسالة';
 $labels['autosavedraft'] = 'حفظ المسودة تلقائياً';
 $labels['everynminutes'] = 'كل $n دقيقة';
-$labels['keepaliveevery'] = 'كل $n دقيقة';
 $labels['keepalive'] = 'تحقق من وجود رسائل جديدة عند';
 $labels['never'] = 'أبداً';
 $labels['messagesdisplaying'] = 'إظهار الرسائل';

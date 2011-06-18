@@ -14,7 +14,7 @@
 | Corrections: Alexander Stiebing <ja.stiebing[NOSPAM]@web.de>          |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2316 2009-02-27 10:54:17Z thomasb $
+@version $Id: labels.inc 2854 2009-08-12 11:00:13Z thomasb $
 
 */
 
@@ -101,7 +101,7 @@ $labels['replytoallmessage'] = 'Antwort an Absender und alle Empfänger verfasse
 $labels['forwardmessage'] = 'Nachricht weiterleiten';
 $labels['deletemessage'] = 'Nachricht löschen';
 $labels['movemessagetotrash'] = 'Nachricht in den Papierkorb verschieben';
-$labels['printmessage'] = 'Diese Nachricht drucken';
+$labels['printmessage'] = 'Nachricht drucken';
 $labels['previousmessage'] = 'Vorherige Nachricht anzeigen';
 $labels['previousmessages'] = 'Vorherige Nachrichten anzeigen';
 $labels['firstmessage'] = 'Die erste Nachricht anzeigen';
@@ -117,12 +117,15 @@ $labels['markread'] = 'Als gelesen';
 $labels['markunread'] = 'Als ungelesen';
 $labels['markflagged'] = 'Stern hinzufügen';
 $labels['markunflagged'] = 'Stern entfernen';
+$labels['messageactions']   = 'Weitere Aktionen...';
 $labels['select'] = 'Auswählen';
 $labels['all'] = 'Alle';
 $labels['none'] = 'Keine';
 $labels['unread'] = 'Ungelesene';
 $labels['flagged'] = 'Markierte';
 $labels['unanswered'] = 'Unbeantwortete';
+$labels['deleted'] = 'Gelöschte';
+$labels['invert'] = 'Umkehren';
 $labels['filter'] = 'Filter';
 $labels['compact'] = 'Packen';
 $labels['empty'] = 'Leeren';
@@ -132,8 +135,12 @@ $labels['unknown'] = 'unbekannt';
 $labels['unlimited'] = 'unlimitiert';
 $labels['quicksearch'] = 'Schnellsuche';
 $labels['resetsearch'] = 'Löschen';
+$labels['searchmod']  = 'Suchkriterien ändern';
+$labels['msgtext']  = 'Ganze Nachricht';
 $labels['openinextwin'] = 'In neuem Fenster öffnen';
+$labels['emlsave'] = 'Herunterladen (.eml)';
 $labels['compose'] = 'Neue Nachricht verfassen';
+$labels['editasnew'] = 'Als neue Nachricht öffnen';
 $labels['savemessage'] = 'Nachricht speichern';
 $labels['sendmessage'] = 'Nachricht jetzt senden';
 $labels['addattachment'] = 'Datei anfügen';
@@ -232,8 +239,7 @@ $labels['fromknownsenders'] = 'bei bekannten Absendern';
 $labels['always'] = 'immer';
 $labels['showinlineimages'] = 'Angehängte Bilder unter der Nachricht anzeigen';
 $labels['autosavedraft'] = 'Entwurf autom. speichern';
-$labels['everynminutes'] = 'alle $n Minuten';
-$labels['keepaliveevery'] = '$n Minute(n)';
+$labels['everynminutes'] = '$n Minute(n)';
 $labels['keepalive'] = 'Auf neue Nachrichten prüfen nach';
 $labels['never'] = 'nie';
 $labels['messagesdisplaying'] = 'Nachrichtendarstellung';
@@ -245,6 +251,12 @@ $labels['2047folding'] = 'Vollständig RFC 2047 kompatibel (andere)';
 $labels['advancedoptions'] = 'Erweiterte Einstellungen';
 $labels['focusonnewmessage'] = 'Fokussiere Browserfenster bei neuen Nachrichten';
 $labels['checkallfolders'] = 'Alle Ordner auf neue Nachrichten prüfen';
+$labels['displaynext'] = 'Zeige nächste Nachricht nach verschieben/löschen';
+$labels['mainoptions'] = 'Allgemein';
+$labels['section'] = 'Bereich';
+$labels['maintenance'] = 'Wartung';
+$labels['newmessage'] = 'Neue Nachrichten';
+$labels['listoptions'] = 'Listendarstellung';
 $labels['folder'] = 'Ordner';
 $labels['folders'] = 'Ordner';
 $labels['foldername'] = 'Ordnername';
