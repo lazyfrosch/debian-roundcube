@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: func.inc 575 2007-05-18 12:35:28Z thomasb $
+ $Id: func.inc 587 2007-05-28 19:21:36Z thomasb $
 
 */
 
@@ -460,7 +460,7 @@ function rcmail_message_list($attrib)
         $uid_param = $mbox==$CONFIG['drafts_mbox'] ? '_draf_uid' : '_uid';
         $cont = Q(rcube_imap::decode_mime_string($header->$col, $header->charset));
         if (empty($cont)) $cont = Q(rcube_label('nosubject'));
-        $cont = sprintf('<a href="%s" onclick="return false">%s</a>', Q(rcmail_url($action, array($uid_param=>$header->uid, '_mbox'=>$mbox))), $cont);
+        $cont = sprintf('<a href="%s" onclick="return rcube_event.cancel(event)">%s</a>', Q(rcmail_url($action, array($uid_param=>$header->uid, '_mbox'=>$mbox))), $cont);
         }
       else if ($col=='size')
         $cont = show_bytes($header->$col);
@@ -546,7 +546,7 @@ function rcmail_js_message_list($a_headers, $insert_top=FALSE)
         $uid_param = $mbox==$CONFIG['drafts_mbox'] ? '_draf_uid' : '_uid';
         $cont = Q(rcube_imap::decode_mime_string($header->$col, $header->charset));
         if (!$cont) $cont = Q(rcube_label('nosubject'));
-        $cont = sprintf('<a href="%s" onclick="return false">%s</a>', Q(rcmail_url($action, array($uid_param=>$header->uid, '_mbox'=>$mbox))), $cont);
+        $cont = sprintf('<a href="%s" onclick="return rcube_event.cancel(event)">%s</a>', Q(rcmail_url($action, array($uid_param=>$header->uid, '_mbox'=>$mbox))), $cont);
         }
       else if ($col=='size')
         $cont = show_bytes($header->$col);
