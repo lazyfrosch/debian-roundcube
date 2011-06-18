@@ -9,7 +9,7 @@ body
 
 body.iframe
 {
-  margin: 0px;
+  margin: 20px 0 0 0;
   background-color: #FFF;
 }
 
@@ -252,6 +252,14 @@ img
 .boxtitle .rightalign
 {
   float: right;
+}
+
+body.iframe .boxtitle
+{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
 }
 
 .boxcontent
@@ -828,7 +836,7 @@ span.tablink-selected
 span.tablink a,
 span.tablink-selected a
 {
-  display: block;
+  display: inline-block;
   padding: 5px 10px 0 5px;
   margin-left: 5px;
   height: 23px;

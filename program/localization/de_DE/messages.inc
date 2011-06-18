@@ -13,7 +13,7 @@
 | Author: Marcel Schlesinger <info@marcel-schlesinger.de>               |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 4345 2010-12-17 14:28:38Z thomasb $
+@version $Id: messages.inc 4469 2011-01-29 14:55:12Z thomasb $
 
 */
 
@@ -24,6 +24,8 @@ $messages['sessionerror'] = 'Ihre Session ist ungültig oder abgelaufen';
 $messages['imaperror'] = 'Keine Verbindung zum IMAP-Server';
 $messages['servererror'] = 'Serverfehler!';
 $messages['servererrormsg'] = 'Serverfehler: $msg';
+$messages['errorreadonly'] = 'Die Aktion nicht ausgeführt werden. Der Ordner ist schreibgeschützt.';
+$messages['errornoperm'] = 'Die Aktion nicht ausgeführt werden. Zugriff verweigert.';
 $messages['invalidrequest'] = 'Ungültige Anfrage! Es wurden keine Daten gespeichert.';
 $messages['nomessagesfound'] = 'Keine Nachrichten in diesem Ordner';
 $messages['loggedout'] = 'Sie haben Ihre Session erfolgreich beendet. Auf Wiedersehen!';
@@ -135,7 +137,6 @@ $messages['namecannotbeempty'] = 'Der Name darf nicht leer sein';
 $messages['nametoolong'] = 'Der Name ist zu lang';
 $messages['folderupdated'] = 'Der Ordner wurde erfolgreich aktualisiert';
 $messages['foldercreated'] = 'Der Ordner wurde erfolgreich erstellt';
-$messages['errorreadonly'] = 'Die Aktion nicht ausgeführt werden. Der Ordner ist schreibgeschützt.';
-$messages['errornoperm'] = 'Die Aktion nicht ausgeführt werden. Zugriff verweigert.';
+$messages['invalidimageformat'] = 'Kein gültiges Bildformat';
 
 ?>

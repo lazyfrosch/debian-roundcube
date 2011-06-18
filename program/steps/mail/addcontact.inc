@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: addcontact.inc 4166 2010-11-02 09:27:03Z alec $
+ $Id: addcontact.inc 4509 2011-02-09 10:51:50Z thomasb $
 
 */
 
@@ -46,7 +46,7 @@ if (!empty($_POST['_address']) && is_object($CONTACTS))
       $OUTPUT->send();
     }
 
-    $contact['email'] = idn_to_utf8($contact['email']);
+    $contact['email'] = rcube_idn_to_utf8($contact['email']);
 
     // use email address part for name
     if (empty($contact['name']) || $contact['name'] == $contact['email'])

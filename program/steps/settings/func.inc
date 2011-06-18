@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: func.inc 4389 2011-01-04 11:16:54Z alec $
+ $Id: func.inc 4509 2011-02-09 10:51:50Z thomasb $
 
 */
 
@@ -72,7 +72,7 @@ function rcmail_identities_list($attrib)
   // get identities list and define 'mail' column
   $list = $USER->list_identities();
   foreach ($list as $idx => $row)
-    $list[$idx]['mail'] = trim($row['name'] . ' <' . idn_to_utf8($row['email']) .'>');
+    $list[$idx]['mail'] = trim($row['name'] . ' <' . rcube_idn_to_utf8($row['email']) .'>');
 
   // get all identites from DB and define list of cols to be displayed
   $plugin = $RCMAIL->plugins->exec_hook('identities_list', array(
@@ -755,7 +755,6 @@ function rcmail_get_skins()
 
   return $skins;
 }
-
 
 // register UI objects
 $OUTPUT->add_handlers(array(

@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_shared.inc 4232 2010-11-18 10:34:10Z alec $
+ $Id: rcube_shared.inc 4509 2011-02-09 10:51:50Z thomasb $
 
 */
 
@@ -700,7 +700,7 @@ if (!function_exists('idn_to_utf8'))
             $loaded = true;
         }
 
-        if ($idn && $domain && preg_match('/(^|@|\.)xn--/i', $domain)) {
+        if ($idn && $domain && preg_match('/(^|\.)xn--/i', $domain)) {
             try {
                 $domain = $idn->decode($domain);
             }

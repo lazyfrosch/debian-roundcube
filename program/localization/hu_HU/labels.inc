@@ -15,7 +15,7 @@
 |         Barnabas Bona <bsi at hosember dot hu>                        |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4368 2010-12-27 08:51:22Z yllar $
+@version $Id: labels.inc 4469 2011-01-29 14:55:12Z thomasb $
 
 */
 
@@ -49,7 +49,7 @@ $labels['readstatus'] = 'Olvasott';
 $labels['mailboxlist'] = 'Mappák';
 $labels['messagesfromto'] = 'Üzenetek: $from - $to / $count';
 $labels['threadsfromto'] = 'Témák ($from - $to, összesen $count)';
-$labels['messagenrof'] = '$nr / $coun t üzenet';
+$labels['messagenrof'] = '$nr / $count üzenet';
 $labels['copy'] = 'Másolás';
 $labels['move'] = 'Áthelyezés';
 $labels['moveto'] = 'áthelyezés...';

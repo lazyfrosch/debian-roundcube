@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_message.php 4288 2010-11-29 09:54:15Z alec $
+ $Id: rcube_message.php 4516 2011-02-09 12:46:46Z alec $
 
 */
 
@@ -478,10 +478,21 @@ class rcube_message
                         if (!empty($mail_part->filename))
                             $this->attachments[] = $mail_part;
                     }
-                    // is a regular attachment (content-type name regexp according to RFC4288.4.2)
+                    // regular attachment with valid content type
+                    // (content-type name regexp according to RFC4288.4.2)
                     else if (preg_match('/^[a-z0-9!#$&.+^_-]+\/[a-z0-9!#$&.+^_-]+$/i', $part_mimetype)) {
                         if (!$mail_part->filename)
                             $mail_part->filename = 'Part '.$mail_part->mime_id;
+
+                        $this->attachments[] = $mail_part;
+                    }
+                    // attachment with invalid content type
+                    // replace malformed content type with application/octet-stream (#1487767)
+                    else if ($mail_part->filename) {
+                        $mail_part->ctype_primary   = 'application';
+                        $mail_part->ctype_secondary = 'octet-stream';
+                        $mail_part->mimetype        = 'application/octet-stream';
+
                         $this->attachments[] = $mail_part;
                     }
                 }
@@ -503,6 +514,16 @@ class rcube_message
                     // We'll add all such attachments to the attachments list
                     if (!isset($got_html_part) && empty($inline_object->content_id)
                         && !empty($inline_object->filename)
+                    ) {
+                        $this->attachments[] = $inline_object;
+                    }
+                    // MS Outlook sometimes also adds non-image attachments as related
+                    // We'll add all such attachments to the attachments list
+                    // Warning: some browsers support pdf in <img/>
+                    // @TODO: we should fetch HTML body and find attachment's content-id
+                    // to handle also image attachments without reference in the body
+                    if (!empty($inline_object->filename)
+                        && !preg_match('/^image\/(gif|jpe?g|png|tiff|bmp|svg)/', $inline_object->mimetype)
                     ) {
                         $this->attachments[] = $inline_object;
                     }

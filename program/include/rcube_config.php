@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_config.php 4363 2010-12-22 19:17:47Z alec $
+ $Id: rcube_config.php 4509 2011-02-09 10:51:50Z thomasb $
 
 */
 
@@ -287,7 +287,7 @@ class rcube_config
             $domain = rcube_parse_host($this->prop['mail_domain']);
 
         if ($encode)
-            $domain = idn_to_ascii($domain);
+            $domain = rcube_idn_to_ascii($domain);
 
         return $domain;
     }
