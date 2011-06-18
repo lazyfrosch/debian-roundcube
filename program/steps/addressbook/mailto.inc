@@ -4,8 +4,8 @@
  +-----------------------------------------------------------------------+
  | program/steps/addressbook/mailto.inc                                  |
  |                                                                       |
- | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2007, RoundCube Dev. - Switzerland                      |
+ | This file is part of the Roundcube Webmail client                     |
+ | Copyright (C) 2007, Roundcube Dev. - Switzerland                      |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -23,7 +23,7 @@ $cid = get_input_value('_cid', RCUBE_INPUT_GET);
 $recipients = null;
 $mailto = array();
 
-if ($cid && preg_match('/^[a-z0-9\-\+\/_=]+(,[a-z0-9\-\+\/_=]+)*$/i', $cid) && $CONTACTS->ready)
+if ($cid && preg_match('/^[a-z0-9\+\/=_-]+(,[a-z0-9\+\/=_-]+)*$/i', $cid) && $CONTACTS->ready)
 {
   $CONTACTS->set_page(1);
   $CONTACTS->set_pagesize(100);
@@ -47,4 +47,3 @@ else
 // send response
 $OUTPUT->send();
 
-?>

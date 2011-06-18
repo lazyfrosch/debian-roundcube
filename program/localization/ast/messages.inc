@@ -5,8 +5,8 @@
 +-----------------------------------------------------------------------+
 | language/ast/messages.inc                                             |
 |                                                                       |
-| Language file of the RoundCube Webmail client                         |
-| Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
+| Language file of the Roundcube Webmail client                         |
+| Copyright (C) 2005-2008, Roundcube Dev. - Switzerland                 |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -15,7 +15,7 @@
 |         http://softastur.org                                          |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 2036 2009-02-02 04:37:58Z mikelg $
+@version $Id: messages.inc 4304 2010-12-03 10:58:40Z alec $
 
 */
 
@@ -54,9 +54,7 @@ $messages['deletecontactconfirm'] = '¿Tas seguru de desaniciar los contautos qu
 $messages['deletemessagesconfirm'] = '¿Tas seguru de desaniciar los mensaxes que marcaste?';
 $messages['deletefolderconfirm'] = '¿Tas seguru de desaniciar esta bandexa?';
 $messages['purgefolderconfirm'] = '¿Tas seguru de desaniciar tolos mensaxes d\'esta bandexa?';
-$messages['foldercreating'] = 'Faciendo la bandexa...';
 $messages['folderdeleting'] = 'Desaniciando la bandexa...';
-$messages['folderrenaming'] = 'Renomando la bandexa...';
 $messages['foldermoving'] = 'Moviendo la bandexa...';
 $messages['formincomplete'] = 'Tienes de rellenar tolos campos del formulariu';
 $messages['noemailwarning'] = 'Por favor, dame un corréu válidu';
@@ -89,7 +87,6 @@ $messages['movingmessage'] = 'Moviendo\'l mensaxe...';
 $messages['receiptsent'] = 'Unviose correchamente l\'avisu de llectura.';
 $messages['errorsendingreceipt'] = 'Nun fui a unviar l\'avisu de llectura.';
 $messages['nodeletelastidentity'] = 'Nun puedo desaniciar esa identidá porque ye la última.';
-$messages['addsubfolderhint'] = 'Esta bandexa va ser subandexa de la que ta marcada';
 $messages['forbiddencharacter'] = 'El nome de la bandexa tien un caráuter que nun val';
 $messages['selectimportfile'] = 'Por favor escueye el ficheru que quies xubir';
 $messages['addresswriterror'] = 'Nun puedo escribir nel llibru de direiciones qu\'escoyisti';
@@ -102,8 +99,8 @@ $messages['editorwarning'] = 'Si pases a editor en modu testu vas perder tol est
 $messages['httpreceivedencrypterror'] = 'Hai un fallu garrafal de configuración. Contauta col alministrador de secute. <b>Nun se pude unviar el mesaxe</b>';
 $messages['smtpconnerror'] = 'Fallu SMTP ($code): Fallu de conexón col sirvidor';
 $messages['smtpautherror'] = 'Fallu SMTP ($code): Fallu d\'autorización';
-$messages['smtpfromerror'] = 'Fallu SMTP ($code): Fallu al aficar el remitente "$from"';
-$messages['smtptoerror'] = 'Fallu SMTP ($code): Fallu al amestar el destinatariu "$to"';
+$messages['smtpfromerror'] = 'Fallu SMTP ($code): Fallu al aficar el remitente "$from" ($msg)';
+$messages['smtptoerror'] = 'Fallu SMTP ($code): Fallu al amestar el destinatariu "$to" ($msg)';
 $messages['smtprecipientserror'] = 'Fallu SMTP: Nun soi a amosar la llista de destinatarios';
 $messages['smtperror'] = 'Fallu SMTP: $msg';
 

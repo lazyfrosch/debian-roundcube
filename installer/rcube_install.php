@@ -4,8 +4,8 @@
  +-----------------------------------------------------------------------+
  | rcube_install.php                                                     |
  |                                                                       |
- | This file is part of the RoundCube Webmail package                    |
- | Copyright (C) 2008-2009, RoundCube Dev. - Switzerland                 |
+ | This file is part of the Roundcube Webmail package                    |
+ | Copyright (C) 2008-2009, Roundcube Dev. - Switzerland                 |
  | Licensed under the GNU Public License                                 |
  +-----------------------------------------------------------------------+
 
@@ -15,10 +15,10 @@
 
 
 /**
- * Class to control the installation process of the RoundCube Webmail package
+ * Class to control the installation process of the Roundcube Webmail package
  *
  * @category Install
- * @package  RoundCube
+ * @package  Roundcube
  * @author Thomas Bruederli
  */
 class rcube_install
@@ -38,17 +38,11 @@ class rcube_install
     'locale_string' => 'language',
     'multiple_identities' => 'identities_level',
     'addrbook_show_images' => 'show_images',
+    'imap_root' => 'imap_ns_personal',
   );
   
-  // these config options are optional or can be set to null
-  var $optional_config = array(
-    'log_driver', 'syslog_id', 'syslog_facility', 'imap_auth_type',
-    'smtp_helo_host', 'smtp_auth_type', 'sendmail_delay', 'double_auth',
-    'language', 'mail_header_delimiter', 'create_default_folders',
-    'quota_zero_as_unlimited', 'spellcheck_uri', 'spellcheck_languages',
-    'http_received_header', 'session_domain', 'mime_magic', 'log_logins',
-    'enable_installer', 'skin_include_php', 'imap_root', 'imap_delimiter',
-    'virtuser_file', 'virtuser_query', 'dont_override');
+  // these config options are required for a working system
+  var $required_config = array('db_dsnw', 'db_table_contactgroups', 'db_table_contactgroupmembers', 'des_key');
   
   /**
    * Constructor
@@ -176,16 +170,17 @@ class rcube_install
       else if ($prop == 'smtp_pass' && !empty($_POST['_smtp_user_u'])) {
         $value = '%p';
       }
-      else if ($prop == 'default_imap_folders'){
-	$value = Array();
-	foreach($this->config['default_imap_folders'] as $_folder){
-	  switch($_folder) {
-	  case 'Drafts': $_folder = $this->config['drafts_mbox']; break;
-	  case 'Sent':   $_folder = $this->config['sent_mbox']; break;
-	  case 'Junk':   $_folder = $this->config['junk_mbox']; break;
-	  case 'Trash':  $_folder = $this->config['trash_mbox']; break;
+      else if ($prop == 'default_imap_folders') {
+	    $value = Array();
+	    foreach ($this->config['default_imap_folders'] as $_folder) {
+	      switch($_folder) {
+	      case 'Drafts': $_folder = $this->config['drafts_mbox']; break;
+	      case 'Sent':   $_folder = $this->config['sent_mbox']; break;
+	      case 'Junk':   $_folder = $this->config['junk_mbox']; break;
+	      case 'Trash':  $_folder = $this->config['trash_mbox']; break;
           }
-	  if (!in_array($_folder, $value))  $value[] = $_folder;
+	    if (!in_array($_folder, $value))
+	      $value[] = $_folder;
         }
       }
       else if (is_bool($default)) {
@@ -230,7 +225,7 @@ class rcube_install
       return null;
     
     $out = $seen = array();
-    $optional = array_flip($this->optional_config);
+    $required = array_flip($this->required_config);
     
     // iterate over the current configuration
     foreach ($this->config as $prop => $value) {
@@ -246,19 +241,19 @@ class rcube_install
     
     // iterate over default config
     foreach ($defaults as $prop => $value) {
-      if (!$seen[$prop] && !isset($this->config[$prop]) && !isset($optional[$prop]))
+      if (!isset($seen[$prop]) && !isset($this->config[$prop]) && isset($required[$prop]))
         $out['missing'][] = array('prop' => $prop);
     }
-    
+
     // check config dependencies and contradictions
     if ($this->config['enable_spellcheck'] && $this->config['spellcheck_engine'] == 'pspell') {
       if (!extension_loaded('pspell')) {
         $out['dependencies'][] = array('prop' => 'spellcheck_engine',
           'explain' => 'This requires the <tt>pspell</tt> extension which could not be loaded.');
       }
-      if (!empty($this->config['spellcheck_languages'])) {
+      else if (!empty($this->config['spellcheck_languages'])) {
         foreach ($this->config['spellcheck_languages'] as $lang => $descr)
-	  if (!pspell_new($lang))
+          if (!pspell_new($lang))
             $out['dependencies'][] = array('prop' => 'spellcheck_languages',
               'explain' => "You are missing pspell support for language $lang ($descr)");
       }
@@ -332,15 +327,53 @@ class rcube_install
     }
   }
   
-  
   /**
    * Compare the local database schema with the reference schema
-   * required for this version of RoundCube
+   * required for this version of Roundcube
    *
    * @param boolean True if the schema schould be updated
    * @return boolean True if the schema is up-to-date, false if not or an error occured
    */
-  function db_schema_check($update = false)
+  function db_schema_check($DB, $update = false)
+  {
+    if (!$this->configured)
+      return false;
+    
+    // simple ad hand-made db schema
+    $db_schema = array(
+      'users' => array(),
+      'identities' => array(),
+      'contacts' => array(),
+      'contactgroups' => array(),
+      'contactgroupmembers' => array(),
+      'cache' => array(),
+      'messages' => array(),
+      'session' => array(),
+    );
+    
+    $errors = array();
+    
+    // check list of tables
+    $existing_tables = $DB->list_tables();
+
+    foreach ($db_schema as $table => $cols) {
+      $table = !empty($this->config['db_table_'.$table]) ? $this->config['db_table_'.$table] : $table;
+      if (!in_array($table, $existing_tables))
+        $errors[] = "Missing table ".$table;
+      // TODO: check cols and indices
+    }
+    
+    return !empty($errors) ? $errors : false;
+  }
+  
+  /**
+   * Compare the local database schema with the reference schema
+   * required for this version of Roundcube
+   *
+   * @param boolean True if the schema schould be updated
+   * @return boolean True if the schema is up-to-date, false if not or an error occured
+   */
+  function mdb2_schema_check($update = false)
   {
     if (!$this->configured)
       return false;
@@ -355,7 +388,8 @@ class rcube_install
       'portability' => true
     );
     
-    $schema =& MDB2_Schema::factory($this->config['db_dsnw'], $options);
+    $dsnw = $this->config['db_dsnw'];
+    $schema = MDB2_Schema::factory($dsnw, $options);
     $schema->db->supported['transactions'] = false;
     
     if (PEAR::isError($schema)) {
@@ -372,10 +406,11 @@ class rcube_install
       }
       
       // load reference schema
-      $dsn = MDB2::parseDSN($this->config['db_dsnw']);
-      $ref_schema = INSTALL_PATH . 'SQL/' . $dsn['phptype'] . '.schema.xml';
+      $dsn_arr = MDB2::parseDSN($this->config['db_dsnw']);
+
+      $ref_schema = INSTALL_PATH . 'SQL/' . $dsn_arr['phptype'] . '.schema.xml';
       
-      if (is_file($ref_schema)) {
+      if (is_readable($ref_schema)) {
         $reference = $schema->parseDatabaseDefinition($ref_schema, false, array(), $schema->options['fail_on_invalid_names']);
         
         if (PEAR::isError($reference)) {
@@ -433,7 +468,7 @@ class rcube_install
     
     foreach ($default_hosts as $key => $name) {
       if (!empty($name))
-        $out[] = is_numeric($key) ? $name : $key;
+        $out[] = rcube_parse_host(is_numeric($key) ? $name : $key);
     }
     
     return $out;
@@ -591,7 +626,7 @@ class rcube_install
   }
   
   /**
-   * Handler for RoundCube errors
+   * Handler for Roundcube errors
    */
   function raise_error($p)
   {

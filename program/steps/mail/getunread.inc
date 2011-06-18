@@ -4,8 +4,8 @@
  +-----------------------------------------------------------------------+
  | program/steps/mail/getunread.inc                                      |
  |                                                                       |
- | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | This file is part of the Roundcube Webmail client                     |
+ | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: getunread.inc 2966 2009-09-18 10:15:17Z alec $
+ $Id: getunread.inc 4294 2010-12-01 09:52:23Z alec $
 
 */
 
@@ -23,17 +23,26 @@ $a_folders = $IMAP->list_mailboxes();
 
 if (!empty($a_folders))
 {
-  $inbox = ($IMAP->get_mailbox_name() == 'INBOX');
-  foreach ($a_folders as $mbox_row) {
-    $unseen = $IMAP->messagecount($mbox_row, 'UNSEEN', !isset($_SESSION['unseen_count'][$mbox_row]));
+  $current = $IMAP->get_mailbox_name();
+  $inbox = ($current == 'INBOX');
+  $check_all = (bool)$RCMAIL->config->get('check_all_folders');
 
-    if ($unseen || !isset($_SESSION['unseen_count'][$mbox_row])) {
+  foreach ($a_folders as $mbox_row) {
+    $unseen_old = rcmail_get_unseen_count($mbox_row);
+
+    if (!$check_all && $unseen_old !== null && $mbox_row != $current)
+      $unseen = $unseen_old;
+    else
+      $unseen = $IMAP->messagecount($mbox_row, 'UNSEEN', $unseen_old === null);
+
+    if ($unseen || $unseen_old === null) {
       $OUTPUT->command('set_unread_count', $mbox_row, $unseen, $inbox && $mbox_row == 'INBOX');
     }
-    $_SESSION['unseen_count'][$mbox_row] = $unseen;
+
+    rcmail_set_unseen_count($mbox_row, $unseen);
   }
 }
 
 $OUTPUT->send();
 
-?>
+

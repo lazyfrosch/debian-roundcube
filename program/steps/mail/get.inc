@@ -4,8 +4,8 @@
  +-----------------------------------------------------------------------+
  | program/steps/mail/get.inc                                            |
  |                                                                       |
- | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
+ | This file is part of the Roundcube Webmail client                     |
+ | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: get.inc 2979 2009-09-22 07:50:32Z alec $
+ $Id: get.inc 4115 2010-10-20 11:41:48Z alec $
 
 */
 
@@ -35,12 +35,36 @@ if (!empty($_GET['_preload'])) {
 
 ob_end_clean();
 
+// Now we need IMAP connection
+if (!$RCMAIL->imap_connect()) {
+  // Get action is often executed simultanously.
+  // Some servers have MAXPERIP or other limits.
+  // To workaround this we'll wait for some time
+  // and try again (once).
+  // Note: Random sleep interval is used to minimize concurency
+  // in getting message parts
+  if (!isset($_GET['_redirected'])) {
+    usleep(rand(10,30)*100000); // 1-3 sec.
+    header('Location: ' . $_SERVER['REQUEST_URI'] . '&_redirected=1');
+  }
+  else {
+    raise_error(array(
+      'code' => 500, 'type' => 'php',
+      'file' => __FILE__, 'line' => __LINE__,
+      'message' => 'Unable to get/display message part. IMAP connection error'),
+      true, true);
+  }
+  // Don't kill session, just quit (#1486995)
+  exit;
+}
+
 // similar code as in program/steps/mail/show.inc
 if (!empty($_GET['_uid'])) {
   $RCMAIL->config->set('prefer_html', true);
   $MESSAGE = new rcube_message(get_input_value('_uid', RCUBE_INPUT_GET));
 }
 
+send_nocacheing_headers();
 
 // show part page
 if (!empty($_GET['_frame'])) {
@@ -49,25 +73,14 @@ if (!empty($_GET['_frame'])) {
 }
 
 else if ($pid = get_input_value('_part', RCUBE_INPUT_GET)) {
-  // TNEF encoded attachment part
-  if (preg_match('/^winmail\.([0-9.]+)\.([0-9]+)$/', $pid, $nt)) {
-    $pid = $nt[1]; $i = $nt[2];
-    if ($part = $MESSAGE->mime_parts[$pid]) {
-      $tnef_arr = $IMAP->tnef_decode($part, $MESSAGE->uid);
-      if (is_a($tnef_arr[$i], 'rcube_message_part'))
-        $MESSAGE->mime_parts[$pid] = $tnef_arr[$i];
-    }
-  }
-  
+
   if ($part = $MESSAGE->mime_parts[$pid]) {
     $ctype_primary = strtolower($part->ctype_primary);
     $ctype_secondary = strtolower($part->ctype_secondary);
     $mimetype = sprintf('%s/%s', $ctype_primary, $ctype_secondary);
-    
-    $browser = new rcube_browser;
 
-    send_nocacheing_headers();
-    
+    $browser = $RCMAIL->output->browser;
+
     // send download headers
     if ($_GET['_download']) {
       header("Content-Type: application/octet-stream");
@@ -78,12 +91,13 @@ else if ($pid = get_input_value('_part', RCUBE_INPUT_GET)) {
       header("Content-Type: text/$ctype_secondary; charset=" . ($part->charset ? $part->charset : RCMAIL_CHARSET));
     }
     else {
+      $mimetype = rcmail_fix_mimetype($mimetype);
       header("Content-Type: $mimetype");
       header("Content-Transfer-Encoding: binary");
     }
 
     // deliver part content
-    if ($ctype_primary == 'text' && $ctype_secondary == 'html') {
+    if ($ctype_primary == 'text' && $ctype_secondary == 'html' && empty($_GET['_download'])) {
       // get part body if not available
       if (!$part->body)
         $part->body = $MESSAGE->get_part_content($part->mime_id);
@@ -94,20 +108,21 @@ else if ($pid = get_input_value('_part', RCUBE_INPUT_GET)) {
     else {
       // don't kill the connection if download takes more than 30 sec.
       @set_time_limit(0);
-      
+
       $filename = $part->filename ? $part->filename : ($MESSAGE->subject ? $MESSAGE->subject : 'roundcube') . '.'.$ctype_secondary;
-      
+      $filename = preg_replace('[\r\n]', '', $filename);
+
       if ($browser->ie && $browser->ver < 7)
         $filename = rawurlencode(abbreviate_string($filename, 55));
       else if ($browser->ie)
         $filename = rawurlencode($filename);
       else
         $filename = addcslashes($filename, '"');
-      
+
       $disposition = !empty($_GET['_download']) ? 'attachment' : 'inline';
-      
+
       header("Content-Disposition: $disposition; filename=\"$filename\"");
-      
+
       // turn off output buffering and print part content
       if ($part->body)
         echo $part->body;
@@ -139,4 +154,4 @@ else {
 header('HTTP/1.1 404 Not Found');
 exit;
 
-?>
+

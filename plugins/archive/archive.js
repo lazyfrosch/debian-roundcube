@@ -1,6 +1,6 @@
 /*
  * Archive plugin script
- * @version 1.2
+ * @version @package_version@
  */
 
 function rcmail_archive(prop)
@@ -8,10 +8,8 @@ function rcmail_archive(prop)
   if (!rcmail.env.uid && (!rcmail.message_list || !rcmail.message_list.get_selection().length))
     return;
   
-  var uids = rcmail.env.uid ? rcmail.env.uid : rcmail.message_list.get_selection().join(',');
-    
-  rcmail.set_busy(true, 'loading');
-  rcmail.http_post('plugin.archive', '_uid='+uids+'&_mbox='+urlencode(rcmail.env.mailbox), true);
+  if (rcmail.env.mailbox != rcmail.env.archive_folder)
+    rcmail.command('moveto', rcmail.env.archive_folder);
 }
 
 // callback for app-onload event

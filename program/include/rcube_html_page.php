@@ -4,8 +4,8 @@
  +-----------------------------------------------------------------------+
  | program/include/rcube_html_page.php                                   |
  |                                                                       |
- | This file is part of the RoundCube PHP suite                          |
- | Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
+ | This file is part of the Roundcube PHP suite                          |
+ | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | CONTENTS:                                                             |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id:  $
+ $Id: rcube_html_page.php 4015 2010-09-29 16:47:05Z alec $
 
 */
 
@@ -39,6 +39,7 @@ class rcube_html_page
     protected $header = '';
     protected $footer = '';
     protected $body = '';
+    protected $base_path = '';
 
 
     /** Constructor */
@@ -55,7 +56,7 @@ class rcube_html_page
         static $sa_files = array();
         
         if (!preg_match('|^https?://|i', $file) && $file[0] != '/')
-          $file = $this->scripts_path . $file . (($fs = @filemtime($this->scripts_path . $file)) ? '?s='.$fs : '');
+            $file = $this->scripts_path . $file . (($fs = @filemtime($this->scripts_path . $file)) ? '?s='.$fs : '');
 
         if (in_array($file, $sa_files)) {
             return;
@@ -83,6 +84,8 @@ class rcube_html_page
 
     /**
      * Add HTML code to the page header
+     *
+     * @param string $str HTML code
      */
     public function add_header($str)
     {
@@ -92,6 +95,8 @@ class rcube_html_page
     /**
      * Add HTML code to the page footer
      * To be added right befor </body>
+     *
+     * @param string $str HTML code
      */
     public function add_footer($str)
     {
@@ -100,6 +105,8 @@ class rcube_html_page
 
     /**
      * Setter for page title
+     *
+     * @param string $t Page title
      */
     public function set_title($t)
     {
@@ -109,6 +116,8 @@ class rcube_html_page
     /**
      * Setter for output charset.
      * To be specified in a meta tag and sent as http-header
+     *
+     * @param string $charset Charset
      */
     public function set_charset($charset)
     {
@@ -117,6 +126,8 @@ class rcube_html_page
 
     /**
      * Getter for output charset
+     *
+     * @return string Output charset
      */
     public function get_charset()
     {
@@ -129,11 +140,11 @@ class rcube_html_page
     public function reset()
     {
         $this->script_files = array();
-        $this->scripts = array();
-        $this->title = '';
-        $this->header = '';
-        $this->footer = '';
-        $this->body = '';
+        $this->scripts      = array();
+        $this->title        = '';
+        $this->header       = '';
+        $this->footer       = '';
+        $this->body         = '';
     }
 
     /**
@@ -148,7 +159,7 @@ class rcube_html_page
 
         // set default page title
         if (empty($this->title)) {
-            $this->title = 'RoundCube Mail';
+            $this->title = 'Roundcube Mail';
         }
 
         // replace specialchars in content
@@ -196,14 +207,14 @@ class rcube_html_page
         }
 
         // find page header
-        if ($hpos = strpos(strtolower($output), '</head>')) {
+        if ($hpos = stripos($output, '</head>')) {
             $__page_header .= "\n";
         }
         else {
             if (!is_numeric($hpos)) {
-                $hpos = strpos(strtolower($output), '<body');
+                $hpos = stripos($output, '<body');
             }
-            if (!is_numeric($hpos) && ($hpos = strpos(strtolower($output), '<html'))) {
+            if (!is_numeric($hpos) && ($hpos = stripos($output, '<html'))) {
                 while ($output[$hpos] != '>') {
                     $hpos++;
                 }
@@ -221,14 +232,14 @@ class rcube_html_page
         }
 
         // find page body
-        if ($bpos = strpos(strtolower($output), '<body')) {
+        if ($bpos = stripos($output, '<body')) {
             while ($output[$bpos] != '>') {
                 $bpos++;
             }
             $bpos++;
         }
         else {
-            $bpos = strpos(strtolower($output), '</head>')+7;
+            $bpos = stripos($output, '</head>')+7;
         }
 
         // add page body
@@ -237,8 +248,7 @@ class rcube_html_page
         }
 
         // find and add page footer
-        $output_lc = strtolower($output);
-        if (($fpos = strrpos($output_lc, '</body>')) || ($fpos = strrpos($output_lc, '</html>'))) {
+        if (($fpos = strripos($output, '</body>')) || ($fpos = strripos($output, '</html>'))) {
             $output = substr($output, 0, $fpos) . "$__page_footer\n" . substr($output, $fpos);
         }
         else {
@@ -248,23 +258,37 @@ class rcube_html_page
         // reset those global vars
         $__page_header = $__page_footer = '';
 
+	    $this->base_path = $base_path;
         // correct absolute paths in images and other tags
-        $output = preg_replace('!(src|href|background)=(["\']?)(/[a-z0-9_-]+)!i', "\\1=\\2$base_path\\3", $output);
-        $output = preg_replace_callback('!(src|href)=(["\']?)([a-z0-9/_.-]+.(css|js))(["\'\s>])!i', array($this, 'add_filemtime'), $output);
+	    // add timestamp to .js and .css filename
+        $output = preg_replace_callback('!(src|href|background)=(["\']?)([a-z0-9/_.-]+)(["\'\s>])!i',
+	    array($this, 'file_callback'), $output);
         $output = str_replace('$__skin_path', $base_path, $output);
 
         if ($this->charset != RCMAIL_CHARSET)
-	    echo rcube_charset_convert($output, RCMAIL_CHARSET, $this->charset);
-	else
-	    echo $output;
+	        echo rcube_charset_convert($output, RCMAIL_CHARSET, $this->charset);
+	    else
+	        echo $output;
     }
     
     /**
      * Callback function for preg_replace_callback in write()
+     *
+     * @return string Parsed string
      */
-    public function add_filemtime($matches)
+    private function file_callback($matches)
     {
-        return sprintf("%s=%s%s?s=%d%s", $matches[1], $matches[2], $matches[3], @filemtime($matches[3]), $matches[5]);
+	    $file = $matches[3];
+
+        // correct absolute paths
+	    if ($file[0] == '/')
+	        $file = $this->base_path . $file;
+
+        // add file modification timestamp
+	    if (preg_match('/\.(js|css)$/', $file))
+    	    $file .= '?s=' . @filemtime($file);
+
+	    return sprintf("%s=%s%s%s", $matches[1], $matches[2], $file, $matches[4]);
     }
 }
 

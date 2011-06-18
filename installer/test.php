@@ -88,18 +88,18 @@ if ($RCI->configured && ($messages = $RCI->check_config())) {
 ?>
 
 <h3>Check if directories are writable</h3>
-<p>RoundCube may need to write/save files into these directories</p>
+<p>Roundcube may need to write/save files into these directories</p>
 <?php
 
 if ($RCI->configured) {
     $pass = false;
 
-    $dirs[] = $RCI->config['temp_dir'];
+    $dirs[] = $RCI->config['temp_dir'] ? $RCI->config['temp_dir'] : 'temp';
     if($RCI->config['log_driver'] != 'syslog')
-      $dirs[] = $RCI->config['log_dir'];
+      $dirs[] = $RCI->config['log_dir'] ? $RCI->config['log_dir'] : 'logs';
 
     foreach ($dirs as $dir) {
-        $dirpath = $dir{0} == '/' ? $dir : INSTALL_PATH . $dir;
+        $dirpath = $dir[0] == '/' ? $dir : INSTALL_PATH . $dir;
         if (is_writable(realpath($dirpath))) {
             $RCI->pass($dir);
             $pass = true;
@@ -119,7 +119,7 @@ else {
 
 ?>
 
-<h3>Check configured database settings</h3>
+<h3>Check DB config</h3>
 <?php
 
 $db_working = false;
@@ -164,15 +164,14 @@ if ($db_working) {
         echo '<p><input type="submit" name="initdb" value="Initialize database" /></p>';
         $db_working = false;
     }
-  /*
-    else if (!$RCI->db_schema_check($update = !empty($_POST['updatedb']))) {
+    else if ($RCI->db_schema_check($DB, $update = !empty($_POST['updatedb']))) {
         $RCI->fail('DB Schema', "Database schema differs");
-        
-        echo $update ? '<p class="warning">Failed to update the database schema! Please manually execute the SQL statements from the SQL/*.update.sql file on your database</p>' :
-          '<p><input type="submit" name="updatedb" value="Update schema now" /></p>';
+        $db_map = array('pgsql' => 'postgres', 'mysqli' => 'mysql', 'sqlsrv' => 'mssql');
+        $updatefile = INSTALL_PATH . 'SQL/' . (isset($db_map[$DB->db_provider]) ? $db_map[$DB->db_provider] : $DB->db_provider) . '.update.sql';
+        echo '<p class="warning">Please manually execute the SQL statements from '.$updatefile.' on your database.<br/>';
+        echo 'See comments in the file and execute queries that are superscribed with the currently installed version number.</p>';
         $db_working = false;
     }
-  */
     else {
         $RCI->pass('DB Schema');
         echo '<br />';
@@ -213,10 +212,10 @@ if ($db_working) {
 
 ?>
 
-<h3>Test SMTP settings</h3>
+<h3>Test SMTP config</h3>
 
 <p>
-Server: <?php echo $RCI->getprop('smtp_server', 'PHP mail()'); ?><br />
+Server: <?php echo rcube_parse_host($RCI->getprop('smtp_server', 'PHP mail()')); ?><br />
 Port: <?php echo $RCI->getprop('smtp_port'); ?><br />
 
 <?php
@@ -246,22 +245,25 @@ $to_field = new html_inputfield(array('name' => '_to', 'id' => 'sendmailto'));
 
 <?php
 
-if (isset($_POST['sendmail']) && !empty($_POST['_from']) && !empty($_POST['_to'])) {
-  
-  echo '<p>Trying to send email...<br />';
-  
-  if (preg_match('/^' . $RCI->email_pattern . '$/i', trim($_POST['_from'])) &&
-      preg_match('/^' . $RCI->email_pattern . '$/i', trim($_POST['_to']))) {
+if (isset($_POST['sendmail'])) {
 
+  echo '<p>Trying to send email...<br />';
+
+  $from = idn_to_ascii(trim($_POST['_from']));
+  $to   = idn_to_ascii(trim($_POST['_to']));
+
+  if (preg_match('/^' . $RCI->email_pattern . '$/i', $from) &&
+      preg_match('/^' . $RCI->email_pattern . '$/i', $to)
+  ) {
     $headers = array(
-      'From'    => trim($_POST['_from']),
-      'To'      => trim($_POST['_to']),
-      'Subject' => 'Test message from RoundCube',
+      'From'    => $from,
+      'To'      => $to,
+      'Subject' => 'Test message from Roundcube',
     );
 
-    $body = 'This is a test to confirm that RoundCube can send email.';
+    $body = 'This is a test to confirm that Roundcube can send email.';
     $smtp_response = array();
-    
+
     // send mail using configured SMTP server
     if ($RCI->getprop('smtp_server')) {
       $CONFIG = $RCI->config;
@@ -273,11 +275,12 @@ if (isset($_POST['sendmail']) && !empty($_POST['_from']) && !empty($_POST['_to']
         $CONFIG['smtp_pass'] = $_POST['_smtp_pass'];
       }
 
-      $mail_object  = new rcube_mail_mime();
+      $mail_object  = new Mail_mime();
       $send_headers = $mail_object->headers($headers);
 
       $SMTP = new rcube_smtp();
-      $SMTP->connect();
+      $SMTP->connect(rcube_parse_host($RCI->getprop('smtp_server')),
+        $RCI->getprop('smtp_port'), $CONFIG['smtp_user'], $CONFIG['smtp_pass']);
 
       $status = $SMTP->send_mail($headers['From'], $headers['To'],
           ($foo = $mail_object->txtHeaders($send_headers)), $body);
@@ -328,7 +331,7 @@ if (isset($_POST['sendmail']) && !empty($_POST['_from']) && !empty($_POST['_to']
 <p><input type="submit" name="sendmail" value="Send test mail" /></p>
 
 
-<h3>Test IMAP configuration</h3>
+<h3>Test IMAP config</h3>
 
 <?php
 
@@ -383,9 +386,12 @@ if (isset($_POST['imaptest']) && !empty($_POST['_host']) && !empty($_POST['_user
     $imap_host = trim($_POST['_host']);
     $imap_port = $RCI->getprop('default_port');
   }
-  
+
+  $imap_host = idn_to_ascii($imap_host);
+  $imap_user = idn_to_ascii($_POST['_user']);
+
   $imap = new rcube_imap(null);
-  if ($imap->connect($imap_host, $_POST['_user'], $_POST['_pass'], $imap_port, $imap_ssl)) {
+  if ($imap->connect($imap_host, $imap_user, $_POST['_pass'], $imap_port, $imap_ssl)) {
     $RCI->pass('IMAP connect', 'SORT capability: ' . ($imap->get_capability('SORT') ? 'yes' : 'no'));
     $imap->close();
   }
@@ -405,7 +411,8 @@ if (isset($_POST['imaptest']) && !empty($_POST['_host']) && !empty($_POST['_user
 <p class="warning">
 
 After completing the installation and the final tests please <b>remove</b> the whole
-installer folder from the document root of the webserver.<br />
+installer folder from the document root of the webserver or make sure that
+enable_installer option in main.inc.php is disabled.<br />
 <br />
 
 These files may expose sensitive configuration data like server passwords and encryption keys

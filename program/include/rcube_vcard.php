@@ -4,8 +4,8 @@
  +-----------------------------------------------------------------------+
  | program/include/rcube_vcard.php                                       |
  |                                                                       |
- | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2008-2009, RoundCube Dev. - Switzerland                 |
+ | This file is part of the Roundcube Webmail client                     |
+ | Copyright (C) 2008-2009, Roundcube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -14,7 +14,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: $
+ $Id: rcube_vcard.php 4393 2011-01-04 22:00:35Z thomasb $
 
 */
 
@@ -28,6 +28,7 @@
  */
 class rcube_vcard
 {
+  private static $values_decoded = false;
   private $raw = array(
     'FN' => array(),
     'N' => array(array('','','','','')),
@@ -47,10 +48,10 @@ class rcube_vcard
   /**
    * Constructor
    */
-  public function __construct($vcard = null)
+  public function __construct($vcard = null, $charset = RCMAIL_CHARSET, $detect = false)
   {
     if (!empty($vcard))
-      $this->load($vcard);
+      $this->load($vcard, $charset, $detect);
   }
 
 
@@ -58,19 +59,32 @@ class rcube_vcard
    * Load record from (internal, unfolded) vcard 3.0 format
    *
    * @param string vCard string to parse
+   * @param string Charset of string values
+   * @param boolean True if loading a 'foreign' vcard and extra heuristics for charset detection is required
    */
-  public function load($vcard)
+  public function load($vcard, $charset = RCMAIL_CHARSET, $detect = false)
   {
+    self::$values_decoded = false;
     $this->raw = self::vcard_decode($vcard);
 
+    // resolve charset parameters
+    if ($charset == null) {
+      $this->raw = self::charset_convert($this->raw);
+    }
+    // vcard has encoded values and charset should be detected
+    else if ($detect && self::$values_decoded &&
+      ($detected_charset = self::detect_encoding(self::vcard_encode($this->raw))) && $detected_charset != RCMAIL_CHARSET) {
+        $this->raw = self::charset_convert($this->raw, $detected_charset);
+    }
+
     // find well-known address fields
-    $this->displayname = $this->raw['FN'][0];
+    $this->displayname = $this->raw['FN'][0][0];
     $this->surname = $this->raw['N'][0][0];
     $this->firstname = $this->raw['N'][0][1];
     $this->middlename = $this->raw['N'][0][2];
-    $this->nickname = $this->raw['NICKNAME'][0];
-    $this->organization = $this->raw['ORG'][0];
-    $this->business = ($this->raw['X-ABShowAs'][0] == 'COMPANY') || (join('', (array)$this->raw['N'][0]) == '' && !empty($this->organization));
+    $this->nickname = $this->raw['NICKNAME'][0][0];
+    $this->organization = $this->raw['ORG'][0][0];
+    $this->business = ($this->raw['X-ABSHOWAS'][0][0] == 'COMPANY') || (join('', (array)$this->raw['N'][0]) == '' && !empty($this->organization));
     
     foreach ((array)$this->raw['EMAIL'] as $i => $raw_email)
       $this->email[$i] = is_array($raw_email) ? $raw_email[0] : $raw_email;
@@ -81,6 +95,13 @@ class rcube_vcard
       $tmp = $this->email[0];
       $this->email[0] = $this->email[$pref_index];
       $this->email[$pref_index] = $tmp;
+    }
+
+    // make sure displayname is not empty (required by RFC2426)
+    if (!strlen($this->displayname)) {
+      // the same method is used in steps/mail/addcontact.inc
+      $this->displayname = ucfirst(preg_replace('/[\.\-]/', ' ',
+        substr($this->email[0], 0, strpos($this->email[0], '@'))));
     }
   }
 
@@ -106,7 +127,7 @@ class rcube_vcard
     switch ($field) {
       case 'name':
       case 'displayname':
-        $this->raw['FN'][0] = $value;
+        $this->raw['FN'][0][0] = $value;
         break;
         
       case 'firstname':
@@ -118,11 +139,11 @@ class rcube_vcard
         break;
       
       case 'nickname':
-        $this->raw['NICKNAME'][0] = $value;
+        $this->raw['NICKNAME'][0][0] = $value;
         break;
         
       case 'organization':
-        $this->raw['ORG'][0] = $value;
+        $this->raw['ORG'][0][0] = $value;
         break;
         
       case 'email':
@@ -156,6 +177,28 @@ class rcube_vcard
     
     return $result;
   }
+  
+  
+  /**
+   * Convert a whole vcard (array) to UTF-8.
+   * If $force_charset is null, each member value that has a charset parameter will be converted
+   */
+  private static function charset_convert($card, $force_charset = null)
+  {
+    foreach ($card as $key => $node) {
+      foreach ($node as $i => $subnode) {
+        if (is_array($subnode) && (($charset = $force_charset) || ($subnode['charset'] && ($charset = $subnode['charset'][0])))) {
+          foreach ($subnode as $j => $value) {
+            if (is_numeric($j) && is_string($value))
+              $card[$key][$i][$j] = rcube_charset_convert($value, $charset);
+          }
+          unset($card[$key][$i]['charset']);
+        }
+      }
+    }
+
+    return $card;
+  }
 
 
   /**
@@ -168,11 +211,14 @@ class rcube_vcard
   {
     $out = array();
 
+    // check if charsets are specified (usually vcard version < 3.0 but this is not reliable)
+    if (preg_match('/charset=/i', substr($data, 0, 2048)))
+      $charset = null;
     // detect charset and convert to utf-8
-    $encoding = self::detect_encoding($data);
-    if ($encoding && $encoding != RCMAIL_CHARSET) {
-      $data = rcube_charset_convert($data, $encoding);
+    else if (($charset = self::detect_encoding($data)) && $charset != RCMAIL_CHARSET) {
+      $data = rcube_charset_convert($data, $charset);
       $data = preg_replace(array('/^[\xFE\xFF]{2}/', '/^\xEF\xBB\xBF/', '/^\x00+/'), '', $data); // also remove BOM
+      $charset = RCMAIL_CHARSET;
     }
 
     $vcard_block = '';
@@ -182,15 +228,17 @@ class rcube_vcard
       if ($in_vcard_block && !empty($line))
         $vcard_block .= $line . "\n";
 
-      if (trim($line) == 'END:VCARD') {
+      $line = trim($line);
+
+      if (preg_match('/^END:VCARD$/i', $line)) {
         // parse vcard
-        $obj = new rcube_vcard(self::cleanup($vcard_block));
+        $obj = new rcube_vcard(self::cleanup($vcard_block), $charset, true);
         if (!empty($obj->displayname))
           $out[] = $obj;
 
         $in_vcard_block = false;
       }
-      else if (trim($line) == 'BEGIN:VCARD') {
+      else if (preg_match('/^BEGIN:VCARD$/i', $line)) {
         $vcard_block = $line . "\n";
         $in_vcard_block = true;
       }
@@ -217,9 +265,6 @@ class rcube_vcard
     // Remove cruft like item1.X-AB*, item1.ADR instead of ADR, and empty lines
     $vcard = preg_replace(array('/^item\d*\.X-AB.*$/m', '/^item\d*\./m', "/\n+/"), array('', '', "\n"), $vcard);
 
-    // remove vcard 2.1 charset definitions
-    $vcard = preg_replace('/;CHARSET=[^:;]+/', '', $vcard);
-    
     // if N doesn't have any semicolons, add some 
     $vcard = preg_replace('/^(N:[^;\R]*)$/m', '\1;;;;', $vcard);
 
@@ -269,7 +314,7 @@ class rcube_vcard
 
         foreach($regs2[1] as $attrid => $attr) {
           if ((list($key, $value) = explode('=', $attr)) && $value) {
-	    $value = trim($value);
+            $value = trim($value);
             if ($key == 'ENCODING') {
               // add next line(s) to value string if QP line end detected
               while ($value == 'QUOTED-PRINTABLE' && preg_match('/=$/', $lines[$i]))
@@ -286,7 +331,7 @@ class rcube_vcard
         }
 
         $entry = array_merge($entry, (array)self::vcard_unquote($line[2]));
-        $data[$field][] = count($entry) > 1 ? $entry : $entry[0];
+        $data[$field][] = $entry;
       }
     }
 
@@ -328,9 +373,11 @@ class rcube_vcard
   {
     switch (strtolower($encoding)) {
       case 'quoted-printable':
+        self::$values_decoded = true;
         return quoted_printable_decode($value);
 
       case 'base64':
+        self::$values_decoded = true;
         return base64_decode($value);
 
       default:
