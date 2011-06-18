@@ -13,7 +13,7 @@
  | Author: Marcel Schlesinger <info@marcel-schlesinger.de>               |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 1107 2008-02-17 18:32:46Z thomasb $
+ @version $Id: labels.inc 1446 2008-05-28 21:36:42Z thomasb $
 
 */
 
@@ -68,11 +68,35 @@ $labels['wednesday'] = 'Mittwoch';
 $labels['thursday'] = 'Donnerstag';
 $labels['friday'] = 'Freitag';
 $labels['saturday'] = 'Samstag';
+$labels['jan'] = 'Jan';
+$labels['feb'] = 'Feb';
+$labels['mar'] = 'Mär';
+$labels['apr'] = 'Apr';
+$labels['may'] = 'Mai';
+$labels['jun'] = 'Jun';
+$labels['jul'] = 'Jul';
+$labels['aug'] = 'Aug';
+$labels['sep'] = 'Sep';
+$labels['oct'] = 'Okt';
+$labels['nov'] = 'Nov';
+$labels['dec'] = 'Dez';
+$labels['longjan'] = 'Januar';
+$labels['longfeb'] = 'Februar';
+$labels['longmar'] = 'März';
+$labels['longapr'] = 'April';
+$labels['longmay'] = 'Mai';
+$labels['longjun'] = 'Juni';
+$labels['longjul'] = 'Juli';
+$labels['longaug'] = 'August';
+$labels['longsep'] = 'September';
+$labels['longoct'] = 'Oktober';
+$labels['longnov'] = 'November';
+$labels['longdec'] = 'Dezember';
 $labels['today'] = 'Heute';
 $labels['checkmail'] = 'Auf neue Nachrichten überprüfen';
 $labels['writenewmessage'] = 'Neue Nachricht schreiben';
 $labels['replytomessage'] = 'Antwort verfassen';
-$labels['replytoallmessage'] = 'Antwort an Absender und alle Empfänger';
+$labels['replytoallmessage'] = 'Antwort an Absender und alle Empfänger verfassen';
 $labels['forwardmessage'] = 'Nachricht weiterleiten';
 $labels['deletemessage'] = 'Nachricht löschen';
 $labels['movemessagetotrash'] = 'Nachricht in den Papierkorb verschieben';
@@ -171,6 +195,17 @@ $labels['dstactive'] = 'Sommerzeit';
 $labels['htmleditor'] = 'HTML-Nachrichten erstellen';
 $labels['htmlsignature'] = 'HTML-Signatur';
 $labels['previewpane'] = 'Vorschaufenster anzeigen';
+$labels['logoutclear'] = 'Papierkorb beim Abmelden leeren';
+$labels['logoutcompact'] = 'Posteingang beim Abmleden packen';
+$labels['uisettings'] = 'Benutzeroberfläche';
+$labels['serversettings'] = 'Server-Einstellungen';
+$labels['mailboxview'] = 'Mailbox-Ansicht';
+$labels['mdnrequests'] = 'Lesebestätigung senden';
+$labels['askuser'] = 'immer fragen';
+$labels['autosend'] = 'automatisch senden';
+$labels['ignore'] = 'ignorieren';
+$labels['readwhendeleted'] = 'Beim Löschen als gelesen markieren';
+$labels['flagfordeletion'] = 'Als gelöscht markieren wenn kein Papierkorb';
 $labels['autosavedraft'] = 'Entwurf automatisch speichern';
 $labels['everynminutes'] = 'alle $n Minuten';
 $labels['never'] = 'nie';

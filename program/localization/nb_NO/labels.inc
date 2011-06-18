@@ -14,7 +14,7 @@
  | Author: Tor Erik Linnerud - JKLM <tel@jklm.no>                        |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 1093 2008-02-16 11:40:18Z tomekp $
+ @version $Id: labels.inc 1335 2008-04-27 15:18:13Z alec $
 
 */
 
@@ -69,6 +69,30 @@ $labels['wednesday'] = 'Onsdag';
 $labels['thursday'] = 'Torsdag';
 $labels['friday'] = 'Fredag';
 $labels['saturday'] = 'Lørdag';
+$labels['jan'] = 'Jan';
+$labels['feb'] = 'Feb';
+$labels['mar'] = 'Mar';
+$labels['apr'] = 'Apr';
+$labels['may'] = 'Mai';
+$labels['jun'] = 'Jun';
+$labels['jul'] = 'Jul';
+$labels['aug'] = 'Aug';
+$labels['sep'] = 'Sep';
+$labels['oct'] = 'Okt';
+$labels['nov'] = 'Nov';
+$labels['dec'] = 'Des';
+$labels['longjan'] = 'Januar';
+$labels['longfeb'] = 'Februar';
+$labels['longmar'] = 'Marsj';
+$labels['longapr'] = 'April';
+$labels['longmay'] = 'Mai';
+$labels['longjun'] = 'Juni';
+$labels['longjul'] = 'Juli';
+$labels['longaug'] = 'August';
+$labels['longsep'] = 'September';
+$labels['longoct'] = 'Oktober';
+$labels['longnov'] = 'November';
+$labels['longdec'] = 'Desember';
 $labels['today'] = 'I dag';
 $labels['checkmail'] = 'Sjekk for nye beskjeder';
 $labels['writenewmessage'] = 'Opprett en ny e-post';
@@ -172,6 +196,10 @@ $labels['dstactive'] = 'Sommertid';
 $labels['htmleditor'] = 'Bruk HTML-editor';
 $labels['htmlsignature'] = 'HTML-signatur';
 $labels['previewpane'] = 'Forhåndsvisning';
+$labels['logoutclear'] = 'Tøm søpel ved utlogging';
+$labels['logoutcompact'] = 'Kompakt innboksen ved utlogging';
+$labels['uisettings'] = 'Brukergrensesnitt';
+$labels['serversettings'] = 'Serverinnstillinger';
 $labels['autosavedraft'] = 'Autolagring av utkast';
 $labels['everynminutes'] = 'Hvert $n. minutt';
 $labels['never'] = 'Aldri';

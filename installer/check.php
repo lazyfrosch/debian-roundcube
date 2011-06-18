@@ -1,13 +1,16 @@
 <form action="index.php" method="get">
 <?php
 
-$required_php_exts = array('PCRE' => 'pcre', 'Session' => 'session');
+$required_php_exts = array('PCRE' => 'pcre', 'Session' => 'session',
+    'DOM XML' => 'dom');
 
 $optional_php_exts = array('FileInfo' => 'fileinfo', 'Libiconv' => 'iconv',
-    'Multibyte' => 'mbstring', 'OpenSSL' => 'openssl', 'Mcrypt' => 'mcrypt', 'GD' => 'gd');
+    'Multibyte' => 'mbstring', 'OpenSSL' => 'openssl', 'Mcrypt' => 'mcrypt',
+    'GD' => 'gd');
 
 $required_libs = array('PEAR' => 'PEAR.php', 'DB' => 'DB.php', 'MDB2' => 'MDB2.php',
-    'Net_SMTP' => 'Net/SMTP.php', 'Mail_mime' => 'Mail/mime.php', 'iilConnection' => 'lib/imap.inc');
+    'Net_SMTP' => 'Net/SMTP.php', 'Mail_mime' => 'Mail/mime.php',
+    'iilConnection' => 'lib/imap.inc');
 
 $supported_dbs = array('MySQL' => 'mysql', 'MySQLi' => 'mysqli',
     'PostgreSQL' => 'pgsql', 'SQLite (v2)' => 'sqlite');
@@ -37,11 +40,10 @@ echo '<input type="hidden" name="_step" value="' . ($RCI->configured ? 3 : 2) . 
 <h3>Checking PHP version</h3>
 <?php
 
-define('MIN_PHP_VERSION', '4.3.1');
+define('MIN_PHP_VERSION', '5.2.0');
 if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '>=')) {
     $RCI->pass('Version', 'PHP ' . PHP_VERSION . ' detected');
-}
-else {
+} else {
     $RCI->fail('Version', 'PHP Version ' . MIN_PHP_VERSION . ' or greater is required ' . PHP_VERSION . ' detected');
 }
 ?>
@@ -54,8 +56,7 @@ $prefix = (PHP_SHLIB_SUFFIX === 'dll') ? 'php_' : '';
 foreach ($required_php_exts AS $name => $ext) {
     if (extension_loaded($ext)) {
         $RCI->pass($name);
-    }
-    else {
+    } else {
         $_ext = $prefix . $ext . '.' . PHP_SHLIB_SUFFIX;
         $msg = @dl($_ext) ? 'Could be loaded. Please add in php.ini' : '';
         $RCI->fail($name, $msg, $source_urls[$name]);

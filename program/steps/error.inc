@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: error.inc 850 2007-10-03 00:13:32Z ihug $
+ $Id: error.inc 1347 2008-04-30 14:07:29Z thomasb $
 
 */
 
@@ -99,9 +99,8 @@ EOF;
 
 if (template_exists('error'))
   {
-  $OUTPUT->scripts = array();
-  $OUTPUT->script_files = array();
-  parse_template('error');
+  $OUTPUT->reset();
+  $OUTPUT->send('error');
   }
 
 

@@ -13,7 +13,7 @@
  | Author: Weiran Zhang (weiran@weiran.co.uk)                            |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 1255 2008-04-05 12:49:21Z thomasb $
+ @version $Id: labels.inc 1373 2008-05-10 14:48:18Z alec $
 
 */
 
@@ -68,10 +68,34 @@ $labels['wednesday'] = 'Wednesday';
 $labels['thursday'] = 'Thursday';
 $labels['friday'] = 'Friday';
 $labels['saturday'] = 'Saturday';
+$labels['jan'] = 'Jan';
+$labels['feb'] = 'Feb';
+$labels['mar'] = 'Mar';
+$labels['apr'] = 'Apr';
+$labels['may'] = 'May';
+$labels['jun'] = 'Jun';
+$labels['jul'] = 'Jul';
+$labels['aug'] = 'Aug';
+$labels['sep'] = 'Sep';
+$labels['oct'] = 'Oct';
+$labels['nov'] = 'Nov';
+$labels['dec'] = 'Dec';
+$labels['longjan'] = 'January';
+$labels['longfeb'] = 'February';
+$labels['longmar'] = 'March';
+$labels['longapr'] = 'April';
+$labels['longmay'] = 'May';
+$labels['longjun'] = 'June';
+$labels['longjul'] = 'July';
+$labels['longaug'] = 'August';
+$labels['longsep'] = 'September';
+$labels['longoct'] = 'October';
+$labels['longnov'] = 'November';
+$labels['longdec'] = 'December';
 $labels['today'] = 'Today';
 $labels['checkmail'] = 'Check for new messages';
 $labels['writenewmessage'] = 'Create a new message';
-$labels['replytomessage'] = 'Reply to the message';
+$labels['replytomessage'] = 'Reply to sender';
 $labels['replytoallmessage'] = 'Reply to sender and all recipients';
 $labels['forwardmessage'] = 'Forward the message';
 $labels['deletemessage'] = 'Delete message';
@@ -171,6 +195,10 @@ $labels['dstactive'] = 'Summer time';
 $labels['htmleditor'] = 'Compose HTML messages';
 $labels['htmlsignature'] = 'HTML signature';
 $labels['previewpane'] = 'Show preview pane';
+$labels['logoutclear'] = 'Clear Trash on logout';
+$labels['logoutcompact'] = 'Compact Inbox on logout';
+$labels['uisettings'] = 'User Interface';
+$labels['serversettings'] = 'Server Settings';
 $labels['autosavedraft'] = 'Automatically save draft';
 $labels['everynminutes'] = 'every $n minutes';
 $labels['never'] = 'never';

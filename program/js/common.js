@@ -10,7 +10,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
  
- $Id: common.js 1064 2008-02-13 05:33:41Z till $
+ $Id: common.js 1264 2008-04-07 09:08:06Z alec $
 */
 
 // Constants
@@ -579,18 +579,21 @@ roundcube_browser.prototype.get_cookie = getCookie;
 // tiny replacement for Firebox functionality
 function rcube_console()
 {
-  this.box = rcube_find_object('console');
-  
   this.log = function(msg)
   {
-    if (this.box)
-      this.box.value += str+'\n--------------------------------------\n';
+    box = rcube_find_object('console');
+    if (box)
+      if (msg[msg.length-1]=='\n')
+        box.value += msg+'--------------------------------------\n';
+      else
+        box.value += msg+'\n--------------------------------------\n';
   };
-  
+
   this.reset = function()
   {
-    if (this.box)
-      this.box.value = '';
+    box = rcube_find_object('console');
+    if (box)
+      box.value = '';
   };
 }
 

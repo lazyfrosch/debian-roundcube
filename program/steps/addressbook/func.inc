@@ -15,18 +15,21 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: func.inc 930 2007-11-25 17:34:19Z thomasb $
+ $Id: func.inc 1412 2008-05-21 07:45:54Z alec $
 
 */
-
-require_once('include/rcube_contacts.inc');
-require_once('include/rcube_ldap.inc');
 
 // instantiate a contacts object according to the given source
 if (($source = get_input_value('_source', RCUBE_INPUT_GPC)) && isset($CONFIG['ldap_public'][$source]))
   $CONTACTS = new rcube_ldap($CONFIG['ldap_public'][$source]);
-else
-  $CONTACTS = new rcube_contacts($DB, $_SESSION['user_id']);
+else if (strtolower($CONFIG['address_book_type']) == 'ldap') {
+    // Get the first LDAP address book.
+    $source = key((array)$CONFIG['ldap_public']);
+    $prop = current((array)$CONFIG['ldap_public']);
+    $CONTACTS = new rcube_ldap($prop);
+} else {
+    $CONTACTS = new rcube_contacts($DB, $_SESSION['user_id']);
+} // end else
 
 $CONTACTS->set_pagesize($CONFIG['pagesize']);
 
@@ -45,9 +48,13 @@ $OUTPUT->set_env('source', $source ? $source : '0');
 $OUTPUT->set_env('readonly', $CONTACTS->readonly, false);
 
 // add list of address sources to client env
-$js_list = array("0" => array('id' => 0, 'readonly' => false));
+$js_list = array();
+if (strtolower($CONFIG['address_book_type']) != 'ldap') {
+  // We are using the DB address book, add it.
+  $js_list = array("0" => array('id' => 0, 'readonly' => false));
+} // end if
 foreach ((array)$CONFIG['ldap_public'] as $id => $prop)
-  $js_list[$id] = array('id' => $id, 'readonly' => !$prop['writeable']);
+  $js_list[$id] = array('id' => $id, 'readonly' => !$prop['writable']);
 $OUTPUT->set_env('address_sources', $js_list);
 
 
@@ -69,19 +76,28 @@ function rcmail_directory_list($attrib)
     
   // allow the following attributes to be added to the <ul> tag
   $out = '<ul' . create_attrib_string($attrib, array('style', 'class', 'id')) . ">\n";
-  $out .= sprintf($line_templ,
-    'rcmli'.$local_id,
-    !$current ? 'selected' : '',
-    Q(rcmail_url('list', array('_source' => 0))),
-    JS_OBJECT_NAME,
-    $local_id,
-    JS_OBJECT_NAME,
-    $local_id,
-    JS_OBJECT_NAME,
-    $local_id,
-    JS_OBJECT_NAME,
-    $local_id,
-    rcube_label('personaladrbook'));
+  if (strtolower($CONFIG['address_book_type']) != 'ldap') {
+    $out .= sprintf($line_templ,
+      'rcmli'.$local_id,
+      !$current ? 'selected' : '',
+      Q(rcmail_url('list', array('_source' => 0))),
+      JS_OBJECT_NAME,
+      $local_id,
+      JS_OBJECT_NAME,
+      $local_id,
+      JS_OBJECT_NAME,
+      $local_id,
+      JS_OBJECT_NAME,
+      $local_id,
+      rcube_label('personaladrbook'));
+  } // end if
+  else {
+    // DB address book not used, see if a source is set, if not use the
+    // first LDAP directory.
+    if (!$current) {
+      $current = key((array)$CONFIG['ldap_public']);
+    } // end if
+  } // end else
   
   foreach ((array)$CONFIG['ldap_public'] as $id => $prop)
   {
@@ -157,7 +173,7 @@ function rcmail_js_contacts_list($result, $prefix='')
     
     // format each col
     foreach ($a_show_cols as $col)
-      $a_row_cols[$col] = $row[$col];
+      $a_row_cols[$col] = Q($row[$col]);
     
     $OUTPUT->command($prefix.'add_contact_row', $row['ID'], $a_row_cols);
     }
@@ -223,7 +239,8 @@ function rcmail_get_rowcount_text()
 
   return $out;
   }
-  
+
+$OUTPUT->set_pagetitle(rcube_label('addressbook'));
   
 // register UI objects
 $OUTPUT->add_handlers(array(
@@ -231,7 +248,7 @@ $OUTPUT->add_handlers(array(
   'addresslist' => 'rcmail_contacts_list',
   'addressframe' => 'rcmail_contact_frame',
   'recordscountdisplay' => 'rcmail_rowcount_display',
-  'searchform' => 'rcmail_search_form'
+  'searchform' => array($OUTPUT, 'search_form')
 ));
 
 ?>

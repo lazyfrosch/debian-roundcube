@@ -15,15 +15,14 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: upload.inc 1085 2008-02-14 23:49:30Z till $
+ $Id: upload.inc 1434 2008-05-27 14:58:04Z thomasb $
 
 */
 
 
-if (!$_SESSION['compose'])
-  {
-  exit;
-  }
+if (!$_SESSION['compose']) {
+  die("Invalid session var!");
+}
 
 
 // use common temp dir for file uploads
@@ -34,7 +33,8 @@ if (!is_array($_SESSION['compose']['attachments']))
   $_SESSION['compose']['attachments'] = array();
 
 
-$response = '';
+// clear all stored output properties (like scripts and env vars)
+$OUTPUT->reset();
 
 if (is_array($_FILES['_attachments']['tmp_name']))
   {
@@ -77,6 +77,10 @@ if (is_array($_FILES['_attachments']['tmp_name']))
       $OUTPUT->command('display_message', $msg, 'error');
       }
     }
+  }
+else if ($_SERVER['REQUEST_METHOD'] == 'POST')
+  { 
+  $OUTPUT->command('display_message', rcube_label('fileuploaderror'), 'error');
   }
 
 // send html page with JS calls as response

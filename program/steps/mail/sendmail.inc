@@ -5,7 +5,7 @@
  | program/steps/mail/sendmail.inc                                       |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -16,14 +16,9 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: sendmail.inc 1255 2008-04-05 12:49:21Z thomasb $
+ $Id: sendmail.inc 1344 2008-04-30 08:21:42Z thomasb $
 
 */
-
-
-//require_once('lib/smtp.inc');
-require_once('lib/html2text.inc');
-require_once('lib/rc_mail_mime.inc');
 
 
 if (!isset($_SESSION['compose']['id']))
@@ -70,7 +65,7 @@ function rcmail_get_identity($id)
  */
 function rcmail_attach_emoticons(&$mime_message)
 {
-  global $CONFIG, $INSTALL_PATH;
+  global $CONFIG;
 
   $htmlContents = $mime_message->getHtmlBody();
 
@@ -100,7 +95,7 @@ function rcmail_attach_emoticons(&$mime_message)
     if (! in_array($image_name, $included_images))
       {
       // add the image to the MIME message
-      $img_file = $INSTALL_PATH . '/' . $searchstr . $image_name;
+      $img_file = INSTALL_PATH . '/' . $searchstr . $image_name;
       if(! $mime_message->addHTMLImage($img_file, 'image/gif', '', true, '_' . $image_name))
         $OUTPUT->show_message("emoticonerror", 'error');
 
@@ -210,9 +205,6 @@ if (!empty($_POST['_receipt']))
   }
 
 // additional headers
-$headers['Message-ID'] = $message_id;
-$headers['X-Sender'] = $from;
-
 if ($CONFIG['http_received_header'])
 {
   $nldlm = rcmail_header_delm() . "\t";
@@ -222,6 +214,9 @@ if ($CONFIG['http_received_header'])
     $_SERVER['SERVER_PROTOCOL'].' ('.$_SERVER['REQUEST_METHOD'].'); ' . date('r'),
     69, $nldlm);
 }
+
+$headers['Message-ID'] = $message_id;
+$headers['X-Sender'] = $from;
 
 if (!empty($CONFIG['useragent']))
   $headers['User-Agent'] = $CONFIG['useragent'];
@@ -237,7 +232,7 @@ $isHtmlVal = strtolower(get_input_value('_is_html', RCUBE_INPUT_POST));
 $isHtml = ($isHtmlVal == "1");
 
 // create extended PEAR::Mail_mime instance
-$MAIL_MIME = new rc_mail_mime(rcmail_header_delm());
+$MAIL_MIME = new rcube_mail_mime(rcmail_header_delm());
 
 // For HTML-formatted messages, construct the MIME message with both
 // the HTML part and the plain-text part
@@ -318,7 +313,7 @@ $MAIL_MIME->setParam(array(
 ));
 
 // encoding subject header with mb_encode provides better results with asian characters
-if ($MBSTRING && function_exists("mb_encode_mimeheader"))
+if (function_exists("mb_encode_mimeheader"))
 {
   mb_internal_encoding($message_charset);
   $headers['Subject'] = mb_encode_mimeheader($headers['Subject'], $message_charset, 'Q');

@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_shared.inc 1255 2008-04-05 12:49:21Z thomasb $
+ $Id: rcube_shared.inc 1490 2008-06-07 18:48:59Z alec $
 
 */
 
@@ -84,121 +84,6 @@ function rcube_browser()
 
 
 /**
- * Get localized text in the desired language
- *
- * @param mixed Named parameters array or label name
- * @return string Localized text
- */
-function rcube_label($attrib)
-{
-  global $sess_user_lang, $INSTALL_PATH, $OUTPUT;
-  static $sa_text_data, $s_language, $utf8_decode;
-
-  // extract attributes
-  if (is_string($attrib))
-    $attrib = array('name' => $attrib);
-    
-  $nr = is_numeric($attrib['nr']) ? $attrib['nr'] : 1;
-  $vars = isset($attrib['vars']) ? $attrib['vars'] : '';
-
-  $command_name = !empty($attrib['command']) ? $attrib['command'] : NULL;
-  $alias = $attrib['name'] ? $attrib['name'] : ($command_name && $command_label_map[$command_name] ? $command_label_map[$command_name] : '');
-
-
-  // load localized texts
-  if (!$sa_text_data || $s_language != $sess_user_lang)
-    {
-    $sa_text_data = array();
-    
-    // get english labels (these should be complete)
-    @include($INSTALL_PATH.'program/localization/en_US/labels.inc');
-    @include($INSTALL_PATH.'program/localization/en_US/messages.inc');
-
-    if (is_array($labels))
-      $sa_text_data = $labels;
-    if (is_array($messages))
-      $sa_text_data = array_merge($sa_text_data, $messages);
-    
-    // include user language files
-    if ($sess_user_lang!='en' && is_dir($INSTALL_PATH.'program/localization/'.$sess_user_lang))
-    {
-      include_once($INSTALL_PATH.'program/localization/'.$sess_user_lang.'/labels.inc');
-      include_once($INSTALL_PATH.'program/localization/'.$sess_user_lang.'/messages.inc');
-
-      if (is_array($labels))
-        $sa_text_data = array_merge($sa_text_data, $labels);
-      if (is_array($messages))
-        $sa_text_data = array_merge($sa_text_data, $messages);
-    }
-      
-    $s_language = $sess_user_lang;
-  }
-
-  // text does not exist
-  if (!($text_item = $sa_text_data[$alias]))
-  {
-    /*
-    raise_error(array(
-      'code' => 500,
-      'type' => 'php',
-      'line' => __LINE__,
-      'file' => __FILE__,
-      'message' => "Missing localized text for '$alias' in '$sess_user_lang'"), TRUE, FALSE);
-    */
-    return "[$alias]";
-  }
-
-  // make text item array 
-  $a_text_item = is_array($text_item) ? $text_item : array('single' => $text_item);
-
-  // decide which text to use
-  if ($nr==1)
-    $text = $a_text_item['single'];
-  else if ($nr>0)
-    $text = $a_text_item['multiple'];
-  else if ($nr==0)
-  {
-    if ($a_text_item['none'])
-      $text = $a_text_item['none'];
-    else if ($a_text_item['single'])
-      $text = $a_text_item['single'];
-    else if ($a_text_item['multiple'])
-      $text = $a_text_item['multiple'];
-  }
-
-  // default text is single
-  if ($text=='')
-    $text = $a_text_item['single'];
-
-  // replace vars in text
-  if (is_array($attrib['vars']))
-  {
-    foreach ($attrib['vars'] as $var_key=>$var_value)
-      $a_replace_vars[substr($var_key, 0, 1)=='$' ? substr($var_key, 1) : $var_key] = $var_value;
-  }
-
-  if ($a_replace_vars)
-    $text = preg_replace('/\${?([_a-z]{1}[_a-z0-9]*)}?/ei', '$a_replace_vars["\1"]', $text);
-
-  // remove variables in text which were not available in arg $vars and $nr
-  eval("\$text = <<<EOF
-$text
-EOF;
-");
-
-  // format output
-  if (($attrib['uppercase'] && strtolower($attrib['uppercase']=='first')) || $attrib['ucfirst'])
-    return ucfirst($text);
-  else if ($attrib['uppercase'])
-    return strtoupper($text);
-  else if ($attrib['lowercase'])
-    return strtolower($text);
-
-  return $text;
-}
-
-
-/**
  * Send HTTP headers to prevent caching this page
  */
 function send_nocacheing_headers()
@@ -236,18 +121,22 @@ function send_future_expire_header($offset=2600000)
  * @param int Modified date as unix timestamp
  * @param string Etag value for caching
  */
-function send_modified_header($mdate, $etag=null)
+function send_modified_header($mdate, $etag=null, $skip_check=false)
 {
   if (headers_sent())
     return;
     
   $iscached = false;
-  if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= $mdate)
-    $iscached = true;
-  
   $etag = $etag ? "\"$etag\"" : null;
-  if ($etag)
-    $iscached = ($_SERVER['HTTP_IF_NONE_MATCH'] == $etag);
+
+  if (!$skip_check)
+  {
+    if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= $mdate)
+      $iscached = true;
+  
+    if ($etag)
+      $iscached = ($_SERVER['HTTP_IF_NONE_MATCH'] == $etag);
+  }
   
   if ($iscached)
     header("HTTP/1.x 304 Not Modified");
@@ -655,29 +544,6 @@ function get_offset_time($offset_str, $factor=1)
 
 
 /**
- * Return the last occurence of a string in another string
- *
- * @param haystack string string in which to search
- * @param needle string string for which to search
- * @return index of needle within haystack, or false if not found
- */
-function strrstr($haystack, $needle)
-{
-  $pver = phpversion();
-  if ($pver[0] >= 5)
-      return strrpos($haystack, $needle);
-  else
-  {
-    $index = strpos(strrev($haystack), strrev($needle));
-    if($index === false)
-        return false;
-    
-    $index = strlen($haystack) - strlen($needle) - $index;
-    return $index;
-  }
-}
-
-/**
  * A method to guess the mime_type of an attachment.
  *
  * @param string $path     Path to the file.
@@ -713,6 +579,35 @@ function rc_mime_content_type($path, $failover = 'unknown/unknown')
     finfo_close($finfo);
 
     return $mime_type;
+}
+
+
+/**
+ * A method to guess encoding of a string.
+ *
+ * @param string $string     	String.
+ * @param string $failover 	Default result for failover.
+ *
+ * @return string
+ */
+function rc_detect_encoding($string, $failover='')
+{
+    if (!function_exists('mb_detect_encoding')) {
+        return $failover;
+    }
+
+    // FIXME: the order is important, because sometimes 
+    // iso string is detected as euc-jp and etc.
+    $enc = array(
+	'UTF-8', 'ISO-8859-1', 'ISO-8859-2', 'ISO-8859-3', 'ISO-8859-4',
+	'ISO-8859-5', 'ISO-8859-6', 'ISO-8859-7', 'ISO-8859-8', 'ISO-8859-9',
+	'ISO-8859-10', 'ISO-8859-13', 'ISO-8859-14', 'ISO-8859-15', 'ISO-8859-16',
+	'WINDOWS-1252', 'WINDOWS-1251', 'EUC-JP', 'EUC-TW', 'KOI8-R'
+    );
+
+    $result = mb_detect_encoding($string, join(',', $enc));
+
+    return $result ? $result : $failover;
 }
 
 ?>

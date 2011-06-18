@@ -13,7 +13,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 1052 2008-02-12 18:41:53Z thomasb $
+ @version $Id: messages.inc 1456 2008-05-30 13:27:13Z thomasb $
 
 */
 
@@ -78,5 +78,6 @@ $messages['receiptsent'] = 'Successfully sent a read receipt';
 $messages['errorsendingreceipt'] = 'Could not send the receipt';
 $messages['nodeletelastidentity'] = 'You cannot delete this identity, it\'s your last one.';
 $messages['addsubfolderhint'] = 'This folder will be created as subfolder of the currently selected one';
+$messages['forbiddencharacter'] = 'Folder name contains a forbidden character';
 
 ?>
