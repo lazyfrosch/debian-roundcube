@@ -2,7 +2,7 @@
 /*
  +-------------------------------------------------------------------------+
  | Roundcube Webmail IMAP Client                                           |
- | Version 0.5.1                                                           |
+ | Version 0.5.2                                                           |
  |                                                                         |
  | Copyright (C) 2005-2011, Roundcube Dev. - Switzerland                   |
  |                                                                         |
@@ -23,7 +23,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                          |
  +-------------------------------------------------------------------------+
 
- $Id: index.php 4509 2011-02-09 10:51:50Z thomasb $
+ $Id: index.php 4674 2011-04-20 09:03:08Z thomasb $
 
 */
 
@@ -95,10 +95,12 @@ if ($RCMAIL->task == 'login' && $RCMAIL->action == 'login') {
   }
   else if ($auth['valid'] && !$auth['abort'] &&
         !empty($auth['host']) && !empty($auth['user']) &&
-        $RCMAIL->login($auth['user'], $auth['pass'], $auth['host'])) {
-    // create new session ID
+        $RCMAIL->login($auth['user'], $auth['pass'], $auth['host'])
+  ) {
+    // create new session ID, don't destroy the current session
+    // it was destroyed already by $RCMAIL->kill_session() above
     $RCMAIL->session->remove('temp');
-    $RCMAIL->session->regenerate_id();
+    $RCMAIL->session->regenerate_id(false);
 
     // send auth cookie if necessary
     $RCMAIL->authenticate_session();
@@ -110,7 +112,7 @@ if ($RCMAIL->task == 'login' && $RCMAIL->action == 'login') {
     $query = array();
     if ($url = get_input_value('_url', RCUBE_INPUT_POST)) {
       parse_str($url, $query);
-      
+
       // prevent endless looping on login page
       if ($query['_task'] == 'login')
         unset($query['_task']);
@@ -180,7 +182,7 @@ else {
 
   // check client X-header to verify request origin
   if ($OUTPUT->ajax_call) {
-    if (rc_request_header('X-Roundcube-Request') != $RCMAIL->get_request_token()) {
+    if (rc_request_header('X-Roundcube-Request') != $RCMAIL->get_request_token() && !$RCMAIL->config->get('devel_mode')) {
       header('HTTP/1.1 404 Not Found');
       die("Invalid Request");
     }

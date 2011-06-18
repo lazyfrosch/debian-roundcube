@@ -16,7 +16,7 @@
  | Author: Lukas Kahwe Smith <smith@pooteeweet.org>                      |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_mdb2.php 4057 2010-10-07 07:03:25Z alec $
+ $Id: rcube_mdb2.php 4643 2011-04-11 12:24:00Z alec $
 
 */
 
@@ -553,15 +553,7 @@ class rcube_mdb2
      */
     function fromunixtime($timestamp)
     {
-        switch($this->db_provider) {
-            case 'mysqli':
-            case 'mysql':
-            case 'sqlite':
-                return sprintf("FROM_UNIXTIME(%d)", $timestamp);
-
-            default:
-                return date("'Y-m-d H:i:s'", $timestamp);
-        }
+        return date("'Y-m-d H:i:s'", $timestamp);
     }
 
 

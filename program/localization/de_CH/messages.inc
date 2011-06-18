@@ -13,7 +13,7 @@
 | Author: Thomas Bruederli <roundcube@gmail.com>                        |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 4345 2010-12-17 14:28:38Z thomasb $
+@version $Id: messages.inc 4666 2011-04-17 09:34:02Z alec $
 
 */
 
@@ -115,7 +115,7 @@ $messages['smtpautherror'] = 'SMTP Fehler ($code): Die Authentisierung ist fehlg
 $messages['smtpfromerror'] = 'SMTP Fehler ($code): Der Absender "$from" konnte nicht gesetzt werden ($msg)';
 $messages['smtptoerror'] = 'SMTP Fehler ($code): Der Empfänger "$to" konnte nicht gesetzt werden ($msg)';
 $messages['smtprecipientserror'] = 'SMTP Fehler: Die Empfängerliste konnte nicht verarbeitet werden';
-$messages['smtpdsnerror'] = 'SMTP-Fehler: Empfangsbestätigung werden nicht unterstützt';
+$messages['smtpdsnerror'] = 'SMTP-Fehler: Übermittlungsbestätigungen werden nicht unterstützt';
 $messages['smtperror'] = 'SMTP Fehler: $msg';
 $messages['emailformaterror'] = 'Ungültige E-Mail-Adresse: $email';
 $messages['toomanyrecipients'] = 'Zuviele Empfänger angegeben. Reduzieren Sie die Empfängeradressen auf $max.';
@@ -135,7 +135,7 @@ $messages['namecannotbeempty'] = 'Der Name darf nicht leer sein';
 $messages['nametoolong'] = 'Der Name ist zu lang';
 $messages['folderupdated'] = 'Der Ordner wurde erfolgreich aktualisiert';
 $messages['foldercreated'] = 'Der Ordner wurde erfolgreich erstellt';
-$messages['errorreadonly'] = 'Die Aktion nicht ausgeführt werden. Der Ordner ist schreibgeschützt.';
-$messages['errornoperm'] = 'Die Aktion nicht ausgeführt werden. Zugriff verweigert.';
+$messages['errorreadonly'] = 'Die Aktion kann nicht ausgeführt werden. Der Ordner ist schreibgeschützt.';
+$messages['errornoperm'] = 'Die Aktion kann nicht ausgeführt werden. Zugriff verweigert.';
 
 ?>

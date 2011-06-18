@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_message.php 4516 2011-02-09 12:46:46Z alec $
+ $Id: rcube_message.php 4643 2011-04-11 12:24:00Z alec $
 
 */
 
@@ -725,7 +725,9 @@ class rcube_message
                     $line  = $prefix . rc_wordwrap($line, $length - $level - 2, " \r\n$prefix ");
                 }
                 else if ($line) {
-                    $line = ' ' . rc_wordwrap(rtrim($line), $length - 2, " \r\n ");
+                    $line = rc_wordwrap(rtrim($line), $length - 2, " \r\n");
+                    // space-stuffing
+                    $line = preg_replace('/(^|\r\n)(From| |>)/', '\\1 \\2', $line);
                 }
 
                 $text[$idx] = $line;
