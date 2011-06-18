@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_imap.inc 561 2007-05-17 15:18:12Z thomasb $
+ $Id: rcube_imap.inc 587 2007-05-28 19:21:36Z thomasb $
 
 */
 
@@ -2275,7 +2275,7 @@ class rcube_imap
 
   function _mod_mailbox($mbox_name, $mode='in')
     {
-    if (empty($mbox_name) || (!empty($this->root_ns) && $this->root_ns == $mbox_name) || $mbox_name == 'INBOX')
+    if ((!empty($this->root_ns) && $this->root_ns == $mbox_name) || $mbox_name == 'INBOX')
       return $mbox_name;
 
     if (!empty($this->root_dir) && $mode=='in') 
@@ -2312,12 +2312,14 @@ class rcube_imap
 
   function get_id($uid, $mbox_name=NULL) 
     {
-      return $this->_uid2id($uid, $this->_mod_mailbox($mbox_name));
+      $mailbox = $mbox_name ? $this->_mod_mailbox($mbox_name) : $this->mailbox;
+      return $this->_uid2id($uid, $mailbox);
     }
   
   function get_uid($id,$mbox_name=NULL)
     {
-      return $this->_id2uid($id, $this->_mod_mailbox($mbox_name));
+      $mailbox = $mbox_name ? $this->_mod_mailbox($mbox_name) : $this->mailbox;
+      return $this->_id2uid($id, $mailbox);
     }
 
   function _uid2id($uid, $mbox_name=NULL)

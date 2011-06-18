@@ -13,7 +13,7 @@
  | Requires: common.js, list.js                                          |
  +-----------------------------------------------------------------------+
 
-  $Id: app.js 575 2007-05-18 12:35:28Z thomasb $
+  $Id: app.js 615 2007-06-13 05:57:44Z thomasb $
 */
 
 
@@ -1680,7 +1680,7 @@ function rcube_webmail()
       }
 
     // check for empty body
-    if ((input_message.value=='')&&(tinyMCE.getContent()==''))
+    if (input_message.value=='')
       {
       if (!confirm(this.get_label('nobodywarning')))
         {

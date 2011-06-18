@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_smtp.inc 399 2006-12-06 21:37:37Z thomasb $
+ $Id: rcube_smtp.inc 587 2007-05-28 19:21:36Z thomasb $
 
 */
 
@@ -72,7 +72,7 @@ function smtp_mail($from, $recipients, &$headers, &$body, &$response)
   // create Net_SMTP object and connect to server
   if (!is_object($smtp_conn))
     {
-    $helo_host = !empty($_SERVER['server_name']) ? $_SERVER['server_name'] : 'localhost';
+    $helo_host = !empty($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost';
     $SMTP_CONN = new Net_SMTP($smtp_host, $smtp_port, $helo_host);
 
     // set debugging
