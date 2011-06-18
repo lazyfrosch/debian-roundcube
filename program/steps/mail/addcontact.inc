@@ -5,7 +5,7 @@
  | program/steps/mail/addcontact.inc                                     |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,9 +15,13 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: addcontact.inc 1712 2008-09-02 07:42:46Z thomasb $
+ $Id: addcontact.inc 2758 2009-07-16 15:01:05Z thomasb $
 
 */
+
+// only process ajax requests
+if (!$OUTPUT->ajax_call)
+  return;
 
 $done = false;
 $CONTACTS = $RCMAIL->get_address_book(null, true);
@@ -41,8 +45,14 @@ if (!empty($_POST['_address']) && is_object($CONTACTS))
     $existing = $CONTACTS->search('email', $contact['email'], true, false);
     if ($done = $existing->count)
       $OUTPUT->show_message('contactexists', 'warning');
-    else if ($done = $CONTACTS->insert($contact))
-      $OUTPUT->show_message('addedsuccessfully', 'confirmation');
+    else
+    {
+      $plugin = $RCMAIL->plugins->exec_hook('create_contact', array('record' => $contact, 'source' => null));
+      $contact = $plugin['record'];
+
+      if (!$plugin['abort'] && ($done = $CONTACTS->insert($contact)))
+        $OUTPUT->show_message('addedsuccessfully', 'confirmation');
+    }
   }
 }
 

@@ -11,10 +11,11 @@
 |                                                                       |
 +-----------------------------------------------------------------------+
 | Author: Mark Moses <mark@katmoda.com>                                 |
-|         Lazlo Westerhof <roundcube@lazlo.me>                          |
+|         Lazlo Westerhof <roundcube@lazlo.me>                        	|
+|         Frits Letteboer <f.letteboer@radiotwenterand.nl>              |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 2237 2009-01-17 01:55:39Z till $
+@version $Id: messages.inc 2798 2009-07-24 13:30:39Z robin $
 
 */
 
@@ -23,6 +24,8 @@ $messages['loginfailed'] = 'Inloggen mislukt';
 $messages['cookiesdisabled'] = 'Uw browser accepteert geen cookies';
 $messages['sessionerror'] = 'Uw sessie is verlopen of ongeldig';
 $messages['imaperror'] = 'Connectie met IMAP server mislukt';
+$messages['servererror'] = 'Server Fout!';
+$messages['invalidrequest'] = 'Ongeldige aanvraag! Er zijn geen gegevens opgeslagen.';
 $messages['nomessagesfound'] = 'Geen berichten gevonden in deze mailbox';
 $messages['loggedout'] = 'Succesvol uitgelogd. Tot ziens!';
 $messages['mailboxempty'] = 'Mailbox is leeg';
@@ -46,6 +49,7 @@ $messages['errorsavingsent'] = 'Er is een fout opgetreden tijdens het opslaan va
 $messages['errorsaving'] = 'Er is een fout opgetreden tijdens het opslaan';
 $messages['errormoving'] = 'Kan het bericht niet verplaatsen';
 $messages['errordeleting'] = 'Kan het bericht niet verwijderen';
+$messages['errormarking'] = 'Kon bericht niet markeren';
 $messages['deletecontactconfirm'] = 'Weet u zeker dat u de geselecteerde contactperso(o)n/en wilt verwijderen?';
 $messages['deletemessagesconfirm'] = 'Weet u zeker dat u de geselecteerde bericht(en) wilt verwijderen?';
 $messages['deletefolderconfirm'] = 'Weet u zeker dat u deze map wilt verwijderen?';
@@ -95,5 +99,12 @@ $messages['importconfirm'] = '<b>Er zijn $inserted contactpersonen succesvol ge√
 $messages['opnotpermitted'] = 'Deze verrichting is niet toegestaan!';
 $messages['nofromaddress'] = 'Het e-mailadres mist in de geselecteerde identiteit';
 $messages['editorwarning'] = 'Door het overschakelen naar de platte tekst editor gaat alle opmaak verloren. Weet je zeker dat je verder wil gaan?';
+$messages['httpreceivedencrypterror'] = 'Er is een fatale fout opgetreden. Neem direct contact op met uw systeembeheerder. <b>Uw bericht kon niet worden verzonden.</b>';
+$messages['smtpconnerror'] = 'SMTP Fout ($code): Verbinding met server mislukt';
+$messages['smtpautherror'] = 'SMTP Fout ($code): Autenticatie mislukt';
+$messages['smtpfromerror'] = 'SMTP Fout ($code): Kon afzender "$from" niet instellen';
+$messages['smtptoerror'] = 'SMTP Fout ($code): Kon ontvanger "$to" niet toevoegen';
+$messages['smtprecipientserror'] = 'SMTP Fout: Kon lijst van ontvangers niet verwerken';
+$messages['smtperror'] = 'SMTP Fout: $msg';
 
 ?>

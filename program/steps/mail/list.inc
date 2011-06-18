@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: list.inc 2483 2009-05-15 10:22:29Z thomasb $
+ $Id: list.inc 2634 2009-06-11 07:53:32Z alec $
 
 */
 
@@ -57,11 +57,10 @@ if ($_SESSION['search_filter'] && $_SESSION['search_filter'] != 'ALL')
 			      
 
 // fetch message headers
-if ($IMAP->messagecount($mbox_name, 'ALL', !empty($_REQUEST['_refresh'])))
+if ($count = $IMAP->messagecount($mbox_name, 'ALL', !empty($_REQUEST['_refresh'])))
   $a_headers = $IMAP->list_headers($mbox_name, NULL, $sort_col, $sort_order);
 
-$count = $IMAP->messagecount($mbox_name);
-$unseen = $IMAP->messagecount($mbox_name, 'UNSEEN', !empty($_REQUEST['_refresh']));
+$unseen = $count ? $IMAP->messagecount($mbox_name, 'UNSEEN', !empty($_REQUEST['_refresh'])) : 0;
 
 // update message count display
 $pages = ceil($count/$IMAP->page_size);

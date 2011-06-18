@@ -15,7 +15,7 @@
 |         Lauris Bukšis-Haberkorns <lauris@nix.lv>                      |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
+@version $Id: labels.inc 2513 2009-05-21 12:59:19Z alec $
 
 */
 
@@ -231,8 +231,7 @@ $labels['fromknownsenders'] = 'no zināmiem sūtītājiem';
 $labels['always'] = 'vienmēr';
 $labels['showinlineimages'] = 'Attēlot pielikuma attēlus zem vēstules';
 $labels['autosavedraft'] = 'Automātiski saglabāt uzmetumu';
-$labels['everynminutes'] = 'katras $n minūtes';
-$labels['keepaliveevery'] = 'katru $n minūti(-es)';
+$labels['everynminutes'] = 'katru $n minūti(-es)';
 $labels['keepalive'] = 'Pārbaudīt jaunas vēstules mapēs';
 $labels['never'] = 'nekad';
 $labels['messagesdisplaying'] = 'Vēstuļu attēlošana';

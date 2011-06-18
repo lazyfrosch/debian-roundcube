@@ -15,7 +15,7 @@
  | Author: Sjon Hortensius <sjon@hortensius.net>                         |
  +-----------------------------------------------------------------------+
 
- $Id: rss.inc 2223 2009-01-08 14:12:00Z alec $
+ $Id: rss.inc 2672 2009-06-22 16:20:34Z alec $
 
 */
 
@@ -49,7 +49,7 @@ $sort_order = 'DESC';
 
 // Send global XML output
 header('Content-type: text/xml');
-echo '<?xml version="1.0" encoding="UTF-8"?>
+echo '<?xml version="1.0" encoding="'.RCMAIL_CHARSET.'"?>
 	<rss version="2.0"
 	 xmlns:dc="http://purl.org/dc/elements/1.1/"
 	 xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"

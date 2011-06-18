@@ -12,9 +12,10 @@
 +-----------------------------------------------------------------------+
 | Author: Ville Alatalo <ville@alatalo.org>                             |
 |         Veljo Velling <veve@utu.fi>                                   |
+|         Jorma Tuomainen <jt@wiza.fi>                                  |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 2237 2009-01-17 01:55:39Z till $
+@version $Id: messages.inc 2572 2009-05-29 17:39:35Z alec $
 
 */
 
@@ -23,6 +24,7 @@ $messages['loginfailed'] = 'Sisäänkirjautuminen epäonnistui';
 $messages['cookiesdisabled'] = 'Selaimesi ei hyväksy evästeitä';
 $messages['sessionerror'] = 'Sessio ei kelpaa tai ei ole enää voimassa';
 $messages['imaperror'] = 'Yhteys IMAP-palvelimeen epäonnistui';
+$messages['servererror'] = 'Palvelin virhe!';
 $messages['nomessagesfound'] = 'Kansiossa ei ole sähköpostiviestejä';
 $messages['loggedout'] = 'Sinut on kirjattu ulos järjestelmästä.';
 $messages['mailboxempty'] = 'Kansio on tyhjä';
@@ -94,5 +96,7 @@ $messages['importerror'] = 'Tuonti epäonnistui! Lähetetty tiedosto ei ole vCar
 $messages['importconfirm'] = '<b>$inserted kontaktia tuotu onnistuneesti $inserted kontaktioa, $skipped olemassaolevaa kontaktia hypättiin yli</b>:<p><em>$names</em></p>';
 $messages['opnotpermitted'] = 'Toiminto ei ole sallittu!';
 $messages['nofromaddress'] = 'Valittu identiteetti ei sisällä sähköpostiosoitetta';
+$messages['editorwarning'] = 'Vaihtaminen tekstieditoriin aiheuttaa viestin muotoilun katoamisen. Haluatko jatkaa?';
+$messages['httpreceivedencrypterror'] = 'Vakava virhe asetuksissa. Ota välittömästi yhteys ylläpitoon. <b>Viestiäsi ei voida lähettää.</b>';
 
 ?>

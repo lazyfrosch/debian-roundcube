@@ -11,7 +11,7 @@
 +-----------------------------------------------------------------------+
 | Author: Moshe Leibovitch  <moish@mln.co.il>                           |
 | Updates: Noor Dawod <noor@comrax.com>                                 |
-| Updates: Moshe Leibovitch  <moish@mln.co.il>  06122008                |
+| Updates: Moshe Leibovitch  <moish@mln.co.il>  19082009                |
 +-----------------------------------------------------------------------+
 */
 
@@ -114,12 +114,15 @@ $labels['markread'] = 'כנקראו';
 $labels['markunread'] = 'כלא נקראו';
 $labels['markflagged'] = 'כמסומן';
 $labels['markunflagged'] = 'כלא מסומן';
+$labels['messageactions'] = 'פעולות נוספות';
 $labels['select'] = 'בחירה';
 $labels['all'] = 'הכל';
 $labels['none'] = 'כלום';
 $labels['unread'] = 'לא נקראו';
 $labels['flagged'] = 'מסומן';
 $labels['unanswered'] = 'לא נענה';
+$labels['deleted'] = 'נמחק';
+$labels['invert'] = 'היפוך הסימון';
 $labels['filter'] = 'סינון';
 $labels['compact'] = 'פינוי שטח לא מנוצל';
 $labels['empty'] = 'ריקון';
@@ -129,8 +132,12 @@ $labels['unknown'] = 'לא ידוע';
 $labels['unlimited'] = 'ללא הגבלה';
 $labels['quicksearch'] = 'חיפוש מהיר';
 $labels['resetsearch'] = 'ניקוי תיבת החיפוש';
+$labels['searchmod'] = 'מאפייני חיפוש';
+$labels['msgtext'] = 'כל ההודעה';
 $labels['openinextwin'] = 'פתיחה בחלון חדש';
+$labels['emlsave'] = 'הורדת הודעה בפורמט  EML';
 $labels['compose'] = 'כתיבת הודעה';
+$labels['editasnew'] = 'עריכת ההודעה כחדשה';
 $labels['savemessage'] = 'שמירת טיוטה';
 $labels['sendmessage'] = 'משלוח מיידי';
 $labels['addattachment'] = 'צירוף קובץ';
@@ -230,7 +237,6 @@ $labels['always'] = 'תמיד';
 $labels['showinlineimages'] = 'הצגת תמונות מצורפות בתחתית ההודעה';
 $labels['autosavedraft'] = 'שמירה אוטומטית של טיוטה';
 $labels['everynminutes'] = 'כל $n דקות';
-$labels['keepaliveevery'] = 'כל $n דקות';
 $labels['keepalive'] = 'בדיקת הגעה של הודעות חדשות';
 $labels['never'] = 'אף פעם';
 $labels['messagesdisplaying'] = 'הצגת הודעות';
@@ -242,6 +248,12 @@ $labels['2047folding'] = 'תאימות מלאה 2047 אחרים';
 $labels['advancedoptions'] = 'הגדרות נוספות';
 $labels['focusonnewmessage'] = 'מיקוד הסמן על החלון עם ההודעה החדשה';
 $labels['checkallfolders'] = 'בדיקת הודעות חדשות בכל התיקים';
+$labels['displaynext'] = 'מעבר להודעה הבאה לאחר מחיקה או תיוק';
+$labels['mainoptions'] = 'אפשרויות עיקריות';
+$labels['section'] = 'קטע';
+$labels['maintenance'] = 'תחזוקה';
+$labels['newmessage'] = 'הודעה חדשה';
+$labels['listoptions'] = 'אפשרויות רשימה';
 $labels['folder'] = 'תיק';
 $labels['folders'] = 'תיקים';
 $labels['foldername'] = 'שם תיק';

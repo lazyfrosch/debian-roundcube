@@ -17,7 +17,7 @@
 |         Victor Benincasa <vbenincasa@gmail.com>                       |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
+@version $Id: labels.inc 2850 2009-08-07 21:17:12Z yllar $
 
 */
 
@@ -120,13 +120,16 @@ $labels['markread'] = 'como lidas';
 $labels['markunread'] = 'como não lidas';
 $labels['markflagged'] = 'como sinalizadas';
 $labels['markunflagged'] = 'como não sinalizadas';
+$labels['messageactions'] = 'Mais ações...';
 $labels['select'] = 'Selecionar';
 $labels['all'] = 'Todas';
 $labels['none'] = 'Nenhuma';
 $labels['unread'] = 'Não lidas';
 $labels['flagged'] = 'Sinalizada';
 $labels['unanswered'] = 'Não respondida';
-$labels['filter'] = 'Filtro';
+$labels['deleted'] = 'Excluída';
+$labels['invert'] = 'Inverter';
+$labels['filter'] = 'Exibir';
 $labels['compact'] = 'Compactar';
 $labels['empty'] = 'Esvaziar';
 $labels['purge'] = 'Apagar';
@@ -138,7 +141,9 @@ $labels['resetsearch'] = 'Limpar';
 $labels['searchmod'] = 'Opções da pesquisa';
 $labels['msgtext'] = 'Mensagem inteira';
 $labels['openinextwin'] = 'Abrir em nova janela';
+$labels['emlsave'] = 'Download (.eml)';
 $labels['compose'] = 'Escrever mensagem';
+$labels['editasnew'] = 'Editar como novo';
 $labels['savemessage'] = 'Salvar Rascunho';
 $labels['sendmessage'] = 'Enviar';
 $labels['addattachment'] = 'Anexar um arquivo';
@@ -237,8 +242,7 @@ $labels['fromknownsenders'] = 'de remetentes conhecidos';
 $labels['always'] = 'sempre';
 $labels['showinlineimages'] = 'Exibir imagens anexadas abaixo da mensagem';
 $labels['autosavedraft'] = 'Salvar rascunho automaticamente';
-$labels['everynminutes'] = 'a cada $n minutos';
-$labels['keepaliveevery'] = 'a cada $n minuto(s)';
+$labels['everynminutes'] = 'a cada $n minuto(s)';
 $labels['keepalive'] = 'Verificar se há novas mensagens';
 $labels['never'] = 'nunca';
 $labels['messagesdisplaying'] = 'Exibição de mensagens';
@@ -250,6 +254,12 @@ $labels['2047folding'] = 'RFC 2047 Integral (outro)';
 $labels['advancedoptions'] = 'Opções avançadas';
 $labels['focusonnewmessage'] = 'Focar janela do navegador na nova mensagem';
 $labels['checkallfolders'] = 'Verificar se há novas mensagens em todas as pastas';
+$labels['displaynext'] = 'Exibir a mensagem seguinte após apagar/mover uma mensagem';
+$labels['mainoptions'] = 'Opções Principais';
+$labels['section'] = 'Seção';
+$labels['maintenance'] = 'Manutenção';
+$labels['newmessage'] = 'Novas Mensagens';
+$labels['listoptions'] = 'Opções de Exibição';
 $labels['folder'] = 'Pasta';
 $labels['folders'] = 'Pastas';
 $labels['foldername'] = 'Nome da pasta';

@@ -29,10 +29,12 @@
 class rcube_json_output
 {
     private $config;
-    private $charset = 'UTF-8';
+    private $charset = RCMAIL_CHARSET;
     private $env = array();
     private $texts = array();
     private $commands = array();
+    private $callbacks = array();
+    private $message = null;
 
     public $type = 'js';
     public $ajax_call = true;
@@ -66,7 +68,7 @@ class rcube_json_output
     public function set_pagetitle($title)
     {
         $name = $this->config->get('product_name');
-        $this->command('set_pagetitle', JQ(empty($name) ? $title : $name.' :: '.$title));
+        $this->command('set_pagetitle', empty($name) ? $title : $name.' :: '.$title);
     }
 
     /**
@@ -121,7 +123,12 @@ class rcube_json_output
      */
     public function command()
     {
-        $this->commands[] = func_get_args();
+        $cmd = func_get_args();
+        
+        if (strpos($cmd[0], 'plugin.') === 0)
+          $this->callbacks[] = $cmd;
+        else
+          $this->commands[] = $cmd;
     }
     
     
@@ -130,8 +137,11 @@ class rcube_json_output
      */
     public function add_label()
     {
-        $arg_list = func_get_args();
-        foreach ($arg_list as $i => $name) {
+        $args = func_get_args();
+        if (count($args) == 1 && is_array($args[0]))
+            $args = $args[0];
+        
+        foreach ($args as $name) {
             $this->texts[$name] = rcube_label($name);
         }
     }
@@ -143,15 +153,19 @@ class rcube_json_output
      * @param string Message to display
      * @param string Message type [notice|confirm|error]
      * @param array Key-value pairs to be replaced in localized text
+     * @param boolean Override last set message
      * @uses self::command()
      */
-    public function show_message($message, $type='notice', $vars=null)
+    public function show_message($message, $type='notice', $vars=null, $override=true)
     {
-        $this->command(
-            'display_message',
-            rcube_label(array('name' => $message, 'vars' => $vars)),
-            $type
-        );
+        if ($override || !$this->message) {
+            $this->message = $message;
+            $this->command(
+                'display_message',
+                rcube_label(array('name' => $message, 'vars' => $vars)),
+                $type
+            );
+        }
     }
     
     /**
@@ -196,26 +210,36 @@ class rcube_json_output
      * @return void
      * @deprecated
      */
-    public function remote_response($add='', $flush=false)
+    public function remote_response($add='')
     {
         static $s_header_sent = false;
 
         if (!$s_header_sent) {
             $s_header_sent = true;
             send_nocacheing_headers();
-            header('Content-Type: application/x-javascript; charset=' . $this->get_charset());
+            header('Content-Type: text/plain; charset=' . $this->get_charset());
             print '/** ajax response ['.date('d/M/Y h:i:s O')."] **/\n";
         }
 
         // unset default env vars
         unset($this->env['task'], $this->env['action'], $this->env['comm_path']);
 
-        // send response code
-        echo $this->get_js_commands() . $add;
+        $rcmail = rcmail::get_instance();
+        $response = array('action' => $rcmail->action, 'unlock' => (bool)$_REQUEST['_unlock']);
+        
+        if (!empty($this->env))
+          $response['env'] = $this->env;
+          
+        if (!empty($this->texts))
+          $response['texts'] = $this->texts;
 
-        // flush the output buffer
-        if ($flush)
-            flush();
+        // send function calls
+        $response['exec'] = $this->get_js_commands() . $add;
+        
+        if (!empty($this->callbacks))
+          $response['callbacks'] = $this->callbacks;
+
+        echo json_serialize($response);
     }
     
     
@@ -227,14 +251,7 @@ class rcube_json_output
     private function get_js_commands()
     {
         $out = '';
-	
-	if (sizeof($this->env))
-	    $out .= 'this.set_env('.json_serialize($this->env).");\n";
         
-        foreach($this->texts as $name => $text) {
-            $out .= sprintf("this.add_label('%s', '%s');\n", $name, JQ($text));
-        }
-
         foreach ($this->commands as $i => $args) {
             $method = array_shift($args);
             foreach ($args as $i => $arg) {

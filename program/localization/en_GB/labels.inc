@@ -13,7 +13,7 @@
 | Author: Weiran Zhang (weiran@weiran.co.uk)                            |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
+@version $Id: labels.inc 2616 2009-06-05 16:24:10Z alec $
 
 */
 
@@ -122,6 +122,8 @@ $labels['none'] = 'None';
 $labels['unread'] = 'Unread';
 $labels['flagged'] = 'Flagged';
 $labels['unanswered'] = 'Unanswered';
+$labels['deleted'] = 'Deleted';
+$labels['invert'] = 'Invert';
 $labels['filter'] = 'Filter';
 $labels['compact'] = 'Compact';
 $labels['empty'] = 'Empty';
@@ -134,6 +136,7 @@ $labels['resetsearch'] = 'Reset search';
 $labels['searchmod']  = 'Search modifiers';
 $labels['msgtext']  = 'Entire message';
 $labels['openinextwin'] = 'Open in new window';
+$labels['emlsave'] = 'Save (.eml)';
 $labels['compose'] = 'Compose a message';
 $labels['savemessage'] = 'Save this draft';
 $labels['sendmessage'] = 'Send now';
@@ -233,8 +236,7 @@ $labels['fromknownsenders'] = 'from known senders';
 $labels['always'] = 'always';
 $labels['showinlineimages'] = 'Display attached images below the message';
 $labels['autosavedraft'] = 'Automatically save draft';
-$labels['everynminutes'] = 'every $n minutes';
-$labels['keepaliveevery'] = 'every $n minute(s)';
+$labels['everynminutes'] = 'every $n minute(s)';
 $labels['keepalive'] = 'Check for new messages on';
 $labels['never'] = 'never';
 $labels['messagesdisplaying'] = 'Displaying Messages';

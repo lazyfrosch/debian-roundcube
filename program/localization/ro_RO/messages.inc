@@ -13,7 +13,7 @@
 |         Zeno Popovici <zeno.popovici at ulbsibiu.ro>                  |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 2483 2009-05-15 10:22:29Z thomasb $
+@version $Id: messages.inc 2494 2009-05-17 11:56:53Z yllar $
 
 */
 
@@ -96,4 +96,3 @@ $messages['nofromaddress'] = 'Nu exista o adresa de e-mail in identitatea select
 $messages['editorwarning'] = 'Trecerea in mod text a editorului va cauza pierderea formatarii textului. Doriti sa continuati?';
 
 ?>
-

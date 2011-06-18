@@ -17,7 +17,7 @@
 |         Victor Benincasa <vbenincasa@gmail.com>                       |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 2237 2009-01-17 01:55:39Z till $
+@version $Id: messages.inc 2799 2009-07-26 11:42:46Z yllar $
 
 */
 
@@ -26,6 +26,8 @@ $messages['loginfailed'] = 'Falha no login';
 $messages['cookiesdisabled'] = 'Seu navegador não suporta cookies';
 $messages['sessionerror'] = 'A sessão do seu navegador é inválida ou expirou';
 $messages['imaperror'] = 'Falha na conexão com o servidor IMAP';
+$messages['servererror'] = 'Erro no Servidor!';
+$messages['invalidrequest'] = 'Requisição inválida! Nenhum dado foi salvo.';
 $messages['nomessagesfound'] = 'Nenhuma mensagem foi encontrada';
 $messages['loggedout'] = 'Sua sessão foi finalizada com sucesso. Até breve!';
 $messages['mailboxempty'] = 'A caixa de mensagens está vazia';
@@ -49,6 +51,7 @@ $messages['errorsavingsent'] = 'Ocorreu um erro ao salvar a mensagem enviada';
 $messages['errorsaving'] = 'Ocorreu um erro ao salvar';
 $messages['errormoving'] = 'Não foi possível mover a mensagem';
 $messages['errordeleting'] = 'Não foi possível apagar a mensagem';
+$messages['errormarking'] = 'Não foi possível marcar a mensagem';
 $messages['deletecontactconfirm'] = 'Deseja realmente excluir o(s) contato(s) selecionado(s)?';
 $messages['deletemessagesconfirm'] = 'Deseja realmente excluir a(s) mensagem(s) selecionada(s)?';
 $messages['deletefolderconfirm'] = 'Deseja realmente excluir esta pasta?';
@@ -98,5 +101,12 @@ $messages['importconfirm'] = '<b>Foram importados com sucesso $inserted contatos
 $messages['opnotpermitted'] = 'Operação não permitida!';
 $messages['nofromaddress'] = 'Falta o endereço de email na identidade selecionada';
 $messages['editorwarning'] = 'Mudar para o editor de texto simples elimina toda a formatação de texto. Deseja continuar?';
+$messages['httpreceivedencrypterror'] = 'Ocorreu um erro de configuração. Informe ao administrador do sistema imediatamente. <b>Sua mensagem não pode ser enviada.</b>';
+$messages['smtpconnerror'] = 'Erro SMTP ($code): Conexão ao servidor falhou';
+$messages['smtpautherror'] = 'Erro SMTP ($code): Falha na autenticação';
+$messages['smtpfromerror'] = 'Erro SMTP ($code): Falha ao definir o remetente "$from"';
+$messages['smtptoerror'] = 'Erro SMTP ($code): Falha ao adicionar o destinatário "$to"';
+$messages['smtprecipientserror'] = 'Erro SMTP: Não é possível analisar a lista destinatários';
+$messages['smtperror'] = 'Erro SMTP: $msg';
 
 ?>

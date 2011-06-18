@@ -12,6 +12,20 @@
   visibility: hidden;
 }
 
+.googie_edit_layer {
+  border: 1px solid #666666;
+  background-color: #ffffff;
+  padding: 1px 4px;
+  margin: 1px 0px;
+  font-size: 9pt;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.googie_edit_layer span {
+  font-size: 9pt;
+  font-family: "Courier New", Courier, monospace;
+}
+
 .googie_list {
   width: 100%;
   margin: 0;
@@ -34,7 +48,7 @@
 }
 
 .googie_list_onout {
-  background-color: #F6F6F6;
+  background-color: #fff;
 }
 
 .googie_list_selected {
@@ -53,9 +67,12 @@
 
 .googie_list_revert {
   font-size: 11px;
-  color: #b91479;
+  color: #b91414;
 }
 
+.googie_list_revert:hover {
+  color: #fff;
+}
 .googie_link {
   color: #b91414;
   text-decoration: underline;
@@ -77,11 +94,16 @@
   text-decoration: none;
 }
 
-.googie_check_spelling_ok {
+.googie_check_spelling_ok, 
+.googie_resume_editing {
   color: green;
   font-size: 11px;
-  text-decoration: underline;
   cursor: pointer;
+}
+
+.googie_check_spelling_ok:hover,
+.googie_resume_editing:hover {
+  text-decoration: underline;
 }
 
 .googie_lang_3d_click img {

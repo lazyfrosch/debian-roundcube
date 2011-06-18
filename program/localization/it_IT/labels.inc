@@ -14,7 +14,7 @@
 |         Yusef Maali <contact@yusefmaali.net>                          |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
+@version $Id: labels.inc 2900 2009-09-01 11:47:46Z yllar $
 
 */
 
@@ -117,12 +117,14 @@ $labels['markread'] = 'Letti';
 $labels['markunread'] = 'Non letti';
 $labels['markflagged'] = 'Contrassegnati';
 $labels['markunflagged'] = 'Non contrassegnati';
+$labels['messageactions'] = 'Altre azioni...';
 $labels['select'] = 'Seleziona';
 $labels['all'] = 'Tutti';
 $labels['none'] = 'Nessuno';
 $labels['unread'] = 'Non letti';
 $labels['flagged'] = 'Contrassegnati';
 $labels['unanswered'] = 'Senza risposta';
+$labels['deleted'] = 'Cancellato';
 $labels['filter'] = 'Filtra';
 $labels['compact'] = 'Compatta';
 $labels['empty'] = 'Svuota';
@@ -133,7 +135,9 @@ $labels['unlimited'] = 'illimitato';
 $labels['quicksearch'] = 'Ricerca veloce';
 $labels['resetsearch'] = 'Annulla ricerca';
 $labels['openinextwin'] = 'Apri in una nuova finestra';
+$labels['emlsave'] = 'Scarica (.eml)';
 $labels['compose'] = 'Scrivi un messaggio';
+$labels['editasnew'] = 'Modifica come nuovo';
 $labels['savemessage'] = 'Salva come bozza';
 $labels['sendmessage'] = 'Invia il messaggio adesso';
 $labels['addattachment'] = 'Allega un file';
@@ -232,8 +236,7 @@ $labels['fromknownsenders'] = 'da mittenti conosciuti';
 $labels['always'] = 'sempre';
 $labels['showinlineimages'] = 'Mostra immagini allegate sotto il messaggio';
 $labels['autosavedraft'] = 'Salva le bozze automaticamente';
-$labels['everynminutes'] = 'ogni $n minuti';
-$labels['keepaliveevery'] = 'ogni $n minuto(i)';
+$labels['everynminutes'] = 'ogni $n minuto(i)';
 $labels['keepalive'] = 'Controlla la presenza di nuovi messaggi';
 $labels['never'] = 'mai';
 $labels['messagesdisplaying'] = 'Visualizzazione Messaggi';
@@ -245,6 +248,12 @@ $labels['2047folding'] = 'RFC 2047 completo (altri)';
 $labels['advancedoptions'] = 'Opzioni avanzate';
 $labels['focusonnewmessage'] = 'Attiva la finestra del browser all\'arrivo di un nuovo messaggio';
 $labels['checkallfolders'] = 'Controlla tutte le cartelle per la presenza di nuovi messaggi';
+$labels['displaynext'] = 'Dopo aver cancellato/spostato il messaggio mostra quello successivo';
+$labels['mainoptions'] = 'Opzioni principali';
+$labels['section'] = 'Selezione';
+$labels['maintenance'] = 'Manutenzione';
+$labels['newmessage'] = 'Nuovo Messaggio';
+$labels['listoptions'] = 'Mostra Opzioni';
 $labels['folder'] = 'Cartella';
 $labels['folders'] = 'Cartelle';
 $labels['foldername'] = 'Nome cartella';

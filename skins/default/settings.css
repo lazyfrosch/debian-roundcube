@@ -10,8 +10,6 @@
   height: 22px;
   border-bottom: 1px solid #999999;
   white-space: nowrap;
-  /* css hack for IE */
-  width: expression((parseInt(document.documentElement.clientWidth)-240)+'px');
 }
 
 span.tablink,
@@ -21,12 +19,14 @@ span.tablink-selected
   width: 100px;
   height: 24px !important;
   height: 22px;
-  background: url('images/tab_pas.gif') top left no-repeat;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: url('images/tabs.gif') top left no-repeat;
 }
 
 span.tablink-selected
 {
-  background: url('images/tab_act.gif') top left no-repeat;
+  background-position: -102px 0;
 }
 
 span.tablink a,
@@ -42,41 +42,6 @@ span.tablink-selected a
 span.tablink-selected a
 {
   color: #000000;
-}
-
-#userprefs-box
-{
-  position: absolute;
-  top: 95px;
-  left: 20px;
-  bottom: 60px;
-  right: 20px;
-  overflow: auto;
-  border: 1px solid #999999;
-  /* css hack for IE */
-  height: expression((parseInt(document.documentElement.clientHeight)-155)+'px');
-  width: expression((parseInt(document.documentElement.clientWidth)-40)+'px');
-}
-
-#userprefs-box table td.title
-{
-  color: #666666;
-  padding-right: 10px;
-  white-space: nowrap;
-}
-
-#userprefs-box table tr.advanced
-{
-  display: none;
-}
-
-.userprefs-block
-{
-  float: left;
-  margin-right: 14px;
-  min-width: 520px;
-  /* css hack for IE */
-  width: expression(Math.min(520, parseInt(document.documentElement.clientWidth))+'px');
 }
 
 #rcmfd_timezone
@@ -99,8 +64,6 @@ span.tablink-selected a
   bottom: 140px;
   overflow: auto;
   border: 1px solid #999999;
-  /* css hack for IE */
-  height: expression((parseInt(document.documentElement.clientHeight)-235)+'px');
 }
 
 #folder-manager.droptarget
@@ -114,8 +77,6 @@ span.tablink-selected a
   bottom: 60px;
   width: 420px;
   border: 1px solid #999999;
-  /* css hack for IE */
-  height: expression((parseInt(document.documentElement.clientHeight)-155)+'px');
 }
 
 #listbuttons
@@ -135,8 +96,11 @@ span.tablink-selected a
 #subscription-table
 {
   width: 100%;
-  /* css hack for IE */
-  width: expression('auto');
+}
+
+#subscription-table input
+{
+  font: inherit;
 }
 
 #subscription-table tbody td,
@@ -155,6 +119,12 @@ span.tablink-selected a
 #identities-table thead td.email
 {
   width: 45%;
+}
+
+#subscription-table tbody td
+{
+  height: 22px !important;
+  height: 18px;
 }
 
 #subscription-table tr.virtual td
@@ -190,10 +160,23 @@ span.tablink-selected a
   width: 90px;
 }
 
+#subscription-table tbody td.subscribed,
+#subscription-table tbody td.rename,
+#subscription-table tbody td.delete
+{
+  padding: 1px 4px;
+}
+
 #subscription-table thead td.rename,
 #subscription-table thead td.delete
 {
   width: 30px;
+}
+
+#subscription-table td.name input
+{
+  font: inherit;
+  width: 240px;
 }
 
 #identity-frame
@@ -212,9 +195,6 @@ span.tablink-selected a
   bottom: 60px;
   border: 1px solid #999999;
   overflow: auto;
-  /* css hack for IE */
-  width: expression((parseInt(document.documentElement.clientWidth)-470)+'px');
-  height: expression((parseInt(document.documentElement.clientHeight)-155)+'px');
 }
 
 #identity-details table td.title
@@ -239,18 +219,17 @@ input.disabled
   bottom: 20px;
 }
 
-#userprefs-title,
 #identity-title,
+#prefs-title,
 div.boxtitle
 {
   height: 12px !important;
-  padding: 4px 20px 3px 6px;
+  padding: 2px 10px 5px 10px;
   border-bottom: 1px solid #999999;
   color: #333333;
   font-size: 11px;
   font-weight: bold;
-  background-color: #EBEBEB;
-  background-image: url(images/listheader_aqua.gif); 
+  background: url('images/listheader.gif') top left repeat-x #CCC;
 }
 
 div.settingsbox
@@ -278,12 +257,81 @@ legend
   color: #999999;
 }
 
-div.advswitch
+#prefsscreen
 {
+  position: absolute;
+  top: 95px;
+  right: 20px;
+  bottom: 30px;
+  left: 20px;
+}
+
+#sectionslist
+{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  border: 1px solid #999999;
+  background-color: #F9F9F9;
+  overflow: auto;
+}
+
+#sections-table
+{
+  width: 100%;
+  table-layout: fixed;
+}
+
+#sections-table tbody td
+{
+  cursor: default;
+}
+
+#prefs-box
+{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  border: 1px solid #999999;
+  overflow: hidden;
+}
+
+body.iframe,
+#prefs-frame
+{
+  background-color: #F9F9F9;
+  border: none;
+}
+
+#prefs-details
+{
+  margin: 15px;
+}
+
+#prefs-details table td.title
+{
+  color: #666;
+  padding-right: 10px;
+}
+
+#formfooter
+{
+  width: 100%;
+}
+
+#formfooter .footerleft
+{
+  padding-left: 20px;
+  white-space: nowrap;
+  float: left;
+}
+
+#formfooter .footerright
+{
+  padding-right: 20px;
   white-space: nowrap;
   text-align: right;
-  position: absolute;
-  bottom: 35px;
-  right: 20px;
-  width: 460px;
+  float: right;
 }

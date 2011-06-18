@@ -28,15 +28,17 @@
  */
 class rcmail
 {
-  static public $main_tasks = array('mail','settings','addressbook','login','logout');
+  static public $main_tasks = array('mail','settings','addressbook','login','logout','dummy');
   
   static private $instance;
   
   public $config;
   public $user;
   public $db;
+  public $smtp;
   public $imap;
   public $output;
+  public $plugins;
   public $task = 'mail';
   public $action = '';
   public $comm_path = './';
@@ -88,9 +90,9 @@ class rcmail
       $syslog_facility = $this->config->get('syslog_facility', LOG_USER);
       openlog($syslog_id, LOG_ODELAY, $syslog_facility);
     }
-    				
+
     // set task and action properties
-    $this->set_task(strip_quotes(get_input_value('_task', RCUBE_INPUT_GPC)));
+    $this->set_task(get_input_value('_task', RCUBE_INPUT_GPC));
     $this->action = asciiwords(get_input_value('_action', RCUBE_INPUT_GPC));
 
     // connect to database
@@ -123,7 +125,7 @@ class rcmail
 
     // reset some session parameters when changing task
     if ($_SESSION['task'] != $this->task)
-      unset($_SESSION['page']);
+      rcube_sess_unset('page');
 
     // set current task to session
     $_SESSION['task'] = $this->task;
@@ -131,6 +133,9 @@ class rcmail
     // create IMAP object
     if ($this->task == 'mail')
       $this->imap_init();
+      
+    // create plugin API and load plugins
+    $this->plugins = rcube_plugin_api::get_instance();
   }
   
   
@@ -141,14 +146,12 @@ class rcmail
    */
   public function set_task($task)
   {
-    if (!in_array($task, self::$main_tasks))
-      $task = 'mail';
-    
-    $this->task = $task;
-    $this->comm_path = $this->url(array('task' => $task));
+    $task = asciiwords($task);
+    $this->task = $task ? $task : 'mail';
+    $this->comm_path = $this->url(array('task' => $this->task));
     
     if ($this->output)
-      $this->output->set_env('task', $task);
+      $this->output->set_env('task', $this->task);
   }
   
   
@@ -255,9 +258,18 @@ class rcmail
     $contacts = null;
     $ldap_config = (array)$this->config->get('ldap_public');
     $abook_type = strtolower($this->config->get('address_book_type'));
+
+    $plugin = $this->plugins->exec_hook('get_address_book', array('id' => $id, 'writeable' => $writeable));
     
-    if ($id && $ldap_config[$id]) {
+    // plugin returned instance of a rcube_addressbook
+    if ($plugin['instance'] instanceof rcube_addressbook) {
+      $contacts = $plugin['instance'];
+    }
+    else if ($id && $ldap_config[$id]) {
       $contacts = new rcube_ldap($ldap_config[$id]);
+    }
+    else if ($id === '0') {
+      $contacts = new rcube_contacts($this->db, $this->user->ID);
     }
     else if ($abook_type == 'ldap') {
       // Use the first writable LDAP address book.
@@ -290,10 +302,6 @@ class rcmail
     if (!($this->output instanceof rcube_template))
       $this->output = new rcube_template($this->task, $framed);
 
-    foreach (array('flag_for_deletion','read_when_deleted') as $js_config_var) {
-      $this->output->set_env($js_config_var, $this->config->get($js_config_var));
-    }
-    
     // set keep-alive/check-recent interval
     if ($keep_alive = $this->config->get('keep_alive')) {
       // be sure that it's less than session lifetime
@@ -310,10 +318,10 @@ class rcmail
     $this->output->set_env('task', $this->task);
     $this->output->set_env('action', $this->action);
     $this->output->set_env('comm_path', $this->comm_path);
-    $this->output->set_charset($this->config->get('charset', RCMAIL_CHARSET));
+    $this->output->set_charset(RCMAIL_CHARSET);
 
     // add some basic label to client
-    $this->output->add_label('loading');
+    $this->output->add_label('loading', 'servererror');
     
     return $this->output;
   }
@@ -330,6 +338,20 @@ class rcmail
       $this->output = new rcube_json_output($this->task);
     
     return $this->output;
+  }
+
+
+  /**
+   * Create SMTP object and connect to server
+   *
+   * @param boolean True if connection should be established
+   */
+  public function smtp_init($connect = false)
+  {
+    $this->smtp = new rcube_smtp();
+  
+    if ($connect)
+      $this->smtp->connect();
   }
   
   
@@ -358,13 +380,10 @@ class rcmail
     $options = array(
       'imap' => $this->config->get('imap_auth_type', 'check'),
       'delimiter' => isset($_SESSION['imap_delimiter']) ? $_SESSION['imap_delimiter'] : $this->config->get('imap_delimiter'),
+      'rootdir' => isset($_SESSION['imap_root']) ? $_SESSION['imap_root'] : $this->config->get('imap_root'),
+      'debug_mode' => (bool) $this->config->get('imap_debug', 0),
     );
-    
-    if (isset($_SESSION['imap_root']))
-      $options['rootdir'] = $_SESSION['imap_root'];
-    else if ($imap_root = $this->config->get('imap_root'))
-      $options['rootdir'] = $imap_root;
-    
+
     $this->imap->set_options($options);
   
     // set global object for backward compatibility
@@ -385,7 +404,7 @@ class rcmail
     $conn = false;
     
     if ($_SESSION['imap_host'] && !$this->imap->conn) {
-      if (!($conn = $this->imap->connect($_SESSION['imap_host'], $_SESSION['username'], $this->decrypt_passwd($_SESSION['password']), $_SESSION['imap_port'], $_SESSION['imap_ssl']))) {
+      if (!($conn = $this->imap->connect($_SESSION['imap_host'], $_SESSION['username'], $this->decrypt($_SESSION['password']), $_SESSION['imap_port'], $_SESSION['imap_ssl']))) {
         if ($this->output)
           $this->output->show_message($this->imap->error_code == -1 ? 'imaperror' : 'sessionerror', 'error');
       }
@@ -462,7 +481,7 @@ class rcmail
 
     // lowercase username if it's an e-mail address (#1484473)
     if (strpos($username, '@'))
-      $username = rc_strtolower($username);
+      $username = mb_strtolower($username);
 
     // user already registered -> overwrite username
     if ($user = rcube_user::query($username, $host))
@@ -484,6 +503,13 @@ class rcmail
         // get existing mailboxes (but why?)
         // $a_mailboxes = $this->imap->list_mailboxes();
       }
+      else {
+        raise_error(array(
+          'code' => 600,
+          'type' => 'php',
+          'message' => "Failed to create a user record. Maybe aborted by a plugin?"
+          ), true, false);        
+      }
     }
     else {
       raise_error(array(
@@ -504,7 +530,7 @@ class rcmail
       $_SESSION['imap_host'] = $host;
       $_SESSION['imap_port'] = $imap_port;
       $_SESSION['imap_ssl']  = $imap_ssl;
-      $_SESSION['password']  = $this->encrypt_passwd($pass);
+      $_SESSION['password']  = $this->encrypt($pass);
       $_SESSION['login_time'] = mktime();
       
       if ($_REQUEST['_timezone'] != '_default_')
@@ -598,7 +624,7 @@ class rcmail
    * @param mixed Named parameters array or label name
    * @return string Localized text
    */
-  public function gettext($attrib)
+  public function gettext($attrib, $domain=null)
   {
     // load localization files if not done yet
     if (empty($this->texts))
@@ -613,9 +639,12 @@ class rcmail
 
     $command_name = !empty($attrib['command']) ? $attrib['command'] : NULL;
     $alias = $attrib['name'] ? $attrib['name'] : ($command_name && $command_label_map[$command_name] ? $command_label_map[$command_name] : '');
-
+    
+    // check for text with domain
+    if ($domain && ($text_item = $this->texts[$domain.'.'.$alias]))
+      ;
     // text does not exist
-    if (!($text_item = $this->texts[$alias])) {
+    else if (!($text_item = $this->texts[$alias])) {
       /*
       raise_error(array(
         'code' => 500,
@@ -677,7 +706,7 @@ class rcmail
    *
    * @param string Language ID
    */
-  public function load_language($lang = null)
+  public function load_language($lang = null, $add = array())
   {
     $lang = $this->language_prop(($lang ? $lang : $_SESSION['language']));
     
@@ -707,6 +736,10 @@ class rcmail
       
       $_SESSION['language'] = $lang;
     }
+
+    // append additional texts (from plugin)
+    if (is_array($add) && !empty($add))
+      $this->texts += $add;
   }
 
 
@@ -779,6 +812,9 @@ class rcmail
    */
   public function kill_session()
   {
+    $this->plugins->exec_hook('kill_session');
+    
+    rcube_sess_unset();
     $_SESSION = array('language' => $this->user->language, 'auth_time' => time(), 'temp' => true);
     rcmail::setcookie('sessauth', '-del-', time() - 60);
     $this->user->reset();
@@ -821,12 +857,44 @@ class rcmail
       $this->imap->write_cache();
     }
 
+    if (is_object($this->smtp))
+      $this->smtp->disconnect();
+
     if (is_object($this->contacts))
       $this->contacts->close();
 
     // before closing the database connection, write session data
     if ($_SERVER['REMOTE_ADDR'])
       session_write_close();
+  }
+  
+  
+  /**
+   * Generate a unique token to be used in a form request
+   *
+   * @return string The request token
+   */
+  public function get_request_token()
+  {
+    $key = $this->task;
+    
+    if (!$_SESSION['request_tokens'][$key])
+      $_SESSION['request_tokens'][$key] = md5(uniqid($key . rand(), true));
+    
+    return $_SESSION['request_tokens'][$key];
+  }
+  
+  
+  /**
+   * Check if the current request contains a valid token
+   *
+   * @param int Request method
+   * @return boolean True if request token is valid false if not
+   */
+  public function check_request($mode = RCUBE_INPUT_POST)
+  {
+    $token = get_input_value('_token', $mode);
+    return !empty($token) && $_SESSION['request_tokens'][$this->task] == $token;
   }
   
   
@@ -851,64 +919,108 @@ class rcmail
       return md5($auth_string);
   }
 
+
   /**
-   * Encrypt IMAP password using DES encryption
+   * Encrypt using 3DES
    *
-   * @param string Password to encrypt
-   * @return string Encryprted string
+   * @param string $clear clear text input
+   * @param string $key encryption key to retrieve from the configuration, defaults to 'des_key'
+   * @param boolean $base64 whether or not to base64_encode() the result before returning
+   *
+   * @return string encrypted text
    */
-  public function encrypt_passwd($pass)
+  public function encrypt($clear, $key = 'des_key', $base64 = true)
   {
-    if (function_exists('mcrypt_module_open') && ($td = mcrypt_module_open(MCRYPT_TripleDES, "", MCRYPT_MODE_ECB, ""))) {
+    if (!$clear)
+      return '';
+    /*-
+     * Add a single canary byte to the end of the clear text, which
+     * will help find out how much of padding will need to be removed
+     * upon decryption; see http://php.net/mcrypt_generic#68082
+     */
+    $clear = pack("a*H2", $clear, "80");
+  
+    if (function_exists('mcrypt_module_open') &&
+        ($td = mcrypt_module_open(MCRYPT_TripleDES, "", MCRYPT_MODE_CBC, "")))
+    {
       $iv = mcrypt_create_iv(mcrypt_enc_get_iv_size($td), MCRYPT_RAND);
-      mcrypt_generic_init($td, $this->config->get_des_key(), $iv);
-      $cypher = mcrypt_generic($td, $pass);
+      mcrypt_generic_init($td, $this->config->get_crypto_key($key), $iv);
+      $cipher = $iv . mcrypt_generic($td, $clear);
       mcrypt_generic_deinit($td);
       mcrypt_module_close($td);
     }
-    else if (function_exists('des')) {
-      $cypher = des($this->config->get_des_key(), $pass, 1, 0, NULL);
+    else if (function_exists('des'))
+    {
+      define('DES_IV_SIZE', 8);
+      $iv = '';
+      for ($i = 0; $i < constant('DES_IV_SIZE'); $i++)
+        $iv .= sprintf("%c", mt_rand(0, 255));
+      $cipher = $iv . des($this->config->get_crypto_key($key), $clear, 1, 1, $iv);
     }
-    else {
-      $cypher = $pass;
-
+    else
+    {
       raise_error(array(
         'code' => 500,
         'type' => 'php',
         'file' => __FILE__,
-        'message' => "Could not convert encrypt password. Make sure Mcrypt is installed or lib/des.inc is available"
-        ), true, false);
+        'message' => "Could not perform encryption; make sure Mcrypt is installed or lib/des.inc is available"
+      ), true, true);
     }
-
-    return base64_encode($cypher);
+  
+    return $base64 ? base64_encode($cipher) : $cipher;
   }
 
-
   /**
-   * Decrypt IMAP password using DES encryption
+   * Decrypt 3DES-encrypted string
    *
-   * @param string Encrypted password
-   * @return string Plain password
+   * @param string $cipher encrypted text
+   * @param string $key encryption key to retrieve from the configuration, defaults to 'des_key'
+   * @param boolean $base64 whether or not input is base64-encoded
+   *
+   * @return string decrypted text
    */
-  public function decrypt_passwd($cypher)
+  public function decrypt($cipher, $key = 'des_key', $base64 = true)
   {
-    if (function_exists('mcrypt_module_open') && ($td = mcrypt_module_open(MCRYPT_TripleDES, "", MCRYPT_MODE_ECB, ""))) {
-      $iv = mcrypt_create_iv(mcrypt_enc_get_iv_size($td), MCRYPT_RAND);
-      mcrypt_generic_init($td, $this->config->get_des_key(), $iv);
-      $pass = mdecrypt_generic($td, base64_decode($cypher));
+    if (!$cipher)
+      return '';
+  
+    $cipher = $base64 ? base64_decode($cipher) : $cipher;
+
+    if (function_exists('mcrypt_module_open') &&
+        ($td = mcrypt_module_open(MCRYPT_TripleDES, "", MCRYPT_MODE_CBC, "")))
+    {
+      $iv = substr($cipher, 0, mcrypt_enc_get_iv_size($td));
+      $cipher = substr($cipher, mcrypt_enc_get_iv_size($td));
+      mcrypt_generic_init($td, $this->config->get_crypto_key($key), $iv);
+      $clear = mdecrypt_generic($td, $cipher);
       mcrypt_generic_deinit($td);
       mcrypt_module_close($td);
     }
-    else if (function_exists('des')) {
-      $pass = des($this->config->get_des_key(), base64_decode($cypher), 0, 0, NULL);
+    else if (function_exists('des'))
+    {
+      define('DES_IV_SIZE', 8);
+      $iv = substr($cipher, 0, constant('DES_IV_SIZE'));
+      $cipher = substr($cipher, constant('DES_IV_SIZE'));
+      $clear = des($this->config->get_crypto_key($key), $cipher, 0, 1, $iv);
     }
-    else {
-      $pass = base64_decode($cypher);
+    else
+    {
+      raise_error(array(
+        'code' => 500,
+        'type' => 'php',
+        'file' => __FILE__,
+        'message' => "Could not perform decryption; make sure Mcrypt is installed or lib/des.inc is available"
+      ), true, true);
     }
-
-    return preg_replace('/\x00/', '', $pass);
+  
+    /*-
+     * Trim PHP's padding and the canary byte; see note in
+     * rcmail::encrypt() and http://php.net/mcrypt_generic#68082
+     */
+    $clear = substr(rtrim($clear, "\0"), 0, -1);
+  
+    return $clear;
   }
-
 
   /**
    * Build a valid URL to this instance of RoundCube
@@ -920,18 +1032,17 @@ class rcmail
   {
     if (!is_array($p))
       $p = array('_action' => @func_get_arg(0));
-
-    if (!$p['task'] || !in_array($p['task'], rcmail::$main_tasks))
-      $p['task'] = $this->task;
-
-    $p['_task'] = $p['task'];
+    
+    $task = $p['_task'] ? $p['_task'] : ($p['task'] ? $p['task'] : $this->task);
+    $p['_task'] = $task;
     unset($p['task']);
 
     $url = './';
     $delm = '?';
-    foreach (array_reverse($p) as $par => $val)
+    foreach (array_reverse($p) as $key => $val)
     {
       if (!empty($val)) {
+        $par = $key[0] == '_' ? $key : '_'.$key;
         $url .= $delm.urlencode($par).'='.urlencode($val);
         $delm = '&';
       }

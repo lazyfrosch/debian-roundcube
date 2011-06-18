@@ -13,9 +13,10 @@
 | Author: Mark Moses <mark@katmoda.com>                                 |
 |         Lazlo Westerhof <roundcube@lazlo.me>                          |
 |         Laurens Vets <laurens@daemon.be>                              |
+|         Frits Letteboer <f.letteboer@radiotwenterand.nl>              |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
+@version $Id: labels.inc 2914 2009-09-04 10:51:09Z robin $
 
 */
 
@@ -118,12 +119,15 @@ $labels['markread'] = 'Gelezen';
 $labels['markunread'] = 'Ongelezen';
 $labels['markflagged'] = 'Selecteren';
 $labels['markunflagged'] = 'Niet selecteren';
+$labels['messageactions'] = 'Meer acties...';
 $labels['select'] = 'Selecteer';
 $labels['all'] = 'Allemaal';
 $labels['none'] = 'Geen';
 $labels['unread'] = 'Ongelezen';
 $labels['flagged'] = 'Geselecteerd';
 $labels['unanswered'] = 'Onbeantwoord';
+$labels['deleted'] = 'Verwijderd';
+$labels['invert'] = 'Selectie omdraaien';
 $labels['filter'] = 'Filter';
 $labels['compact'] = 'Opschonen';
 $labels['empty'] = 'Legen';
@@ -136,7 +140,9 @@ $labels['resetsearch'] = 'Reset zoekopdracht';
 $labels['searchmod'] = 'Zoekopties';
 $labels['msgtext'] = 'Gehele bericht';
 $labels['openinextwin'] = 'Openen in een nieuw venster';
+$labels['emlsave'] = 'Opslaan (.eml)';
 $labels['compose'] = 'Nieuw bericht aanmaken';
+$labels['editasnew'] = 'Als nieuw bewerken';
 $labels['savemessage'] = 'Bewaar als concept';
 $labels['sendmessage'] = 'Verstuur het bericht nu';
 $labels['addattachment'] = 'Voeg een bijlage toe';
@@ -168,7 +174,7 @@ $labels['addreplyto'] = 'Antwoord-aan toevoegen';
 $labels['mdnrequest'] = 'De afzender van dit bericht heeft gevraagd een melding te ontvangen wanneer u dit bericht heeft gelezen. Wilt u deze melding verzenden?';
 $labels['receiptread'] = 'Ontvangstbevestiging (gelezen)';
 $labels['yourmessage'] = 'Dit is een ontvangstbevestiging voor uw bericht';
-$labels['receiptnote'] = 'Let op: Dit bevestigd alleen dat uw bericht bij de geaddresseerde is weergegeven. Er is geen garantie dat de geaddresseerde het bericht daadwerkelijk heeft gelezen of de inhoud heeft begrepen.';
+$labels['receiptnote'] = 'Let op: Dit bevestigt alleen dat uw bericht bij de geadresseerde is weergegeven. Er is geen garantie dat de geadresseerde het bericht daadwerkelijk heeft gelezen of de inhoud ervan heeft begrepen.';
 $labels['name'] = 'Naam';
 $labels['firstname'] = 'Voornaam';
 $labels['surname'] = 'Achternaam';
@@ -236,7 +242,6 @@ $labels['always'] = 'altijd';
 $labels['showinlineimages'] = 'Toon bijgevoegde afbeeldingen onder het bericht';
 $labels['autosavedraft'] = 'Concept automatisch opslaan';
 $labels['everynminutes'] = 'iedere $n minuten';
-$labels['keepaliveevery'] = 'iedere $n minuten';
 $labels['keepalive'] = 'Controleer op nieuwe berichten';
 $labels['never'] = 'nooit';
 $labels['messagesdisplaying'] = 'Berichten weergave';
@@ -248,6 +253,12 @@ $labels['2047folding'] = 'Volledig RFC 2047 (andere)';
 $labels['advancedoptions'] = 'Geavanceerde opties';
 $labels['focusonnewmessage'] = 'Focus browserscherm bij nieuw bericht';
 $labels['checkallfolders'] = 'Controleer alle mappen op nieuwe berichten';
+$labels['displaynext'] = 'Na verplaatsen/verwijderen het volgende bericht tonen';
+$labels['mainoptions'] = 'Hoofdopties';
+$labels['section'] = 'Sectie';
+$labels['maintenance'] = 'Onderhoud';
+$labels['newmessage'] = 'Nieuw bericht';
+$labels['listoptions'] = 'Lijstopties';
 $labels['folder'] = 'Map';
 $labels['folders'] = 'Mappen';
 $labels['foldername'] = 'Mapnaam';

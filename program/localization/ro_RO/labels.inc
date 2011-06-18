@@ -13,7 +13,7 @@
 |         Zeno Popovici <zeno.popovici at ulbsibiu.ro>                  |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
+@version $Id: labels.inc 2513 2009-05-21 12:59:19Z alec $
 
 */
 
@@ -231,8 +231,7 @@ $labels['fromknownsenders'] = 'de la expeditori cunoscuti';
 $labels['always'] = 'intotdeauna';
 $labels['showinlineimages'] = 'Arata imaginile atasate sub mesaj';
 $labels['autosavedraft'] = 'Salveaza ciorna automat';
-$labels['everynminutes'] = 'fiecare $n minute';
-$labels['keepaliveevery'] = 'fiecare $n minut(e)';
+$labels['everynminutes'] = 'fiecare $n minut(e)';
 $labels['keepalive'] = 'Verifica mesaje noi la';
 $labels['never'] = 'niciodata';
 $labels['messagesdisplaying'] = 'Afisarea Mesajelor';
@@ -265,4 +264,3 @@ $labels['MB'] = 'MO';
 $labels['GB'] = 'GO';
 
 ?>
-

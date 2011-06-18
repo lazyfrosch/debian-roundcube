@@ -14,7 +14,7 @@
 |         Zhang Huang bin <michaelbibby@gmail.com>                      |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2237 2009-01-17 01:55:39Z till $
+@version $Id: labels.inc 2513 2009-05-21 12:59:19Z alec $
 
 */
 
@@ -232,8 +232,7 @@ $labels['fromknownsenders'] = '来自未知的发件人';
 $labels['always'] = '总是';
 $labels['showinlineimages'] = '在邮件下方显示附件中的图片';
 $labels['autosavedraft'] = '自动保存到草稿箱';
-$labels['everynminutes'] = '第 $n 分钟';
-$labels['keepaliveevery'] = '每隔 $n 分钟';
+$labels['everynminutes'] = '每隔 $n 分钟';
 $labels['keepalive'] = '检查新邮件';
 $labels['never'] = '从不';
 $labels['messagesdisplaying'] = '邮件显示设置';

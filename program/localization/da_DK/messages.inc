@@ -14,7 +14,7 @@
 |         Søren Aggeboe <soren@aggeboe.dk>                              |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 2483 2009-05-15 10:22:29Z thomasb $
+@version $Id: messages.inc 2494 2009-05-17 11:56:53Z yllar $
 
 */
 
@@ -97,4 +97,3 @@ $messages['nofromaddress'] = 'Der mangler en email-adresse i den valgte identite
 $messages['editorwarning'] = 'Al formatering af teksten forsvinder, hvis der skiftes til ren tekst. Vil du fortsætte?';
 
 ?>
-

@@ -15,12 +15,34 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: func.inc 1939 2008-10-05 07:18:15Z alec $
+ $Id: func.inc 2894 2009-08-29 20:56:00Z alec $
 
 */
 
+// add list of address sources to client env
+$js_list = array();
+if (strtolower($CONFIG['address_book_type']) != 'ldap') {
+  // We are using the DB address book, add it.
+  $js_list['0'] = array('id' => 0, 'name' => rcube_label('personaladrbook'), 'readonly' => false);
+}
+if (is_array($CONFIG['ldap_public'])) {
+  foreach ($CONFIG['ldap_public'] as $id => $prop)
+    $js_list[$id] = array('id' => $id, 'name' => $prop['name'], 'readonly' => !$prop['writable']);
+}
+
+$plugin = $RCMAIL->plugins->exec_hook('address_sources', array('sources' => $js_list));
+$js_list = $plugin['sources'];
+
+// select source
+$source = get_input_value('_source', RCUBE_INPUT_GPC);
+
+// if source is not set use first directory
+if (empty($source))
+  $source = $js_list[key($js_list)]['id'];
+
+
 // instantiate a contacts object according to the given source
-$CONTACTS = $RCMAIL->get_address_book(($source = get_input_value('_source', RCUBE_INPUT_GPC)));
+$CONTACTS = $RCMAIL->get_address_book($source);
 
 $CONTACTS->set_pagesize($CONFIG['pagesize']);
 
@@ -37,23 +59,12 @@ if (!empty($_REQUEST['_search']) && isset($_SESSION['search'][$_REQUEST['_search
 // set data source env
 $OUTPUT->set_env('source', $source ? $source : '0');
 $OUTPUT->set_env('readonly', $CONTACTS->readonly, false);
-
-// add list of address sources to client env
-$js_list = array();
-if (strtolower($CONFIG['address_book_type']) != 'ldap') {
-  // We are using the DB address book, add it.
-  $js_list = array("0" => array('id' => 0, 'readonly' => false));
-}
-if (is_array($CONFIG['ldap_public'])) {
-  foreach ($CONFIG['ldap_public'] as $id => $prop)
-    $js_list[$id] = array('id' => $id, 'readonly' => !$prop['writable']);
-}
 $OUTPUT->set_env('address_sources', $js_list);
 
 
 function rcmail_directory_list($attrib)
 {
-  global $CONFIG, $OUTPUT;
+  global $RCMAIL, $OUTPUT;
   
   if (!$attrib['id'])
     $attrib['id'] = 'rcmdirectorylist';
@@ -63,26 +74,24 @@ function rcmail_directory_list($attrib)
   $current = get_input_value('_source', RCUBE_INPUT_GPC);
   $line_templ = html::tag('li', array('id' => 'rcmli%s', 'class' => '%s'),
     html::a(array('href' => '%s', 'onclick' => "return ".JS_OBJECT_NAME.".command('list','%s',this)"), '%s'));
-    
-  if (strtolower($CONFIG['address_book_type']) != 'ldap') {
-    $out .= sprintf($line_templ, $local_id, (!$current ? 'selected' : ''),
-      Q(rcmail_url(null, array('_source' => $local_id))), $local_id, rcube_label('personaladrbook'));
-  } // end if
-  else {
+
+  if (!$current && strtolower($RCMAIL->config->get('address_book_type', 'sql')) != 'ldap') {
+    $current = '0';
+  }
+  else if (!$current) {
     // DB address book not used, see if a source is set, if not use the
     // first LDAP directory.
-    if (!$current) {
-      $current = key((array)$CONFIG['ldap_public']);
-    } // end if
-  } // end else
-  
-  foreach ((array)$CONFIG['ldap_public'] as $id => $prop) {
+    $current = key((array)$RCMAIL->config->get('ldap_public', array()));
+  }
+
+  foreach ((array)$OUTPUT->env['address_sources'] as $j => $source) {
+    $id = $source['id'] ? $source['id'] : $j;
     $js_id = JQ($id);
     $dom_id = preg_replace('/[^a-z0-9\-_]/i', '', $id);
     $out .= sprintf($line_templ, $dom_id, ($current == $id ? 'selected' : ''),
-      Q(rcmail_url(null, array('_source' => $id))), $js_id, (!empty($prop['name']) ? Q($prop['name']) : Q($id)));
+      Q(rcmail_url(null, array('_source' => $id))), $js_id, (!empty($source['name']) ? Q($source['name']) : Q($id)));
   }
-  
+
   $OUTPUT->add_gui_object('folderlist', $attrib['id']);
   
   return html::tag('ul', $attrib, $out, html::$common_attrib);

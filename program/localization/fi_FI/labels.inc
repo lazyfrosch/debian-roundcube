@@ -12,9 +12,10 @@
 +-----------------------------------------------------------------------+
 | Author: Ville Alatalo <ville@alatalo.org>                             |
 |         Veljo Velling <veve@utu.fi>                                   |
+|         Jorma Tuomainen <jt@wiza.fi>                                  |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2237 2009-01-17 01:55:39Z till $
+@version $Id: labels.inc 2581 2009-05-31 11:12:04Z alec $
 
 */
 
@@ -121,6 +122,9 @@ $labels['select'] = 'Valitse';
 $labels['all'] = 'Kaikki';
 $labels['none'] = 'Ei mitään';
 $labels['unread'] = 'Lukemattomat';
+$labels['flagged'] = 'Korostettu';
+$labels['unanswered'] = 'Vastaamaton';
+$labels['filter'] = 'Suodin';
 $labels['compact'] = 'Tiivistä';
 $labels['empty'] = 'Tyhjennä';
 $labels['purge'] = 'Puhdista';
@@ -129,7 +133,10 @@ $labels['unknown'] = 'tuntematon';
 $labels['unlimited'] = 'rajoittamaton';
 $labels['quicksearch'] = 'Pikahaku';
 $labels['resetsearch'] = 'Nollaa haku';
+$labels['searchmod'] = 'Haku kriteerit';
+$labels['msgtext'] = 'Koko viesti';
 $labels['openinextwin'] = 'Avaa uudessa ikkunassa';
+$labels['emlsave'] = 'Tallenna (.eml)';
 $labels['compose'] = 'Viestin kirjoitus';
 $labels['savemessage'] = 'Tallenna tämä luonnos';
 $labels['sendmessage'] = 'Lähetä viesti';
@@ -224,9 +231,13 @@ $labels['ignore'] = 'jätä huomiotta';
 $labels['readwhendeleted'] = 'Merkitse poistettavat viestit luetuiksi';
 $labels['flagfordeletion'] = 'Poistamisen sijaan, merkitse viestit poistettavaksi';
 $labels['skipdeleted'] = 'Älä näytä poistettuja viestejä';
+$labels['showremoteimages'] = 'Näytä ulkopuoliset kuvat viestissä';
+$labels['fromknownsenders'] = 'tunnetuilta lähettäjiltä';
+$labels['always'] = 'aina';
 $labels['showinlineimages'] = 'Näytä liitekuvat viestin jälkeen';
 $labels['autosavedraft'] = 'Tallenna luonnos automaattisesti';
-$labels['everynminutes'] = '$n minuutin välein';
+$labels['everynminutes'] = 'joka $n minuutti';
+$labels['keepalive'] = 'Tarkasta uudet viestit';
 $labels['never'] = 'ei koskaan';
 $labels['messagesdisplaying'] = 'Viestien näyttäminen';
 $labels['messagescomposition'] = 'Viestien kirjoittaminen';
@@ -235,6 +246,8 @@ $labels['2231folding'] = 'Täysin RFC 2231 mukainen (Thunderbird)';
 $labels['miscfolding'] = 'RFC 2047/2231 mukainen (MS Outlook)';
 $labels['2047folding'] = 'Täysin RFC 2047 mukainen (muut)';
 $labels['advancedoptions'] = 'Lisäasetukset';
+$labels['focusonnewmessage'] = 'Tarkenna selainikkuna uuteen viestiin';
+$labels['checkallfolders'] = 'Tarkista kaikki kansiot uusien viestien varalta';
 $labels['folder'] = 'Kansio';
 $labels['folders'] = 'Kansiot';
 $labels['foldername'] = 'Kansion nimi';
