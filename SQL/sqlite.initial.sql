@@ -1,5 +1,5 @@
 -- RoundCube Webmail initial database structure
--- Version 0.1a
+-- Version 0.1-rc1
 -- 
 
 -- --------------------------------------------------------
@@ -58,7 +58,8 @@ CREATE TABLE identities (
   email varchar(128) NOT NULL default '',
   "reply-to" varchar(128) NOT NULL default '',
   bcc varchar(128) NOT NULL default '',
-  signature text NOT NULL default ''
+  signature text NOT NULL default '',
+  html_signature tinyint NOT NULL default '0'
 );
 
 CREATE INDEX ix_identities_user_id ON identities(user_id);
@@ -118,7 +119,7 @@ CREATE TABLE messages (
   date datetime NOT NULL default '0000-00-00 00:00:00',
   size integer NOT NULL default '0',
   headers text NOT NULL,
-  body text
+  structure text
 );
 
 CREATE INDEX ix_messages_user_id ON messages(user_id);

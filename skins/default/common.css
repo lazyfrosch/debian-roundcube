@@ -73,6 +73,13 @@ input, textarea
   border: 1px solid #666666;
 }
 
+input[type="checkbox"],
+input[type="radio"]
+{
+  border: 0;
+  padding: 0;
+}
+
 input.button
 {
   height: 20px;
@@ -120,7 +127,7 @@ img
   width: 600px;
   height: 37px;
   background: url(images/taskbar.gif) top right no-repeat;
-  padding: 10px 24px 0px 0px;
+  padding: 10px 14px 10px 0px;
   text-align: right;
   white-space: nowrap;
   z-index: 2;
@@ -213,6 +220,41 @@ a.button-logout
   border: 1px solid #CCCCCC;
 }
 
+.splitter
+{
+  position: absolute;
+  padding: 2px;
+  background: url(images/dimple.png) center no-repeat;
+}
+
+.splitter-h
+{
+  cursor: n-resize;
+  background-position: center 2px;
+}
+
+.splitter-v
+{
+  cursor: e-resize;
+  background-position: 1px center;
+}
+
+.boxtitle
+{
+  height: 12px !important;
+  padding: 4px 20px 3px 20px;
+  border-bottom: 1px solid #999;
+  color: #333;
+  font-size: 11px;
+  font-weight: bold;
+  background-color: #EBEBEB;
+  background-image: url(images/listheader_aqua.gif);
+}
+
+.radios-left label
+{
+  padding-left: 0.3em;
+}
 
 /***** common table settings ******/
 
@@ -247,14 +289,98 @@ table.records-table tr
 
 table.records-table tr.selected td
 {
-  font-weight: bold;
   color: #FFFFFF;
   background-color: #CC3333;
 }
 
+table.records-table tr.focused td
+{
+}
+
+table.records-table tr.unfocused td
+{
+  color: #FFFFFF;
+  background-color: #929292;
+}
+
+
+/***** mac-style quicksearch field *****/
+
+#quicksearchbar
+{
+  position: absolute;
+  top: 60px;
+  right: 30px;
+  width: 182px;
+  height: 20px;
+  text-align: right;
+  background: url('images/searchfield.gif') top left no-repeat;
+}
+
+#quicksearchbar a
+{
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  text-decoration: none;
+}
+
+#quicksearchbar img
+{
+  vertical-align: middle;
+}
+
+#quicksearchbox
+{
+  position: absolute;
+  top: 2px;
+  left: 20px;
+  width: 140px;
+  font-size: 11px;
+  padding: 0px;
+  border: none;
+}
+
+
+/*\*/
+html>body*#quicksearchbar[id$="quicksearchbar"]:not([class="none"]) { background-image: none; }
+html>body*#quicksearchbar[id$="quicksearchbar"]:not([class="none"]) a { top: 5px; }
+html>body*#quicksearchbar[id$="quicksearchbar"]:not([class="none"]) #quicksearchbox { width: 180px; top:0px; right: 1px; left: auto; }
+/**/
 
 
 /***** roundcube webmail pre-defined classes *****/
+
+#rcversion
+{
+  position: absolute;
+  top: 67px;
+  left: 20px;
+  width: 160px;
+  text-align: center;
+
+  font-weight: normal;
+  font-size: x-small;
+  font-variant: small-caps;
+  
+  color: #999999;
+  /*border: 1px solid #308014;
+  background-color: #b4eeb4;*/
+}
+
+#rcmdraglayer
+{
+  width: 300px;
+  border: 1px solid #999999;
+  background-color: #F9F9F9;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  font-size: 11px;
+  opacity: 0.6;
+  -moz-opacity: 0.6;
+}
 
 a.rcmContactAddress
 {

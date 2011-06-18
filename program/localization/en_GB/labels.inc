@@ -1,18 +1,19 @@
 <?php
 
 /*
+
  +-----------------------------------------------------------------------+
  | language/en_GB/labels.inc                                             |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005, RoundQube Dev. - Switzerland                      |
+ | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Weiran Zhang (weiran@weiran.co.uk)                            |
  +-----------------------------------------------------------------------+
 
- $Id: labels.inc 296 2006-08-06 15:53:41Z thomasb $
+ @version $Id: labels.inc 543 2007-04-28 18:07:12Z thomasb $
 
 */
 
@@ -157,15 +158,6 @@ $labels['contactsfromto'] = 'Contacts $from to $to of $count';
 $labels['print']          = 'Print';
 $labels['export']         = 'Export';
 
-// LDAP search
-$labels['ldapsearch'] = 'LDAP directory search';
-
-$labels['ldappublicsearchname']    = 'Contact name';
-$labels['ldappublicsearchtype'] = 'Exact match?';
-$labels['ldappublicserverselect'] = 'Select servers';
-$labels['ldappublicsearchfield'] = 'Search on';
-$labels['ldappublicsearchform'] = 'Look for a contact';
-$labels['ldappublicsearch'] = 'Search';
 
 // settings
 $labels['settingsfor']  = 'Settings for';

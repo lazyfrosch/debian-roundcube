@@ -83,7 +83,7 @@
 {
   position: absolute;
   bottom: 16px;
-  right: 40px;
+  right: 30px;
   width: 300px;
   height: 20px;
   text-align: right;
@@ -110,21 +110,57 @@
   position: absolute;
   top: 85px;
   left: 200px;
-  right: 40px;
+  right: 30px;
   bottom: 40px;
   border: 1px solid #999999;
   background-color: #F9F9F9;
   overflow: auto;
   /* css hack for IE */
-  width: expression((parseInt(document.documentElement.clientWidth)-240)+'px');
+  width: expression((parseInt(document.documentElement.clientWidth)-230)+'px');
   height: expression((parseInt(document.documentElement.clientHeight)-125)+'px');
 }
 
+#mailpreviewframe
+{
+  position: absolute;
+  top: 305px;
+  left: 200px;
+  right: 30px;
+  bottom: 40px;
+  border: 1px solid #999999;
+  background-color: #F9F9F9;
+  /* css hack for IE */
+  width: expression((parseInt(document.documentElement.clientWidth)-230)+'px');
+  height: expression((parseInt(document.documentElement.clientHeight)-135-document.getElementById('mailcontframe').offsetHeight)+'px');
+}
+
+#messagecontframe
+{
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/*\*/
+html>body*#messagecontframe
+{
+  [height: 40%;
+  height: 40%;
+  ]height: 100%;
+}
+/**/
 
 #messagepartframe
 {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: auto;
+  height: auto;
   border: 1px solid #999999;
-  background-color: #F9F9F9;  
+  background-color: #F9F9F9;
 }
 
 
@@ -150,20 +186,6 @@
   font-weight: bold;
 }
 
-#rcmdraglayer
-{
-  width: 300px;
-  border: 1px solid #999999;
-  background-color: #F9F9F9;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 3px;
-  padding-bottom: 3px;
-  font-size: 11px;
-  opacity: 0.6;
-  -moz-opacity: 0.6;
-}
-
 
 /** mailbox list styles */
 
@@ -172,7 +194,7 @@
   position: absolute;
   top: 85px;
   left: 20px;
-  width: 140px !important;
+  width: 145px !important;
 /*  width: 162px; */
   height: 13px;
   padding: 3px 10px 2px 10px;
@@ -189,7 +211,7 @@
   position: absolute;
   top: 105px;
   left: 20px;
-  width: 160px;
+  width: 165px;
   bottom: 40px;
   border: 1px solid #CCCCCC;
   background-color: #F9F9F9;
@@ -373,8 +395,7 @@ body.messagelist
   background: url(images/sort_desc.gif) top right no-repeat;
 }
 
-#messagelist thead tr td a,
-#messagelist thead tr td a:hover
+#messagelist thead tr td a
 {
   display: block;
   width: auto !important;
@@ -385,8 +406,7 @@ body.messagelist
 
 #messagelist tbody tr td
 {
-  height: 16px !important;
-  height: 20px;
+  height: 16px;
   padding: 2px;
   padding-right: 4px;
   font-size: 11px;
@@ -395,6 +415,12 @@ body.messagelist
   text-overflow: ellipsis;
   border-bottom: 1px solid #EBEBEB;
   cursor: pointer;
+}
+
+#messagelist tbody tr td a
+{
+  color: #000;
+  text-decoration: none;
 }
 
 #messagelist col
@@ -432,7 +458,7 @@ body.messagelist
 
 #messagelist tr td.date
 {
-  width: 110px;
+  width: 118px;
   vertical-align: middle;
 }
 
@@ -456,35 +482,27 @@ body.messagelist
 
 #messagelist tr.selected td
 {
-  font-weight: bold;
   color: #FFFFFF;
   background-color: #CC3333;
 }
 
-#messagelist tr.focused td
-{
-  border-bottom: thin dotted;
-  border-top: thin dotted;
-}
-
 #messagelist tr.unfocused td
 {
-  font-weight: bold;
   color: #FFFFFF;
   background-color: #929292;
 }
 
-#messagelist tr.selected td a.rcmContactAddress
+#messagelist tr.selected td a
 {
   color: #FFFFFF;
 }
 
-#messagelist tr.unfocused td a.rcmContactAddress
+#messagelist tr.unfocused td a
 {
   color: #FFFFFF;
 }
 
-#messagelist tr.deleted td a.rcmContactAddress
+#messagelist tr.deleted td a
 {
   color: #CCCCCC;
 }
@@ -495,65 +513,20 @@ body.messagelist
   color: #CCCCCC;
 }
 
-#quicksearchbar
+
+#quotadisplay
 {
-  position: absolute;
-  top: 60px;
-  right: 40px;
-  width: 182px;
-  height: 20px;
-  text-align: right;
-  background: url('images/searchfield.gif') top left no-repeat;
+  color: #666666;
+  font-size: 11px;
 }
 
-#quicksearchbar a
-{
-  position: absolute;
-  top: 3px;
-  right: 4px;
-  text-decoration: none;
-}
-
-#quicksearchbar img
+#quotadisplay img
 {
   vertical-align: middle;
+  margin-left: 4px;
+  border: 1px solid #666666;
 }
 
-#quicksearchbox
-{
-  position: absolute;
-  top: 2px;
-  left: 20px;
-  width: 140px;
-  font-size: 11px;
-  padding: 0px;
-  border: none;
-}
-
-
-/*\*/
-html>body*#quicksearchbar { background-image: none; }
-html>body*#quicksearchbar a { top: 5px; }
-html>body*#quicksearchbar #quicksearchbox { width: 180px; top:0px; right: 1px; left: auto; }
-/**/
-
-
-#rcversion
-{
-  position: absolute;
-  top: 67px;
-  left: 20px;
-  width: 160px;
-  text-align: center;
-
-  font-weight: normal;
-  font-size: x-small;
-  font-variant: small-caps;
-  
-  color: #999999;
-  /*border: 1px solid #308014;
-  background-color: #b4eeb4;*/
-}
 
 /** message view styles */
 
@@ -563,7 +536,7 @@ html>body*#quicksearchbar #quicksearchbox { width: 180px; top:0px; right: 1px; l
   position: absolute;
   top: 85px;
   left: 200px;
-  right: 40px;
+  right: 30px;
   bottom: 40px;
   border: 1px solid #cccccc;
   background-color: #FFFFFF;
@@ -574,12 +547,25 @@ html>body*#quicksearchbar #quicksearchbox { width: 180px; top:0px; right: 1px; l
   height: expression((parseInt(document.documentElement.clientHeight)-125)+'px');
 }
 
+div.messageheaderbox
+{
+  margin: 6px 8px 0px 8px;
+  border: 1px solid #ccc;
+}
+
 table.headers-table
 {
   width: 100%;
   background-color: #EBEBEB;
   table-layout: fixed;
+}
 
+#messagebody table.headers-table
+{
+  width: auto;
+  margin: 6px 8px;
+  background-color: #F4F4F4;
+  border: 1px solid #ccc;
 }
 
 table.headers-table tr td
@@ -608,16 +594,26 @@ table.headers-table tr td.subject
 {
   margin: 0px;
   padding: 0px 0px 0px 68px;
-  height: 18px;
+  min-height: 18px;
   list-style-image: none;
   list-style-type: none;
-  background: url(images/icons/attachment.png) 52px 1px no-repeat #DFDFDF; 
-  border-bottom: 1px solid #FFFFFF;
+  background: url(images/icons/attachment.png) 52px 1px no-repeat #DFDFDF;
+  /* css hack for IE */
+  height: expression(Math.min(18, parseInt(this.clientHeight))+'px');
+}
+
+#attachment-list:after
+{
+  content: ".";
+  display: block;
+  height: 0;
+  font-size: 0;
+  clear: both;
+  visibility: hidden;
 }
 
 #attachment-list li
 {
-/*  display: block; */
   float: left;
   height: 18px;
   font-size: 11px;
@@ -636,6 +632,7 @@ table.headers-table tr td.subject
 
 #messagebody
 {
+  position:relative;
   min-height: 300px;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -654,12 +651,37 @@ div.message-part a
   color: #0000CC;
 }
 
-div.message-part pre
+div.message-part div.pre
 {
   margin: 0px;
   padding: 0px;
+  white-space: pre;
+  font-family: monospace;
 }
 
+div.message-part blockquote
+{
+  color: blue;
+  border-left: 2px solid blue;
+  border-right: 2px solid blue;
+  background-color: #F6F6F6;
+  margin: 2px 0px 2px 0px;
+  padding: 1px 8px 1px 10px;
+}
+
+div.message-part blockquote blockquote
+{
+  color: green;
+  border-left: 2px solid green;
+  border-right: 2px solid green;
+}
+
+div.message-part blockquote blockquote blockquote
+{
+  color: #990000;
+  border-left: 2px solid #bb0000;
+  border-right: 2px solid #bb0000;
+}
 
 #remote-objects-message
 {
@@ -856,8 +878,3 @@ div.message-part pre
   margin-top: 8px;
 }
 
-#rcmquotadisplay
-{
-  color: #999999;
-  font-size: 11px;
-}

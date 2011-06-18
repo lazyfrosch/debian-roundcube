@@ -15,47 +15,43 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: folders.inc 232 2006-05-18 15:46:50Z cmcnulty $
+ $Id: folders.inc 573 2007-05-18 11:29:25Z thomasb $
 */
 
-$REMOTE_REQUEST = TRUE;
 $mbox_name = $IMAP->get_mailbox_name();
 
-
 // send EXPUNGE command
-if ($_action=='expunge')
-  {
-  $success = $IMAP->expunge($_GET['_mbox']);
+if ($_action=='expunge' && ($mbox = get_input_value('_mbox', RCUBE_INPUT_POST)))
+{
+  $success = $IMAP->expunge($mbox);
 
   // reload message list if current mailbox  
-  if ($success && $_GET['_reload'])
-    {
-    rcube_remote_response('this.clear_message_list();', TRUE);
+  if ($success && !empty($_REQUEST['_reload']))
+  {
+    $OUTPUT->command('message_list.clear');
     $_action = 'list';
     return;
-    }
+  }
   else
     $commands = "// expunged: $success\n";
-  }
+}
 
 // clear mailbox
-else if ($_action=='purge')
-  {
-  $success = $IMAP->clear_mailbox($_GET['_mbox']);
+else if ($_action=='purge' && ($mbox = get_input_value('_mbox', RCUBE_INPUT_POST)))
+{
+  $success = $IMAP->clear_mailbox($mbox);
   
-  if ($success && $_GET['_reload'])
-    {
-    $commands = "this.clear_message_list();\n";
-    $commands .= "this.set_env('messagecount', 0);\n";
-    $commands .= "this.set_env('pagecount', 0);\n";
-    $commands .= sprintf("this.set_rowcount('%s');\n", rcmail_get_messagecount_text());
-    $commands .= sprintf("this.set_unread_count('%s', 0);\n", addslashes($mbox_name));
-    }
+  if ($success && !empty($_REQUEST['_reload']))
+  {
+    $OUTPUT->set_env('messagecount', 0);
+    $OUTPUT->set_env('pagecount', 0);
+    $OUTPUT->command('message_list.clear');
+    $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text());
+    $OUTPUT->command('set_unread_count', $mbox_name, 0);
+  }
   else
     $commands = "// purged: $success";
-  }
+}
 
-
-
-rcube_remote_response($commands);
+$OUTPUT->send($commands);
 ?>

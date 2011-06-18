@@ -5,7 +5,7 @@
  | program/steps/mail/move_del.inc                                       |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005, RoundCube Dev. - Switzerland                      |
+ | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,77 +15,82 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: move_del.inc 269 2006-06-29 23:41:40Z richs $
+ $Id: move_del.inc 573 2007-05-18 11:29:25Z thomasb $
 
 */
 
-$REMOTE_REQUEST = TRUE;
-
 // move messages
-if ($_action=='moveto' && $_GET['_uid'] && $_GET['_target_mbox'])
-  {
-  $count = sizeof(explode(',', $_GET['_uid']));  
-  $moved = $IMAP->move_message($_GET['_uid'], $_GET['_target_mbox'], $_GET['_mbox']);
+if ($_action=='moveto' && !empty($_POST['_uid']) && !empty($_POST['_target_mbox']))
+{
+  $count = sizeof(explode(',', ($uids = get_input_value('_uid', RCUBE_INPUT_POST))));
+  $target = get_input_value('_target_mbox', RCUBE_INPUT_POST);
+  $moved = $IMAP->move_message($uids, $target, get_input_value('_mbox', RCUBE_INPUT_POST));
   
   if (!$moved)
-    {
+  {
     // send error message
-    $commands = "this.list_mailbox();\n";
-    $commands .= show_message('errormoving', 'error');
-    rcube_remote_response($commands);
+    $OUTPUT->command('list_mailbox');
+    $OUTPUT->show_message('errormoving', 'error');
+    $OUTPUT->send();
     exit;
-    }
   }
+}
 
 // delete messages 
-else if ($_action=='delete' && $_GET['_uid'])
-  {
-  $count = sizeof(explode(',', $_GET['_uid']));
-  $del = $IMAP->delete_message($_GET['_uid'], $_GET['_mbox']);
+else if ($_action=='delete' && !empty($_POST['_uid']))
+{
+  $count = sizeof(explode(',', ($uids = get_input_value('_uid', RCUBE_INPUT_POST))));
+  $del = $IMAP->delete_message($uids, get_input_value('_mbox', RCUBE_INPUT_POST));
   
   if (!$del)
-    {
+  {
     // send error message
-    $commands = "this.list_mailbox();\n";
-    $commands .= show_message('errordeleting', 'error');
-    rcube_remote_response($commands);
+    $OUTPUT->command('list_mailbox');
+    $OUTPUT->show_message('errordeleting', 'error');
+    $OUTPUT->send();
     exit;
-    }
   }
+}
   
 // unknown action or missing query param
 else
-  {
   exit;
-  }
+
+// refresh saved seach set after moving some messages
+if (($search_request = get_input_value('_search', RCUBE_INPUT_GPC)) && $IMAP->search_set)
+  $_SESSION['search'][$search_request] = $IMAP->refresh_search();
 
 
 // update message count display
-$pages = ceil($IMAP->messagecount()/$IMAP->page_size);
-$commands = sprintf("this.set_rowcount('%s');\n", rcmail_get_messagecount_text());
-$commands .= sprintf("this.set_env('pagecount', %d);\n", $pages);
+$msg_count = $IMAP->messagecount();
+$pages = ceil($msg_count / $IMAP->page_size);
+$OUTPUT->set_env('pagecount', $pages);
+$OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($msg_count));
 
 
 // update mailboxlist
 $mbox = $IMAP->get_mailbox_name();
-$commands .= sprintf("this.set_unread_count('%s', %d);\n", $mbox, $IMAP->messagecount($mbox, 'UNSEEN'));
+$OUTPUT->command('set_unread_count', $mbox, $IMAP->messagecount($mbox, 'UNSEEN'));
 
-if ($_action=='moveto')
-  $commands .= sprintf("this.set_unread_count('%s', %d);\n", $_GET['_target_mbox'], $IMAP->messagecount($_GET['_target_mbox'], 'UNSEEN'));
+if ($_action=='moveto' && $target)
+  $OUTPUT->command('set_unread_count', $target, $IMAP->messagecount($target, 'UNSEEN'));
 
-$commands .= sprintf("this.set_quota('%s');\n", $IMAP->get_quota()); 
+$OUTPUT->command('set_quota', $IMAP->get_quota());
 
 // add new rows from next page (if any)
-if ($_GET['_from']!='show' && $pages>1 && $IMAP->list_page < $pages)
-  {
-  $a_headers = $IMAP->list_headers($mbox, null, $_SESSION['sort_col'], $_SESSION['sort_order']);
-  $a_headers = array_slice($a_headers, -$count, $count);
-  $commands .= rcmail_js_message_list($a_headers);
-  }
-
+if ($_POST['_from']!='show' && $pages>1 && $IMAP->list_page < $pages)
+{
+  $sort_col   = isset($_SESSION['sort_col'])   ? $_SESSION['sort_col']   : $CONFIG['message_sort_col'];
+  $sort_order = isset($_SESSION['sort_order']) ? $_SESSION['sort_order'] : $CONFIG['message_sort_order'];
   
-// send response
-rcube_remote_response($commands);
+  $a_headers = $IMAP->list_headers($mbox, NULL, $sort_col, $sort_order);
+  $a_headers = array_slice($a_headers, -$count, $count);
 
-exit;
+  rcmail_js_message_list($a_headers);
+}
+
+
+// send response
+$OUTPUT->send();
+
 ?>

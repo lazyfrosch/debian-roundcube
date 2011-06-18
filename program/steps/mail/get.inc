@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: get.inc 147 2006-02-20 23:29:14Z roundcube $
+ $Id: get.inc 511 2007-03-19 22:36:24Z thomasb $
 
 */
 
@@ -29,7 +29,7 @@ if ($_GET['_preload'])
   $message = rcube_label('loadingdata');
 
   print "<html>\n<head>\n" .
-        '<meta http-equiv="refresh" content="0; url='.$url.'">' .
+        '<meta http-equiv="refresh" content="0; url='.htmlspecialchars($url).'">' .
         "\n</head>\n<body>" .
         $message .
         "\n</body>\n</html>";
@@ -37,21 +37,13 @@ if ($_GET['_preload'])
   }
 
 
-
 // similar code as in program/steps/mail/show.inc
 if ($_GET['_uid'])
   {
-  $MESSAGE = array();
-  $MESSAGE['source'] = rcmail_message_source($_GET['_uid']);
-
-  $mmd = new Mail_mimeDecode($MESSAGE['source']);
-  $MESSAGE['structure'] = $mmd->decode(array('include_bodies' => TRUE,
-                                             'decode_headers' => FALSE,
-                                             'decode_bodies' => FALSE));
-
-  $MESSAGE['parts'] = $mmd->getMimeNumbers($MESSAGE['structure']);
+  $MESSAGE = array('UID' => get_input_value('_uid', RCUBE_INPUT_GET));
+  $MESSAGE['structure'] = $IMAP->get_structure($MESSAGE['UID']);
+  $MESSAGE['parts'] = $IMAP->get_mime_numbers($MESSAGE['structure']);
   }
-
 
 
 // show part page
@@ -61,43 +53,27 @@ if ($_GET['_frame'])
   exit;
   }
 
-else if ($_GET['_part'])
+else if ($pid = get_input_value('_part', RCUBE_INPUT_GET))
   {
-  if ($part = $MESSAGE['parts'][$_GET['_part']]);
+  if ($part = $MESSAGE['parts'][$pid]);
     {
     $ctype_primary = strtolower($part->ctype_primary);
     $ctype_secondary = strtolower($part->ctype_secondary);
-
     $mimetype = sprintf('%s/%s', $ctype_primary, $ctype_secondary);
-    $filename = $part->d_parameters['filename'] ? $part->d_parameters['filename'] : $part->ctype_parameters['name'];
 
-    if ($ctype_primary=='text' && $ctype_secondary=='html')
-      {
-      list($MESSAGE['parts']) = rcmail_parse_message($part,
-                                                     array('safe' => (bool)$_GET['_safe'],
-                                                           'prefer_html' => TRUE,
-                                                           'get_url' => $GET_URL.'&_part=%s'));
+    header("Expires: 0");
+    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+    header("Cache-Control: private", false);
+    header("Content-Transfer-Encoding: binary");
 
-      $cont = rcmail_print_body($MESSAGE['parts'][0], (bool)$_GET['_safe']);
-      }
-    else
-      $cont = $IMAP->mime_decode($part->body, $part->headers['content-transfer-encoding']);
-
-    // send correct headers for content type and length
+    // send download headers
     if ($_GET['_download'])
       {
-      // send download headers
+      header("Cache-Control: private", false);
       header("Content-Type: application/octet-stream");
-      header(sprintf('Content-Disposition: attachment; filename="%s"',
-                     $filename ? $filename : "roundcube.$ctype_secondary"));
       }
     else
-      {
       header("Content-Type: $mimetype");
-      header(sprintf('Content-Disposition: inline; filename="%s"', $filename));
-      }
-
-    header(sprintf('Content-Length: %d', strlen($cont)));
 
     // We need to set the following headers to make downloads work using IE in HTTPS mode.
     if (isset($_SERVER['HTTPS']))
@@ -107,7 +83,37 @@ else if ($_GET['_part'])
       }
 
     // deliver part content
-    echo $cont;
+    if ($ctype_primary=='text' && $ctype_secondary=='html')
+      {
+      // we have to analyze the whole structure again to find inline objects
+      list($new_parts, $new_attachments) =
+        rcmail_parse_message($MESSAGE['structure'],
+                             array('safe' => (bool)$_GET['_safe'],
+                                   'prefer_html' => TRUE,
+                                   'get_url' => $GET_URL.'&_part=%s'));
+
+      $all_parts = array_merge($new_parts, $new_attachments);
+      for ($partix = 0; $partix < sizeof($all_parts); $partix++)
+        if ($all_parts[$partix]->mime_id == $pid)
+          $part = &$all_parts[$partix];
+
+      // get part body if not available
+      if (!$part->body)
+        $part->body = $IMAP->get_message_part($MESSAGE['UID'], $part->mime_id, $part);
+
+      $OUTPUT = new rcube_html_page();
+      $OUTPUT->write(rcmail_print_body($part, (bool)$_GET['_safe']));
+      }
+    else
+      {
+      header(sprintf('Content-Disposition: %s; filename="%s";',
+                     $part->disposition ? $part->disposition : 'attachment',
+                     $part->filename ? $part->filename : "roundcube.$ctype_secondary"));
+
+      // turn off output buffering and print part content
+      $IMAP->get_message_part($MESSAGE['UID'], $part->mime_id, $part->encoding, true);
+      }
+
     exit;
     }
   }
@@ -127,34 +133,13 @@ else
                                                  array('safe' => (bool)$_GET['_safe'],
                                                  'get_url' => $GET_URL.'&_part=%s'));
 
-  if ($MESSAGE['parts'] && $ctype_primary=='multipart')
-    {
-    // reset output page
-    $OUTPUT = new rcube_html_page();
-    parse_template('messagepart');
-    exit;
-    }
-  else if ($MESSAGE['parts'][0])
-    {
-    $part = $MESSAGE['parts'][0];
-    $cont = rcmail_print_body($part, (bool)$_GET['_safe']);
-    }
-  else
-    $cont = $IMAP->get_body($_GET['_uid']);
+  $cont = "<html>\n<head><title></title>\n</head>\n<body>";
+  $cont .= rcmail_message_body(array());
+  $cont .= "\n</body>\n</html>";
 
   $OUTPUT = new rcube_html_page();
   $OUTPUT->write($cont);
 
-/*
-    if ($mimetype=='text/html')
-      print $cont;
-    else
-      {
-      print "<html>\n<body>\n";
-      print $cont;
-      print "\n</body>\n</html>";
-      }
-*/
   exit;
   }
 
