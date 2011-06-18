@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: edit_identity.inc 2040 2008-11-05 10:19:44Z alec $
+ $Id: edit_identity.inc 2483 2009-05-15 10:22:29Z thomasb $
 
 */
 
@@ -43,7 +43,7 @@ else {
     return;
   }
   else if (IDENTITIES_LEVEL == 1)
-    $IDENTITY_RECORD['email'] = rcmail_get_email();
+    $IDENTITY_RECORD['email'] = $RCMAIL->user->get_username();
 }
 
 

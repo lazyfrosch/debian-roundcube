@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: save_identity.inc 2006 2008-10-24 07:57:21Z alec $
+ $Id: save_identity.inc 2483 2009-05-15 10:22:29Z thomasb $
 
 */
 
@@ -86,7 +86,7 @@ if ($_POST['_iid'])
 else if (IDENTITIES_LEVEL < 2)
 {
   if (IDENTITIES_LEVEL == 1)
-    $save_data['email'] = rcmail_get_email();
+    $save_data['email'] = $RCMAIL->user->get_username();
 
   if ($save_data['email'] && ($insert_id = $USER->insert_identity($save_data)))
   {
