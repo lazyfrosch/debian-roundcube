@@ -4,8 +4,8 @@
  +-----------------------------------------------------------------------+
  | program/steps/mail/viewsource.inc                                     |
  |                                                                       |
- | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
+ | This file is part of the Roundcube Webmail client                     |
+ | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: viewsource.inc 2613 2009-06-05 13:34:07Z alec $
+ $Id: viewsource.inc 3989 2010-09-25 13:03:53Z alec $
 
 */
 
@@ -25,13 +25,13 @@ ob_end_clean();
 if ($uid = get_input_value('_uid', RCUBE_INPUT_GET))
 {
   $headers = $IMAP->get_headers($uid);
-  $charset = $headers->charset ? $headers->charset : $IMAP->default_charset;
+  $charset = $headers->charset ? $headers->charset : $CONFIG['default_charset'];
   header("Content-Type: text/plain; charset={$charset}");
 
   if (!empty($_GET['_save'])) {
     $filename = ($headers->subject ? $IMAP->decode_header($headers->subject) : 'roundcube') . '.eml';
-    $browser = new rcube_browser;
-    
+    $browser = $RCMAIL->output->browser;
+
     if ($browser->ie && $browser->ver < 7)
       $filename = rawurlencode(abbreviate_string($filename, 55));
     else if ($browser->ie)
@@ -42,7 +42,7 @@ if ($uid = get_input_value('_uid', RCUBE_INPUT_GET))
     header("Content-Length: {$headers->size}");
     header("Content-Disposition: attachment; filename=\"$filename\"");
   }
-  
+
   $IMAP->print_raw_body($uid);
 }
 else
@@ -50,10 +50,10 @@ else
   raise_error(array(
       'code' => 500,
       'type' => 'php',
+      'file' => __FILE__, 'line' => __LINE__,
       'message' => 'Message UID '.$uid.' not found'),
-    true,
-    true);
+    true, true);
 }
 
 exit;
-?>
+

@@ -4,8 +4,8 @@
  +-----------------------------------------------------------------------+
  | program/steps/settings/save_prefs.inc                                 |
  |                                                                       |
- | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
+ | This file is part of the Roundcube Webmail client                     |
+ | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: save_prefs.inc 2983 2009-09-23 12:32:09Z alec $
+ $Id: save_prefs.inc 4169 2010-11-02 14:53:54Z alec $
 
 */
 
@@ -32,7 +32,6 @@ switch ($CURR_SECTION)
       'timezone'     => isset($_POST['_timezone']) ? (is_numeric($_POST['_timezone']) ? floatval($_POST['_timezone']) : get_input_value('_timezone', RCUBE_INPUT_POST)) : $CONFIG['timezone'],
       'dst_active'   => isset($_POST['_dst_active']) ? TRUE : FALSE,
       'pagesize'     => is_numeric($_POST['_pagesize']) ? max(2, intval($_POST['_pagesize'])) : $CONFIG['pagesize'],
-      'index_sort'   => isset($_POST['_index_sort']) ? TRUE : FALSE,
       'prettydate'   => isset($_POST['_pretty_date']) ? TRUE : FALSE,
       'skin' 	     => isset($_POST['_skin']) ? get_input_value('_skin', RCUBE_INPUT_POST) : $CONFIG['skin'],
     );
@@ -41,7 +40,9 @@ switch ($CURR_SECTION)
   case 'mailbox':
     $a_user_prefs = array(
       'focus_on_new_message' => isset($_POST['_focus_on_new_message']) ? TRUE : FALSE,
-      'preview_pane' 	     => isset($_POST['_preview_pane']) ? TRUE : FALSE,
+      'preview_pane'         => isset($_POST['_preview_pane']) ? TRUE : FALSE,
+      'preview_pane_mark_read' => isset($_POST['_preview_pane_mark_read']) ? intval($_POST['_preview_pane_mark_read']) : $CONFIG['preview_pane_mark_read'],
+      'autoexpand_threads'   => isset($_POST['_autoexpand_threads']) ? intval($_POST['_autoexpand_threads']) : 0,
       'mdn_requests'         => isset($_POST['_mdn_requests']) ? intval($_POST['_mdn_requests']) : 0,
       'keep_alive'           => isset($_POST['_keep_alive']) ? intval($_POST['_keep_alive'])*60 : $CONFIG['keep_alive'],
       'check_all_folders'    => isset($_POST['_check_all_folders']) ? TRUE : FALSE,
@@ -54,14 +55,23 @@ switch ($CURR_SECTION)
       'inline_images'   => isset($_POST['_inline_images']) ? TRUE : FALSE,
       'show_images'     => isset($_POST['_show_images']) ? intval($_POST['_show_images']) : 0,
       'display_next'    => isset($_POST['_display_next']) ? TRUE : FALSE,
+      'default_charset' => get_input_value('_default_charset', RCUBE_INPUT_POST),
     );
 
   break;
   case 'compose':
     $a_user_prefs = array(
-      'htmleditor'         => isset($_POST['_htmleditor']) ? TRUE : FALSE,
+      'htmleditor'         => intval($_POST['_htmleditor']),
       'draft_autosave'     => isset($_POST['_draft_autosave']) ? intval($_POST['_draft_autosave']) : 0,
       'mime_param_folding' => isset($_POST['_mime_param_folding']) ? intval($_POST['_mime_param_folding']) : 0,
+      'force_7bit'         => isset($_POST['_force_7bit']) ? TRUE : FALSE,
+      'mdn_default'        => isset($_POST['_mdn_default']) ? TRUE : FALSE,
+      'dsn_default'        => isset($_POST['_dsn_default']) ? TRUE : FALSE,
+      'reply_same_folder'  => isset($_POST['_reply_same_folder']) ? TRUE : FALSE,
+      'show_sig'           => isset($_POST['_show_sig']) ? intval($_POST['_show_sig']) : 1,
+      'top_posting'        => !empty($_POST['_top_posting']),
+      'strip_existing_sig' => isset($_POST['_strip_existing_sig']),
+      'sig_above'          => !empty($_POST['_sig_above']) && !empty($_POST['_top_posting']),
     );
 
   break;
@@ -70,6 +80,7 @@ switch ($CURR_SECTION)
       'read_when_deleted' => isset($_POST['_read_when_deleted']) ? TRUE : FALSE,
       'skip_deleted'      => isset($_POST['_skip_deleted']) ? TRUE : FALSE,
       'flag_for_deletion' => isset($_POST['_flag_for_deletion']) ? TRUE : FALSE,
+      'delete_always' 	  => isset($_POST['_delete_always']) ? TRUE : FALSE,
       'logout_purge'      => isset($_POST['_logout_purge']) ? TRUE : FALSE,
       'logout_expunge'    => isset($_POST['_logout_expunge']) ? TRUE : FALSE,
     );
@@ -86,8 +97,7 @@ switch ($CURR_SECTION)
   break;
 }
 
-
-$data = rcmail::get_instance()->plugins->exec_hook('save_preferences',
+$data = rcmail::get_instance()->plugins->exec_hook('preferences_save',
   array('prefs' => $a_user_prefs, 'section' => $CURR_SECTION));
 
 $a_user_prefs = $data['prefs'];
@@ -108,8 +118,9 @@ switch ($CURR_SECTION)
       $OUTPUT->command('reload', 500);
     }
 
-    // switch skin
-    $OUTPUT->set_skin($a_user_prefs['skin']);
+    // switch skin (if valid, otherwise unset the pref and fall back to default)
+    if (!$OUTPUT->set_skin($a_user_prefs['skin']))
+      unset($a_user_prefs['skin']);
 
     // force min size
     if ($a_user_prefs['pagesize'] < 1)
@@ -152,4 +163,4 @@ if ($USER->save_prefs($a_user_prefs))
 // display the form again
 rcmail_overwrite_action('edit-prefs');
 
-?>
+

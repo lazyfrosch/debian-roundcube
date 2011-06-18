@@ -5,15 +5,15 @@
 +-----------------------------------------------------------------------+
 | language/ms_MY/messages.inc                                           |
 |                                                                       |
-| Language file of the RoundCube Webmail client                         |
-| Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
+| Language file of the Roundcube Webmail client                         |
+| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
 | Author: Muhammad Zamri MS <myzamri@gmail.com>                        |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 543 2007-04-28 18:07:12Z thomasb $
+@version $Id: messages.inc 4304 2010-12-03 10:58:40Z alec $
 
 */
 
@@ -77,6 +77,5 @@ $messages['movingmessage'] = 'Memindah mesej...';
 $messages['receiptsent'] = 'Berjaya menghantar resip bacaan';
 $messages['errorsendingreceipt'] = 'Tidak dapat menghantar resip';
 $messages['nodeletelastidentity'] = 'Anda tidak boleh membuang identiti ini, ia milik anda yang terakhir.';
-$messages['addsubfolderhint'] = 'Folder ini akan dibina sebagai subfolder kepada folder yang dipilih sekarang';
 
 ?>

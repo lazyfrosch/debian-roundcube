@@ -4,8 +4,8 @@
  +-----------------------------------------------------------------------+
  | rcube_shared.inc                                                      |
  |                                                                       |
- | This file is part of the RoundCube PHP suite                          |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | This file is part of the Roundcube PHP suite                          |
+ | Copyright (C) 2005-2007, Roundcube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | CONTENTS:                                                             |
@@ -15,13 +15,13 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_shared.inc 3063 2009-10-27 09:43:39Z alec $
+ $Id: rcube_shared.inc 4232 2010-11-18 10:34:10Z alec $
 
 */
 
 
 /**
- * RoundCube shared functions
+ * Roundcube shared functions
  * 
  * @package Core
  */
@@ -32,18 +32,23 @@
  */
 function send_nocacheing_headers()
 {
+  global $OUTPUT;
+
   if (headers_sent())
     return;
 
   header("Expires: ".gmdate("D, d M Y H:i:s")." GMT");
   header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-  header("Cache-Control: private, must-revalidate, post-check=0, pre-check=0");
-  header("Pragma: no-cache");
-  
+  // Request browser to disable DNS prefetching (CVE-2010-0464)
+  header("X-DNS-Prefetch-Control: off");
+
   // We need to set the following headers to make downloads work using IE in HTTPS mode.
-  if (rcube_https_check()) {
-    header('Pragma: ');
-    header('Cache-Control: ');
+  if ($OUTPUT->browser->ie && rcube_https_check()) {
+    header('Pragma: private');
+    header("Cache-Control: private, must-revalidate");
+  } else {
+    header("Cache-Control: private, no-cache, must-revalidate, post-check=0, pre-check=0");
+    header("Pragma: no-cache");
   }
 }
 
@@ -93,7 +98,7 @@ function send_modified_header($mdate, $etag=null, $skip_check=false)
   else
     header("Last-Modified: ".gmdate("D, d M Y H:i:s", $mdate)." GMT");
   
-  header("Cache-Control: max-age=0");
+  header("Cache-Control: private, must-revalidate, max-age=0");
   header("Expires: ");
   header("Pragma: ");
   
@@ -105,97 +110,6 @@ function send_modified_header($mdate, $etag=null, $skip_check=false)
     ob_end_clean();
     exit;
     }
-}
-
-
-/**
- * Returns whether an $str is a reserved word for any of the version of Javascript or ECMAScript
- * @param str String to check
- * @return boolean True if $str is a reserver word, False if not
- */
-function is_js_reserved_word($str)
-{
-  return in_array($str, array(
-    // ECMASript ver 4 reserved words
-    'as','break','case','catch','class','const','continue',
-    'default','delete','do','else','export','extends','false','finally','for','function',
-    'if','import','in','instanceof','is','namespace','new','null','package','private',
-    'public','return','super','switch','this','throw','true','try','typeof','use','var',
-    'void','while','with',
-    // ECMAScript ver 4 future reserved words
-    'abstract','debugger','enum','goto','implements','interface','native','protected',
-    'synchronized','throws','transient','volatile',
-    // special meaning in some contexts
-    'get','set',
-    // were reserved in ECMAScript ver 3
-    'boolean','byte','char','double','final','float','int','long','short','static'
-  ));
-}
-
-
-/**
- * Convert a variable into a javascript object notation
- *
- * @param mixed Input value
- * @return string Serialized JSON string
- */
-function json_serialize($var)
-{
-  if (is_object($var))
-    $var = get_object_vars($var);
-
-  if (is_array($var))
-  {
-    // empty array
-    if (!sizeof($var))
-      return '[]';
-    else
-    {
-      $keys_arr = array_keys($var);
-      $is_assoc = $have_numeric = 0;
-
-      for ($i=0; $i<sizeof($keys_arr); ++$i)
-      {
-        if (is_numeric($keys_arr[$i]))
-          $have_numeric = 1;
-        if (!is_numeric($keys_arr[$i]) || $keys_arr[$i] != $i)
-          $is_assoc = 1;
-        if ($is_assoc && $have_numeric)
-          break;
-      }
-      
-      $brackets = $is_assoc ? '{}' : '[]';
-      $pairs = array();
-
-      foreach ($var as $key => $value)
-      {
-        // enclose key with quotes if it is not variable-name conform
-        if (!preg_match('/^[_a-zA-Z]{1}[_a-zA-Z0-9]*$/', $key) || is_js_reserved_word($key))
-          $key = "'$key'";
-
-        $pairs[] = sprintf("%s%s", $is_assoc ? "$key:" : '', json_serialize($value));
-      }
-
-      return $brackets{0} . implode(',', $pairs) . $brackets{1};
-    }
-  }
-  else if (!is_string($var) && strval(intval($var)) === strval($var))
-    return $var;
-  else if (is_bool($var))
-    return $var ? '1' : '0';
-  else
-    return "'".JQ($var)."'";
-}
-
-
-/**
- * Function to convert an array to a javascript array
- * Actually an alias function for json_serialize()
- * @deprecated
- */
-function array2js($arr, $type='')
-{
-  return json_serialize($arr);
 }
 
 
@@ -243,19 +157,22 @@ function parse_bytes($str)
 {
   if (is_numeric($str))
     return floatval($str);
-    
-  if (preg_match('/([0-9]+)([a-z])/i', $str, $regs))
+
+  if (preg_match('/([0-9\.]+)\s*([a-z]*)/i', $str, $regs))
   {
     $bytes = floatval($regs[1]);
     switch (strtolower($regs[2]))
     {
       case 'g':
+      case 'gb':
         $bytes *= 1073741824;
         break;
       case 'm':
+      case 'mb':
         $bytes *= 1048576;
         break;
       case 'k':
+      case 'kb':
         $bytes *= 1024;
         break;
     }
@@ -310,7 +227,7 @@ function make_absolute_url($path, $base_url)
   // cut base_url to the last directory
   if (strrpos($base_url, '/')>7)
   {
-    $host_url = substr($base_url, 0, strpos($base_url, '/'));
+    $host_url = substr($base_url, 0, strpos($base_url, '/', 7));
     $base_url = substr($base_url, 0, strrpos($base_url, '/'));
   }
 
@@ -345,7 +262,12 @@ function rc_wordwrap($string, $width=75, $break="\n", $cut=false)
   $para = explode($break, $string);
   $string = '';
   while (count($para)) {
-    $list = explode(' ', array_shift($para));
+    $line = array_shift($para);
+    if ($line[0] == '>') {
+      $string .= $line.$break;
+      continue;
+    }
+    $list = explode(' ', $line);
     $len = 0;
     while (count($list)) {
       $line = array_shift($list);
@@ -356,25 +278,25 @@ function rc_wordwrap($string, $width=75, $break="\n", $cut=false)
         $string .= ($len ? ' ' : '').$line;
         $len += (1 + $l);
       } else {
-	if ($l > $width) {
-	  if ($cut) {
-	    $start = 0;
-	    while ($l) {
-	      $str = mb_substr($line, $start, $width);
-	      $strlen = mb_strlen($str);
-	      $string .= ($len ? $break : '').$str;
-	      $start += $strlen;
-	      $l -= $strlen;
-	      $len = $strlen;
-	    }
-	  } else {
-            $string .= ($len ? $break : '').$line;
-	    if (count($list)) $string .= $break;
-	    $len = 0;
-	  }
-	} else {
+        if ($l > $width) {
+          if ($cut) {
+            $start = 0;
+            while ($l) {
+              $str = mb_substr($line, $start, $width);
+              $strlen = mb_strlen($str);
+              $string .= ($len ? $break : '').$str;
+              $start += $strlen;
+              $l -= $strlen;
+              $len = $strlen;
+            }
+          } else {
+                $string .= ($len ? $break : '').$line;
+            if (count($list)) $string .= $break;
+            $len = 0;
+          }
+        } else {
           $string .= $break.$line;
-	  $len = $l;
+          $len = $l;
         }
       }
     }
@@ -485,23 +407,28 @@ function get_offset_time($offset_str, $factor=1)
 
 
 /**
- * Replace the middle part of a string with ...
- * if it is longer than the allowed length
+ * Truncate string if it is longer than the allowed length
+ * Replace the middle or the ending part of a string with a placeholder
  *
  * @param string Input string
  * @param int    Max. length
  * @param string Replace removed chars with this
+ * @param bool   Set to True if string should be truncated from the end
  * @return string Abbreviated string
  */
-function abbreviate_string($str, $maxlength, $place_holder='...')
+function abbreviate_string($str, $maxlength, $place_holder='...', $ending=false)
 {
   $length = mb_strlen($str);
-  $first_part_length = floor($maxlength/2) - mb_strlen($place_holder);
   
   if ($length > $maxlength)
   {
-    $second_starting_location = $length - $maxlength + $first_part_length + 1;
-    $str = mb_substr($str, 0, $first_part_length) . $place_holder . mb_substr($str, $second_starting_location, $length);
+    if ($ending)
+      return mb_substr($str, 0, $maxlength) . $place_holder;
+
+    $place_holder_length = mb_strlen($place_holder);
+    $first_part_length = floor(($maxlength - $place_holder_length)/2);
+    $second_starting_location = $length - $maxlength + $first_part_length + $place_holder_length;
+    $str = mb_substr($str, 0, $first_part_length) . $place_holder . mb_substr($str, $second_starting_location);
   }
 
   return $str;
@@ -510,16 +437,17 @@ function abbreviate_string($str, $maxlength, $place_holder='...')
 /**
  * A method to guess the mime_type of an attachment.
  *
- * @param string $path     Path to the file.
- * @param string $name     File name (with suffix)
- * @param string $failover Mime type supplied for failover.
+ * @param string $path      Path to the file.
+ * @param string $name      File name (with suffix)
+ * @param string $failover  Mime type supplied for failover.
+ * @param string $is_stream Set to True if $path contains file body
  *
  * @return string
  * @author Till Klampaeckel <till@php.net>
  * @see    http://de2.php.net/manual/en/ref.fileinfo.php
  * @see    http://de2.php.net/mime_content_type
  */
-function rc_mime_content_type($path, $name, $failover = 'application/octet-stream')
+function rc_mime_content_type($path, $name, $failover = 'application/octet-stream', $is_stream=false)
 {
     $mime_type = null;
     $mime_magic = rcmail::get_instance()->config->get('mime_magic');
@@ -531,24 +459,27 @@ function rc_mime_content_type($path, $name, $failover = 'application/octet-strea
         $mime_type = $mime_ext[$suffix];
     }
     // try fileinfo extension if available
-    if (!$mime_type) {
-        if (!extension_loaded('fileinfo')) {
-            @dl('fileinfo.' . PHP_SHLIB_SUFFIX);
-        }
-        if (function_exists('finfo_open')) {
-            if ($finfo = finfo_open(FILEINFO_MIME, $mime_magic)) {
+    if (!$mime_type && function_exists('finfo_open')) {
+        if ($finfo = finfo_open(FILEINFO_MIME, $mime_magic)) {
+            if ($is_stream)
+                $mime_type = finfo_buffer($finfo, $path);
+            else
                 $mime_type = finfo_file($finfo, $path);
-                finfo_close($finfo);
-            }
+            finfo_close($finfo);
         }
     }
     // try PHP's mime_content_type
-    if (!$mime_type && function_exists('mime_content_type')) {
-      $mime_type = mime_content_type($path); 
+    if (!$mime_type && !$is_stream && function_exists('mime_content_type')) {
+      $mime_type = @mime_content_type($path);
     }
     // fall back to user-submitted string
     if (!$mime_type) {
         $mime_type = $failover;
+    }
+    else {
+        // Sometimes (PHP-5.3?) content-type contains charset definition,
+        // Remove it (#1487122) also "charset=binary" is useless
+        $mime_type = array_shift(preg_split('/[; ]/', $mime_type));
     }
 
     return $mime_type;
@@ -601,12 +532,12 @@ function rc_utf8_clean($input)
   
   if (!is_string($input) || $input == '')
     return $input;
-  
+
   // iconv/mbstring are much faster (especially with long strings)
-  if (function_exists('mb_convert_encoding') && ($res = mb_convert_encoding($input, 'UTF8', 'UTF8')))
+  if (function_exists('mb_convert_encoding') && ($res = mb_convert_encoding($input, 'UTF-8', 'UTF-8')) !== false)
     return $res;
 
-  if (function_exists('iconv') && ($res = iconv('UTF8', 'UTF8//IGNORE', $input)))
+  if (function_exists('iconv') && ($res = @iconv('UTF-8', 'UTF-8//IGNORE', $input)) !== false)
     return $res;
 
   $regexp = '/^('.
@@ -624,7 +555,7 @@ function rc_utf8_clean($input)
   $seq = '';
   $out = '';
 
-  for ($i = 0, $len = strlen($input)-1; $i < $len; $i++) {
+  for ($i = 0, $len = strlen($input); $i < $len; $i++) {
     $chr = $input[$i];
     $ord = ord($chr);
     // 1-byte character
@@ -654,6 +585,23 @@ function rc_utf8_clean($input)
   return $out;
 }
 
+
+/**
+ * Convert a variable into a javascript object notation
+ *
+ * @param mixed Input value
+ * @return string Serialized JSON string
+ */
+function json_serialize($input)
+{
+  $input = rc_utf8_clean($input);
+
+  // sometimes even using rc_utf8_clean() the input contains invalid UTF-8 sequences
+  // that's why we have @ here
+  return @json_encode($input);
+}
+
+
 /**
  * Explode quoted string
  * 
@@ -677,6 +625,26 @@ function rcube_explode_quoted_string($delimiter, $string)
   
   $result[] = substr($string, $p);
   return $result;
+}
+
+
+/**
+ * Get all keys from array (recursive)
+ * 
+ * @param array Input array
+ * @return array
+ */
+function array_keys_recursive($array)
+{
+  $keys = array();
+  
+  if (!empty($array))
+    foreach ($array as $key => $child) {
+      $keys[] = $key;
+      foreach (array_keys_recursive($child) as $val)
+        $keys[] = $val;
+    }
+  return $keys;
 }
 
 
@@ -717,4 +685,51 @@ if (!extension_loaded('mbstring'))
     }
 }
 
-?>
+/**
+ * intl replacement functions
+ */
+
+if (!function_exists('idn_to_utf8'))
+{
+    function idn_to_utf8($domain, $flags=null)
+    {
+        static $idn, $loaded;
+
+        if (!$loaded) {
+            $idn = new Net_IDNA2();
+            $loaded = true;
+        }
+
+        if ($idn && $domain && preg_match('/(^|@|\.)xn--/i', $domain)) {
+            try {
+                $domain = $idn->decode($domain);
+            }
+            catch (Exception $e) {
+            }
+        }
+        return $domain;
+    }
+}
+
+if (!function_exists('idn_to_ascii'))
+{
+    function idn_to_ascii($domain, $flags=null)
+    {
+        static $idn, $loaded;
+
+        if (!$loaded) {
+            $idn = new Net_IDNA2();
+            $loaded = true;
+        }
+
+        if ($idn && $domain && preg_match('/[^\x20-\x7E]/', $domain)) {
+            try {
+                $domain = $idn->encode($domain);
+            }
+            catch (Exception $e) {
+            }
+        }
+        return $domain;
+    }
+}
+

@@ -4,8 +4,8 @@
  +-----------------------------------------------------------------------+
  | program/include/rcube_plugin_api.php                                  |
  |                                                                       |
- | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2008-2009, RoundCube Dev. - Switzerland                 |
+ | This file is part of the Roundcube Webmail client                     |
+ | Copyright (C) 2008-2009, Roundcube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,14 +15,14 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: $
+ $Id: rcube_plugin_api.php 4154 2010-10-29 08:42:28Z alec $
 
 */
 
 /**
  * The plugin loader and global API
  *
- * @package Core
+ * @package PluginAPI
  */
 class rcube_plugin_api
 {
@@ -31,21 +31,52 @@ class rcube_plugin_api
   public $dir;
   public $url = 'plugins/';
   public $output;
+  public $config;
   
   public $handlers = array();
   private $plugins = array();
+  private $tasks = array();
   private $actions = array();
   private $actionmap = array();
   private $objectsmap = array();
   private $template_contents = array();
-  
   private $required_plugins = array('filesystem_attachments');
   private $active_hook = false;
+
+  // Deprecated names of hooks, will be removed after 0.5-stable release
+  private $deprecated_hooks = array(
+    'create_user'       => 'user_create',
+    'kill_session'      => 'session_destroy',
+    'upload_attachment' => 'attachment_upload',
+    'save_attachment'   => 'attachment_save',
+    'get_attachment'    => 'attachment_get',
+    'cleanup_attachments' => 'attachments_cleanup',
+    'display_attachment' => 'attachment_display',
+    'remove_attachment' => 'attachment_delete',
+    'outgoing_message_headers' => 'message_outgoing_headers',
+    'outgoing_message_body' => 'message_outgoing_body',
+    'address_sources'   => 'addressbooks_list',
+    'get_address_book'  => 'addressbook_get',
+    'create_contact'    => 'contact_create',
+    'save_contact'      => 'contact_update',
+    'contact_save'      => 'contact_update',
+    'delete_contact'    => 'contact_delete',
+    'manage_folders'    => 'folders_list',
+    'list_mailboxes'    => 'mailboxes_list',
+    'save_preferences'  => 'preferences_save',
+    'user_preferences'  => 'preferences_list',
+    'list_prefs_sections' => 'preferences_sections_list',
+    'list_identities'   => 'identities_list',
+    'create_identity'   => 'identity_create',
+    'delete_identity'   => 'identity_delete',
+    'save_identity'     => 'identity_update',
+    'identity_save'     => 'identity_update',
+  );
 
   /**
    * This implements the 'singleton' design pattern
    *
-   * @return object rcube_plugin_api The one and only instance if this class
+   * @return rcube_plugin_api The one and only instance if this class
    */
   static function get_instance()
   {
@@ -69,38 +100,50 @@ class rcube_plugin_api
   /**
    * Load and init all enabled plugins
    *
-   * This has to be done after rcmail::load_gui() or rcmail::init_json()
+   * This has to be done after rcmail::load_gui() or rcmail::json_init()
    * was called because plugins need to have access to rcmail->output
    */
   public function init()
   {
     $rcmail = rcmail::get_instance();
     $this->output = $rcmail->output;
-    
+    $this->config = $rcmail->config;
+
     $plugins_dir = dir($this->dir);
+    $plugins_dir = unslashify($plugins_dir->path);
     $plugins_enabled = (array)$rcmail->config->get('plugins', array());
-    
+
     foreach ($plugins_enabled as $plugin_name) {
-      $fn = $plugins_dir->path . DIRECTORY_SEPARATOR . $plugin_name . DIRECTORY_SEPARATOR . $plugin_name . '.php';
-      
+      $fn = $plugins_dir . DIRECTORY_SEPARATOR . $plugin_name . DIRECTORY_SEPARATOR . $plugin_name . '.php';
+
       if (file_exists($fn)) {
         include($fn);
-        
+
         // instantiate class if exists
         if (class_exists($plugin_name, false)) {
           $plugin = new $plugin_name($this);
-          // check inheritance and task specification
-          if (is_subclass_of($plugin, 'rcube_plugin') && (!$plugin->task || preg_match('/('.$plugin->task.')/i', $rcmail->task))) {
-            $plugin->init();
-            $this->plugins[] = $plugin;
+          // check inheritance...
+          if (is_subclass_of($plugin, 'rcube_plugin')) {
+            // ... task, request type and framed mode
+            if ((!$plugin->task || preg_match('/^('.$plugin->task.')$/i', $rcmail->task))
+                && (!$plugin->noajax || is_a($this->output, 'rcube_template'))
+                && (!$plugin->noframe || empty($_REQUEST['_framed']))
+            ) {
+              $plugin->init();
+              $this->plugins[] = $plugin;
+            }
           }
         }
         else {
-          raise_error(array('code' => 520, 'type' => 'php', 'message' => "No plugin class $plugin_name found in $fn"), true, false);
+          raise_error(array('code' => 520, 'type' => 'php',
+	    'file' => __FILE__, 'line' => __LINE__,
+	    'message' => "No plugin class $plugin_name found in $fn"), true, false);
         }
       }
       else {
-        raise_error(array('code' => 520, 'type' => 'php', 'message' => "Failed to load plugin file $fn"), true, false);
+        raise_error(array('code' => 520, 'type' => 'php',
+	  'file' => __FILE__, 'line' => __LINE__,
+	  'message' => "Failed to load plugin file $fn"), true, false);
       }
     }
     
@@ -116,7 +159,8 @@ class rcube_plugin_api
       
       // load required core plugin if no derivate was found
       if (!$loaded) {
-        $fn = $plugins_dir->path . DIRECTORY_SEPARATOR . $plugin_name . DIRECTORY_SEPARATOR . $plugin_name . '.php';
+        $fn = $plugins_dir . DIRECTORY_SEPARATOR . $plugin_name . DIRECTORY_SEPARATOR . $plugin_name . '.php';
+
         if (file_exists($fn)) {
           include_once($fn);
           
@@ -136,7 +180,9 @@ class rcube_plugin_api
       
       // trigger fatal error if still not loaded
       if (!$loaded) {
-        raise_error(array('code' => 520, 'type' => 'php', 'message' => "Requried plugin $plugin_name was not loaded"), true, true);
+        raise_error(array('code' => 520, 'type' => 'php',
+	  'file' => __FILE__, 'line' => __LINE__,
+	  'message' => "Requried plugin $plugin_name was not loaded"), true, true);
       }
     }
 
@@ -144,30 +190,30 @@ class rcube_plugin_api
     $this->register_hook('template_container', array($this, 'template_container_hook'));
     
     // maybe also register a shudown function which triggers shutdown functions of all plugin objects
-    
-    
-    // call imap_init right now
-    // (should actually be done in rcmail::imap_init() but plugins are not initialized then)
-    if ($rcmail->imap) {
-      $hook = $this->exec_hook('imap_init', array('fetch_headers' => $rcmail->imap->fetch_add_headers));
-      if ($hook['fetch_headers'])
-        $rcmail->imap->fetch_add_headers = $hook['fetch_headers'];
-    }
   }
   
   
   /**
    * Allows a plugin object to register a callback for a certain hook
    *
-   * @param string Hook name
-   * @param mixed String with global function name or array($obj, 'methodname')
+   * @param string $hook Hook name
+   * @param mixed  $callback String with global function name or array($obj, 'methodname')
    */
   public function register_hook($hook, $callback)
   {
-    if (is_callable($callback))
+    if (is_callable($callback)) {
+      if (isset($this->deprecated_hooks[$hook])) {
+        raise_error(array('code' => 522, 'type' => 'php',
+          'file' => __FILE__, 'line' => __LINE__,
+          'message' => "Deprecated hook name. ".$hook.' -> '.$this->deprecated_hooks[$hook]), true, false);
+        $hook = $this->deprecated_hooks[$hook];
+      }
       $this->handlers[$hook][] = $callback;
+    }
     else
-      raise_error(array('code' => 521, 'type' => 'php', 'message' => "Invalid callback function for $hook"), true, false);
+      raise_error(array('code' => 521, 'type' => 'php',
+        'file' => __FILE__, 'line' => __LINE__,
+        'message' => "Invalid callback function for $hook"), true, false);
   }
   
   
@@ -175,12 +221,15 @@ class rcube_plugin_api
    * Triggers a plugin hook.
    * This is called from the application and executes all registered handlers
    *
-   * @param string Hook name
-   * @param array Named arguments (key->value pairs)
+   * @param string $hook Hook name
+   * @param array $args Named arguments (key->value pairs)
    * @return array The (probably) altered hook arguments
    */
   public function exec_hook($hook, $args = array())
   {
+    if (!is_array($args))
+      $args = array('arg' => $args);
+
     $args += array('abort' => false);
     $this->active_hook = $hook;
     
@@ -201,23 +250,28 @@ class rcube_plugin_api
   /**
    * Let a plugin register a handler for a specific request
    *
-   * @param string Action name (_task=mail&_action=plugin.foo)
-   * @param string Plugin name that registers this action
-   * @param mixed Callback: string with global function name or array($obj, 'methodname')
+   * @param string $action Action name (_task=mail&_action=plugin.foo)
+   * @param string $owner Plugin name that registers this action
+   * @param mixed  $callback Callback: string with global function name or array($obj, 'methodname')
+   * @param string $task Task name registered by this plugin
    */
-  public function register_action($action, $owner, $callback)
+  public function register_action($action, $owner, $callback, $task = null)
   {
     // check action name
-    if (strpos($action, 'plugin.') !== 0)
+    if ($task)
+      $action = $task.'.'.$action;
+    else if (strpos($action, 'plugin.') !== 0)
       $action = 'plugin.'.$action;
-    
+
     // can register action only if it's not taken or registered by myself
     if (!isset($this->actionmap[$action]) || $this->actionmap[$action] == $owner) {
       $this->actions[$action] = $callback;
       $this->actionmap[$action] = $owner;
     }
     else {
-      raise_error(array('code' => 523, 'type' => 'php', 'message' => "Cannot register action $action; already taken by another plugin"), true, false);
+      raise_error(array('code' => 523, 'type' => 'php',
+        'file' => __FILE__, 'line' => __LINE__,
+        'message' => "Cannot register action $action; already taken by another plugin"), true, false);
     }
   }
 
@@ -226,7 +280,7 @@ class rcube_plugin_api
    * This method handles requests like _task=mail&_action=plugin.foo
    * It executes the callback function that was registered with the given action.
    *
-   * @param string Action name
+   * @param string $action Action name
    */
   public function exec_action($action)
   {
@@ -234,7 +288,9 @@ class rcube_plugin_api
       call_user_func($this->actions[$action]);
     }
     else {
-      raise_error(array('code' => 524, 'type' => 'php', 'message' => "No handler found for action $action"), true, true);
+      raise_error(array('code' => 524, 'type' => 'php',
+        'file' => __FILE__, 'line' => __LINE__,
+        'message' => "No handler found for action $action"), true, true);
     }
   }
 
@@ -242,9 +298,9 @@ class rcube_plugin_api
   /**
    * Register a handler function for template objects
    *
-   * @param string Object name
-   * @param string Plugin name that registers this action
-   * @param mixed Callback: string with global function name or array($obj, 'methodname')
+   * @param string $name Object name
+   * @param string $owner Plugin name that registers this action
+   * @param mixed  $callback Callback: string with global function name or array($obj, 'methodname')
    */
   public function register_handler($name, $owner, $callback)
   {
@@ -258,16 +314,58 @@ class rcube_plugin_api
       $this->objectsmap[$name] = $owner;
     }
     else {
-      raise_error(array('code' => 525, 'type' => 'php', 'message' => "Cannot register template handler $name; already taken by another plugin"), true, false);
+      raise_error(array('code' => 525, 'type' => 'php',
+        'file' => __FILE__, 'line' => __LINE__,
+        'message' => "Cannot register template handler $name; already taken by another plugin"), true, false);
     }
   }
   
   
   /**
+   * Register this plugin to be responsible for a specific task
+   *
+   * @param string $task Task name (only characters [a-z0-9_.-] are allowed)
+   * @param string $owner Plugin name that registers this action
+   */
+  public function register_task($task, $owner)
+  {
+    if ($task != asciiwords($task)) {
+      raise_error(array('code' => 526, 'type' => 'php',
+        'file' => __FILE__, 'line' => __LINE__,
+        'message' => "Invalid task name: $task. Only characters [a-z0-9_.-] are allowed"), true, false);
+    }
+    else if (in_array($task, rcmail::$main_tasks)) {
+      raise_error(array('code' => 526, 'type' => 'php',
+        'file' => __FILE__, 'line' => __LINE__,
+        'message' => "Cannot register taks $task; already taken by another plugin or the application itself"), true, false);
+    }
+    else {
+      $this->tasks[$task] = $owner;
+      rcmail::$main_tasks[] = $task;
+      return true;
+    }
+    
+    return false;
+  }
+
+
+  /**
+   * Checks whether the given task is registered by a plugin
+   *
+   * @param string $task Task name
+   * @return boolean True if registered, otherwise false
+   */
+  public function is_plugin_task($task)
+  {
+    return $this->tasks[$task] ? true : false;
+  }
+
+
+  /**
    * Check if a plugin hook is currently processing.
    * Mainly used to prevent loops and recursion.
    *
-   * @param string Hook to check (optional)
+   * @param string $hook Hook to check (optional)
    * @return boolean True if any/the given hook is currently processed, otherwise false
    */
   public function is_processing($hook = null)
@@ -277,6 +375,8 @@ class rcube_plugin_api
   
   /**
    * Include a plugin script file in the current HTML page
+   *
+   * @param string $fn Path to script
    */
   public function include_script($fn)
   {
@@ -288,6 +388,8 @@ class rcube_plugin_api
 
   /**
    * Include a plugin stylesheet in the current HTML page
+   *
+   * @param string $fn Path to stylesheet
    */
   public function include_stylesheet($fn)
   {
@@ -299,6 +401,9 @@ class rcube_plugin_api
   
   /**
    * Save the given HTML content to be added to a template container
+   *
+   * @param string $html HTML content
+   * @param string $container Template container identifier
    */
   public function add_content($html, $container)
   {
@@ -307,6 +412,9 @@ class rcube_plugin_api
   
   /**
    * Callback for template_container hooks
+   *
+   * @param array $attrib
+   * @return array
    */
   private function template_container_hook($attrib)
   {
@@ -316,6 +424,9 @@ class rcube_plugin_api
   
   /**
    * Make the given file name link into the plugins directory
+   *
+   * @param string $fn Filename
+   * @return string 
    */
   private function resource_url($fn)
   {

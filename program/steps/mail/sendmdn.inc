@@ -4,8 +4,8 @@
  +-----------------------------------------------------------------------+
  | program/steps/mail/sendmdn.inc                                        |
  |                                                                       |
- | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2008-2009, RoundCube Dev. - Switzerland                 |
+ | This file is part of the Roundcube Webmail client                     |
+ | Copyright (C) 2008-2009, Roundcube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: sendmail.inc 930 2007-11-25 17:34:19Z thomasb $
+ $Id: sendmdn.inc 3989 2010-09-25 13:03:53Z alec $
 
 */
 
@@ -40,5 +40,3 @@ else {
 }
 
 $OUTPUT->send();
-
-?>

@@ -14,7 +14,6 @@ $RCI->bool_config_props = array(
   'smtp_log' => 1,
   'prefer_html' => 1,
   'preview_pane' => 1,
-  'htmleditor' => 1,
   'debug_level' => 1,
 );
 
@@ -24,7 +23,7 @@ $_SESSION['allowinstaller'] = true;
 if (!empty($_POST['submit'])) {
   
   echo '<p class="notice">Copy or download the following configurations and save them in two files';
-  echo ' (names above the text box) within the <tt>'.RCMAIL_CONFIG_DIR.'</tt> directory of your RoundCube installation.<br/>';
+  echo ' (names above the text box) within the <tt>'.RCMAIL_CONFIG_DIR.'</tt> directory of your Roundcube installation.<br/>';
   echo ' Make sure that there are no characters outside the <tt>&lt;?php ?&gt;</tt> brackets when saving the files.</p>';
   
   $textbox = new html_textarea(array('rows' => 16, 'cols' => 60, 'class' => "configfile"));
@@ -343,12 +342,12 @@ $check_autocreate = new html_checkbox(array('name' => '_auto_create_user', 'id' 
 echo $check_autocreate->show(intval($RCI->getprop('auto_create_user')), array('value' => 1));
 
 ?>
-<label for="cfgautocreate">Automatically create a new RoundCube user when log-in the first time</label><br />
+<label for="cfgautocreate">Automatically create a new Roundcube user when log-in the first time</label><br />
 
 <p class="hint">A user is authenticated by the IMAP server but it requires a local record to store settings
 and contacts. With this option enabled a new user record will automatically be created once the IMAP login succeeds.</p>
 
-<p class="hint">If this option is disabled, the login only succeeds if there's a matching user-record in the local RoundCube database
+<p class="hint">If this option is disabled, the login only succeeds if there's a matching user-record in the local Roundcube database
 what means that you have to create those records manually or disable this option after the first login.</p>
 </dd>
 
@@ -543,13 +542,16 @@ echo $check_prevpane->show(intval($RCI->getprop('preview_pane')));
 
 <dt class="propname">htmleditor <span class="userconf">*</span></dt>
 <dd>
+<label for="cfghtmlcompose">Compose HTML formatted messages</label>
 <?php
 
-$check_htmlcomp = new html_checkbox(array('name' => '_htmleditor', 'id' => "cfghtmlcompose", 'value' => 1));
-echo $check_htmlcomp->show(intval($RCI->getprop('htmleditor')));
+$select_htmlcomp = new html_select(array('name' => '_htmleditor', 'id' => "cfghtmlcompose"));
+$select_htmlcomp->add('never', 0);
+$select_htmlcomp->add('always', 1);
+$select_htmlcomp->add('on reply to HTML message only', 2);
+echo $select_htmlcomp->show(intval($RCI->getprop('htmleditor')));
 
 ?>
-<label for="cfghtmlcompose">Compose HTML formatted messages</label><br />
 </dd>
 
 <dt class="propname">draft_autosave <span class="userconf">*</span></dt>
@@ -571,8 +573,16 @@ echo $select_autosave->show(intval($RCI->getprop('draft_autosave')));
 <dd>
 <?php
 
+$mdn_opts = array(
+    0 => 'ask the user',
+    1 => 'send automatically',
+    3 => 'send receipt to user contacts, otherwise ask the user',
+    4 => 'send receipt to user contacts, otherwise ignore',
+    2 => 'ignore',
+);
+
 $select_mdnreq = new html_select(array('name' => '_mdn_requests', 'id' => "cfgmdnreq"));
-$select_mdnreq->add(array('ask the user', 'send automatically', 'ignore'), array(0, 1, 2));
+$select_mdnreq->add(array_values($mdn_opts), array_keys($mdn_opts));
 echo $select_mdnreq->show(intval($RCI->getprop('mdn_requests')));
 
 ?>
