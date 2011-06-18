@@ -17,7 +17,7 @@
 |         Victor Benincasa <vbenincasa@gmail.com>                       |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2237 2009-01-17 01:55:39Z till $
+@version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
 
 */
 
@@ -41,7 +41,7 @@ $labels['from'] = 'Remetente';
 $labels['to'] = 'Para';
 $labels['cc'] = 'Cópia';
 $labels['bcc'] = 'Cópia Oculta (Bcc)';
-$labels['replyto'] = 'Responder para';
+$labels['replyto'] = 'Resp. para';
 $labels['date'] = 'Data';
 $labels['size'] = 'Tamanho';
 $labels['priority'] = 'Prioridade';
@@ -135,6 +135,8 @@ $labels['unknown'] = 'desconhecido';
 $labels['unlimited'] = 'ilimitado';
 $labels['quicksearch'] = 'Pesquisa rápida';
 $labels['resetsearch'] = 'Limpar';
+$labels['searchmod'] = 'Opções da pesquisa';
+$labels['msgtext'] = 'Mensagem inteira';
 $labels['openinextwin'] = 'Abrir em nova janela';
 $labels['compose'] = 'Escrever mensagem';
 $labels['savemessage'] = 'Salvar Rascunho';
@@ -164,7 +166,7 @@ $labels['dontsave'] = 'não salvar';
 $labels['maxuploadsize'] = 'Tamanho máximo permitido do arquivo é $size';
 $labels['addcc'] = 'Cópia';
 $labels['addbcc'] = 'Cópia Oculta';
-$labels['addreplyto'] = 'Responder para';
+$labels['addreplyto'] = 'Resp. para';
 $labels['mdnrequest'] = 'O remetente desta mensagem deseja ser notificado quando você ler esta mensagem. Você permite o envio desta notificação?';
 $labels['receiptread'] = 'Confirmação de Leitura (Exibida)';
 $labels['yourmessage'] = 'Esta é uma confirmação de leitura da sua mensagem';

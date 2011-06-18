@@ -15,9 +15,13 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: list.inc 2109 2008-12-03 08:16:44Z alec $
+ $Id: list.inc 2483 2009-05-15 10:22:29Z thomasb $
 
 */
+
+if (!$OUTPUT->ajax_call) {
+  return;
+}
 
 // is there a sort type for this request?
 if ($sort = get_input_value('_sort', RCUBE_INPUT_GET))

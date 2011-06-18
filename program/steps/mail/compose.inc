@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: compose.inc 2301 2009-02-18 19:15:36Z alec $
+ $Id: compose.inc 2483 2009-05-15 10:22:29Z thomasb $
 
 */
 
@@ -70,8 +70,10 @@ if ($msg_uid = $_SESSION['compose']['param']['_reply_uid'])
   $compose_mode = RCUBE_COMPOSE_REPLY;
 else if ($msg_uid = $_SESSION['compose']['param']['_forward_uid'])
   $compose_mode = RCUBE_COMPOSE_FORWARD;
-else if ($msg_uid = $_SESSION['compose']['param']['_draft_uid'])
+else if ($msg_uid = $_SESSION['compose']['param']['_draft_uid']) {
+  $RCMAIL->imap->set_mailbox($CONFIG['drafts_mbox']);
   $compose_mode = RCUBE_COMPOSE_DRAFT;
+}
 
 if (!empty($msg_uid))
 {
@@ -488,7 +490,7 @@ function rcmail_create_reply_body($body, $bodyIsHtml)
       }
 
     // add title line(s)
-    $prefix = wordwrap(sprintf("On %s, %s wrote:\n",
+    $prefix = rc_wordwrap(sprintf("On %s, %s wrote:\n",
       $MESSAGE->headers->date,
       $MESSAGE->get_header('from')), 76);
 

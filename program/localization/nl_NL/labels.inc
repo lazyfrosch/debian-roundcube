@@ -15,7 +15,7 @@
 |         Laurens Vets <laurens@daemon.be>                              |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2237 2009-01-17 01:55:39Z till $
+@version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
 
 */
 
@@ -122,7 +122,7 @@ $labels['select'] = 'Selecteer';
 $labels['all'] = 'Allemaal';
 $labels['none'] = 'Geen';
 $labels['unread'] = 'Ongelezen';
-$labels['flagged'] = 'Gemarkeerd';
+$labels['flagged'] = 'Geselecteerd';
 $labels['unanswered'] = 'Onbeantwoord';
 $labels['filter'] = 'Filter';
 $labels['compact'] = 'Opschonen';
@@ -133,6 +133,8 @@ $labels['unknown'] = 'onbekend';
 $labels['unlimited'] = 'onbeperkt';
 $labels['quicksearch'] = 'Snel zoeken';
 $labels['resetsearch'] = 'Reset zoekopdracht';
+$labels['searchmod'] = 'Zoekopties';
+$labels['msgtext'] = 'Gehele bericht';
 $labels['openinextwin'] = 'Openen in een nieuw venster';
 $labels['compose'] = 'Nieuw bericht aanmaken';
 $labels['savemessage'] = 'Bewaar als concept';

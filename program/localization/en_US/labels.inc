@@ -13,7 +13,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 2237 2009-01-17 01:55:39Z till $
+ @version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
 
 */
 
@@ -161,6 +161,8 @@ $labels['unlimited']  = 'unlimited';
 
 $labels['quicksearch']  = 'Quick search';
 $labels['resetsearch']  = 'Reset search';
+$labels['searchmod']  = 'Search modifiers';
+$labels['msgtext']  = 'Entire message';
 
 $labels['openinextwin'] = 'Open in new window';
 
