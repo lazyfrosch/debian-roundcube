@@ -1,5 +1,5 @@
 RoundCube Webmail (http://roundcube.net)
-
+=================
 
 Introduction:
 -------------
@@ -42,6 +42,9 @@ not store a password, it's just used to assign identities, contacts and cache
 records. If you have 'auto_create_user' set to FALSE only IMAP logins which
 already have a corresponding entry in the user's table (username and hostname)
 will be allowed.
+
+Read more at http://trac.roundcube.net/wiki/Howto_Config
+and http://trac.roundcube.net/wiki/Dev_Docs
 
 
 Contact:

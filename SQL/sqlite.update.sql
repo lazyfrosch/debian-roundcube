@@ -22,3 +22,6 @@ CREATE TABLE messages (
 );
 
 CREATE INDEX ix_messages_user_cache_uid ON messages(user_id,cache_key,uid);
+
+CREATE INDEX ix_users_username ON users(username);
+CREATE INDEX ix_users_alias ON users(alias);

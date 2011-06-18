@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: save_identity.inc 938 2007-12-10 15:27:19Z thomasb $
+ $Id: save_identity.inc 1407 2008-05-19 17:47:45Z thomasb $
 
 */
 
@@ -76,21 +76,17 @@ if ($_POST['_iid'])
   }
 }
 
-// insert a new contact
+// insert a new identity record
 else
 {
   if ($insert_id = $USER->insert_identity($save_data))
   {
+    $OUTPUT->show_message('successfullysaved', 'confirmation');
+    
     $_GET['_iid'] = $insert_id;
 
     if (!empty($_POST['_standard']))
       $default_id = $insert_id;
-
-    if ($_POST['_framed'])
-    {
-      // add contact row or jump to the page where it should appear
-      // ....
-    }
   }
   else
   {
@@ -107,6 +103,6 @@ if ($default_id)
   $USER->set_default($default_id);
 
 // go to next step
-rcmail_overwrite_action($_framed ? 'edit-identity' : 'identities');
+rcmail_overwrite_action('identities');
 
 ?>

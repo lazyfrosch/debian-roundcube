@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: viewsource.inc 1255 2008-04-05 12:49:21Z thomasb $
+ $Id: viewsource.inc 1195 2008-03-21 11:45:46Z thomasb $
 
 */
 

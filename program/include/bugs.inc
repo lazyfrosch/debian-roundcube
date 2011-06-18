@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: bugs.inc 666 2007-08-07 21:02:12Z thomasb $
+ $Id: bugs.inc 1291 2008-04-12 13:54:45Z thomasb $
 
 */
 
@@ -66,7 +66,7 @@ function raise_error($arg=array(), $log=false, $terminate=false)
  */
 function log_bug($arg_arr)
 {
-  global $CONFIG, $INSTALL_PATH;
+  global $CONFIG;
   $program = $arg_arr['type']=='xpath' ? 'XPath' : strtoupper($arg_arr['type']);
 
   // write error to local log file
@@ -81,7 +81,7 @@ function log_bug($arg_arr)
       $arg_arr['line']);
                  
     if (empty($CONFIG['log_dir']))
-      $CONFIG['log_dir'] = $INSTALL_PATH.'logs';
+      $CONFIG['log_dir'] = INSTALL_PATH.'logs';
       
     // try to open specific log file for writing
     if ($fp = @fopen($CONFIG['log_dir'].'/errors', 'a'))

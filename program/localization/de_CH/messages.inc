@@ -13,7 +13,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 1075 2008-02-13 23:43:04Z thomasb $
+ @version $Id: messages.inc 1456 2008-05-30 13:27:13Z thomasb $
 
 */
 
@@ -81,5 +81,6 @@ $messages['errorsendingreceipt'] = 'Bestätigung konnte nicht gesendet werden';
 
 $messages['nodeletelastidentity'] = 'Sie können diesen Absender nicht löschen';
 $messages['addsubfolderhint'] = 'Wird als Unterdornder des aktuell selektieren Ordners erstellt';
+$messages['forbiddencharacter'] = 'Der Ordnername enthält ein ungültiges Zeichen';
 
 ?>

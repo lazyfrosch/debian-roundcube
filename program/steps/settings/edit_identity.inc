@@ -15,21 +15,19 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: edit_identity.inc 940 2007-12-11 04:20:01Z estadtherr $
+ $Id: edit_identity.inc 1412 2008-05-21 07:45:54Z alec $
 
 */
 
-if (($_GET['_iid'] || $_POST['_iid']) && $_action=='edit-identity')
+$OUTPUT->set_pagetitle(rcube_label('identities'));
+
+if (($_GET['_iid'] || $_POST['_iid']) && $RCMAIL->action=='edit-identity')
   {
   $IDENTITY_RECORD = $USER->get_identity(get_input_value('_iid', RCUBE_INPUT_GPC));
   
   if (is_array($IDENTITY_RECORD))
     $OUTPUT->set_env('iid', $IDENTITY_RECORD['identity_id']);
-
-  $OUTPUT->set_pagetitle(rcube_label('edititem'));
   }
-else
-  $OUTPUT->set_pagetitle(rcube_label('newitem'));
 
 
 $OUTPUT->include_script('list.js');
@@ -37,13 +35,20 @@ $OUTPUT->include_script('list.js');
 
 function rcube_identity_form($attrib)
   {
-  global $IDENTITY_RECORD, $OUTPUT;
+  global $IDENTITY_RECORD, $RCMAIL, $OUTPUT;
 
-  $OUTPUT->include_script('tiny_mce/tiny_mce_src.js');
-  $OUTPUT->add_script("tinyMCE.init({ mode : 'specific_textareas'," .
+  $tinylang = substr($_SESSION['language'], 0, 2);
+  if (!file_exists('program/js/tiny_mce/langs/'.$tinylang.'.js'))
+    {
+      $tinylang = 'en';
+    }
+
+  $OUTPUT->include_script('tiny_mce/tiny_mce.js');
+  $OUTPUT->add_script("tinyMCE.init({ mode : 'textareas'," .
+                                    "editor_selector : 'mce_editor'," .
                                     "apply_source_formatting : true," .
+                                    "language : '$tinylang'," .
                                     "content_css : '\$__skin_path' + '/editor_content.css'," .
-                                    "editor_css : '\$__skin_path' + '/editor_ui.css'," .
                                     "theme : 'advanced'," .
                                     "theme_advanced_toolbar_location : 'top'," .
                                     "theme_advanced_toolbar_align : 'left'," .
@@ -51,7 +56,7 @@ function rcube_identity_form($attrib)
                                     "theme_advanced_buttons2 : 'link,unlink,code,forecolor,fontselect,fontsizeselect'," .
                                     "theme_advanced_buttons3 : '' });");
 
-  if (!$IDENTITY_RECORD && $GLOBALS['_action']!='add-identity')
+  if (!$IDENTITY_RECORD && $RCMAIL->action != 'add-identity')
     return rcube_label('notfound');
 
   // add some labels to client
@@ -69,7 +74,7 @@ function rcube_identity_form($attrib)
                        'reply-to'     => array('type' => 'text', 'label' => 'replyto'),
                        'bcc'          => array('type' => 'text'),
                        'signature'	  => array('type' => 'textarea', 'size' => "40", 'rows' => "6"),
-                       'html_signature'=>array('type' => 'checkbox', 'label' => 'htmlsignature', 'onclick' => 'return rcmail.toggle_editor(this, \'_signature\');'),
+                       'html_signature'=>array('type' => 'checkbox', 'label' => 'htmlsignature', 'onclick' => 'return rcmail.toggle_editor(this, \'rcmfd_signature\');'),
                        'standard'     => array('type' => 'checkbox', 'label' => 'setdefault'));
 
 
@@ -80,7 +85,7 @@ function rcube_identity_form($attrib)
     if (is_array($colprop))
       {
       $out = $form_start;
-      $out .= rcmail_get_edit_field($attrib['part'], $IDENTITY_RECORD[$attrib['part']], $attrib, $colprop['type']); 
+      $out .= rcmail_get_edit_field($attrib['part'], $IDENTITY_RECORD[$attrib['part']], $attrib + array('size' => 30), $colprop['type']); 
       return $out;
       }
     else
@@ -104,13 +109,15 @@ function rcube_identity_form($attrib)
       {
       $attrib['size'] = $colprop['size'];
       $attrib['rows'] = $colprop['rows'];
-      $attrib['mce_editable'] = $IDENTITY_RECORD['html_signature'] ? "true" : "false";
+      if ($IDENTITY_RECORD['html_signature'])
+        {
+        $attrib['class'] = "mce_editor";
+        }
       }
     else
       {
-      unset($attrib['size']);
+      $attrib['size'] = 40;
       unset($attrib['rows']);
-      unset($attrib['mce_editable']);
       }
 
     $label = strlen($colprop['label']) ? $colprop['label'] : $col;
@@ -129,8 +136,8 @@ function rcube_identity_form($attrib)
 
 $OUTPUT->add_handler('identityform', 'rcube_identity_form');
 
-if ($_action=='add-identity' && template_exists('addidentity'))
-  parse_template('addidentity');
+if ($RCMAIL->action=='add-identity' && template_exists('addidentity'))
+  $OUTPUT->send('addidentity');
 
-parse_template('editidentity');
+$OUTPUT->send('editidentity');
 ?>

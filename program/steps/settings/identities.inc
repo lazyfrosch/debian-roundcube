@@ -15,12 +15,11 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: identities.inc 543 2007-04-28 18:07:12Z thomasb $
+ $Id: identities.inc 1412 2008-05-21 07:45:54Z alec $
 
 */
 
-if ($USER_DATA = $DB->fetch_assoc($sql_result))
-  $OUTPUT->set_pagetitle(sprintf('%s (%s@%s)', rcube_label('identities'), $USER_DATA['username'], $USER_DATA['mail_host']));
+$OUTPUT->set_pagetitle(rcube_label('identities'));
 
 $OUTPUT->include_script('list.js');
 
@@ -45,5 +44,5 @@ function rcmail_identity_frame($attrib)
 
 $OUTPUT->add_handler('identityframe', 'rcmail_identity_frame');
 
-parse_template('identities');
+$OUTPUT->send('identities');
 ?>

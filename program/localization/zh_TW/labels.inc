@@ -14,7 +14,7 @@
  |         Ting-Hung Chiu <earrl@mmlab.cse.yzu.edu.tw>                   |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 1086 2008-02-15 05:43:32Z tomekp $
+ @version $Id: labels.inc 1277 2008-04-10 10:01:46Z alec $
 
 */
 
@@ -31,8 +31,8 @@ $labels['addressbook'] = '通訊錄';
 $labels['inbox'] = '信件匣';
 $labels['drafts'] = '草稿匣';
 $labels['sent'] = '寄件備份';
-$labels['trash'] = '垃圾郵件';
-$labels['junk'] = '垃圾桶';
+$labels['trash'] = '垃圾桶';
+$labels['junk'] = '垃圾郵件';
 $labels['subject'] = '主旨';
 $labels['from'] = '寄件者';
 $labels['to'] = '收件者';

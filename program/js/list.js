@@ -172,7 +172,7 @@ focus: function(e)
   for (var n=0; n<this.selection.length; n++)
   {
     id = this.selection[n];
-    if (this.rows[id].obj)
+    if (this.rows[id] && this.rows[id].obj)
     {
       this.set_classname(this.rows[id].obj, 'selected', true);
       this.set_classname(this.rows[id].obj, 'unfocused', false);
@@ -398,6 +398,9 @@ select_next: function()
  */
 shift_select: function(id, control)
 {
+  if (!this.rows[this.shift_start] || !this.selection.length)
+    this.shift_start = id;
+
   var from_rowIndex = this.rows[this.shift_start].obj.rowIndex;
   var to_rowIndex = this.rows[id].obj.rowIndex;
 

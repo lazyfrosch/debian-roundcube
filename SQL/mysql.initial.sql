@@ -50,12 +50,12 @@ CREATE TABLE `identities` (
   `user_id` int(10) unsigned NOT NULL default '0',
   `del` tinyint(1) NOT NULL default '0',
   `standard` tinyint(1) NOT NULL default '0',
-  `name` varchar(128) NOT NULL default '',
+  `name` varchar(128) NOT NULL,
   `organization` varchar(128) NOT NULL default '',
-  `email` varchar(128) NOT NULL default '',
+  `email` varchar(128) NOT NULL,
   `reply-to` varchar(128) NOT NULL default '',
   `bcc` varchar(128) NOT NULL default '',
-  `signature` text NOT NULL,
+  `signature` text NOT NULL default '',
   `html_signature` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`identity_id`),
   KEY `user_id` (`user_id`)
@@ -91,7 +91,9 @@ CREATE TABLE `users` (
   `last_login` datetime NOT NULL default '0000-00-00 00:00:00',
   `language` varchar(5) NOT NULL default 'en',
   `preferences` text,
-  PRIMARY KEY  (`user_id`)
+  PRIMARY KEY  (`user_id`),
+  INDEX `username_index` (`username`),
+  INDEX `alias_index` (`alias`)
 );
 
 -- --------------------------------------------------------
