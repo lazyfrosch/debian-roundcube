@@ -1,11 +1,12 @@
 <?php
 
 /*
+
  +-----------------------------------------------------------------------+
  | language/de_CH/labels.inc                                             |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005, RoundQube Dev. - Switzerland                      |
+ | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
@@ -13,7 +14,7 @@
  | Corrections: Alexander Stiebing <ja.stiebing[NOSPAM]@web.de>          |
  +-----------------------------------------------------------------------+
 
- $Id: labels.inc 282 2006-07-25 22:11:50Z thomasb $
+ @version $Id: labels.inc 549 2007-05-01 18:53:56Z thomasb $
 
 */
 
@@ -98,9 +99,16 @@ $labels['replytoallmessage'] = 'Antwort an Absender und alle Empfänger';
 $labels['forwardmessage']   = 'Nachricht weiterleiten';
 $labels['deletemessage']    = 'In den Papierkorb verschieben';
 $labels['printmessage']     = 'Diese Nachricht drucken';
+$labels['previousmessage']  = 'Vorherige Nachricht anzeigen';
 $labels['previousmessages'] = 'Vorherige Nachrichten anzeigen';
+$labels['firstmessage']     = 'Die erste Nachricht anzeigen';
+$labels['firstmessages']    = 'Die ersten Nachrichten anzeigen';
+$labels['nextmessage']      = 'Nächste Nachricht anzeigen';
 $labels['nextmessages']     = 'Weitere Nachrichten anzeigen';
+$labels['lastmessage']      = 'Die letzte Nachricht anzeigen';
+$labels['lastmessages']     = 'Die letzten Nachrichten anzeigen';
 $labels['backtolist']       = 'Zurück zur Liste';
+$labels['viewsource']       = 'Quelltext anzeigen';
 
 $labels['select'] = 'Auswählen';
 $labels['all']    = 'Alle';
@@ -125,6 +133,7 @@ $labels['savemessage']  = 'Nachricht speichern';
 $labels['sendmessage']  = 'Nachricht jetzt senden';
 $labels['addattachment']  = 'Datei anfügen';
 $labels['charset']  = 'Zeichensatz';
+$labels['editortype'] = 'Editor-Typ';
 $labels['returnreceipt'] = 'Empfangsbestätigung';
 
 $labels['checkspelling'] = 'Rechtschreibung prüfen';
@@ -143,6 +152,9 @@ $labels['highest'] = 'Höchste';
 
 $labels['nosubject']  = '(kein Betreff)';
 $labels['showimages'] = 'Bilder anzeigen';
+
+$labels['htmltoggle'] = 'HTML';
+$labels['plaintoggle'] = 'Klartext';
 
 
 // address book // Adressbuch
@@ -167,17 +179,13 @@ $labels['print']          = 'Drucken';
 $labels['export']         = 'Exportieren';
 
 $labels['previouspage']   = 'Eine Seite zurück';
+$labels['firstpage']      = 'Erste Seite';
 $labels['nextpage']       = 'Nächste Seite';
+$labels['lastpage']      = 'Letzte Seite';
 
-// LDAP search
-$labels['ldapsearch'] = 'LDAP Verzeichnis-Suche';
+$labels['groups'] = 'Gruppen';
+$labels['personaladrbook'] = 'Persönliches Adressbuch';
 
-$labels['ldappublicsearchname']   = 'Kontakt-Name';
-$labels['ldappublicsearchtype']   = 'Genaue Übereinstimmung';
-$labels['ldappublicserverselect'] = 'Server-Auswahl';
-$labels['ldappublicsearchfield']  = 'Suche in';
-$labels['ldappublicsearchform']   = 'Adressen suchen';
-$labels['ldappublicsearch'] = 'Suchen';
 
 // settings // Einstellungen
 $labels['settingsfor']  = 'Einstellungen für';
@@ -199,6 +207,13 @@ $labels['timezone']  = 'Zeitzone';
 $labels['pagesize']  = 'Einträge pro Seite';
 $labels['signature'] = 'Signatur';
 $labels['dstactive']  = 'Sommerzeit';
+$labels['htmleditor'] = 'HTML-Nachrichten verfassen';
+$labels['htmlsignature'] = 'HTML-Signatur';
+$labels['previewpane'] = 'Nachrichtenvorschau anzeigen';
+
+$labels['autosavedraft']  = 'Entwurf autom. speichern';
+$labels['everynminutes']  = 'alle $n Minuten';
+$labels['never']  = 'nie';
 
 $labels['folder']  = 'Ordner';
 $labels['folders']  = 'Ordner';

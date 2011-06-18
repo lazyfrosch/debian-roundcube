@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: session.inc 132 2006-02-05 15:38:51Z roundcube $
+ $Id: session.inc 521 2007-03-27 09:34:30Z thomasb $
 
 */
 
@@ -36,7 +36,10 @@ function sess_close()
 // read session data
 function sess_read($key)
   {
-  global $DB, $SESS_CHANGED;
+  global $DB, $SESS_CHANGED, $SESS_CLIENT_IP;
+  
+  if ($DB->is_error())
+    return FALSE;
   
   $sql_result = $DB->query("SELECT vars, ip, ".$DB->unixtimestamp('changed')." AS changed
                             FROM ".get_table_name('session')."
@@ -45,7 +48,8 @@ function sess_read($key)
 
   if ($sql_arr = $DB->fetch_assoc($sql_result))
     {
-    $SESS_CHANGED = mktime(); //$sql_arr['changed'];
+    $SESS_CHANGED = $sql_arr['changed'];
+    $SESS_CLIENT_IP = $sql_arr['ip'];
 
     if (strlen($sql_arr['vars']))
       return $sql_arr['vars'];
@@ -59,6 +63,9 @@ function sess_read($key)
 function sess_write($key, $vars)
   {
   global $DB;
+  
+  if ($DB->is_error())
+    return FALSE;
 
   $sql_result = $DB->query("SELECT 1
                             FROM ".get_table_name('session')."
@@ -70,7 +77,7 @@ function sess_write($key, $vars)
     session_decode($vars);
     $DB->query("UPDATE ".get_table_name('session')."
                 SET    vars=?,
-                       changed=now()
+                       changed=".$DB->now()."
                 WHERE  sess_id=?",
                 $vars,
                 $key);
@@ -79,7 +86,7 @@ function sess_write($key, $vars)
     {
     $DB->query("INSERT INTO ".get_table_name('session')."
                 (sess_id, vars, ip, created, changed)
-                VALUES (?, ?, ?, now(), now())",
+                VALUES (?, ?, ?, ".$DB->now().", ".$DB->now().")",
                 $key,
                 $vars,
                 $_SERVER['REMOTE_ADDR']);
@@ -96,6 +103,9 @@ function sess_destroy($key)
   {
   global $DB;
   
+  if ($DB->is_error())
+    return FALSE;
+  
   // delete session entries in cache table
   $DB->query("DELETE FROM ".get_table_name('cache')."
               WHERE  session_id=?",
@@ -105,7 +115,6 @@ function sess_destroy($key)
               WHERE sess_id=?",
               $key);
 
-  rcmail_clear_session_temp($key);
   return TRUE;
   }
 
@@ -115,10 +124,13 @@ function sess_gc($maxlifetime)
   {
   global $DB;
 
+  if ($DB->is_error())
+    return FALSE;
+
   // get all expired sessions  
   $sql_result = $DB->query("SELECT sess_id
                             FROM ".get_table_name('session')."
-                            WHERE ".$DB->unixtimestamp('now()')."-".$DB->unixtimestamp('changed')." > ?",
+                            WHERE ".$DB->unixtimestamp($DB->now())."-".$DB->unixtimestamp('changed')." > ?",
                             $maxlifetime);
                                    
   $a_exp_sessions = array();
@@ -137,14 +149,33 @@ function sess_gc($maxlifetime)
                 WHERE sess_id IN ('".join("','", $a_exp_sessions)."')");
     }
 
-  // remove session specific temp dirs
-  foreach ($a_exp_sessions as $key)
-    rcmail_clear_session_temp($key);
-
   // also run message cache GC
   rcmail_message_cache_gc();
+  rcmail_temp_gc();
 
   return TRUE;
+  }
+
+
+function sess_regenerate_id()
+  {
+  $randlen = 32;
+  $randval = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  $random = "";
+  for ($i=1; $i <= $randlen; $i++)
+    $random .= substr($randval, rand(0,(strlen($randval) - 1)), 1);
+
+  // use md5 value for id or remove capitals from string $randval
+  $random = md5($random);
+
+  // delete old session record
+  sess_destroy(session_id());
+
+  session_id($random);
+  $cookie = session_get_cookie_params();
+  setcookie(session_name(), $random, $cookie['lifetime'], $cookie['path']);
+
+  return true;
   }
 
 

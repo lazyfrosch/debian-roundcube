@@ -1,18 +1,19 @@
 <?php
 
 /*
+
  +-----------------------------------------------------------------------+
  | language/en_US/labels.inc                                             |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005, RoundQube Dev. - Switzerland                      |
+ | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: labels.inc 296 2006-08-06 15:53:41Z thomasb $
+ @version $Id: labels.inc 543 2007-04-28 18:07:12Z thomasb $
 
 */
 
@@ -63,7 +64,7 @@ $labels['download'] = 'download';
 $labels['filename'] = 'File name';
 $labels['filesize'] = 'File size';
 
-$labels['preferhtml'] = 'Prefer HTML';
+$labels['preferhtml'] = 'Display HTML';
 $labels['htmlmessage'] = 'HTML Message';
 $labels['prettydate'] = 'Pretty dates';
 
@@ -97,8 +98,14 @@ $labels['replytoallmessage'] = 'Reply to sender and all recipients';
 $labels['forwardmessage']   = 'Forward the message';
 $labels['deletemessage']    = 'Move message to trash';
 $labels['printmessage']     = 'Print this message';
+$labels['previousmessage']  = 'Show the previous message';
 $labels['previousmessages'] = 'Show previous set of messages';
+$labels['firstmessage']     = 'Show the first message';
+$labels['firstmessages']    = 'Show first set of messages';
+$labels['nextmessage']      = 'Show the next message';
 $labels['nextmessages']     = 'Show next set of messages';
+$labels['lastmessage']      = 'Show the last message';
+$labels['lastmessages']     = 'Show last set of messages';
 $labels['backtolist']       = 'Back to message list';
 $labels['viewsource']       = 'Show source';
 
@@ -120,16 +127,17 @@ $labels['resetsearch']  = 'Reset search';
 
 
 // message compose
-$labels['compose']  = 'Compose a message';
+$labels['compose']        = 'Compose a message';
+$labels['sendmessage']    = 'Send the message now';
 $labels['savemessage']  = 'Save this draft';
-$labels['sendmessage']  = 'Send the message now';
 $labels['addattachment']  = 'Attach a file';
-$labels['charset']  = 'Charset';
-$labels['returnreceipt'] = 'Return receipt';
+$labels['charset']        = 'Charset';
+$labels['editortype']     = 'Editor type';
+$labels['returnreceipt']  = 'Return receipt';
 
 $labels['checkspelling'] = 'Check spelling';
 $labels['resumeediting'] = 'Resume editing';
-$labels['revertto'] = 'Revert to';
+$labels['revertto']      = 'Revert to';
 
 $labels['attachments'] = 'Attachments';
 $labels['upload'] = 'Upload';
@@ -143,6 +151,9 @@ $labels['highest'] = 'Highest';
 
 $labels['nosubject']  = '(no subject)';
 $labels['showimages'] = 'Display images';
+
+$labels['htmltoggle'] = 'HTML';
+$labels['plaintoggle'] = 'Plain text';
 
 
 // address boook
@@ -167,18 +178,12 @@ $labels['print']          = 'Print';
 $labels['export']         = 'Export';
 
 $labels['previouspage']   = 'Show previous set';
+$labels['firstpage']      = 'Show first set';
 $labels['nextpage']       = 'Show next set';
+$labels['lastpage']       = 'Show last set';
 
-
-// LDAP search
-$labels['ldapsearch'] = 'LDAP directory search';
-
-$labels['ldappublicsearchname']    = 'Contact name';
-$labels['ldappublicsearchtype'] = 'Exact match?';
-$labels['ldappublicserverselect'] = 'Select servers';
-$labels['ldappublicsearchfield'] = 'Search on';
-$labels['ldappublicsearchform'] = 'Look for a contact';
-$labels['ldappublicsearch'] = 'Search';
+$labels['groups'] = 'Groups';
+$labels['personaladrbook'] = 'Personal Addresses';
 
 
 // settings
@@ -201,6 +206,13 @@ $labels['timezone']  = 'Time zone';
 $labels['pagesize']  = 'Rows per page';
 $labels['signature'] = 'Signature';
 $labels['dstactive']  = 'Daylight savings';
+$labels['htmleditor'] = 'Compose HTML messages';
+$labels['htmlsignature'] = 'HTML signature';
+$labels['previewpane'] = 'Show preview pane';
+
+$labels['autosavedraft']  = 'Automatically save draft';
+$labels['everynminutes']  = 'every $n minutes';
+$labels['never']  = 'never';
 
 $labels['folder']  = 'Folder';
 $labels['folders']  = 'Folders';

@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: index.inc 258 2006-06-02 18:16:48Z thomasb $
+ $Id: index.inc 560 2007-05-17 15:01:26Z thomasb $
  
  */
  
@@ -27,10 +27,10 @@
 	'am'    => 'Armenian',
 	'bg'    => 'Bulgarian',
 	'bs_BA' => 'Bosnian (Bosanski)',
-	'tw'    => 'Chinese (BIG5)',
-	'cn'    => 'Chinese (GB2312)',
-	'cz'    => 'Czech',
+	'zh_TW' => 'Chinese (BIG5)',
+	'zh_CN' => 'Chinese (GB2312)',
  	'ca'    => 'Català',
+	'cz'    => 'Czech',
 	'da'    => 'Dansk',
  	'de_DE' => 'Deutsch (Deutsch)',
  	'de_CH' => 'Deutsch (Schweiz)',
@@ -40,11 +40,14 @@
 	'fr'    => 'Français', 
 	'ga'    => 'Galician',
 	'el'    => 'Greek',
-	'hr'	=> 'Hrvatski',
+	'hi'    => 'Hindi',
+	'hr'    => 'Hrvatski',
 	'hu'    => 'Hungarian',
+	'id_ID' => 'Indonesian',
 	'it'    => 'Italiano',
 	'ja'    => 'Japanese (日本語)',
 	'kr'    => 'Korean',
+	'kur_KU' => 'Kurdish (Kurmancî)',
 	'lv'    => 'Latvian',
 	'lt'    => 'Lithuanian',
 	'nl_NL' => 'Nederlands',
@@ -59,20 +62,26 @@
 	'ru'    => 'Russian',
 	'fi'    => 'Suomi',
 	'se'    => 'Svenska',
-	'si'    => 'Slovenian',
+	'si'    => 'Sinhala',
+	'sl'    => 'Slovenian',
 	'sk'    => 'Slovak',
+	'sr_latin' => 'Serbian Latin',
+	'sr_cyrillic' => 'Serbian Cyrillic',
 	'tr'    => 'Turkish',
+	'th'    => 'Thai',
 	'vn'    => 'Vietnamese'
 );
 
 $rcube_language_aliases = array(
 	'ee' => 'et_EE',
 	'bs' => 'bs_BA',
+  'cn' => 'zh_CN',
 	'de' => 'de_DE',
 	'en' => 'en_US',
 	'nl' => 'nl_NL',
 	'no' => 'nn_NO',
-	'pt' => 'pt_PT'
+	'pt' => 'pt_PT',
+  'tw' => 'zh_TW'
 );
 
 $rcube_charsets = array();

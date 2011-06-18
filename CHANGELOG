@@ -1,14 +1,369 @@
 CHANGELOG RoundCube Webmail
 ---------------------------
 
-2007/01/15 (thomasb)
+2007/05/18 (thomasb)
 ----------
-- Applied path for wrong HTML message parsing
+- Use HTTP-POST requests for actions that change state
+
+
+2007/05/17 (thomasb)
+----------
+- Updated Catalan, Russian, Portuguese, Slovak and Chinese translations
+- Renamed localization folder for Chinese (Big5)
+- Chanegd Slovenian language code from 'si' to 'sl'
+- Added Sinhala (Sri-Lanka) localization
+- Use global filters and bind username/ for Ldap searches (#1484159)
+- Hide quota display if imap server does not support it
+- Hide address groups if no LDAP servers configured
+- Add link to message subjects (closes #1484257)
+- Better SQL query for contact listing/search (closes #1484369)
+
+
+2007/05/13 (thomasb)
+----------
+- Updated Norwegian (bokmal), Czech, Danish and Portuguese (standard) translation
+- Fixed marking as read in preview pane (closes #1484364)
+- CSS hack to display attachments correctly in IE6
+- Wrap message body text (closes #1484148)
+
+
+2007/05/03 (yllar)
+----------
+- Updated French, Lithuanian, Armenian, Spanish and Italian translations
+
+
+2007/05/01 (thomasb)
+----------
+- Updated German, Euskara, Hungarian, Romanian and Spanish translation
+- Added Hindi and Kurdish localization
+
+
+2007/04/28 (thomasb)
+----------
+- LDAP access is back in address book (closes #1484087)
+- Added search function for contacts
+- New Template parsing and output encoding
+- Fixed bugs #1484119 and #1483978
+
+
+2007/04/08 (thomasb)
+----------
+- Fixed message moving procedure (closes #1484308)
+- Fixed display of multiple attachments (closes #1466563)
+- Fixed check for new messages (closes #1484310)
+- List attachments without filename
+
+
+2007/03/27 (thomasb)
+----------
+- New session authentication: Change sessid cookie when login, authentication with sessauth cookie is now configurable.
+  Should close bugs #1483951 and #1484299
+
+
+2007/03/23 (thomasb)
+----------
+- Correctly translate mailbox names (closes #1484276)
+- Quote e-mail address links (closes #1484300)
+
+
+2007/03/21 (thomasb)
+----------
+- Updated PEAR::Mail_mime package
+- Added Persian localization
+- Updated Catalan and Brazilian Portuguese translations
+- Updated INSTALL manual with a note about database passwords
+- Accept single quotes for HTML attributes when modifying message body (thanks Jason)
+- Sanitize input for new users/identities (thanks Colin Alston)
+
+
+2007/03/19 (thomasb)
+----------
+- Don't download HTML message parts
+- Convert HTML parts to plaintext if 'prefer_html' is off
+- Correctly parse message/rfc822 parts (closes #1484045)
+- Code cleanup
+
+
+2007/03/18 (thomasb)
+----------
+- Also use user_id for unique key in messages table (closes #1484074)
+- Hide contacts drop down on blur (closes #1484203)
+- Make entries in contacts drop down clickable
+- Turn off browser autocompletion on login page
+- Quote <? in text/html message parts
+- Hide border around radio buttons
+- Replaced old JS function calls.
+
+
+2007/03/13 (thomasb)
+----------
+- Applied patch for attachment download by crichardson (closes #1484198)
+- Fixed bug in Postgres DB handling (closes #1484068)
+- Fixed bug of invalid calls to fetchRow() in rcube_db.inc (closes #1484280)
+- Fixed array_merge bug (closes #1484281)
+- Fixed flag for deletion in list view (closes #1484264)
+- Finally support semicolons as recipient separator (closes ##1484251)
+- Fixed message headers (subject) encoding
+
+
+2007/03/04 (tomekp)
+----------
+- check if safe mode is on or not (closes #1484269)
+
+
+2007/03/02 (thomasb)
+----------
+- Show "no subject" in message list if subject is missing (closes #1484243)
+- Solved page caching of message preview (closes #1484153)
+- Only use gzip compression if configured (closes #1484236)
+
+
+2007/02/25 (estadtherr)
+----------
+- Fixed priority selector issue (#1484150)
+- Upgraded to TinyMCE v2.1.0
+
+
+2007/02/21 (thomasb)
+----------
+- Fixed some CSS issues in default skin (closes #1484210 and #1484161)
+- Prevent from double quoting of numeric HTML character references (closes #1484253)
+
+
+2007/02/07 (tomekp)
+----------
+- Updated (bg) translation (Doichin Dokov)
+
+
+2007/02/06 (tomekp)
+----------
+- Updated (pl) translation
+- Updated (pt_BR) translation (Robson F. Ramaldes)
+- Big cleanup in program/localization
+
+
+2007/02/05 (thomasb)
+----------
+- Updated Italian, Slovenian, Greek, Bulgarian, Hungarian and Croatian translation
+
+
+2007/01/07 (estadtherr)
+----------
+- Fixed display of HTML message attachments (closes #1484178)
+
+
+2007/01/07 (thomasb)
+----------
+- Applied patch for preview caching (closes #1484186)
+- Added Thai and Vietnamese localization files
+
+
+2006/12/29 (thomasb)
+----------
+- Added error handling for attachment uploads
+- Use multibyte safe string functions where necessary (closes #1483988)
+- Updated Swiss German localization (de_CH)
 
 
 2006/12/22 (thomasb)
 ----------
-- Applied security fixes for XSS vulnerabilites
+- Applied security patch to validate the submitted host value (by Kees Cook)
+- Applied security patch to validate input values when deleting contacts (by Kees Cook)
+- Applied security patch that sanitizes emoticon paths when attaching them (by Kees Cook)
+- Applied a patch to more aggressively sanitize a HTML message
+- Visualize blocked images in HTML messages
+
+
+2006/12/20 (thomasb)
+----------
+- Fixed wrong message listing when showing search results (closes #1484131)
+- Introduced functions Q() and JQ() as aliases for rep_specialchars_output()
+- Show remote images when opening HTML message part as attachment
+
+
+2006/12/17 (thomasb)
+----------
+- Added patch by Ryan Rittenhouse & David Glick for a resizeable preview pane
+
+
+2006/12/06 (thomasb)
+----------
+- Improve memory usage when sending mail (closes #1484098)
+- Mark messages as read once the preview is loaded (closes #1484132)
+- Include smtp final response in log (closes #1484081)
+
+
+2006/12/04 (thomasb)
+----------
+- Corrected date string in sent message header (closes #1484125)
+- Correclty choose "To" column in sent and draft mailboxes (closes #1483943)
+- Changed srong tooltips for message browse buttons (closes #1483930)
+
+
+2006/12/03 (estadtherr)
+----------
+- Added fix to convert HTML signatures for plain text messages
+- Fixed signature delimeter character to be standard (Bug #1484035)
+
+
+2006/12/01 (thomasb)
+----------
+- Implemented preview pane
+- Fixed XSS vulnerability (Bug #1484109)
+- Remove newlines from mail headers (Bug #1484031)
+- Selection issues when moving/deleting (Bug #1484044)
+- Applied patch of Clement Moulin for imap host auto-selection
+- ISO-encode IMAP password for plaintext login (Bugs #1483977 & #1483886)
+- Fixed folder name encoding in subscription list (Bug #1484113)
+- Fixed JS errors in identity list (Bug #1484120)
+- Show client debug console on debug_level 8
+- Added Serbian translation
+- Updated Spanish and Bulgarian localization
+
+
+2006/11/22 (robin)
+----------
+- Fix a bug introduced with Shift-Del yesterday
+
+
+2006/11/21 (robin)
+----------
+- Add missing nl_NL translations
+- Translate foldernames in folder form (closes #1484113)
+
+
+2006/11/21 (robin)
+----------
+- Added first and last buttons to message list, address book
+  and message detail
+- Pressing Shift-Del bypasses Trash folder
+- Enable purge command for Junk folder
+
+
+2006/11/17 (robin)
+----------
+- Re-initialize message list after shift-select and delete
+
+
+2006/11/16 (robin)
+----------
+- Fixed updating message list after expunge and purge
+- Fetch all aliases if virtuser_query is used instead
+  of only the first one
+
+
+2006/11/11 (estadtherr)
+----------
+- fixed deletion/moving of messages from within "show" page
+
+
+2006/11/09 (thomasb)
+----------
+- Little bugfix in HTML encoding
+- Fixed encoding issues and delete-on-reply problem
+- Corrected template parsing
+
+
+2006/11/07 (estadtherr)
+----------
+- Upgraded to TinyMCE v2.0.8
+- Fixed CSS path for editor popups
+
+2006/09/26 (estadtherr)
+----------
+- Added spellchecker plugin to TinyMCE configuration
+- Fixed HTML/Plain toggle labels
+
+
+2006/09/24 (thomasb)
+----------
+- Partial client re-write with a common list class
+- Re-enabled multi select of contacts (Bug #1484017)
+- Enable contact editing right after creation (Bug #1459641)
+- Updated Hungarian, Estonian and Traditional Chinese localization
+
+
+2006/09/19 (thomasb)
+----------
+- Correct UTF-7 to UTF-8 conversion if mbstring is not available
+
+
+2006/09/13 (estadtherr)
+----------
+- Introduction of TinyMCE HTML editor support for message composition and signatures
+  Note : a new column is added to the "identities" database table
+
+
+2006/09/12 (estadtherr)
+----------
+- Fixed html2text treatment of table headers (Bug #1484020)
+- Fixed IMAP fetch of message body (Bug #1484019)
+
+
+2006/09/08 (thomasb)
+----------
+- Fixed safe_mode problems (Bug #1418381)
+- Fixed wrong header encoding (Bug #1483976)
+
+
+2006/09/07 (thomasb)
+----------
+- Made automatic draft saving configurable
+- Fixed JS bug when renaming folders (Bug #1483989)
+- Don't wait for complete page load when calling JavaScript init()
+- Some improvements to prevent session expiration
+- Prevent from double submit of spell check requests
+
+
+2006/09/01 (thomasb)
+----------
+- Imporoved message parsing and HTML validation
+- Added quota display as image (by Brett Patterson)
+- Corrected creation of a message-id
+- Updated Norwegian (bokmal) localization
+
+
+2006/08/30 (thomasb)
+----------
+- New indentation for quoted message text
+- Improved HTML validity
+
+
+2006/08/28 (estadtherr)
+----------
+- Fixed URL character set (Ticket #1445501)
+- Fixed saving of contact into MySQL from LDAP query results (Ticket #1483820)
+
+
+2006/08/25 (thomasb)
+----------
+- Fixed folder renaming: unsubscribe before rename (Bug #1483920)
+- Finalized new message parsing (+ chaching)
+- Updated SQL scripts and UPGRADING instructions
+
+
+2006/08/23 (thomasb)
+----------
+- Updated Polish, Portuguese, Latvian, Chinese and Japanese localization
+
+
+2006/08/20 (thomasb)
+----------
+- Fixed wrong usage of mbstring (Bug #1462439)
+- Set default spelling language (Ticket #1483938)
+- Added support for Nox Spell Server
+
+
+2006/08/18 (thomasb)
+----------
+- Re-built message parsing (Bug #1327068)
+  Now based on the message structure delivered by the IMAP server.
+- Fixed some XSS and SQL injection issues
+
+
+2006/08/10 (thomasb)
+----------
+- Fixed charset problems with folder renaming
 
 
 2006/08/04 (thomasb)
