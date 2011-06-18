@@ -15,7 +15,7 @@
  | Author: Sjon Hortensius <sjon@hortensius.net>                         |
  +-----------------------------------------------------------------------+
 
- $Id: rss.inc 2672 2009-06-22 16:20:34Z alec $
+ $Id: rss.inc 2927 2009-09-05 12:31:19Z alec $
 
 */
 
@@ -30,7 +30,7 @@ $REMOTE_REQUEST = TRUE;
 $OUTPUT_TYPE = 'rss';
 
 $webmail_url = 'http';
-if (strstr('HTTPS', $_SERVER['SERVER_PROTOCOL'] )!== FALSE)
+if (strstr('HTTPS', $_SERVER['SERVER_PROTOCOL'] )!== FALSE || $RCMAIL->config->get('use_https'))
   $webmail_url .= 's';
 $webmail_url .= '://'.$_SERVER['SERVER_NAME'];
 if ($_SERVER['SERVER_PORT'] != '80')

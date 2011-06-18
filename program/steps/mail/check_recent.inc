@@ -34,6 +34,7 @@ foreach ($a_mailboxes as $mbox_name) {
       }
       
       $unread_count = $IMAP->messagecount(NULL, 'UNSEEN', TRUE);
+      $_SESSION['unseen_count'][$mbox_name] = $unread_count;
 
       $OUTPUT->set_env('messagecount', $all_count);
       $OUTPUT->set_env('pagesize', $IMAP->page_size);
@@ -68,9 +69,12 @@ foreach ($a_mailboxes as $mbox_name) {
         rcmail_js_message_list($result_h, true, false);
       }
     }
+    else {
+      rcmail_send_unread_count($mbox_name, true);
+    }
   }
-  else if ($unseen = $IMAP->messagecount($mbox_name, 'UNSEEN', $check_all)) {
-    $OUTPUT->command('set_unread_count', $mbox_name, $unseen);
+  else if ($check_all) {
+    rcmail_send_unread_count($mbox_name, true);
   }
 }
 

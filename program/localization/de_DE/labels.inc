@@ -13,7 +13,7 @@
 | Author: Marcel Schlesinger <info@marcel-schlesinger.de>               |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2854 2009-08-12 11:00:13Z thomasb $
+@version $Id: labels.inc 3065 2009-10-27 16:08:00Z thomasb $
 
 */
 
@@ -251,6 +251,7 @@ $labels['advancedoptions'] = 'Erweiterte Einstellungen';
 $labels['focusonnewmessage'] = 'Fokussiere Browserfenster bei neuen Nachrichten';
 $labels['checkallfolders'] = 'Alle Ordner auf neue Nachrichten prüfen';
 $labels['displaynext'] = 'Zeige nächste Nachricht nach verschieben/löschen';
+$labels['indexsort'] = 'Benutze Index für Sortierung nach Datum (schneller)';
 $labels['mainoptions'] = 'Allgemein';
 $labels['section'] = 'Bereich';
 $labels['maintenance'] = 'Wartung';

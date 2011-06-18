@@ -266,7 +266,7 @@ class rcmail
       $contacts = $plugin['instance'];
     }
     else if ($id && $ldap_config[$id]) {
-      $contacts = new rcube_ldap($ldap_config[$id]);
+      $contacts = new rcube_ldap($ldap_config[$id], $this->config->get('ldap_debug'), $this->config->mail_domain($_SESSION['imap_host']));
     }
     else if ($id === '0') {
       $contacts = new rcube_contacts($this->db, $this->user->ID);
@@ -275,7 +275,7 @@ class rcmail
       // Use the first writable LDAP address book.
       foreach ($ldap_config as $id => $prop) {
         if (!$writeable || $prop['writable']) {
-          $contacts = new rcube_ldap($prop);
+          $contacts = new rcube_ldap($prop, $this->config->get('ldap_debug'), $this->config->mail_domain($_SESSION['imap_host']));
           break;
         }
       }
@@ -366,6 +366,7 @@ class rcmail
     $this->imap = new rcube_imap($this->db);
     $this->imap->debug_level = $this->config->get('debug_level');
     $this->imap->skip_deleted = $this->config->get('skip_deleted');
+    $this->imap->index_sort = $this->config->get('index_sort', true);
 
     // enable caching of imap data
     if ($this->config->get('enable_caching')) {
@@ -378,7 +379,7 @@ class rcmail
     // Setting root and delimiter before iil_Connect can save time detecting them
     // using NAMESPACE and LIST 
     $options = array(
-      'imap' => $this->config->get('imap_auth_type', 'check'),
+      'auth_method' => $this->config->get('imap_auth_type', 'check'),
       'delimiter' => isset($_SESSION['imap_delimiter']) ? $_SESSION['imap_delimiter'] : $this->config->get('imap_delimiter'),
       'rootdir' => isset($_SESSION['imap_root']) ? $_SESSION['imap_root'] : $this->config->get('imap_root'),
       'debug_mode' => (bool) $this->config->get('imap_debug', 0),
@@ -761,7 +762,7 @@ class rcmail
             continue;
 
           if ($label = $rcube_languages[$name])
-            $sa_languages[$name] = $label ? $label : $name;
+            $sa_languages[$name] = $label;
         }
         closedir($dh);
       }
@@ -879,7 +880,7 @@ class rcmail
     $key = $this->task;
     
     if (!$_SESSION['request_tokens'][$key])
-      $_SESSION['request_tokens'][$key] = md5(uniqid($key . rand(), true));
+      $_SESSION['request_tokens'][$key] = md5(uniqid($key . mt_rand(), true));
     
     return $_SESSION['request_tokens'][$key];
   }

@@ -13,7 +13,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 2755 2009-07-15 09:49:35Z thomasb $
+ @version $Id: messages.inc 3042 2009-10-14 10:52:27Z alec $
 
 */
 
@@ -28,6 +28,7 @@ $messages['nomessagesfound'] = 'No messages found in this mailbox';
 $messages['loggedout'] = 'You have successfully terminated the session. Good bye!';
 $messages['mailboxempty'] = 'Mailbox is empty';
 $messages['loading'] = 'Loading...';
+$messages['uploading'] = 'Uploading file...';
 $messages['loadingdata'] = 'Loading data...';
 $messages['checkingmail'] = 'Checking for new messages...';
 $messages['sendingmessage'] = 'Sending message...';
@@ -68,6 +69,7 @@ $messages['notsentwarning'] = 'Message has not been sent. Do you want to discard
 $messages['noldapserver'] = 'Please select an ldap server to search';
 $messages['nocontactsreturned'] = 'No contacts were found';
 $messages['nosearchname'] = 'Please enter a contact name or email address';
+$messages['notuploadedwarning'] = 'Not all attachments have been uploaded yet. Please wait or cancel the upload.';
 $messages['searchsuccessful'] = '$nr messages found';
 $messages['searchnomatch'] = 'Search returned no matches';
 $messages['searching'] = 'Searching...';
@@ -104,5 +106,6 @@ $messages['smtpfromerror'] = 'SMTP Error ($code): Failed to set sender "$from"';
 $messages['smtptoerror'] = 'SMTP Error ($code): Failed to add recipient "$to"';
 $messages['smtprecipientserror'] = 'SMTP Error: Unable to parse recipients list';
 $messages['smtperror'] = 'SMTP Error: $msg';
+$messages['emailformaterror'] = 'Incorrect e-mail address: $email';
 
 ?>

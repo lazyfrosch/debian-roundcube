@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: move_del.inc 2758 2009-07-16 15:01:05Z thomasb $
+ $Id: move_del.inc 2960 2009-09-17 12:36:32Z alec $
 
 */
 
@@ -32,10 +32,6 @@ if ($RCMAIL->action=='moveto' && !empty($_POST['_uid']) && !empty($_POST['_targe
     $count = sizeof(explode(',', ($uids = get_input_value('_uid', RCUBE_INPUT_POST))));
     $target = get_input_value('_target_mbox', RCUBE_INPUT_POST);
     $mbox = get_input_value('_mbox', RCUBE_INPUT_POST);
-
-    // flag messages as read before moving them
-    if ($CONFIG['read_when_deleted'] && $target == $CONFIG['trash_mbox'])
-	$IMAP->set_flag($uids, 'SEEN');
 
     $moved = $IMAP->move_message($uids, $target, $mbox);
   
@@ -106,10 +102,15 @@ else
   // update mailboxlist
   $mbox = $IMAP->get_mailbox_name();
   $unseen_count = $msg_count ? $IMAP->messagecount($mbox, 'UNSEEN') : 0;
-  $OUTPUT->command('set_unread_count', $mbox, $unseen_count, ($mbox == 'INBOX'));
+  $old_unseen = $_SESSION['unseen_count'][$mbox];
+  
+  if ($old_unseen != $unseen_count) {
+    $OUTPUT->command('set_unread_count', $mbox, $unseen_count, ($mbox == 'INBOX'));
+    $_SESSION['unseen_count'][$mbox] = $unseen_count;
+  }
 
   if ($RCMAIL->action=='moveto' && $target) {
-    $OUTPUT->command('set_unread_count', $target, $IMAP->messagecount($target, 'UNSEEN'));
+    rcmail_send_unread_count($target, true);
   }
 
   $OUTPUT->command('set_quota', rcmail_quota_content($IMAP->get_quota()));

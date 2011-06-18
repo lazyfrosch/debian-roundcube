@@ -13,7 +13,7 @@
 | Author: Artur Smolkin <artsmolkin@ya.ru>                              |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2850 2009-08-07 21:17:12Z yllar $
+@version $Id: labels.inc 3061 2009-10-26 21:42:58Z yllar $
 
 */
 
@@ -251,6 +251,7 @@ $labels['advancedoptions'] = 'Дополнительные настройки';
 $labels['focusonnewmessage'] = 'Фокусировать окно браузера при новом сообщении';
 $labels['checkallfolders'] = 'Проверять новые сообщения во всех папках';
 $labels['displaynext'] = 'Показать следующее сообщение, после удаления или перемещения данного';
+$labels['indexsort'] = 'Использовать индекс сообщений для сортировки по дате';
 $labels['mainoptions'] = 'Основные настройки';
 $labels['section'] = 'Раздел';
 $labels['maintenance'] = 'Обслуживание';

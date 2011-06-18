@@ -16,7 +16,7 @@
 |         Frits Letteboer <f.letteboer@radiotwenterand.nl>              |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2914 2009-09-04 10:51:09Z robin $
+@version $Id: labels.inc 3029 2009-10-09 11:46:23Z alec $
 
 */
 
@@ -28,7 +28,7 @@ $labels['server'] = 'Server';
 $labels['login'] = 'Inloggen';
 $labels['logout'] = 'Uitloggen';
 $labels['mail'] = 'E-Mail';
-$labels['settings'] = 'Persoonlijke Instellingen';
+$labels['settings'] = 'Instellingen';
 $labels['addressbook'] = 'Adresboek';
 $labels['inbox'] = 'Postvak IN';
 $labels['drafts'] = 'Concepten';

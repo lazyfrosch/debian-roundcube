@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: sendmail.inc 2713 2009-07-06 09:13:10Z alec $
+ $Id: sendmail.inc 3042 2009-10-14 10:52:27Z alec $
 
 */
 
@@ -151,6 +151,8 @@ function rcmail_attach_emoticons(&$mime_message)
 // parse email address input
 function rcmail_email_input_format($mailto)
 {
+  global $EMAIL_FORMAT_ERROR;
+
   $regexp = array('/[,;]\s*[\r\n]+/', '/[\r\n]+/', '/[,;]\s*$/m', '/;/', '/(\S{1})(<\S+@\S+>)/U');
   $replace = array(', ', ', ', '', ',', '\\1 \\2');
 
@@ -181,8 +183,16 @@ function rcmail_email_input_format($mailto)
         $address = '<'.$address.'>';
 
       $result[] = $name.' '.$address;
+      $item = $address;
     } else if (trim($item)) {
-      // @TODO: handle errors
+      continue;
+    }
+
+    // check address format
+    $item = trim($item, '<>');
+    if ($item && !check_email($item)) {
+      $EMAIL_FORMAT_ERROR = $item;
+      return;
     }
   }
 
@@ -194,15 +204,22 @@ function rcmail_email_input_format($mailto)
 if (strlen($_POST['_draft_saveid']) > 3)
   $olddraftmessageid = get_input_value('_draft_saveid', RCUBE_INPUT_POST);
 
-$message_id = sprintf('<%s@%s>', md5(uniqid('rcmail'.rand(),true)), $RCMAIL->config->mail_domain($_SESSION['imap_host']));
+$message_id = sprintf('<%s@%s>', md5(uniqid('rcmail'.mt_rand(),true)), $RCMAIL->config->mail_domain($_SESSION['imap_host']));
 
 // set default charset
 $input_charset = $OUTPUT->get_charset();
 $message_charset = isset($_POST['_charset']) ? $_POST['_charset'] : $input_charset;
 
+$EMAIL_FORMAT_ERROR = NULL;
+
 $mailto = rcmail_email_input_format(get_input_value('_to', RCUBE_INPUT_POST, TRUE, $message_charset));
 $mailcc = rcmail_email_input_format(get_input_value('_cc', RCUBE_INPUT_POST, TRUE, $message_charset));
 $mailbcc = rcmail_email_input_format(get_input_value('_bcc', RCUBE_INPUT_POST, TRUE, $message_charset));
+
+if ($EMAIL_FORMAT_ERROR) {
+  $OUTPUT->show_message('emailformaterror', 'error', array('email' => $EMAIL_FORMAT_ERROR)); 
+  $OUTPUT->send('iframe');
+}
 
 if (empty($mailto) && !empty($mailcc)) {
   $mailto = $mailcc;
@@ -231,17 +248,40 @@ $headers = array();
 if ($CONFIG['http_received_header'])
 {
   $nldlm = $RCMAIL->config->header_delimiter() . "\t";
+  // FROM/VIA
   $http_header = 'from ';
   if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-    $http_header .= rcmail_encrypt_header(gethostbyaddr($_SERVER['HTTP_X_FORWARDED_FOR'])) .
-      ' [' . rcmail_encrypt_header($_SERVER['HTTP_X_FORWARDED_FOR']) . ']';
+    $host = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    $hostname = gethostbyaddr($host);
+    if ($CONFIG['http_received_header_encrypt']) {
+      $http_header .= rcmail_encrypt_header($hostname);
+      if ($host != $hostname)
+        $http_header .= ' ('. rcmail_encrypt_header($host) . ')';
+    } else {
+      $http_header .= (($host != $hostname) ? $hostname : '[' . $host . ']');
+      $http_header .= ' ('. ($host == $hostname ? '' : $hostname . ' ') .
+        '[' . $host .'])';
+    }
     $http_header .= $nldlm . ' via ';
   }
-  $http_header .= rcmail_encrypt_header(gethostbyaddr($_SERVER['REMOTE_ADDR'])) .
-      ' [' . rcmail_encrypt_header($_SERVER['REMOTE_ADDR']) .']';
+  $host = $_SERVER['REMOTE_ADDR'];
+  $hostname = gethostbyaddr($host);
+  if ($CONFIG['http_received_header_encrypt']) {
+    $http_header .= rcmail_encrypt_header($hostname);
+    if ($host != $hostname)
+      $http_header .= ' ('. rcmail_encrypt_header($host) . ')';
+  } else {
+    $http_header .= (($host != $hostname) ? $hostname : '[' . $host . ']');
+    $http_header .= ' ('. ($host == $hostname ? '' : $hostname . ' ') .
+      '[' . $host .'])';
+  }
+  // BY
+  $http_header .= $nldlm . 'by ' . $_SERVER['HTTP_HOST'];
+  // WITH
   $http_header .= $nldlm . 'with ' . $_SERVER['SERVER_PROTOCOL'] .
       ' ('.$_SERVER['REQUEST_METHOD'] . '); ' . date('r');
   $http_header = wordwrap($http_header, 69, $nldlm);
+
   $headers['Received'] = $http_header;
 }
 

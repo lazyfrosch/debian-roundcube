@@ -13,7 +13,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 2831 2009-08-03 18:42:57Z alec $
+ @version $Id: labels.inc 2983 2009-09-23 12:32:09Z alec $
 
 */
 
@@ -306,6 +306,7 @@ $labels['advancedoptions'] = 'Advanced options';
 $labels['focusonnewmessage'] = 'Focus browser window on new message';
 $labels['checkallfolders'] = 'Check all folders for new messages';
 $labels['displaynext'] = 'After message delete/move display the next message';
+$labels['indexsort'] = 'Use message index for sorting by date';
 $labels['mainoptions'] = 'Main Options';
 $labels['section'] = 'Section';
 $labels['maintenance'] = 'Maintenance';

@@ -8,6 +8,11 @@ input, textarea
   background-color: expression(this.type=='checkbox' || this.type=='radio' ? 'transparent' : '#ffffff');
 }
 
+#login-form form
+{
+  margin-top: 0;
+}
+
 .pagenav a.buttonPas
 {
   filter: alpha(opacity=35);
@@ -66,10 +71,22 @@ input, textarea
   background-image: url('images/mail_toolbar.gif');
 }
 
+#listcontrols a.buttonPas,
+#mailboxcontrols a.buttonPas
+{
+  filter: alpha(opacity=35);
+  background-image: url('images/mail_footer.png');
+}
+
 #messagetoolbar select.mboxlist
 {
   margin: 0 8px;
   top: 8px;
+}
+
+#quicksearchbar
+{
+  z-index: 250;
 }
 
 #mainscreen
@@ -152,17 +169,6 @@ input, textarea
 #messagecanvas 
 {
   width: expression((parseInt(this.parentNode.offsetWidth)-20)+'px');
-}
-
-#printmessageframe
-{
-  width: expression((parseInt(document.documentElement.clientWidth)-220)+'px');
-  height: expression((parseInt(document.documentElement.clientHeight)-125)+'px');
-}
-
-#attachment-list
-{
-  height: expression(Math.min(16, parseInt(document.documentElement.clientHeight))+'px');
 }
 
 #countcontrols
@@ -250,4 +256,14 @@ ul.toolbarmenu li a
 {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
   filter: alpha(opacity=80);
+}
+
+#countcontrols
+{
+  padding-right: 10px;
+}
+
+table.records-table thead tr td
+{
+  height: 19px;
 }

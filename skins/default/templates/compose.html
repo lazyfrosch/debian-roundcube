@@ -21,6 +21,7 @@
       <roundcube:button command="spellcheck" type="link" class="buttonPas spellcheck" classAct="button spellcheck" classSel="button spellcheckSel" title="checkspelling" content=" " />
       <roundcube:button command="add-attachment" type="link" class="buttonPas attach" classAct="button attach" classSel="button attachSel" title="addattachment" content=" " />
       <roundcube:button command="savedraft" type="link" class="buttonPas savedraft" classAct="button savedraft" classSel="button savedraftSel" title="savemessage" content=" " />
+      <roundcube:container name="toolbar" id="compose-toolbar" />
     </td>
     <td id="priority-selector">
       <label for="rcmcomposepriority"><roundcube:label name="priority" />:</label>&nbsp;<roundcube:object name="prioritySelector" form="form" id="rcmcomposepriority" />
@@ -93,13 +94,13 @@
 
 <div id="compose-attachments">
 <div id="attachment-title"><roundcube:label name="attachments" /></div>
-<roundcube:object name="composeAttachmentList" deleteIcon="/images/icons/delete.png" />
+<roundcube:object name="composeAttachmentList" deleteIcon="/images/icons/delete.png" cancelIcon="/images/icons/delete.png" loadingIcon="/images/display/loading_blue.gif" />
 <p><roundcube:button command="add-attachment" imagePas="/images/buttons/add_pas.png" imageSel="/images/buttons/add_sel.png" imageAct="/images/buttons/add_act.png" width="23" height="18" title="addattachment" /></p>
 </div>
 
 </form>
 
-<roundcube:object name="composeAttachmentForm" id="attachment-form" />
+<roundcube:object name="composeAttachmentForm" id="attachment-form" attachmentFieldSize="40" />
 
 </body>
 </html>

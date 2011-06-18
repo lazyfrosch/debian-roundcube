@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: getunread.inc 1917 2008-10-02 17:26:16Z alec $
+ $Id: getunread.inc 2966 2009-09-18 10:15:17Z alec $
 
 */
 
@@ -24,9 +24,16 @@ $a_folders = $IMAP->list_mailboxes();
 if (!empty($a_folders))
 {
   $inbox = ($IMAP->get_mailbox_name() == 'INBOX');
-  foreach ($a_folders as $mbox_row)
-    $OUTPUT->command('set_unread_count', $mbox_row, $IMAP->messagecount($mbox_row, 'UNSEEN'), $inbox && $mbox_row == 'INBOX');
+  foreach ($a_folders as $mbox_row) {
+    $unseen = $IMAP->messagecount($mbox_row, 'UNSEEN', !isset($_SESSION['unseen_count'][$mbox_row]));
+
+    if ($unseen || !isset($_SESSION['unseen_count'][$mbox_row])) {
+      $OUTPUT->command('set_unread_count', $mbox_row, $unseen, $inbox && $mbox_row == 'INBOX');
+    }
+    $_SESSION['unseen_count'][$mbox_row] = $unseen;
+  }
 }
 
 $OUTPUT->send();
+
 ?>

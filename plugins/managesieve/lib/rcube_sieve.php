@@ -117,7 +117,7 @@ class rcube_sieve
 
           $script = $this->_convert_from_squirrel_rules($script);
 
-          $this->script = new rcube_sieve_script($script);
+          $this->script = new rcube_sieve_script($script, $this->disabled);
        
           $this->save();
 
@@ -184,7 +184,7 @@ class rcube_sieve_script
     * @param  string  Script's text content
     * @param  array   Disabled extensions
     */
-  public function __construct($script, $disabled)
+  public function __construct($script, $disabled=NULL)
     {
       if (!empty($disabled))
         foreach ($disabled as $ext)
@@ -264,9 +264,10 @@ class rcube_sieve_script
     {
       $script = '';
       $exts = array();
+      $idx = 0;
       
       // rules
-      foreach ($this->content as $idx => $rule)
+      foreach ($this->content as $rule)
         {
 	  $extension = '';
 	  $tests = array();
@@ -367,7 +368,8 @@ class rcube_sieve_script
 	    }
 	  
 	  $script .= "}\n";
-	
+	  $idx++;
+
 	  if ($extension && !isset($exts[$extension]))
 	    $exts[$extension] = $extension;
 	}
@@ -442,7 +444,7 @@ class rcube_sieve_script
     {
       $result = NULL;
     
-      if (preg_match('/^(if|elsif|else)\s+((allof|anyof|exists|header|not|size)\s+(.*))\s+\{(.*)\}$/sm', trim($content), $matches))
+      if (preg_match('/^(if|elsif|else)\s+((true|not\s+true|allof|anyof|exists|header|not|size)(.*))\s+\{(.*)\}$/sm', trim($content), $matches))
         {
 	  list($tests, $join) = $this->_parse_tests(trim($matches[2]));
 	  $actions = $this->_parse_actions(trim($matches[5]));
@@ -454,7 +456,7 @@ class rcube_sieve_script
 		    'join' => $join,
 	    );
 	}
-    
+
       return $result;
     }    
 
