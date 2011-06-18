@@ -10,12 +10,10 @@
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
-| Author: Maxim Zenin <maxx@webmechanics.ru>                            |
-|         Vladimir Kulev <me@lightoze.net>                              |
-|         Artur Smolkin <artsmolkin@ya.ru>                              |
+| Author: Artur Smolkin <artsmolkin@ya.ru>                              |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
+@version $Id: labels.inc 2850 2009-08-07 21:17:12Z yllar $
 
 */
 
@@ -118,12 +116,15 @@ $labels['markread'] = 'Как прочитанное';
 $labels['markunread'] = 'Как непрочитанное';
 $labels['markflagged'] = 'Установить флаг';
 $labels['markunflagged'] = 'Снять флаг';
+$labels['messageactions'] = 'Еще действия...';
 $labels['select'] = 'Выбрать';
 $labels['all'] = 'Все';
 $labels['none'] = 'Ничего';
 $labels['unread'] = 'Непрочитанные';
 $labels['flagged'] = 'Помеченные';
 $labels['unanswered'] = 'Неотвеченные';
+$labels['deleted'] = 'Удаленное';
+$labels['invert'] = 'Инвертное';
 $labels['filter'] = 'Фильтр';
 $labels['compact'] = 'Сжать';
 $labels['empty'] = 'Опустошить';
@@ -136,7 +137,9 @@ $labels['resetsearch'] = 'Сброс';
 $labels['searchmod'] = 'Варианты поиска';
 $labels['msgtext'] = 'Всё сообщение';
 $labels['openinextwin'] = 'Открыть в новом окне';
+$labels['emlsave'] = 'Сохранить (.eml)';
 $labels['compose'] = 'Написать сообщение';
+$labels['editasnew'] = 'Редактировать как новое';
 $labels['savemessage'] = 'Сохранить черновик';
 $labels['sendmessage'] = 'Отправить сейчас';
 $labels['addattachment'] = 'Добавить вложение';
@@ -236,7 +239,6 @@ $labels['always'] = 'всегда';
 $labels['showinlineimages'] = 'Показывать вложенные изображения внизу сообщения';
 $labels['autosavedraft'] = 'Автосохранение черновика';
 $labels['everynminutes'] = 'каждые $n минут';
-$labels['keepaliveevery'] = 'каждые $n минут';
 $labels['keepalive'] = 'Проверять новые сообщения';
 $labels['never'] = 'никогда';
 $labels['messagesdisplaying'] = 'Отображение сообщений';
@@ -248,6 +250,12 @@ $labels['2047folding'] = 'RFC 2047  (для старых программ)';
 $labels['advancedoptions'] = 'Дополнительные настройки';
 $labels['focusonnewmessage'] = 'Фокусировать окно браузера при новом сообщении';
 $labels['checkallfolders'] = 'Проверять новые сообщения во всех папках';
+$labels['displaynext'] = 'Показать следующее сообщение, после удаления или перемещения данного';
+$labels['mainoptions'] = 'Основные настройки';
+$labels['section'] = 'Раздел';
+$labels['maintenance'] = 'Обслуживание';
+$labels['newmessage'] = 'Новое сообщение';
+$labels['listoptions'] = 'Список настроек';
 $labels['folder'] = 'Папка';
 $labels['folders'] = 'Папки';
 $labels['foldername'] = 'Имя папки';

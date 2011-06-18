@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: error.inc 2237 2009-01-17 01:55:39Z till $
+ $Id: error.inc 2547 2009-05-26 16:54:55Z alec $
 
 */
 
@@ -81,20 +81,23 @@ else {
   if (($CONFIG['debug_level'] & 4) && $ERROR_MESSAGE)
     $__error_text = $ERROR_MESSAGE;
   else
-    $__error_text = sprintf('Error No. [0x%04X]', $ERROR_CODE);
+    $__error_text = sprintf('Error No. [%s]', $ERROR_CODE);
 }
 
 
-// compose page content
+// Ajax request
+if ($OUTPUT && ($OUTPUT instanceof rcube_json_output)) {
+  header("HTTP/1.0 $ERROR_CODE $__error_title");
+  die;
+}
 
+// compose page content
 $__page_content = <<<EOF
 <div>
 <h3 class="error-title">$__error_title</h3>
 <p class="error-text">$__error_text</p>
 </div>
 EOF;
-
-
 
 if ($OUTPUT && $OUTPUT->template_exists('error')) {
   $OUTPUT->reset();

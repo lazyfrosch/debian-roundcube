@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: show.inc 2301 2009-02-18 19:15:36Z alec $
+ $Id: show.inc 2822 2009-07-31 09:07:54Z alec $
 
 */
 
@@ -25,21 +25,21 @@ $PRINT_MODE = $RCMAIL->action=='print' ? TRUE : FALSE;
 if ($_GET['_uid']) {
   $MESSAGE = new rcube_message(get_input_value('_uid', RCUBE_INPUT_GET));
 
-  // set message charset as default
-  if (!empty($MESSAGE->headers->charset))
-    $IMAP->set_charset($MESSAGE->headers->charset);
-
-  // go back to list if message not found (wrong UID)
+  // if message not found (wrong UID)...
   if (empty($MESSAGE->headers)) {
     $OUTPUT->show_message('messageopenerror', 'error');
-    if ($RCMAIL->action=='preview' && $OUTPUT->template_exists('messagepreview'))
-        $OUTPUT->send('messagepreview');
+    // ... display error or preview page
+    if ($RCMAIL->action=='preview' && $OUTPUT->template_exists('messageerror'))
+      $OUTPUT->send('messageerror');
+    else if ($RCMAIL->action=='preview' && $OUTPUT->template_exists('messagepreview'))
+      $OUTPUT->send('messagepreview');
+    // ... go back to the list
     else {
       rcmail_overwrite_action('');
       return;
     }
   }
-    
+
   $mbox_name = $IMAP->get_mailbox_name();
   
   // show images?
@@ -50,13 +50,20 @@ if ($_GET['_uid']) {
     .intval($MESSAGE->headers->mdn_sent)
     .intval($MESSAGE->is_safe)
     .(!empty($MESSAGE->attachments) ? intval($CONFIG['inline_images']) : '')
-    .intval($PRINT_MODE));
+    .intval($PRINT_MODE)
+    .$_SESSION['sort_col'].$_SESSION['sort_order']
+    .$IMAP->messagecount($mbox_name, 'ALL', true)
+    );
 
   // allow caching, unless remote images are present
   if ((bool)$MESSAGE->is_safe)
     send_nocacheing_headers();
   else if (empty($CONFIG['devel_mode']))
     send_modified_header($_SESSION['login_time'], $etag, !$MESSAGE->headers->seen);
+
+  // set message charset as default
+  if (!empty($MESSAGE->headers->charset))
+    $IMAP->set_charset($MESSAGE->headers->charset);
 
   $OUTPUT->set_pagetitle($MESSAGE->subject);
   
@@ -71,7 +78,7 @@ if ($_GET['_uid']) {
     $OUTPUT->set_env('trash_mailbox', $CONFIG['trash_mbox']);
   if (!$OUTPUT->ajax_call)
     $OUTPUT->add_label('checkingmail', 'deletemessage', 'movemessagetotrash', 'movingmessage');
-    
+        
   // check for unset disposition notification
   if ($MESSAGE->headers->mdn_to &&
       !$MESSAGE->headers->mdn_sent && !$MESSAGE->headers->seen &&
@@ -81,9 +88,11 @@ if ($_GET['_uid']) {
   {
     if (intval($CONFIG['mdn_requests']) === 1)
     {
-      if (rcmail_send_mdn($MESSAGE->uid))
+      if (rcmail_send_mdn($MESSAGE->uid, $smtp_error))
         $OUTPUT->show_message('receiptsent', 'confirmation');
-      else
+      else if ($smtp_error)
+        $OUTPUT->show_message($smtp_error['label'], 'error', $smtp_error['vars']);
+      else	
         $OUTPUT->show_message('errorsendingreceipt', 'error');
     }
     else if (empty($CONFIG['mdn_requests']))
@@ -98,20 +107,8 @@ if ($_GET['_uid']) {
     {
     $next = $prev = $first = $last = -1;
 
-    if ((!($_SESSION['sort_col'] == 'date' && $_SESSION['sort_order'] == 'DESC') &&
-      $IMAP->get_capability('sort')) || !empty($_REQUEST['_search']))
-      {
-      // Only if we use custom sorting
-      $a_msg_index = $IMAP->message_index(NULL, $_SESSION['sort_col'], $_SESSION['sort_order']);
-
-      $MESSAGE->index = array_search($IMAP->get_id($MESSAGE->uid), $a_msg_index);
-
-      $prev = isset($a_msg_index[$MESSAGE->index-1]) ? $IMAP->get_uid($a_msg_index[$MESSAGE->index-1]) : -1 ;
-      $first = count($a_msg_index)>0 ? $IMAP->get_uid($a_msg_index[0]) : -1;
-      $next = isset($a_msg_index[$MESSAGE->index+1]) ? $IMAP->get_uid($a_msg_index[$MESSAGE->index+1]) : -1 ;
-      $last = count($a_msg_index)>0 ? $IMAP->get_uid($a_msg_index[count($a_msg_index)-1]) : -1;
-      }
-    else
+    if ($_SESSION['sort_col'] == 'date' && $_SESSION['sort_order'] != 'DESC'
+        && empty($_REQUEST['_search']) && !$IMAP->skip_deleted)
       {
       // this assumes that we are sorted by date_DESC
       $cnt = $IMAP->messagecount();
@@ -122,6 +119,18 @@ if ($_GET['_uid']) {
       $first = $IMAP->get_uid($cnt);
       $next = $IMAP->get_uid($seq - 1);
       $last = $IMAP->get_uid(1);
+      }
+    else 
+      {
+      // Only if we use custom sorting
+      $a_msg_index = $IMAP->message_index(NULL, $_SESSION['sort_col'], $_SESSION['sort_order']);
+
+      $MESSAGE->index = array_search($IMAP->get_id($MESSAGE->uid), $a_msg_index);
+
+      $prev = isset($a_msg_index[$MESSAGE->index-1]) ? $IMAP->get_uid($a_msg_index[$MESSAGE->index-1]) : -1 ;
+      $first = count($a_msg_index)>0 ? $IMAP->get_uid($a_msg_index[0]) : -1;
+      $next = isset($a_msg_index[$MESSAGE->index+1]) ? $IMAP->get_uid($a_msg_index[$MESSAGE->index+1]) : -1 ;
+      $last = count($a_msg_index)>0 ? $IMAP->get_uid($a_msg_index[count($a_msg_index)-1]) : -1;
       }
 
     if ($prev > 0)
@@ -134,10 +143,13 @@ if ($_GET['_uid']) {
       $OUTPUT->set_env('last_uid', $last);
     }
 
-  // mark message as read
+  if ($CONFIG['display_next'])
+    $OUTPUT->set_env('display_next', true);
+
   if (!$MESSAGE->headers->seen)
-    $IMAP->set_flag($MESSAGE->uid, 'SEEN');
-  }
+    $RCMAIL->plugins->exec_hook('message_read', array('uid' => $MESSAGE->uid,
+      'mailbox' => $IMAP->mailbox, 'message' => $MESSAGE));
+}
 
 
 
@@ -153,7 +165,7 @@ function rcmail_message_attachments($attrib)
         $ol .= html::tag('li', null, sprintf("%s (%s)", Q($attach_prop->filename), Q(show_bytes($attach_prop->size))));
       }
       else {
-        if (rc_strlen($attach_prop->filename) > 50) {
+        if (mb_strlen($attach_prop->filename) > 50) {
           $filename = abbreviate_string($attach_prop->filename, 50);
           $title = $attach_prop->filename;
       }
@@ -212,9 +224,17 @@ $OUTPUT->add_handlers(array(
 
 
 if ($RCMAIL->action=='print' && $OUTPUT->template_exists('printmessage'))
-  $OUTPUT->send('printmessage');
+  $OUTPUT->send('printmessage', false);
 else if ($RCMAIL->action=='preview' && $OUTPUT->template_exists('messagepreview'))
-  $OUTPUT->send('messagepreview');
+  $OUTPUT->send('messagepreview', false);
 else
-  $OUTPUT->send('message');
+  $OUTPUT->send('message', false);
+
+
+// mark message as read
+if ($MESSAGE && $MESSAGE->headers && !$MESSAGE->headers->seen)
+  $IMAP->set_flag($MESSAGE->uid, 'SEEN');
+
+exit;
+
 ?>

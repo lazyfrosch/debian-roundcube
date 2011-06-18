@@ -17,7 +17,8 @@
 function rcmail_editor_init(skin_path, editor_lang, spellcheck, mode)
 {
   if (mode == 'identity')
-    tinyMCE.init({ mode : 'textareas',
+    tinyMCE.init({
+      mode : 'textareas',
       editor_selector : 'mce_editor',
       apply_source_formatting : true,
       theme : 'advanced',
@@ -52,8 +53,8 @@ function rcmail_editor_init(skin_path, editor_lang, spellcheck, mode)
       spellchecker_languages : (rcmail.env.spellcheck_langs ? rcmail.env.spellcheck_langs : 'Dansk=da,Deutsch=de,+English=en,Espanol=es,Francais=fr,Italiano=it,Nederlands=nl,Polski=pl,Portugues=pt,Suomi=fi,Svenska=sv'),
       gecko_spellcheck : true,
       relative_urls : false,
-      remove_script_host : false ,
-      rc_client: rcube_webmail_client,
+      remove_script_host : false,
+      rc_client: rcmail,
       oninit : 'rcmail_editor_callback'
     });
 }
@@ -62,8 +63,22 @@ function rcmail_editor_init(skin_path, editor_lang, spellcheck, mode)
 function rcmail_editor_callback(editor)
 {
   var input_from = rcube_find_object('_from');
-  if(input_from && input_from.type=='select-one')
+  if (input_from && input_from.type=='select-one')
     rcmail.change_identity(input_from);
+  // set tabIndex
+  rcmail_editor_tabindex()
+}
+
+// set tabIndex on tinyMCE editor
+function rcmail_editor_tabindex()
+{
+  if (rcmail.env.task == 'mail') {
+    var editor = tinyMCE.get(rcmail.env.composebody);
+    var textarea = editor.getElement();
+    var node = editor.getContentAreaContainer().childNodes[0];
+    if (textarea && node)
+      node.tabIndex = textarea.tabIndex;
+  }
 }
 
 // switch html/plain mode
@@ -75,10 +90,10 @@ function rcmail_toggle_editor(ishtml, textAreaId, flagElement)
   if (ishtml)
     {
     rcmail.display_spellcheck_controls(false);
-    var htmlText = "<pre>" + composeElement.value + "</pre>";
 
-    composeElement.value = htmlText;
+    rcmail.plain2html(composeElement.value, textAreaId);
     tinyMCE.execCommand('mceAddControl', true, textAreaId);
+    rcmail_editor_tabindex();
     if (flagElement && (flag = rcube_find_object(flagElement)))
       flag.value = '1';
     }

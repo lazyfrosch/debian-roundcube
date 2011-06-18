@@ -12,7 +12,7 @@
 | Author: Vahan Yerkanian <vahan@arminco.com>                           |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 2483 2009-05-15 10:22:29Z thomasb $
+@version $Id: messages.inc 2359 2009-03-19 07:53:16Z thomasb $
 
 */
 

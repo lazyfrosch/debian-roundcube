@@ -13,7 +13,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 2237 2009-01-17 01:55:39Z till $
+ @version $Id: messages.inc 2755 2009-07-15 09:49:35Z thomasb $
 
 */
 
@@ -22,6 +22,8 @@ $messages['loginfailed']  = 'Login failed';
 $messages['cookiesdisabled'] = 'Your browser does not accept cookies';
 $messages['sessionerror'] = 'Your session is invalid or expired';
 $messages['imaperror'] = 'Connection to IMAP server failed';
+$messages['servererror'] = 'Server Error!';
+$messages['invalidrequest'] = 'Invalid request! No data was saved.';
 $messages['nomessagesfound'] = 'No messages found in this mailbox';
 $messages['loggedout'] = 'You have successfully terminated the session. Good bye!';
 $messages['mailboxempty'] = 'Mailbox is empty';
@@ -45,6 +47,7 @@ $messages['errorsavingsent'] = 'An error occured while saving sent message';
 $messages['errorsaving'] = 'An error occured while saving';
 $messages['errormoving'] = 'Could not move the message';
 $messages['errordeleting'] = 'Could not delete the message';
+$messages['errormarking'] = 'Could not mark the message';
 $messages['deletecontactconfirm']  = 'Do you really want to delete the selected contact(s)?';
 $messages['deletemessagesconfirm'] = 'Do you really want to delete the selected message(s)?';
 $messages['deletefolderconfirm']  = 'Do you really want to delete this folder?';
@@ -94,5 +97,12 @@ $messages['importconfirm'] = '<b>Successfully imported $inserted contacts, $skip
 $messages['opnotpermitted'] = 'Operation not permitted!';
 $messages['nofromaddress'] = 'Missing e-mail address in selected identity';
 $messages['editorwarning'] = 'Switching to the plain text editor will cause all text formatting to be lost. Do you wish to continue?';
+$messages['httpreceivedencrypterror'] = 'A fatal configuration error occurred. Contact your administrator immediately. <b>Your message can not be sent.</b>';
+$messages['smtpconnerror'] = 'SMTP Error ($code): Connection to server failed';
+$messages['smtpautherror'] = 'SMTP Error ($code): Authentication failed';
+$messages['smtpfromerror'] = 'SMTP Error ($code): Failed to set sender "$from"';
+$messages['smtptoerror'] = 'SMTP Error ($code): Failed to add recipient "$to"';
+$messages['smtprecipientserror'] = 'SMTP Error: Unable to parse recipients list';
+$messages['smtperror'] = 'SMTP Error: $msg';
 
 ?>

@@ -3,10 +3,9 @@
 <head>
 <title><roundcube:object name="pagetitle" /></title>
 <roundcube:include file="/includes/links.html" />
-<link rel="stylesheet" type="text/css" href="/settings.css" />
 <script type="text/javascript" src="/functions.js"></script>
 </head>
-<body onload="rcube_init_settings_tabs()">
+<body>
 
 <roundcube:include file="/includes/taskbar.html" />
 <roundcube:include file="/includes/header.html" />
@@ -17,7 +16,7 @@
 <div id="folder-manager">
 <roundcube:object name="foldersubscription" form="subscriptionform" id="subscription-table"
   cellpadding="1" cellspacing="0" summary="Folder subscription table" class="records-table"
-  deleteIcon="/images/icons/folder-trash.png"
+  deleteIcon="/images/icons/delete.png"
   renameIcon="/images/icons/rename.png" />
 </div>
 

@@ -16,13 +16,13 @@
  |         Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: cache.inc 88 2005-12-03 16:54:12Z roundcube $
+ $Id: iniset.php 2916 2009-09-04 10:58:29Z thomasb $
 
 */
 
 
 // application constants
-define('RCMAIL_VERSION', '0.2.2');
+define('RCMAIL_VERSION', '0.3-stable');
 define('RCMAIL_CHARSET', 'UTF-8');
 define('JS_OBJECT_NAME', 'rcmail');
 
@@ -34,7 +34,7 @@ define('RCMAIL_CONFIG_DIR', INSTALL_PATH . 'config');
 
 // make sure path_separator is defined
 if (!defined('PATH_SEPARATOR')) {
-  define('PATH_SEPARATOR', (eregi('win', PHP_OS) ? ';' : ':'));
+  define('PATH_SEPARATOR', (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') ? ';' : ':');
 }
 
 // RC include folders MUST be included FIRST to avoid other
@@ -58,8 +58,10 @@ if  (isset($_SERVER['HTTPS'])) {
 }
 ini_set('session.name', 'roundcube_sessid');
 ini_set('session.use_cookies', 1);
-ini_set('session.only_use_cookies', 1);
-set_magic_quotes_runtime(0);
+ini_set('session.use_only_cookies', 1);
+if (function_exists('set_magic_quotes_runtime')) {
+  set_magic_quotes_runtime(0);
+}
 
 // increase maximum execution time for php scripts
 // (does not work in safe mode)
@@ -78,25 +80,31 @@ if(extension_loaded('mbstring'))
  * @todo Make Zend, PEAR etc play with this
  * @todo Make our classes conform to a more straight forward CS.
  */
-function __autoload($classname)
+function rcube_autoload($classname)
 {
   $filename = preg_replace(
-      array('/MDB2_(.+)/',
-    	    '/Mail_(.+)/',
-	    '/^html_.+/',
-	    '/^utf8$/',
-	    '/html2text/'
-	),
-      array('MDB2/\\1',
-    	    'Mail/\\1',
-	    'html',
-	    'utf8.class',
-	    'lib/html2text'	// see #1485505
-	),
+      array(
+        '/MDB2_(.+)/',
+        '/Mail_(.+)/',
+        '/Net_(.+)/',
+        '/^html_.+/',
+        '/^utf8$/',
+        '/html2text/'
+      ),
+      array(
+        'MDB2/\\1',
+        'Mail/\\1',
+        'Net/\\1',
+        'html',
+        'utf8.class',
+        'lib/html2text'  // see #1485505
+      ),
       $classname
   );
   include $filename. '.php';
 }
+
+spl_autoload_register('rcube_autoload');
 
 /**
  * Local callback function for PEAR errors

@@ -10,12 +10,12 @@
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
-| Author: Jonas Nasholm <info@bitfuse.net>                              |
+| Author: Jonas Nasholm <rcm@bitfuse.net>                               |
 |         Fredrik Nygren <f.nygren@gmail.com>                           |
 |         Andreas Henriksson <andreas@fatal.se>                         |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
+@version $Id: labels.inc 2850 2009-08-07 21:17:12Z yllar $
 
 */
 
@@ -112,18 +112,21 @@ $labels['nextmessages'] = 'Visa nästa grupp av meddelanden';
 $labels['lastmessage'] = 'Visa sista meddelandet';
 $labels['lastmessages'] = 'Visa sista gruppen av meddelanden';
 $labels['backtolist'] = 'Tillbaka till meddelandelistan';
-$labels['viewsource'] = 'Visa källa';
+$labels['viewsource'] = 'Visa källkod';
 $labels['markmessages'] = 'Markera meddelande';
 $labels['markread'] = 'Läst';
 $labels['markunread'] = 'Oläst';
 $labels['markflagged'] = 'Flaggat';
 $labels['markunflagged'] = 'Oflaggat';
+$labels['messageactions'] = 'Fler hanteringsalternativ...';
 $labels['select'] = 'Välj';
 $labels['all'] = 'Alla';
 $labels['none'] = 'Ingen';
 $labels['unread'] = 'Olästa';
 $labels['flagged'] = 'Flaggade';
 $labels['unanswered'] = 'Obesvarade';
+$labels['deleted'] = 'Raderade';
+$labels['invert'] = 'Invertera';
 $labels['filter'] = 'Filter';
 $labels['compact'] = 'Packa';
 $labels['empty'] = 'Töm';
@@ -136,12 +139,14 @@ $labels['resetsearch'] = 'Återställ sökning';
 $labels['searchmod'] = 'Sökalternativ';
 $labels['msgtext'] = 'Hela meddelandet';
 $labels['openinextwin'] = 'Öppna i nytt fönster';
+$labels['emlsave'] = 'Spara (.eml)';
 $labels['compose'] = 'Skapa nytt meddelande';
+$labels['editasnew'] = 'Redigera som nytt';
 $labels['savemessage'] = 'Spara utkast';
 $labels['sendmessage'] = 'Skicka meddelande';
 $labels['addattachment'] = 'Bifoga fil';
 $labels['charset'] = 'Teckenkodning';
-$labels['editortype'] = 'Typ av redigerare';
+$labels['editortype'] = 'Textredigerare';
 $labels['returnreceipt'] = 'Mottagarkvitto';
 $labels['checkspelling'] = 'Kontrollera stavning';
 $labels['resumeediting'] = 'Återuppta redigering';
@@ -236,7 +241,6 @@ $labels['always'] = 'Alltid';
 $labels['showinlineimages'] = 'Visa bifogade bilder efter meddelande';
 $labels['autosavedraft'] = 'Spara utkast med automatiskt intervall';
 $labels['everynminutes'] = '$n min';
-$labels['keepaliveevery'] = '$n min';
 $labels['keepalive'] = 'Hämta nya meddelanden med automatiskt intervall';
 $labels['never'] = 'Aldrig';
 $labels['messagesdisplaying'] = 'Visning av meddelanden';
@@ -248,6 +252,12 @@ $labels['2047folding'] = 'Full RFC 2047 (övriga)';
 $labels['advancedoptions'] = 'Avancerade inställningar';
 $labels['focusonnewmessage'] = 'Fokusera webbläsarens fönster vid nytt meddelande';
 $labels['checkallfolders'] = 'Genomsök samtliga kataloger efter nya meddelanden';
+$labels['displaynext'] = 'Visa nästa meddelande efter radering/flyttning av meddelande';
+$labels['mainoptions'] = 'Huvudalternativ';
+$labels['section'] = 'Avdelning';
+$labels['maintenance'] = 'Underhåll';
+$labels['newmessage'] = 'Nytt meddelande';
+$labels['listoptions'] = 'Listalternativ';
 $labels['folder'] = 'Katalog';
 $labels['folders'] = 'Kataloger';
 $labels['foldername'] = 'Katalognamn';

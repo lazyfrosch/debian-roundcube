@@ -19,6 +19,10 @@
 
 */
 
+// only process ajax requests
+if (!$OUTPUT->ajax_call)
+  return;
+
 $cid = get_input_value('_cid', RCUBE_INPUT_POST);
 $target = get_input_value('_to', RCUBE_INPUT_POST);
 if ($cid && preg_match('/^[a-z0-9\-_=]+(,[a-z0-9\-_=]+)*$/i', $cid) && strlen($target) && $target != $source)
@@ -26,8 +30,13 @@ if ($cid && preg_match('/^[a-z0-9\-_=]+(,[a-z0-9\-_=]+)*$/i', $cid) && strlen($t
   $success = false;
   $TARGET = $RCMAIL->get_address_book($target);
 
-  if ($TARGET && $TARGET->ready && !$TARGET->readonly)
-    $success = $TARGET->insert($CONTACTS->search($CONTACTS->primary_key, $cid), true);
+  if ($TARGET && $TARGET->ready && !$TARGET->readonly) {
+    $plugin = $RCMAIL->plugins->exec_hook('create_contact', array('record' => $CONTACTS->search($CONTACTS->primary_key, $cid), 'source' => $target));
+    $a_record = $plugin['record'];
+
+    if (!$plugin['abort'])
+      $success = $TARGET->insert($CONTACTS->search($a_record, true));
+  }
 
   if (empty($success))
     $OUTPUT->show_message('copyerror', 'error');

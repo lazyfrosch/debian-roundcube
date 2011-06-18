@@ -16,7 +16,7 @@
  | Author: Lukas Kahwe Smith <smith@pooteeweet.org>                      |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_mdb2.php 2237 2009-01-17 01:55:39Z till $
+ $Id: rcube_mdb2.php 2834 2009-08-04 08:22:41Z alec $
 
 */
 
@@ -106,7 +106,7 @@ class rcube_mdb2
       if (!filesize($dsn_array['database']) && !empty($this->sqlite_initials))
         $this->_sqlite_create_database($dbh, $this->sqlite_initials);
       }
-    else
+    else if ($this->db_provider!='mssql')
       $dbh->setCharset('utf8');
 
     return $dbh;
@@ -178,6 +178,17 @@ class rcube_mdb2
     
 
   /**
+   * Connection state checker
+   *
+   * @param  boolean  True if in connected state
+   */
+  function is_connected()
+    {
+    return PEAR::isError($this->db_handle) ? false : true;
+    }
+
+
+  /**
    * Execute a SQL query
    *
    * @param  string  SQL query to execute
@@ -187,6 +198,9 @@ class rcube_mdb2
    */
   function query()
     {
+    if (!$this->is_connected())
+      return NULL;
+    
     $params = func_get_args();
     $query = array_shift($params);
 
@@ -228,7 +242,7 @@ class rcube_mdb2
   function _query($query, $offset, $numrows, $params)
     {
     // Read or write ?
-    if (strtolower(trim(substr($query,0,6)))=='select')
+    if (strtolower(substr(trim($query),0,6))=='select')
       $mode='r';
     else
       $mode='w';
@@ -307,16 +321,22 @@ class rcube_mdb2
    * Get last inserted record ID
    * For Postgres databases, a sequence name is required
    *
-   * @param  string  Sequence name for increment
+   * @param  string  Table name (to find the incremented sequence)
    * @return mixed   ID or FALSE on failure
    * @access public
    */
-  function insert_id($sequence = '')
+  function insert_id($table = '')
     {
     if (!$this->db_handle || $this->db_mode=='r')
       return FALSE;
 
-    return $this->db_handle->lastInsertID($sequence);
+    // find sequence name
+    if ($table && $this->db_provider == 'pgsql')
+      $table = get_sequence_name($table);
+
+    $id = $this->db_handle->lastInsertID($table);
+    
+    return $this->db_handle->isError($id) ? null : $id;
     }
 
 
@@ -360,7 +380,7 @@ class rcube_mdb2
    */
   function _fetch_row($result, $mode)
     {
-    if ($result === FALSE || PEAR::isError($result))
+    if ($result === FALSE || PEAR::isError($result) || !$this->is_connected())
       return FALSE;
 
     return $result->fetchRow($mode);
@@ -456,6 +476,26 @@ class rcube_mdb2
 
 
   /**
+   * Return list of elements for use with SQL's IN clause
+   *
+   * @param  string Input array
+   * @return string Elements list string
+   * @access public
+   */
+  function array2list($arr, $type=null)
+    {
+    if (!is_array($arr))
+      return $this->quote($arr, $type);
+    
+    $res = array();
+    foreach ($arr as $item)
+      $res[] = $this->quote($item, $type);
+
+    return implode(',', $res);
+    }
+
+
+  /**
    * Return SQL statement to convert a field value into a unix timestamp
    *
    * @param  string  Field name
@@ -471,7 +511,7 @@ class rcube_mdb2
         break;
 
       case 'mssql':
-        return "datediff(s, '1970-01-01 00:00:00', $field)";
+	return "DATEDIFF(second, '19700101', $field) + DATEDIFF(second, GETDATE(), GETUTCDATE())";
 
       default:
         return "UNIX_TIMESTAMP($field)";
@@ -519,6 +559,54 @@ class rcube_mdb2
       default:
         return $this->quote_identifier($column).' LIKE '.$this->quote($value);
       }
+    }
+
+
+  /**
+   * Encodes non-UTF-8 characters in string/array/object (recursive)
+   *
+   * @param  mixed  Data to fix
+   * @return mixed  Properly UTF-8 encoded data
+   * @access public
+   */
+  function encode($input)
+    {
+    if (is_object($input)) {
+      foreach (get_object_vars($input) as $idx => $value)
+        $input->$idx = $this->encode($value);
+      return $input;
+      }
+    else if (is_array($input)) {
+      foreach ($input as $idx => $value)
+        $input[$idx] = $this->encode($value);
+      return $input;	
+      }
+
+    return utf8_encode($input);
+    }
+
+
+  /**
+   * Decodes encoded UTF-8 string/object/array (recursive)
+   *
+   * @param  mixed  Input data
+   * @return mixed  Decoded data
+   * @access public
+   */
+  function decode($input)
+    {
+    if (is_object($input)) {
+      foreach (get_object_vars($input) as $idx => $value)
+        $input->$idx = $this->decode($value);
+      return $input;
+      }
+    else if (is_array($input)) {
+      foreach ($input as $idx => $value)
+        $input[$idx] = $this->decode($value);
+      return $input;	
+      }
+
+    return utf8_decode($input);
     }
 
 
@@ -585,7 +673,9 @@ class rcube_mdb2
     $data = file_get_contents($file_name);
 
     if (strlen($data))
-      sqlite_exec($dbh->connection, $data);
+      if (!sqlite_exec($dbh->connection, $data, $error) || MDB2::isError($dbh)) 
+        raise_error(array('code' => 500, 'type' => 'db',
+	    'line' => __LINE__, 'file' => __FILE__, 'message' => $error), TRUE, FALSE); 
     }
 
 
@@ -617,8 +707,6 @@ function mdb2_debug_handler(&$db, $scope, $message, $context = array())
   {
     $debug_output = $scope . '('.$db->db_index.'): ';
     $debug_output .= $message . $db->getOption('log_line_break');
-    write_log('sqllog', $debug_output);
+    write_log('sql', $debug_output);
   }
 }
-
-

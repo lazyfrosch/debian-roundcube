@@ -135,12 +135,12 @@ class rcube_user
    * Get default identity of this user
    *
    * @param int  Identity ID. If empty, the default identity is returned
-   * @return array Hash array with all cols of the 
+   * @return array Hash array with all cols of the identity record
    */
   function get_identity($id = null)
   {
-    $sql_result = $this->list_identities($id ? sprintf('AND identity_id=%d', $id) : '');
-    return $this->db->fetch_assoc($sql_result);
+    $result = $this->list_identities($id ? sprintf('AND identity_id=%d', $id) : '');
+    return $result[0];
   }
   
   
@@ -160,7 +160,12 @@ class rcube_user
        ORDER BY ".$this->db->quoteIdentifier('standard')." DESC, name ASC, identity_id ASC",
       $this->ID);
     
-    return $sql_result;
+    $result = array();
+    while ($sql_arr = $this->db->fetch_assoc($sql_result)) {
+      $result[] = $sql_arr;
+    }
+    
+    return $result;
   }
   
   
@@ -176,23 +181,24 @@ class rcube_user
     if (!$this->ID)
       return false;
     
-    $write_sql = array();
+    $query_cols = $query_params = array();
     
     foreach ((array)$data as $col => $value)
     {
-      $write_sql[] = sprintf("%s=%s",
-        $this->db->quoteIdentifier($col),
-        $this->db->quote($value));
+      $query_cols[] = $this->db->quoteIdentifier($col) . '=?';
+      $query_params[] = $value;
     }
-    
-    $this->db->query(
-      "UPDATE ".get_table_name('identities')."
-       SET ".join(', ', $write_sql)."
+    $query_params[] = $iid;
+    $query_params[] = $this->ID;
+
+    $sql = "UPDATE ".get_table_name('identities')."
+       SET ".join(', ', $query_cols)."
        WHERE  identity_id=?
        AND    user_id=?
-       AND    del<>1",
-      $iid,
-      $this->ID);
+       AND    del<>1";
+
+    call_user_func_array(array($this->db, 'query'),
+                        array_merge(array($sql), $query_params));
     
     return $this->db->affected_rows();
   }
@@ -213,16 +219,19 @@ class rcube_user
     foreach ((array)$data as $col => $value)
     {
       $insert_cols[] = $this->db->quoteIdentifier($col);
-      $insert_values[] = $this->db->quote($value);
+      $insert_values[] = $value;
     }
+    $insert_cols[] = 'user_id';
+    $insert_values[] = $this->ID;
 
-    $this->db->query(
-      "INSERT INTO ".get_table_name('identities')."
-        (user_id, ".join(', ', $insert_cols).")
-       VALUES (?, ".join(', ', $insert_values).")",
-      $this->ID);
+    $sql = "INSERT INTO ".get_table_name('identities')."
+        (".join(', ', $insert_cols).")
+       VALUES (".join(', ', array_pad(array(), sizeof($insert_values), '?')).")";
 
-    return $this->db->insert_id(get_sequence_name('identities'));
+    call_user_func_array(array($this->db, 'query'),
+                        array_merge(array($sql), $insert_values));
+
+    return $this->db->insert_id('identities');
   }
   
   
@@ -346,49 +355,93 @@ class rcube_user
    */
   static function create($user, $host)
   {
+    $user_name  = '';
     $user_email = '';
     $rcmail = rcmail::get_instance();
-    $dbh = $rcmail->get_dbh();
 
     // try to resolve user in virtuser table and file
     if (!strpos($user, '@')) {
-      if ($email_list = self::user2email($user, false))
-        $user_email = $email_list[0];
+      if ($email_list = self::user2email($user, false, true))
+        $user_email = is_array($email_list[0]) ? $email_list[0][0] : $email_list[0];
     }
-    
+
+    $data = $rcmail->plugins->exec_hook('create_user',
+	array('user'=>$user, 'user_name'=>$user_name, 'user_email'=>$user_email));
+
+    // plugin aborted this operation
+    if ($data['abort'])
+      return false;
+
+    $user_name = $data['user_name'];
+    $user_email = $data['user_email'];
+
+    $dbh = $rcmail->get_dbh();
+
     $dbh->query(
       "INSERT INTO ".get_table_name('users')."
         (created, last_login, username, mail_host, alias, language)
        VALUES (".$dbh->now().", ".$dbh->now().", ?, ?, ?, ?)",
       strip_newlines($user),
       strip_newlines($host),
-      strip_newlines($user_email),
+      strip_newlines($data['alias'] ? $data['alias'] : $user_email),
       $_SESSION['language']);
 
-    if ($user_id = $dbh->insert_id(get_sequence_name('users')))
+    if ($user_id = $dbh->insert_id('users'))
     {
+      // create rcube_user instance to make plugin hooks work
+      $user_instance = new rcube_user($user_id);
+      $rcmail->user = $user_instance;
+
       $mail_domain = $rcmail->config->mail_domain($host);
 
       if ($user_email=='')
         $user_email = strpos($user, '@') ? $user : sprintf('%s@%s', $user, $mail_domain);
 
-      $user_name = $user != $user_email ? $user : '';
+      if ($user_name == '') {
+        $user_name = $user != $user_email ? $user : '';
+      }
 
       if (empty($email_list))
-        $email_list[] = strip_newlines($user_email); 
+        $email_list[] = strip_newlines($user_email);
+      // identities_level check
+      else if (count($email_list) > 1 && $rcmail->config->get('identities_level', 0) > 1)
+        $email_list = array($email_list[0]);
 
-      // also create new identity records
+      // create new identities records
       $standard = 1;
-      foreach ($email_list as $email) {
-        $dbh->query(
-            "INSERT INTO ".get_table_name('identities')."
-              (user_id, del, standard, name, email)
-             VALUES (?, 0, ?, ?, ?)",
-            $user_id,
-	    $standard,
-            strip_newlines($user_name),
-            preg_replace('/^@/', $user . '@', $email));
-	$standard = 0;
+      foreach ($email_list as $row) {
+        if (is_array($row)) {
+          $email = $row[0];
+          $name = $row[1] ? $row[1] : $user_name;
+        }
+        else {
+          $email = $row;
+          $name = $user_name;
+        }
+
+        $plugin = $rcmail->plugins->exec_hook('create_identity', array(
+          'login' => true,
+          'record' => array(
+            'user_id' => $user_id,
+            'name' => strip_newlines($name),
+            'email' => $email,
+            'standard' => $standard,
+            'signature' => '',
+          ),
+        ));
+          
+        if (!$plugin['abort'] && $plugin['record']['email']) {
+          $dbh->query(
+              "INSERT INTO ".get_table_name('identities')."
+                (user_id, del, standard, name, email, signature)
+               VALUES (?, 0, ?, ?, ?, ?)",
+              $user_id,
+              $plugin['record']['standard'],
+              $plugin['record']['name'] != NULL ? $plugin['record']['name'] : '',
+              $plugin['record']['email'],
+              $plugin['record']['signature']);
+        }
+        $standard = 0;
       }
     }
     else
@@ -401,7 +454,7 @@ class rcube_user
         'message' => "Failed to create new user"), true, false);
     }
     
-    return $user_id ? new rcube_user($user_id) : false;
+    return $user_id ? $user_instance : false;
   }
   
   
@@ -413,7 +466,7 @@ class rcube_user
    */
   static function email2user($email)
   {
-    $r = self::findinvirtual('^' . quotemeta($email) . '[[:space:]]');
+    $r = self::findinvirtual('/^' . preg_quote($email, '/') . '\s/');
 
     for ($i=0; $i<count($r); $i++)
     {
@@ -432,9 +485,10 @@ class rcube_user
    *
    * @param string User name
    * @param boolean If true returns first found entry
+   * @param boolean If true returns email as array (email and name for identity)
    * @return mixed Resolved e-mail address string or array of strings
    */
-  static function user2email($user, $first=true)
+  static function user2email($user, $first=true, $extended=false)
   {
     $result = array();
     $rcmail = rcmail::get_instance();
@@ -445,13 +499,13 @@ class rcube_user
       $sql_result = $dbh->query(preg_replace('/%u/', $dbh->escapeSimple($user), $virtuser_query));
       while ($sql_arr = $dbh->fetch_array($sql_result))
         if (strpos($sql_arr[0], '@')) {
-          $result[] = $sql_arr[0];
-	  if ($first)
-	    return $result[0];
-	}
+          $result[] = ($extended && count($sql_arr) > 1) ? $sql_arr : $sql_arr[0];
+          if ($first)
+            return $result[0];
+        }
     }
     // File lookup
-    $r = self::findinvirtual('[[:space:]]' . quotemeta($user) . '[[:space:]]*$');
+    $r = self::findinvirtual('/\s' . preg_quote($user, '/') . '\s*$/');
     for ($i=0; $i<count($r); $i++)
     {
       $data = $r[$i];
@@ -460,7 +514,7 @@ class rcube_user
       {
         $result[] = trim(str_replace('\\@', '@', $arr[0]));
 
-	if ($first)
+        if ($first)
           return $result[0];
       }
     }
@@ -493,7 +547,7 @@ class rcube_user
       if (empty($line) || $line{0}=='#')
         continue;
         
-      if (eregi($pattern, $line))
+      if (preg_match($pattern, $line))
         $result[] = $line;
     }
     

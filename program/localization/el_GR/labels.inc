@@ -14,7 +14,7 @@
  |         John Economou <hsoc@irc.gr>                                   |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 2237 2009-01-17 01:55:39Z till $
+ @version $Id: labels.inc 2513 2009-05-21 12:59:19Z alec $
 
 */
 
@@ -173,7 +173,6 @@ $labels['htmleditor'] = 'Σύνθεση HTML μηνύματος';
 $labels['htmlsignature'] = 'Υπογραφή HTML';
 $labels['previewpane'] = 'Εμφάνιση προηγούμενου παραθύρου';
 $labels['autosavedraft'] = 'Αυτόματη προχείρου';
-$labels['everynminutes'] = 'κάθε $n λεπτά';
 $labels['never'] = 'ποτέ';
 $labels['folder'] = 'Φάκελος';
 $labels['folders'] = 'Φάκελοι';

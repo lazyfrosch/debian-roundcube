@@ -25,7 +25,7 @@
  *
  * @package Addressbook
  */
-class rcube_contacts
+class rcube_contacts extends rcube_addressbook
 {
   var $db = null;
   var $db_name = '';
@@ -56,30 +56,6 @@ class rcube_contacts
     $this->db_name = get_table_name('contacts');
     $this->user_id = $user;
     $this->ready = $this->db && !$this->db->is_error();
-  }
-
-
-  /**
-   * Set internal list page
-   *
-   * @param  number  Page number to list
-   * @access public
-   */
-  function set_page($page)
-  {
-    $this->list_page = (int)$page;
-  }
-
-
-  /**
-   * Set internal page size
-   *
-   * @param  number  Number of messages to display on one page
-   * @access public
-   */
-  function set_pagesize($size)
-  {
-    $this->page_size = (int)$size;
   }
 
 
@@ -115,13 +91,6 @@ class rcube_contacts
     $this->search_fields = null;
     $this->search_string = null;
   }
-  
-  
-  /**
-   * Close connection to source
-   * Called on script shutdown
-   */
-  function close(){}
   
   
   /**
@@ -185,7 +154,7 @@ class rcube_contacts
     {
       if ($col == 'ID' || $col == $this->primary_key)
       {
-        $ids = !is_array($value) ? split(',', $value) : $value;
+        $ids = !is_array($value) ? explode(',', $value) : $value;
         $add_where[] = $this->primary_key.' IN ('.join(',', $ids).')';
       }
       else if ($strict)
@@ -233,7 +202,7 @@ class rcube_contacts
    *
    * @return Result array or NULL if nothing selected yet
    */
-  function get_result($as_res=true)
+  function get_result()
   {
     return $this->result;
   }
@@ -293,18 +262,18 @@ class rcube_contacts
         $a_insert_cols[] = $this->db->quoteIdentifier($col);
         $a_insert_values[] = $this->db->quote($save_data[$col]);
       }
-    
+
     if (!$existing->count && !empty($a_insert_cols))
     {
       $this->db->query(
         "INSERT INTO ".$this->db_name."
          (user_id, changed, del, ".join(', ', $a_insert_cols).")
-         VALUES (?, ".$this->db->now().", 0, ".join(', ', $a_insert_values).")",
-        $this->user_id);
+         VALUES (".intval($this->user_id).", ".$this->db->now().", 0, ".join(', ', $a_insert_values).")"
+        );
         
-      $insert_id = $this->db->insert_id(get_sequence_name('contacts'));
+      $insert_id = $this->db->insert_id('contacts');
     }
-    
+
     return $insert_id;
   }
 

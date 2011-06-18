@@ -5,7 +5,7 @@
  | program/steps/addressbook/delete.inc                                  |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,16 +15,19 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: delete.inc 1361 2008-05-07 22:16:00Z richs $
+ $Id: delete.inc 2758 2009-07-16 15:01:05Z thomasb $
 
 */
 
-if (($cid = get_input_value('_cid', RCUBE_INPUT_POST)) &&
+if ($OUTPUT->ajax_call &&
+    ($cid = get_input_value('_cid', RCUBE_INPUT_POST)) &&
     (preg_match('/^[0-9]+(,[0-9]+)*$/', $cid) ||
      preg_match('/^[a-zA-Z0-9=]+(,[a-zA-Z0-9=]+)*$/', $cid))
    )
   {
-  $deleted = $CONTACTS->delete($cid);
+  $plugin = $RCMAIL->plugins->exec_hook('delete_contact', array('id' => $cid, 'source' => get_input_value('_source', RCUBE_INPUT_GPC)));
+  
+  $deleted = !$plugin['abort'] ? $CONTACTS->delete($cid) : false;
   if (!$deleted)
     {
     // send error message

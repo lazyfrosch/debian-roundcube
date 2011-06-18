@@ -13,7 +13,7 @@
 | Author: Thomas Bruederli <roundcube@gmail.com>                        |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 2237 2009-01-17 01:55:39Z till $
+@version $Id: messages.inc 2755 2009-07-15 09:49:35Z thomasb $
 
 */
 
@@ -22,6 +22,8 @@ $messages['loginfailed'] = 'Login fehlgeschlagen';
 $messages['cookiesdisabled'] = 'Ihr Browser akzeptiert keine Cookies';
 $messages['sessionerror'] = 'Ihre Session ist ungültig oder abgelaufen';
 $messages['imaperror'] = 'Keine Verbindung zum IMAP Server';
+$messages['servererror'] = 'Serverfehler!';
+$messages['invalidrequest'] = 'Ungültige Anfrage! Es wurden keine Daten gespeichert.';
 $messages['nomessagesfound'] = 'Keine Nachrichten in diesem Ordner';
 $messages['loggedout'] = 'Sie haben Ihre Session erfolgreich beendet. Auf Wiedersehen!';
 $messages['mailboxempty'] = 'Ordner ist leer';
@@ -45,6 +47,7 @@ $messages['errorsavingsent'] = 'Ein Fehler ist beim Speichern der gesendeten Nac
 $messages['errorsaving'] = 'Beim Speichern ist ein Fehler aufgetreten';
 $messages['errormoving'] = 'Nachricht konnte nicht verschoben werden';
 $messages['errordeleting'] = 'Nachricht konnte nicht gelöscht werden';
+$messages['errormarking'] = 'Nachricht konnte nicht markiert werden';
 $messages['deletecontactconfirm'] = 'Wollen Sie die ausgewählten Kontakte wirklich löschen';
 $messages['deletemessagesconfirm'] = 'Wollen Sie die ausgewählten Nachrichten wirklich löschen?';
 $messages['deletefolderconfirm'] = 'Wollen Sie diesen Ordner wirklich löschen?';
@@ -94,5 +97,11 @@ $messages['importconfirm'] = '<b>Es wurden $inserted Adressen erfolgreich import
 $messages['opnotpermitted'] = 'Operation nicht erlaubt!';
 $messages['nofromaddress'] = 'Fehlende E-Mail-Adresse in ausgewählter Identität';
 $messages['editorwarning'] = 'Beim Wechseln in den Texteditor gehen alle Textformatierungen verloren. Möchten Sie fortfahren?';
+$messages['smtpconnerror'] = 'SMTP Fehler ($code): Die Verbindung ist fehlgeschlagen';
+$messages['smtpautherror'] = 'SMTP Fehler ($code): Die Authentisierung ist fehlgeschlagen';
+$messages['smtpfromerror'] = 'SMTP Fehler ($code): Der Absender ("$from") konnte nicht gesetzt werden';
+$messages['smtptoerror'] = 'SMTP Fehler ($code): Der Empfänger ("$to") konnte nicht gesetzt werden';
+$messages['smtprecipientserror'] = 'SMTP Fehler: Die Empfängerliste konnte nicht verarbeitet werden';
+$messages['smtperror'] = 'SMTP Fehler: $msg';
 
 ?>

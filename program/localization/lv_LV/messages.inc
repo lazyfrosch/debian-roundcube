@@ -15,7 +15,7 @@
 |         Lauris Bukšis-Haberkorns <lauris@nix.lv>                      |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 2483 2009-05-15 10:22:29Z thomasb $
+@version $Id: messages.inc 2400 2009-04-19 11:32:56Z yllar $
 
 */
 

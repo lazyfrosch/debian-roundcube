@@ -3,7 +3,6 @@
 <head>
 <title><roundcube:object name="productname" /> :: <roundcube:label name="compose" /></title>
 <roundcube:include file="/includes/links.html" />
-<link rel="stylesheet" type="text/css" href="/mail.css" />
 <link rel="stylesheet" type="text/css" href="/googiespell.css" />
 <script type="text/javascript" src="/functions.js"></script>
 </head>
@@ -17,17 +16,17 @@
 <div id="messagetoolbar">
 <table border="0" cellspacing="0" cellpadding="0"><tr>
     <td id="compose-toolbar">
-	<roundcube:button command="list" image="/images/buttons/back_act.png" imageSel="/images/buttons/back_sel.png" imageAct="/images/buttons/back_act.png" width="32" height="32" title="backtolist" />
-	<roundcube:button command="send" imageSel="/images/buttons/send_sel.png" imageAct="/images/buttons/send_act.png" imagePas="/images/buttons/send_pas.png" width="32" height="32" title="sendmessage" />
-	<roundcube:button command="spellcheck" imageSel="/images/buttons/spellcheck_sel.png" imageAct="/images/buttons/spellcheck_act.png" imagePas="/images/buttons/spellcheck_pas.png" width="32" height="32" title="checkspelling" />
-	<roundcube:button command="add-attachment" imageSel="/images/buttons/attach_sel.png" imageAct="/images/buttons/attach_act.png" imagePas="/images/buttons/attach_pas.png" width="32" height="32" title="addattachment" />
-	<roundcube:button command="savedraft" imageSel="/images/buttons/drafts_sel.png" imageAct="/images/buttons/drafts_act.png" imagePas="/images/buttons/drafts_pas.png" width="32" height="32" title="savemessage" />
+      <roundcube:button command="list" type="link" class="button back" classAct="button back" classSel="button backSel" title="backtolist" content=" " />
+      <roundcube:button command="send" type="link" class="buttonPas send" classAct="button send" classSel="button sendSel" title="sendmessage" content=" " />
+      <roundcube:button command="spellcheck" type="link" class="buttonPas spellcheck" classAct="button spellcheck" classSel="button spellcheckSel" title="checkspelling" content=" " />
+      <roundcube:button command="add-attachment" type="link" class="buttonPas attach" classAct="button attach" classSel="button attachSel" title="addattachment" content=" " />
+      <roundcube:button command="savedraft" type="link" class="buttonPas savedraft" classAct="button savedraft" classSel="button savedraftSel" title="savemessage" content=" " />
     </td>
     <td id="priority-selector">
-	<label for="rcmcomposepriority"><roundcube:label name="priority" />:</label>&nbsp;<roundcube:object name="prioritySelector" form="form" id="rcmcomposepriority" />
+      <label for="rcmcomposepriority"><roundcube:label name="priority" />:</label>&nbsp;<roundcube:object name="prioritySelector" form="form" id="rcmcomposepriority" />
     </td>
     <td id="receipt-selector">
-	<roundcube:object name="receiptCheckBox" form="form" id="rcmcomposereceipt" />&nbsp;<label for="rcmcomposereceipt"><roundcube:label name="returnreceipt" /></label>
+      <roundcube:object name="receiptCheckBox" form="form" id="rcmcomposereceipt" />&nbsp;<label for="rcmcomposereceipt"><roundcube:label name="returnreceipt" /></label>
     </td>
 </tr></table>
 </div>
@@ -66,6 +65,12 @@
 	    </tr><tr>
 		<td class="title"><label for="compose-subject"><roundcube:label name="subject" /></label></td>
 		<td><roundcube:object name="composeSubject" id="compose-subject" form="form" tabindex="6" /></td>
+	    </tr><tr>
+		<td class="title"><roundcube:label name="editortype" /></td>
+		<td>
+		    <div id="editor-select"><roundcube:object name="editorSelector" editorid="compose-body" /></div>
+		    <div id="spellcheck-control"></div>
+		</td>
 	    </tr>
 	</tbody>
 	</table>
@@ -78,12 +83,8 @@
 		    <roundcube:button type="input" command="send" class="button mainaction" label="sendmessage" tabindex="8" />
 		    <roundcube:button type="input" command="list" class="button" label="cancel" tabindex="9" />
 		</td>
-		<td style="text-align:center; white-space: nowrap">
-		    <label><roundcube:label name="savesentmessagein" />: <roundcube:object name="storetarget" maxlength="30" /></label>
-		</td>
-		<td style="text-align:right; white-space:nowrap">
-		    <roundcube:label name="editortype" />:&nbsp;
-		    <span class="radios-left"><roundcube:object name="editorSelector" editorid="compose-body" tabindex="10" /></span>
+		<td style="text-align:right; white-space: nowrap">
+		    <label><roundcube:label name="savesentmessagein" />: <roundcube:object name="storetarget" maxlength="30" tabindex="10" /></label>
 		</td>
 	    </tr>
 	</tbody></table>
@@ -92,7 +93,7 @@
 
 <div id="compose-attachments">
 <div id="attachment-title"><roundcube:label name="attachments" /></div>
-<roundcube:object name="composeAttachmentList" deleteIcon="/images/icons/remove-attachment.png"/ >
+<roundcube:object name="composeAttachmentList" deleteIcon="/images/icons/delete.png" />
 <p><roundcube:button command="add-attachment" imagePas="/images/buttons/add_pas.png" imageSel="/images/buttons/add_sel.png" imageAct="/images/buttons/add_act.png" width="23" height="18" title="addattachment" /></p>
 </div>
 

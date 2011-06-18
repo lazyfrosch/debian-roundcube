@@ -29,10 +29,10 @@ class rcube_html_page
     protected $scripts_path = '';
     protected $script_files = array();
     protected $scripts = array();
-    protected $charset = 'UTF-8';
+    protected $charset = RCMAIL_CHARSET;
 
-    protected $script_tag_file = "<script type=\"text/javascript\" src=\"%s%s\"></script>\n";
-    protected $script_tag      = "<script type=\"text/javascript\">\n<!--\n%s\n\n//-->\n</script>\n";
+    protected $script_tag_file = "<script type=\"text/javascript\" src=\"%s\"></script>\n";
+    protected $script_tag  =  "<script type=\"text/javascript\">\n/* <![CDATA[ */\n%s\n/* ]]> */\n</script>";
     protected $default_template = "<html>\n<head><title></title></head>\n<body></body>\n</html>";
 
     protected $title = '';
@@ -53,6 +53,9 @@ class rcube_html_page
     public function include_script($file, $position='head')
     {
         static $sa_files = array();
+        
+        if (!preg_match('|^https?://|i', $file) && $file[0] != '/')
+          $file = $this->scripts_path . $file . (($fs = @filemtime($this->scripts_path . $file)) ? '?s='.$fs : '');
 
         if (in_array($file, $sa_files)) {
             return;
@@ -165,7 +168,7 @@ class rcube_html_page
         // definition of the code to be placed in the document header and footer
         if (is_array($this->script_files['head'])) {
             foreach ($this->script_files['head'] as $file) {
-                $__page_header .= sprintf($this->script_tag_file, $this->scripts_path, $file);
+                $__page_header .= sprintf($this->script_tag_file, $file);
             }
         }
 
@@ -180,7 +183,7 @@ class rcube_html_page
 
         if (is_array($this->script_files['foot'])) {
             foreach ($this->script_files['foot'] as $file) {
-                $__page_footer .= sprintf($this->script_tag_file, $this->scripts_path, $file);
+                $__page_footer .= sprintf($this->script_tag_file, $file);
             }
         }
 
@@ -246,10 +249,22 @@ class rcube_html_page
         $__page_header = $__page_footer = '';
 
         // correct absolute paths in images and other tags
-        $output = preg_replace('/(src|href|background)=(["\']?)(\/[a-z0-9_\-]+)/Ui', "\\1=\\2$base_path\\3", $output);
+        $output = preg_replace('!(src|href|background)=(["\']?)(/[a-z0-9_-]+)!i', "\\1=\\2$base_path\\3", $output);
+        $output = preg_replace_callback('!(src|href)=(["\']?)([a-z0-9/_.-]+.(css|js))(["\'\s>])!i', array($this, 'add_filemtime'), $output);
         $output = str_replace('$__skin_path', $base_path, $output);
 
-        echo rcube_charset_convert($output, 'UTF-8', $this->charset);
+        if ($this->charset != RCMAIL_CHARSET)
+	    echo rcube_charset_convert($output, RCMAIL_CHARSET, $this->charset);
+	else
+	    echo $output;
+    }
+    
+    /**
+     * Callback function for preg_replace_callback in write()
+     */
+    public function add_filemtime($matches)
+    {
+        return sprintf("%s=%s%s?s=%d%s", $matches[1], $matches[2], $matches[3], @filemtime($matches[3]), $matches[5]);
     }
 }
 

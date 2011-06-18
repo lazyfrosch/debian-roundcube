@@ -15,14 +15,14 @@
 | Author: Odd Henriksen <odd@digicon.no>                                |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
+@version $Id: labels.inc 2784 2009-07-22 12:23:12Z yllar $
 
 */
 
 $labels = array();
 $labels['welcome'] = 'Velkommen til $product';
-$labels['username'] = 'Brukernavn:';
-$labels['password'] = 'Passord:';
+$labels['username'] = 'Brukernavn';
+$labels['password'] = 'Passord';
 $labels['server'] = 'Server';
 $labels['login'] = 'Logg på';
 $labels['logout'] = 'Logg ut';
@@ -118,12 +118,15 @@ $labels['markread'] = 'som lest';
 $labels['markunread'] = 'som ulest';
 $labels['markflagged'] = 'som flagget';
 $labels['markunflagged'] = 'som uflagget';
+$labels['messageactions'] = 'Flere valg...';
 $labels['select'] = 'Velg';
 $labels['all'] = 'Alle';
 $labels['none'] = 'Ingen';
 $labels['unread'] = 'Uleste';
 $labels['flagged'] = 'Flagget';
 $labels['unanswered'] = 'Ubesvarte';
+$labels['deleted'] = 'Slettet';
+$labels['invert'] = 'Inverter';
 $labels['filter'] = 'Filter';
 $labels['compact'] = 'Rydd opp';
 $labels['empty'] = 'Tøm';
@@ -133,8 +136,12 @@ $labels['unknown'] = 'ukjent';
 $labels['unlimited'] = 'ubegrenset';
 $labels['quicksearch'] = 'Hurtigsøk';
 $labels['resetsearch'] = 'Nullstill søk';
+$labels['searchmod'] = 'Søke felt';
+$labels['msgtext'] = 'Hele meldingen';
 $labels['openinextwin'] = 'Åpne i nytt vindu';
+$labels['emlsave'] = 'Last ned (.eml)';
 $labels['compose'] = 'Skriv ny e-post';
+$labels['editasnew'] = 'Rediger som ny';
 $labels['savemessage'] = 'Lagre kladd';
 $labels['sendmessage'] = 'Send e-posten';
 $labels['addattachment'] = 'Vedlegg';
@@ -233,8 +240,7 @@ $labels['fromknownsenders'] = 'fra kjente avsendere';
 $labels['always'] = 'alltid';
 $labels['showinlineimages'] = 'Vis vedlagte bilder under meldingen';
 $labels['autosavedraft'] = 'Autolagring av utkast';
-$labels['everynminutes'] = 'Hvert $n. minutt';
-$labels['keepaliveevery'] = 'hvert $n minutt';
+$labels['everynminutes'] = 'hvert $n minutt';
 $labels['keepalive'] = 'Se etter ny e-post';
 $labels['never'] = 'Aldri';
 $labels['messagesdisplaying'] = 'Visning av meldinger';
