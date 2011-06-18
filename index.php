@@ -2,7 +2,7 @@
 /*
  +-----------------------------------------------------------------------+
  | RoundCube Webmail IMAP Client                                         |
- | Version 0.1-rc2-dependent                                             |
+ | Version 0.1-20080302                                                  |
  |                                                                       |
  | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
@@ -36,12 +36,12 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: index.php 903 2007-10-22 06:52:13Z thomasb $
+ $Id: index.php 1162 2008-03-02 13:20:21Z thomasb $
 
 */
 
 // application constants
-define('RCMAIL_VERSION', '0.1-rc2');
+define('RCMAIL_VERSION', '0.1-trunk');
 define('RCMAIL_CHARSET', 'UTF-8');
 define('JS_OBJECT_NAME', 'rcmail');
 
@@ -103,7 +103,7 @@ if (empty($_task) || !in_array($_task, $MAIN_TASKS))
 if ($_action != 'get' && $_action != 'viewsource')
 {
   // use gzip compression if supported
-  if (function_exists('ob_gzhandler') && ini_get('zlib.output_compression'))
+  if (function_exists('ob_gzhandler') && !ini_get('zlib.output_compression'))
     ob_start('ob_gzhandler');
   else
     ob_start();
@@ -196,7 +196,7 @@ else if ($_action != 'login' && $_SESSION['user_id'] && $_action != 'send')
 
 
 // log in to imap server
-if (!empty($_SESSION['user_id']) && $_task=='mail')
+if (!empty($USER->ID) && $_task=='mail')
 {
   $conn = $IMAP->connect($_SESSION['imap_host'], $_SESSION['username'], decrypt_passwd($_SESSION['password']), $_SESSION['imap_port'], $_SESSION['imap_ssl']);
   if (!$conn)
@@ -210,7 +210,7 @@ if (!empty($_SESSION['user_id']) && $_task=='mail')
 
 
 // not logged in -> set task to 'login
-if (empty($_SESSION['user_id']))
+if (empty($USER->ID))
 {
   if ($OUTPUT->ajax_call)
     $OUTPUT->remote_response("setTimeout(\"location.href='\"+this.env.comm_path+\"'\", 2000);");
@@ -238,8 +238,19 @@ if (!empty($_action))
 
 
 // not logged in -> show login page
-if (!$_SESSION['user_id'])
+if (empty($USER->ID))
 {
+  // check if installer is still active
+  if (is_file('./installer/index.php'))
+    $OUTPUT->add_footer('
+  <div style="background:#ef9398; border:2px solid #dc5757; padding:0.5em; margin:2em auto; width:50em">
+  <h2 style="margin-top:0.2em">Installer script is still accessible</h2>
+  <p>The install script of your RoundCube installation is still stored in its default location!</p>
+  <p>Please <b>remove</b> the whole <tt>installer</tt> folder from the RoundCube directory because
+  these files may expose sensitive configuration data like server passwords and encryption keys
+  to the public. Make sure you cannot access the <a href="./installer/">installer script</a> from your browser.</p>
+  </div>');
+  
   $OUTPUT->task = 'login';
   $OUTPUT->send('login');
   exit;
@@ -274,13 +285,16 @@ if ($_task=='mail')
   if ($_action=='viewsource')
     include('program/steps/mail/viewsource.inc');
 
+  if ($_action=='sendmdn')
+    include('program/steps/mail/sendmdn.inc');
+
   if ($_action=='send')
     include('program/steps/mail/sendmail.inc');
 
   if ($_action=='upload')
     include('program/steps/mail/upload.inc');
 
-  if ($_action=='compose' || $_action=='remove-attachment')
+  if ($_action=='compose' || $_action=='remove-attachment' || $_action=='display-attachment')
     include('program/steps/mail/compose.inc');
 
   if ($_action=='addcontact')

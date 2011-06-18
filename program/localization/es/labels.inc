@@ -6,7 +6,7 @@
  | language/es/labels.inc                                                |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
@@ -16,7 +16,7 @@
  |         http://david.grajal.net                                       |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 873 2007-10-16 19:06:34Z yllar $
+ @version $Id: labels.inc 1079 2008-02-14 07:47:11Z tomekp $
 
 */
 
@@ -47,7 +47,7 @@ $labels['priority'] = 'Prioridad';
 $labels['organization'] = 'Organización';
 $labels['reply-to'] = 'Respuesta a';
 $labels['mailboxlist'] = 'Bandejas';
-$labels['messagesfromto'] = 'Mensajes desde $from a $to de $count';
+$labels['messagesfromto'] = 'Mensajes $from a $to de $count';
 $labels['messagenrof'] = 'Mensaje $nr de $count';
 $labels['moveto'] = 'mover a...';
 $labels['download'] = 'descargar';
@@ -60,7 +60,7 @@ $labels['addtoaddressbook'] = 'Añadir a contactos';
 $labels['sun'] = 'Dom';
 $labels['mon'] = 'Lun';
 $labels['tue'] = 'Mar';
-$labels['wed'] = 'Mie';
+$labels['wed'] = 'Mié';
 $labels['thu'] = 'Jue';
 $labels['fri'] = 'Vie';
 $labels['sat'] = 'Sáb';
@@ -90,6 +90,9 @@ $labels['lastmessage'] = 'Mostrar último mensaje';
 $labels['lastmessages'] = 'Mostrar último grupo de mensajes';
 $labels['backtolist'] = 'Volver a la lista de mensajes';
 $labels['viewsource'] = 'Mostrar código';
+$labels['markmessages'] = 'Marcar mensajes';
+$labels['markread'] = 'Como leído';
+$labels['markunread'] = 'Como no leído';
 $labels['select'] = 'Elija';
 $labels['all'] = 'Todos';
 $labels['none'] = 'Ninguno';
@@ -127,6 +130,10 @@ $labels['plaintoggle'] = 'Texto';
 $labels['addcc'] = 'Añadir Cc';
 $labels['addbcc'] = 'Añadir Bcc';
 $labels['addreplyto'] = 'Añadir Respuesta a';
+$labels['mdnrequest'] = 'El emisor de este mensaje desea ser notificado cuando usted lo lea. ¿Quiere enviar esta notificación?';
+$labels['receiptread'] = 'Notificación de lectura';
+$labels['yourmessage'] = 'Esta es una notificación de lectura de su mensaje';
+$labels['receiptnote'] = 'Nota: Esta notificación sólo significa que su mensaje fue mostrado en la computadora del receptor. No hay garantía de que el receptor haya leído o entendido el contenido del mensaje.';
 $labels['name'] = 'Nombre completo';
 $labels['firstname'] = 'Nombre';
 $labels['surname'] = 'Apellido';
@@ -174,6 +181,7 @@ $labels['folder'] = 'Bandeja';
 $labels['folders'] = 'Bandejas';
 $labels['foldername'] = 'Nombre de bandeja';
 $labels['subscribed'] = 'Suscrita';
+$labels['messagecount'] = 'Mensajes';
 $labels['create'] = 'Crear';
 $labels['createfolder'] = 'Crear nueva bandeja';
 $labels['rename'] = 'Renombrar';

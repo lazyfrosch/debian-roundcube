@@ -41,6 +41,49 @@
   padding-left: 2px;
 }
 
+#markmessagemenu
+{
+  position: absolute;
+  top: 32px;
+  left: 90px;
+  width: auto;
+  visibility: hidden;
+  background-color: #F9F9F9;
+  border: 1px solid #CCC;
+  padding: 1px;
+  opacity: 0.9;
+  z-index: 240;
+}
+
+ul.toolbarmenu
+{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+ul.toolbarmenu li
+{
+  font-size: 11px;
+  white-space: nowrap;
+  min-width: 130px;
+  width: auto !important;
+  width: 130px;
+}
+
+ul.toolbarmenu li a
+{
+  display: block;
+  color: #a0a0a0;
+  padding: 2px 8px 3px 12px;
+  text-decoration: none;
+}
+
+ul.toolbarmenu li a.active:hover
+{
+  background-color: #ddd;
+}
+
 #listcontrols
 {
   position: absolute;
@@ -71,6 +114,9 @@ td.formlinks a:visited
 #mailboxcontrols a.active,
 #mailboxcontrols a.active:active,
 #mailboxcontrols a.active:visited,
+ul.toolbarmenu li a.active,
+ul.toolbarmenu li a.active:active,
+ul.toolbarmenu li a.active:visited,
 td.formlinks a,
 td.formlinks a:visited
 {
@@ -152,15 +198,12 @@ td.formlinks a:visited
 
 #messagepartframe
 {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
   border: 1px solid #999999;
   background-color: #F9F9F9;
+  /* css hack for IE */
+  height: expression(parseInt(document.getElementById('messagepartcontainer').offsetHeight)+'px');
 }
 
 
@@ -193,6 +236,7 @@ td.formlinks a:visited
 {
   display: block;
   height: 12px;
+  margin: 0;
   padding: 3px 10px 4px 10px;
   background-color: #EBEBEB;
   background-image: url(images/listheader_aqua.gif); 
@@ -230,12 +274,10 @@ td.formlinks a:visited
 
 #mailboxlist li
 {
- /* height: 18px; */
   font-size: 11px;
   background: url(images/icons/folder-closed.png) no-repeat;
   background-position: 10px 1px;
   border-bottom: 1px solid #EBEBEB;
-/* IE 5.5  margin-left: -16px; */
 }
 
 #mailboxlist li.inbox
@@ -272,11 +314,6 @@ td.formlinks a:visited
   text-decoration: none;
 }
 
-#mailboxlist li, #mailboxlist li.unread
-{  
- /* background-image: url(images/mailbox_list.gif); */
-}
-
 #mailboxlist li.unread
 {
   font-weight: bold;
@@ -288,7 +325,8 @@ td.formlinks a:visited
   background-color: #929292;
 }
 
-#mailboxlist li.selected a
+#mailboxlist li.selected > a,
+#mailboxlist li.droptarget li.selected a
 {
   color: #FFF;
   font-weight: bold;
@@ -305,28 +343,10 @@ td.formlinks a:visited
   padding: 0;
   margin:0;
   border-top: 1px solid #EBEBEB;  
-}
-
-#mailboxlist ul li {
   padding-left: 15px;
   background-position: 25px 1px;
-}
-
-#mailboxlist li.selected li,
-#mailboxlist li.droptarget li {
   background-color: #F9F9F9;
-}
-
-#mailboxlist li.unread li {
-  font-weight: normal;
-}
-
-#mailboxlist li.unread li.unread {
-  font-weight: bold;
-}
-
-#mailboxlist li.selected li a{
-  color: black;
+  color: blue;
   font-weight: normal;
 }
 
@@ -359,6 +379,10 @@ body.messagelist
   /* css hack for IE */
   width: expression(parseInt(document.getElementById('mailcontframe').clientWidth)+'px');
 }
+
+/* safari hack \*/
+html>body*#messagelist[id$="messagelist"]:not([class="none"]) { table-layout: auto; }
+/**/
 
 #messagelist thead tr td
 {
@@ -632,16 +656,20 @@ table.headers-table tr td.subject
 {
   position:relative;
   min-height: 300px;
-  padding-top: 10px;
   padding-bottom: 10px;
   background-color: #FFFFFF;
 }
 
 div.message-part
 {
-  padding: 8px;
-  padding-top: 10px;
-  overflow: hidden;
+  padding: 10px 8px;
+  border-top: 1px solid #ccc;
+/*  overflow: hidden; */
+}
+
+#messagebody div:first-child
+{
+  border-top: 0;
 }
 
 div.message-part a

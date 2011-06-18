@@ -15,21 +15,13 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: func.inc 892 2007-10-20 21:47:11Z thomasb $
+ $Id: func.inc 1176 2008-03-03 21:47:59Z thomasb $
 
 */
 
 
-// get user record
-$sql_result = $DB->query("SELECT username, mail_host FROM ".get_table_name('users')."
-                          WHERE  user_id=?",
-                          $_SESSION['user_id']);
-                                 
-if ($USER_DATA = $DB->fetch_assoc($sql_result))
-{
-  $username = $USER_DATA['username'] . (!strpos($USER_DATA['username'], '@') ? '@'.$USER_DATA['mail_host'] : '');
-  $OUTPUT->set_pagetitle(sprintf('%s %s', rcube_label('settingsfor'), $username));
-}
+if ($USER->ID)
+  $OUTPUT->set_pagetitle(rcube_label('settingsfor') . " ". $USER->get_username());
 
 
 
@@ -37,7 +29,7 @@ function rcmail_user_prefs_form($attrib)
   {
   global $DB, $CONFIG, $sess_user_lang;
 
-  $no_override = !empty($CONFIG['dont_override']) ? array_flip((array)$CONFIG['dont_override']) : array('preview_pane'=>true);
+  $no_override = is_array($CONFIG['dont_override']) ? array_flip($CONFIG['dont_override']) : array();
 
   // add some labels to client
   rcube_add_label('nopagesizewarning');
@@ -110,7 +102,7 @@ function rcmail_user_prefs_form($attrib)
     $out .= sprintf("<tr><td class=\"title\"><label for=\"%s\">%s</label></td><td>%s</td></tr>\n",
                     $field_id,
                     Q(rcube_label('timezone')),
-                    $select_timezone->show($CONFIG['timezone']));
+                    $select_timezone->show((string)$CONFIG['timezone']));
     }
 
   // daylight savings
@@ -161,7 +153,7 @@ function rcmail_user_prefs_form($attrib)
     }
 
   // Show checkbox for HTML Editor
-  if (!isset($no_override['htmleditor']) && $CONFIG['enable_htmleditor'])
+  if (!isset($no_override['htmleditor']))
     {
     $field_id = 'rcmfd_htmleditor';
     $input_htmleditor = new checkbox(array('name' => '_htmleditor', 'id' => $field_id, 'value' => 1));
@@ -205,16 +197,7 @@ function rcmail_user_prefs_form($attrib)
 
 function rcmail_identities_list($attrib)
   {
-  global $DB, $CONFIG, $OUTPUT;
-
-
-  // get contacts from DB
-  $sql_result = $DB->query("SELECT * FROM ".get_table_name('identities')."
-                            WHERE  del<>1
-                            AND    user_id=?
-                            ORDER BY standard DESC, name ASC",
-                            $_SESSION['user_id']);
-
+  global $OUTPUT, $USER;
 
   // add id to message list table if not specified
   if (!strlen($attrib['id']))
@@ -224,7 +207,7 @@ function rcmail_identities_list($attrib)
   $a_show_cols = array('name', 'email', 'organization', 'reply-to');
 
   // create XHTML table  
-  $out = rcube_table_output($attrib, $sql_result, $a_show_cols, 'identity_id');
+  $out = rcube_table_output($attrib, $USER->list_identities(), $a_show_cols, 'identity_id');
   
   // set client env
   $OUTPUT->add_gui_object('identitieslist', $attrib['id']);
@@ -271,7 +254,8 @@ function get_form_tags($attrib, $action, $add_hidden=array())
 // register UI objects
 $OUTPUT->add_handlers(array(
   'userprefs' => 'rcmail_user_prefs_form',
-  'itentitieslist' => 'rcmail_identities_list'
+  'identitieslist' => 'rcmail_identities_list',
+  'itentitieslist' => 'rcmail_identities_list'  // keep this for backward compatibility
 ));
 
 

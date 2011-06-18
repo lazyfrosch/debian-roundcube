@@ -15,20 +15,13 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: edit_identity.inc 543 2007-04-28 18:07:12Z thomasb $
+ $Id: edit_identity.inc 940 2007-12-11 04:20:01Z estadtherr $
 
 */
 
 if (($_GET['_iid'] || $_POST['_iid']) && $_action=='edit-identity')
   {
-  $DB->query("SELECT * FROM ".get_table_name('identities')."
-              WHERE  identity_id=?
-              AND    user_id=?
-              AND    del<>1",
-              get_input_value('_iid', RCUBE_INPUT_GPC),
-              $_SESSION['user_id']);
-  
-  $IDENTITY_RECORD = $DB->fetch_assoc();
+  $IDENTITY_RECORD = $USER->get_identity(get_input_value('_iid', RCUBE_INPUT_GPC));
   
   if (is_array($IDENTITY_RECORD))
     $OUTPUT->set_env('iid', $IDENTITY_RECORD['identity_id']);
@@ -50,7 +43,6 @@ function rcube_identity_form($attrib)
   $OUTPUT->add_script("tinyMCE.init({ mode : 'specific_textareas'," .
                                     "apply_source_formatting : true," .
                                     "content_css : '\$__skin_path' + '/editor_content.css'," .
-                                    "popups_css : '\$__skin_path' + '/editor_popups.css'," .
                                     "editor_css : '\$__skin_path' + '/editor_ui.css'," .
                                     "theme : 'advanced'," .
                                     "theme_advanced_toolbar_location : 'top'," .

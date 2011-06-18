@@ -6,19 +6,19 @@
  | language/de_DE/messages.inc                                           |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
- | Author: Stephan Diehl <info@sd-edv.de>                                |
+ | Author: Marcel Schlesinger <info@marcel-schlesinger.de>               |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 842 2007-10-01 13:55:02Z tomekp $
+ @version $Id: messages.inc 1107 2008-02-17 18:32:46Z thomasb $
 
 */
 
 $messages = array();
-$messages['loginfailed'] = 'Anmelden fehlgeschlagen';
+$messages['loginfailed'] = 'Anmeldung fehlgeschlagen';
 $messages['cookiesdisabled'] = 'Ihr Browser akzeptiert keine Cookies';
 $messages['sessionerror'] = 'Ihre Session ist ungültig oder abgelaufen';
 $messages['imaperror'] = 'Keine Verbindung zum IMAP-Server';
@@ -59,13 +59,13 @@ $messages['noldapserver'] = 'Bitte wählen Sie einen LDAP-Server aus';
 $messages['nocontactsreturned'] = 'Es wurden keine Kontakte gefunden';
 $messages['nosearchname'] = 'Bitte geben Sie einen Namen oder eine E-Mail-Adresse ein';
 $messages['searchsuccessful'] = '$nr Nachrichten gefunden';
-$messages['searchnomatch'] = 'Keine Treffer';
+$messages['searchnomatch'] = 'Die Suche lieferte keine Treffer';
 $messages['searching'] = 'Suche...';
 $messages['checking'] = 'Prüfe...';
 $messages['nospellerrors'] = 'Keine Rechtschreibfehler gefunden';
 $messages['folderdeleted'] = 'Ordner erfolgreich gelöscht';
 $messages['deletedsuccessfully'] = 'Erfolgreich gelöscht';
-$messages['converting'] = 'Entferne Formatierung der Nachricht...';
+$messages['converting'] = 'Entferne Formatierungen der Nachricht...';
 $messages['messageopenerror'] = 'Die Nachricht konnte nicht vom Server geladen werden';
 $messages['fileuploaderror'] = 'Hochladen der Datei fehlgeschlagen';
 $messages['filesizeerror'] = 'Die hochzuladende Datei überschreitet die Maximalgröße von $size';
@@ -74,5 +74,9 @@ $messages['copyerror'] = 'Die Adressen konnten nicht kopiert werden';
 $messages['sourceisreadonly'] = 'Das Adressverzeichnis kann nicht verändert werden';
 $messages['errorsavingcontact'] = 'Die Änderungen konnten nicht gespeichert werden';
 $messages['movingmessage'] = 'Die E-Mail wird verschoben...';
+$messages['receiptsent'] = 'Lesebestätigung erfolgreich gesendet';
+$messages['errorsendingreceipt'] = 'Bestätigung konnte nicht gesendet werden';
+$messages['nodeletelastidentity'] = 'Diese Identität kann nicht gelöscht werden, da dies die letzte ist.';
+$messages['addsubfolderhint'] = 'Wird als Unterordner des aktuell selektieren Ordners erstellt';
 
 ?>

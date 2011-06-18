@@ -6,25 +6,25 @@
  | language/pt_BR/messages.inc                                           |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Anderson S. Ferreira <anderson@cnpm.embrapa.br>               |
- | Updated by: Robson F. Ramaldes <rframaldes@gmail.com>                 |
- | Updated by: Alessandro Lenzi <alessandro@mistymountain.com.br>        |
+ |         Robson F. Ramaldes <rframaldes@gmail.com>                     |
+ |         Alessandro Lenzi <alessandro@mistymountain.com.br>            |
  +-----------------------------------------------------------------------+
 
- $Id: messages.inc 830 2007-09-27 04:33:46Z tomekp $
+ @version $Id: messages.inc 1113 2008-02-18 12:47:25Z yllar $
 
 */
 
 $messages = array();
-$messages['loginfailed']  = 'Falha no login.';
+$messages['loginfailed'] = 'Falha no login.';
 $messages['cookiesdisabled'] = 'Seu navegador não suporta cookies.';
 $messages['sessionerror'] = 'A sessão do seu navegador é inválida ou expirou.';
-$messages['imaperror'] = 'A conexão com o servidor IMAP falhou.';
-$messages['nomessagesfound'] = 'Não foi encontrada nenhuma mensagem.';
+$messages['imaperror'] = 'Falha na conexão com o servidor IMAP.';
+$messages['nomessagesfound'] = 'Nenhuma mensagem foi encontrada.';
 $messages['loggedout'] = 'Sua sessão foi finalizada com sucesso. Até breve!';
 $messages['mailboxempty'] = 'A caixa de mensagens está vazia.';
 $messages['loading'] = 'Carregando...';
@@ -41,7 +41,6 @@ $messages['blockedimages'] = 'Para proteger sua privacidade, as imagens desta me
 $messages['encryptedmessage'] = 'Esta mensagem está criptografada e não pode ser exibida. Desculpe.';
 $messages['nocontactsfound'] = 'Nenhum contato foi encontrado';
 $messages['contactnotfound'] = 'O contato solicitado não foi encontrado';
-
 $messages['sendingfailed'] = 'Falha no envio da mensagem';
 $messages['errorsaving'] = 'Ocorreu um erro ao Salvar';
 $messages['errormoving'] = 'Não foi possível mover a mensagem';
@@ -52,10 +51,10 @@ $messages['deletefolderconfirm'] = 'Deseja realmente excluir esta pasta?';
 $messages['purgefolderconfirm'] = 'Deseja realmente excluir todas mensagens desta pasta?';
 $messages['formincomplete'] = 'Os campos não foram completamente preenchidos.';
 $messages['noemailwarning'] = 'Por favor, informe um endereço de e-mail válido.';
-$messages['nonamewarning']  = 'Por favor, informe o nome.';
+$messages['nonamewarning'] = 'Por favor, informe o nome.';
 $messages['nopagesizewarning'] = 'Por favor, informe o tamanho da página.';
 $messages['norecipientwarning'] = 'Por favor, informe pelo menos um destinatário.';
-$messages['nosubjectwarning']  = 'O campo assunto não foi informado. Deseja incluí-lo agora?';
+$messages['nosubjectwarning'] = 'O campo assunto não foi informado. Deseja incluí-lo agora?';
 $messages['nobodywarning'] = 'Enviar a mensagem sem texto?';
 $messages['notsentwarning'] = 'A mensegem não foi enviada, deseja excluí-la?';
 $messages['noldapserver'] = 'Por favor, selecione um servidor LDAP para a pesquisa';
@@ -72,11 +71,14 @@ $messages['converting'] = 'Removendo formatação da Mensagem...';
 $messages['messageopenerror'] = 'Não foi possível carregar a mensagem do servidor';
 $messages['fileuploaderror'] = 'Falha ao enviar o arquivo';
 $messages['filesizeerror'] = 'O Arquivo enviado excede o tamanho máximo de $size';
-
-$messages['copysuccess'] = '$nr endereços copiados com sucesso';
+$messages['copysuccess'] = '$nr endereço(s) copiado(s) com sucesso';
 $messages['copyerror'] = 'Não foi possível copiar quaisquer endereços';
-$messages['sourceisreadonly'] = 'Esta fonte de endereços é somente leitura';
+$messages['sourceisreadonly'] = 'Esta fonte de endereço é somente leitura';
 $messages['errorsavingcontact'] = 'Não foi possível salvar o endereço de contato.';
 $messages['movingmessage'] = 'Movendo mensagem...';
+$messages['receiptsent'] = 'Confirmação de Leitura enviada com sucesso.';
+$messages['errorsendingreceipt'] = 'Não foi possível enviar a confirmação de leitura.';
+$messages['nodeletelastidentity'] = 'Você não pode excluir sua única identidade.';
+$messages['addsubfolderhint'] = 'Esta pasta será criada como uma sub-pasta da que está selecionada.';
 
 ?>

@@ -5,12 +5,14 @@
  | language/mk/labels.inc                                                |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2007, RoundQube Dev. - Switzerland                      |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author:  Ivan Mishev - mishevivan@gmail.com                           |
  +-----------------------------------------------------------------------+
+
+ @version $Id$
 
 */
 
@@ -45,8 +47,8 @@ $labels['messagesfromto'] = '$count пораки од $from';
 $labels['messagenrof'] = '$nr порака од $count';
 $labels['moveto'] = 'Премести во...';
 $labels['download'] = 'сними';
-$labels['filename'] = 'Име на фајлот';
-$labels['filesize'] = 'Големина на Фајлот';
+$labels['filename'] = 'Име на датотеката';
+$labels['filesize'] = 'Големина на датотеката';
 $labels['preferhtml'] = 'Прикажи во HTML';
 $labels['htmlmessage'] = 'HTML Порака';
 $labels['prettydate'] = 'Убави дати';
@@ -72,6 +74,7 @@ $labels['replytomessage'] = 'Одговори на пораката';
 $labels['replytoallmessage'] = 'Одговори на сите';
 $labels['forwardmessage'] = 'Препрати ја пораката';
 $labels['deletemessage'] = 'Премести ја пораката во Корпа';
+$labels['movemessagetotrash'] = 'Премести ги пораките во Канта';
 $labels['printmessage'] = 'За печатење';
 $labels['previousmessage'] = 'Прикажи ја претходната порака';
 $labels['previousmessages'] = 'Прикажи ги претходните пораки';
@@ -83,6 +86,9 @@ $labels['lastmessage'] = 'Прикажи ја последната порака'
 $labels['lastmessages'] = 'Прикажи ги последните пораки';
 $labels['backtolist'] = 'Врати се во поштенското сандаче';
 $labels['viewsource'] = 'Покажи го изворот на пракање';
+$labels['markmessages'] = 'Обележи ги пораките';
+$labels['markread'] = 'Како прочитани';
+$labels['markunread'] = 'Како непрочитани';
 $labels['select'] = 'Одбележи';
 $labels['all'] = 'Сите';
 $labels['none'] = 'Никоја';
@@ -96,8 +102,8 @@ $labels['unlimited'] = 'неограничено';
 $labels['quicksearch'] = 'Брзо претражување';
 $labels['resetsearch'] = 'Ново претражување';
 $labels['compose'] = 'Нова порака';
-$labels['sendmessage'] = 'Прати ја пораката';
 $labels['savemessage'] = 'Снимај ја пораката во Непратени';
+$labels['sendmessage'] = 'Прати ја пораката';
 $labels['addattachment'] = 'Прикачи фајл';
 $labels['charset'] = 'Charset';
 $labels['editortype'] = 'Тип на едитор';
@@ -117,6 +123,13 @@ $labels['nosubject'] = '(нема тема)';
 $labels['showimages'] = 'Прикажи ги сликите';
 $labels['htmltoggle'] = 'HTML';
 $labels['plaintoggle'] = 'Обичен текст';
+$labels['addcc'] = 'Додај Cc';
+$labels['addbcc'] = 'Додај Bcc';
+$labels['addreplyto'] = 'Додај Одговори-На';
+$labels['mdnrequest'] = 'Праќачот на оваа порака сака да добие известување кога ќе ја прочитате пораката. Дали сакате да го известите?';
+$labels['receiptread'] = 'Извести (читај)';
+$labels['yourmessage'] = 'Ова е известување за вашата порака';
+$labels['receiptnote'] = 'Забелешка: Ова известување само потврдува дека пораката која сте ја пратиле е отворена. Не е гаранција дека примачот ја прочитал или ја разбрал истата.';
 $labels['name'] = 'Прикажано име';
 $labels['firstname'] = 'Име';
 $labels['surname'] = 'Презиме';
@@ -164,6 +177,7 @@ $labels['folder'] = 'Папка';
 $labels['folders'] = 'Папки';
 $labels['foldername'] = 'Име на папката';
 $labels['subscribed'] = 'Претплатен';
+$labels['messagecount'] = 'Пораки';
 $labels['create'] = 'Креирај';
 $labels['createfolder'] = 'Креирај нова папка';
 $labels['rename'] = 'Преименувај';

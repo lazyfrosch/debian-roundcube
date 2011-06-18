@@ -6,14 +6,14 @@
  | language/de_DE/labels.inc                                             |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
- | Author: Stephan Diehl <info@sd-edv.de>                                |
+ | Author: Marcel Schlesinger <info@marcel-schlesinger.de>               |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 858 2007-10-04 10:14:19Z Stiwi $
+ @version $Id: labels.inc 1107 2008-02-17 18:32:46Z thomasb $
 
 */
 
@@ -87,6 +87,9 @@ $labels['lastmessage'] = 'Die letzte Nachricht anzeigen';
 $labels['lastmessages'] = 'Die letzten Nachrichten anzeigen';
 $labels['backtolist'] = 'Zurück zur Liste';
 $labels['viewsource'] = 'Quelltext anzeigen';
+$labels['markmessages'] = 'Nachrichten markieren';
+$labels['markread'] = 'Als gelesen';
+$labels['markunread'] = 'Als ungelesen';
 $labels['select'] = 'Auswählen';
 $labels['all'] = 'Alle';
 $labels['none'] = 'Keine';
@@ -124,7 +127,11 @@ $labels['plaintoggle'] = 'Nur-Text';
 $labels['addcc'] = 'Cc hinzufügen';
 $labels['addbcc'] = 'Bcc hinzufügen';
 $labels['addreplyto'] = 'Antwortadresse hinzufügen';
-$labels['name'] = 'Anzeigename';
+$labels['mdnrequest'] = 'Der Sender dieser Nachricht möchte gerne eine Lesebestätigung. Wollen Sie dieses bestätigen?';
+$labels['receiptread'] = 'Empfangsbestätigung (gelesen)';
+$labels['yourmessage'] = 'Dies ist eine Empfangsbestätigung für Ihre Nachricht';
+$labels['receiptnote'] = 'Hinweis: Der Empfänger hat den Empfang der Nachricht bestätigt. Dies ist keine Garantie, dass die Nachricht gelesen und verstanden wurde.';
+$labels['name'] = 'Angezeigter Name';
 $labels['firstname'] = 'Vorname';
 $labels['surname'] = 'Nachname';
 $labels['email'] = 'E-Mail';
@@ -150,7 +157,7 @@ $labels['settingsfor'] = 'Einstellungen für';
 $labels['preferences'] = 'Einstellungen';
 $labels['userpreferences'] = 'Benutzereinstellungen';
 $labels['editpreferences'] = 'Benutzereinstellungen bearbeiten';
-$labels['identities'] = 'Absender';
+$labels['identities'] = 'Identitäten';
 $labels['manageidentities'] = 'Absender für dieses Konto verwalten';
 $labels['newidentity'] = 'Neuer Absender';
 $labels['newitem'] = 'Neuer Eintrag';
@@ -171,6 +178,7 @@ $labels['folder'] = 'Ordner';
 $labels['folders'] = 'Ordner';
 $labels['foldername'] = 'Ordnername';
 $labels['subscribed'] = 'Abonniert';
+$labels['messagecount'] = 'Nachrichten';
 $labels['create'] = 'Erstellen';
 $labels['createfolder'] = 'Neuen Ordner erstellen';
 $labels['rename'] = 'Umbenennen';

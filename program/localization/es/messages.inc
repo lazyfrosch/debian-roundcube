@@ -6,7 +6,7 @@
  | language/es/messages.inc                                              |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
@@ -15,7 +15,7 @@
  |         Lito Jornero <jornero@gmail.com>                              |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 873 2007-10-16 19:06:34Z yllar $
+ @version $Id: messages.inc 1079 2008-02-14 07:47:11Z tomekp $
 
 */
 
@@ -76,5 +76,9 @@ $messages['copyerror'] = 'No se pudo copiar ninguna dirección';
 $messages['sourceisreadonly'] = 'Esta dirección es de sólo-lectura';
 $messages['errorsavingcontact'] = 'No se pudo guardar la dirección de contacto';
 $messages['movingmessage'] = 'Moviendo mensaje...';
+$messages['receiptsent'] = 'La notificación de lectura se ha enviado con éxito.';
+$messages['errorsendingreceipt'] = 'No se ha podido enviar la notificación de lectura.';
+$messages['nodeletelastidentity'] = 'No se puede borrar esta identidad puesto que es la última.';
+$messages['addsubfolderhint'] = 'Esta carpeta se creará como una subcarpeta dentro de la carpeta seleccionada';
 
 ?>

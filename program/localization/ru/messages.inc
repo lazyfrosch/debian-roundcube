@@ -6,15 +6,16 @@
  | language/ru_RU/messages.inc                                           |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Maxim Zenin <maxx@webmechanics.ru>                            |
  |         Vladimir Kulev <me@lightoze.net>                              |
+ |         Artur Smolkin <admin@roundcube.ru>                            |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 584 2007-05-24 03:49:19Z estadtherr $
+ @version $Id: messages.inc 1134 2008-02-22 15:05:18Z yllar $
 
 */
 
@@ -74,5 +75,10 @@ $messages['copysuccess'] = 'Скопировано $nr адресов';
 $messages['copyerror'] = 'Невозможно скопировать адреса';
 $messages['sourceisreadonly'] = 'Данный источник адресов только для чтения';
 $messages['errorsavingcontact'] = 'Невозможно сохранить адрес контакта';
+$messages['movingmessage'] = 'Перемещение сообщения…';
+$messages['receiptsent'] = 'Уведомление о прочтении отправлено';
+$messages['errorsendingreceipt'] = 'Уведомление о прочтении не отправлено';
+$messages['nodeletelastidentity'] = 'Вы не можете удалить этот профиль, он у вас последний';
+$messages['addsubfolderhint'] = 'Эта папка будет создана как подпапка в текущей папке';
 
 ?>

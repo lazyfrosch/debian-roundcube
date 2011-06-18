@@ -6,7 +6,7 @@
  | language/it/messages.inc                                              |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
@@ -14,7 +14,7 @@
  |         Yusef Maali <contact@yusefmaali.net>                          |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 869 2007-10-15 13:27:08Z yllar $
+ @version $Id: messages.inc 1068 2008-02-13 19:24:23Z yllar $
 
 */
 
@@ -75,5 +75,9 @@ $messages['copyerror'] = 'Impossibile copiare gli indirizzi';
 $messages['sourceisreadonly'] = 'La rubrica è in sola lettura';
 $messages['errorsavingcontact'] = 'Impossibile salvare il contatto';
 $messages['movingmessage'] = 'Sposto il messaggio...';
+$messages['receiptsent'] = 'Ricevuta di ritorno inviata con successo';
+$messages['errorsendingreceipt'] = 'Impossibile spedire la ricevuta di ritorno';
+$messages['nodeletelastidentity'] = 'Impossibile eliminare l\'unica identità disponibile';
+$messages['addsubfolderhint'] = 'La cartella verrà creata come sotto cartella della cartella corrente';
 
 ?>

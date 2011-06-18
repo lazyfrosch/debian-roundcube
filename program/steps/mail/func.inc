@@ -15,12 +15,13 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: func.inc 875 2007-10-17 06:50:28Z thomasb $
+ $Id: func.inc 1125 2008-02-20 22:47:06Z thomasb $
 
 */
 
 require_once('lib/html2text.inc');
 require_once('lib/enriched.inc');
+require_once('include/rcube_smtp.inc');
 
 
 $EMAIL_ADDRESS_PATTERN = '/([a-z0-9][a-z0-9\-\.\+\_]*@[a-z0-9]([a-z0-9\-][.]?)*[a-z0-9]\\.[a-z]{2,5})/i';
@@ -30,16 +31,10 @@ if (empty($_SESSION['mbox']))
 
 // set imap properties and session vars
 if ($mbox = get_input_value('_mbox', RCUBE_INPUT_GPC))
-  {
-  $IMAP->set_mailbox($mbox);
-  $_SESSION['mbox'] = $mbox;
-  }
+  $IMAP->set_mailbox(($_SESSION['mbox'] = $mbox));
 
 if (!empty($_GET['_page']))
-  {
-  $IMAP->set_page((int)$_GET['_page']);
-  $_SESSION['page'] = (int)$_GET['_page'];
-  }
+  $IMAP->set_page(($_SESSION['page'] = intval($_GET['_page'])));
 
 // set mailbox to INBOX if not set
 if (empty($_SESSION['mbox']))
@@ -53,7 +48,11 @@ if (!isset($_SESSION['sort_order']))
 
 // set message set for search result
 if (!empty($_REQUEST['_search']) && isset($_SESSION['search'][$_REQUEST['_search']]))
+  {
   $IMAP->set_search_set($_SESSION['search'][$_REQUEST['_search']]);
+  $OUTPUT->set_env('search_request', $_REQUEST['_search']);
+  $OUTPUT->set_env('search_text', $_SESSION['last_text_search']);
+  }
 
 
 // define url for getting message parts
@@ -77,7 +76,7 @@ if (!$OUTPUT->ajax_call)
 
 // set page title
 if (empty($_action) || $_action == 'list')
-  $OUTPUT->set_pagetitle(rcube_charset_convert($IMAP->get_mailbox_name(), 'UTF-7'));
+  $OUTPUT->set_pagetitle(rcmail_localize_foldername($IMAP->get_mailbox_name()));
 
 
 
@@ -291,6 +290,7 @@ function rcmail_message_list($attrib)
     $OUTPUT->set_env('attachmenticon', $skin_path . $attrib['attachmenticon']);
   
   $OUTPUT->set_env('messages', $a_js_message_arr);
+  $OUTPUT->set_env('coltypes', $a_show_cols);
   
   $OUTPUT->include_script('list.js');
   
@@ -482,6 +482,127 @@ function rcmail_get_messagecount_text($count=NULL, $page=NULL)
   }
 
 
+/* Stolen from Squirrelmail */
+function sq_deent(&$attvalue, $regex, $hex=false)
+  {
+  $ret_match = false;
+  preg_match_all($regex, $attvalue, $matches);
+  if (is_array($matches) && sizeof($matches[0]) > 0)
+    {
+    $repl = Array();
+    for ($i = 0; $i < sizeof($matches[0]); $i++)
+      {
+      $numval = $matches[1][$i];
+      if ($hex)
+        $numval = hexdec($numval);
+      $repl{$matches[0][$i]} = chr($numval);
+      }
+    $attvalue = strtr($attvalue, $repl);
+    return true;
+    }
+  else
+    return false;
+  }
+
+
+/* Stolen verbatim from Squirrelmail */
+function sq_defang(&$attvalue)
+  {
+  /* Skip this if there aren't ampersands or backslashes. */
+  if ((strpos($attvalue, '&') === false) &&
+      (strpos($attvalue, '\\') === false))
+    return;
+  $m = false;
+  do
+    {
+    $m = false;
+    $m = $m || sq_deent($attvalue, '/\&#0*(\d+);*/s');
+    $m = $m || sq_deent($attvalue, '/\&#x0*((\d|[a-f])+);*/si', true);
+    $m = $m || sq_deent($attvalue, '/\\\\(\d+)/s', true);
+    } while ($m == true);
+  $attvalue = stripslashes($attvalue);
+  }
+
+
+function rcmail_html_filter($html)
+  {
+  preg_match_all('/<\/?\w+((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+\s*|\s*)\/?>/', $html, $tags);
+
+  /* From Squirrelmail: Translate all dangerous Unicode or Shift_JIS characters which are accepted by
+   * IE as regular characters. */
+  $replace = array(array('&#x029F;', '&#0671;',  /* L UNICODE IPA Extension */
+                         '&#x0280;', '&#0640;',  /* R UNICODE IPA Extension */
+                         '&#x0274;', '&#0628;',  /* N UNICODE IPA Extension */
+                         '&#xFF25;', '&#65317;', /* Unicode FULLWIDTH LATIN CAPITAL LETTER E */
+                         '&#xFF45;', '&#65349;', /* Unicode FULLWIDTH LATIN SMALL LETTER E */
+                         '&#xFF38;', '&#65336;', /* Unicode FULLWIDTH LATIN CAPITAL LETTER X */
+                         '&#xFF58;', '&#65368;', /* Unicode FULLWIDTH LATIN SMALL LETTER X */
+                         '&#xFF30;', '&#65328;', /* Unicode FULLWIDTH LATIN CAPITAL LETTER P */
+                         '&#xFF50;', '&#65360;', /* Unicode FULLWIDTH LATIN SMALL LETTER P */
+                         '&#xFF32;', '&#65330;', /* Unicode FULLWIDTH LATIN CAPITAL LETTER R */
+                         '&#xFF52;', '&#65362;', /* Unicode FULLWIDTH LATIN SMALL LETTER R */
+                         '&#xFF33;', '&#65331;', /* Unicode FULLWIDTH LATIN CAPITAL LETTER S */
+                         '&#xFF53;', '&#65363;', /* Unicode FULLWIDTH LATIN SMALL LETTER S */
+                         '&#xFF29;', '&#65321;', /* Unicode FULLWIDTH LATIN CAPITAL LETTER I */
+                         '&#xFF49;', '&#65353;', /* Unicode FULLWIDTH LATIN SMALL LETTER I */
+                         '&#xFF2F;', '&#65327;', /* Unicode FULLWIDTH LATIN CAPITAL LETTER O */
+                         '&#xFF4F;', '&#65359;', /* Unicode FULLWIDTH LATIN SMALL LETTER O */
+                         '&#xFF2E;', '&#65326;', /* Unicode FULLWIDTH LATIN CAPITAL LETTER N */
+                         '&#xFF4E;', '&#65358;', /* Unicode FULLWIDTH LATIN SMALL LETTER N */
+                         '&#xFF2C;', '&#65324;', /* Unicode FULLWIDTH LATIN CAPITAL LETTER L */
+                         '&#xFF4C;', '&#65356;', /* Unicode FULLWIDTH LATIN SMALL LETTER L */
+                         '&#xFF35;', '&#65333;', /* Unicode FULLWIDTH LATIN CAPITAL LETTER U */
+                         '&#xFF55;', '&#65365;', /* Unicode FULLWIDTH LATIN SMALL LETTER U */
+                         '&#x207F;', '&#8319;' , /* Unicode SUPERSCRIPT LATIN SMALL LETTER N */
+                         "\xEF\xBC\xA5", /* Shift JIS FULLWIDTH LATIN CAPITAL LETTER E */
+                                         /* in unicode this is some Chinese char range */
+                         "\xEF\xBD\x85", /* Shift JIS FULLWIDTH LATIN SMALL LETTER E */
+                         "\xEF\xBC\xB8", /* Shift JIS FULLWIDTH LATIN CAPITAL LETTER X */
+                         "\xEF\xBD\x98", /* Shift JIS FULLWIDTH LATIN SMALL LETTER X */
+                         "\xEF\xBC\xB0", /* Shift JIS FULLWIDTH LATIN CAPITAL LETTER P */
+                         "\xEF\xBD\x90", /* Shift JIS FULLWIDTH LATIN SMALL LETTER P */
+                         "\xEF\xBC\xB2", /* Shift JIS FULLWIDTH LATIN CAPITAL LETTER R */
+                         "\xEF\xBD\x92", /* Shift JIS FULLWIDTH LATIN SMALL LETTER R */
+                         "\xEF\xBC\xB3", /* Shift JIS FULLWIDTH LATIN CAPITAL LETTER S */
+                         "\xEF\xBD\x93", /* Shift JIS FULLWIDTH LATIN SMALL LETTER S */
+                         "\xEF\xBC\xA9", /* Shift JIS FULLWIDTH LATIN CAPITAL LETTER I */
+                         "\xEF\xBD\x89", /* Shift JIS FULLWIDTH LATIN SMALL LETTER I */
+                         "\xEF\xBC\xAF", /* Shift JIS FULLWIDTH LATIN CAPITAL LETTER O */
+                         "\xEF\xBD\x8F", /* Shift JIS FULLWIDTH LATIN SMALL LETTER O */
+                         "\xEF\xBC\xAE", /* Shift JIS FULLWIDTH LATIN CAPITAL LETTER N */
+                         "\xEF\xBD\x8E", /* Shift JIS FULLWIDTH LATIN SMALL LETTER N */
+                         "\xEF\xBC\xAC", /* Shift JIS FULLWIDTH LATIN CAPITAL LETTER L */
+                         "\xEF\xBD\x8C", /* Shift JIS FULLWIDTH LATIN SMALL LETTER L */
+                         "\xEF\xBC\xB5", /* Shift JIS FULLWIDTH LATIN CAPITAL LETTER U */
+                         "\xEF\xBD\x95", /* Shift JIS FULLWIDTH LATIN SMALL LETTER U */
+                         "\xE2\x81\xBF", /* Shift JIS FULLWIDTH SUPERSCRIPT N */
+                         "\xCA\x9F",   /* L UNICODE IPA Extension */
+                         "\xCA\x80",   /* R UNICODE IPA Extension */
+                         "\xC9\xB4"),  /* N UNICODE IPA Extension */
+                   array('l', 'l', 'r', 'r', 'n', 'n', 'E', 'E', 'e', 'e', 'X', 'X', 'x', 'x',
+                         'P', 'P', 'p', 'p', 'R', 'R', 'r', 'r', 'S', 'S', 's', 's', 'I', 'I',
+                         'i', 'i', 'O', 'O', 'o', 'o', 'N', 'N', 'n', 'n', 'L', 'L', 'l', 'l',
+                         'U', 'U', 'u', 'u', 'n', 'n', 'E', 'e', 'X', 'x', 'P', 'p', 'R', 'r',
+                         'S', 's', 'I', 'i', 'O', 'o', 'N', 'n', 'L', 'l', 'U', 'u', 'n', 'l', 'r', 'n'));
+  if ((count($tags)>3) && (count($tags[3])>0))
+    foreach ($tags[3] as $nr=>$value)
+      {
+      /* Remove comments */
+      $newvalue = preg_replace('/(\/\*.*\*\/)/','$2',$value);
+      /* Translate dangerous characters */
+      $newvalue = str_replace($replace[0], $replace[1], $newvalue);
+      sq_defang($newvalue);
+      /* Rename dangerous CSS */
+      $newvalue = preg_replace('/expression/i', 'idiocy', $newvalue);
+      $newvalue = preg_replace('/url/i', 'idiocy', $newvalue);
+      $newattrs = preg_replace('/'.preg_quote($value, '/').'$/', $newvalue, $tags[1][$nr]);
+      $newtag = preg_replace('/'.preg_quote($tags[1][$nr], '/').'/', $newattrs, $tags[0][$nr]);
+      $html = preg_replace('/'.preg_quote($tags[0][$nr], '/').'/', $newtag, $html);
+      }
+  return $html;
+  }
+
+
 function rcmail_print_body($part, $safe=FALSE, $plain=FALSE)
   {
   global $IMAP, $REMOTE_OBJECTS;
@@ -533,7 +654,7 @@ function rcmail_print_body($part, $safe=FALSE, $plain=FALSE)
       $body = preg_replace($remote_patterns, $remote_replaces, $body);
       }
 
-    return Q($body, 'show', FALSE);
+    return Q(rcmail_html_filter($body), 'show', FALSE);
     }
 
   // text/enriched
@@ -639,7 +760,7 @@ function rcmail_parse_message(&$structure, $arg=array(), $recursive=FALSE)
     $structure->type = 'content';
     $a_return_parts[] = &$structure;
     }
-
+    
   // message contains alternative parts
   else if ($message_ctype_primary=='multipart' && $message_ctype_secondary=='alternative' && is_array($structure->parts))
     {
@@ -731,7 +852,7 @@ function rcmail_parse_message(&$structure, $arg=array(), $recursive=FALSE)
 
       // part text/[plain|html] OR message/delivery-status
       else if (($primary_type=='text' && ($secondary_type=='plain' || $secondary_type=='html') && $mail_part->disposition!='attachment') ||
-               ($primary_type=='message' && $secondary_type=='delivery-status'))
+               ($primary_type=='message' && ($secondary_type=='delivery-status' || $secondary_type=='disposition-notification')))
         {
         $mail_part->type = 'content';
         $a_return_parts[] = $mail_part;
@@ -745,6 +866,10 @@ function rcmail_parse_message(&$structure, $arg=array(), $recursive=FALSE)
         $a_return_parts = array_merge($a_return_parts, $parts);
         $a_attachments = array_merge($a_attachments, $attachmnts);
         }
+        
+      // ignore "virtual" protocol parts
+      else if ($primary_type=='protocol')
+        continue;
 
       // part is file/attachment
       else if ($mail_part->disposition=='attachment' || $mail_part->disposition=='inline' || $mail_part->headers['content-id'] ||
@@ -764,7 +889,7 @@ function rcmail_parse_message(&$structure, $arg=array(), $recursive=FALSE)
         else
           {
           if (!$mail_part->filename)
-            $mail_part->filename = 'file_'.$mail_part->mime_id;
+            $mail_part->filename = 'Part '.$mail_part->mime_id;
           $a_attachments[] = $mail_part;
           }
         }
@@ -862,7 +987,7 @@ function rcmail_message_body($attrib)
   if (!$attrib['id'])
     $attrib['id'] = 'rcmailMsgBody';
 
-  $safe_mode = (bool)$_GET['_safe'];
+  $safe_mode = $MESSAGE['is_safe'] || intval($_GET['_safe']);
   $attrib_str = create_attrib_string($attrib, array('style', 'class', 'id'));
   $out = '<div '. $attrib_str . ">\n";
   
@@ -973,10 +1098,10 @@ function rcmail_sanitize_html($body, $container_id)
   // remove SCRIPT tags
   foreach (array('script', 'applet', 'object', 'embed', 'iframe') as $tag)
     {
-    while (($pos = strpos($body_lc, '<'.$tag)) && ($pos2 = strpos($body_lc, '</'.$tag.'>', $pos)))
+    while (($pos = strpos($body_lc, '<'.$tag)) && (($pos2 = strpos($body_lc, '</'.$tag.'>', $pos)) || ($pos3 = strpos($body_lc, '>', $pos))))
       {
-      $pos2 += strlen('</'.$tag.'>');
-      $body = substr($body, 0, $pos) . substr($body, $pos2, strlen($body)-$pos2);
+      $end = $pos2 ? $pos2 + strlen('</'.$tag.'>') : $pos3 + 1;
+      $body = substr($body, 0, $pos) . substr($body, $end, strlen($body)-$end);
       $body_lc = strtolower($body);
       }
     }
@@ -985,7 +1110,7 @@ function rcmail_sanitize_html($body, $container_id)
   while ($body != $prev_body)
     {
     $prev_body = $body;
-    $body = preg_replace('/(<[^!][^>]*\s)(on[^=>]+)=([^>]+>)/im', '$1__removed=$3', $body);
+    $body = preg_replace('/(<[^!][^>]*\s)on(?:load|unload|click|dblclick|mousedown|mouseup|mouseover|mousemove|mouseout|focus|blur|keypress|keydown|keyup|submit|reset|select|change)=([^>]+>)/im', '$1__removed=$2', $body);
     $body = preg_replace('/(<[^!][^>]*\shref=["\']?)(javascript:)([^>]*?>)/im', '$1null:$3', $body);
     }
 
@@ -1197,15 +1322,15 @@ function rcmail_message_part_controls()
   {
   global $CONFIG, $IMAP, $MESSAGE;
   
-  if (!is_array($MESSAGE) || !is_array($MESSAGE['parts']) || !($_GET['_uid'] && $_GET['_part']) || !$MESSAGE['parts'][$_GET['_part']])
+  $part = asciiwords(get_input_value('_part', RCUBE_INPUT_GPC));
+  if (!is_array($MESSAGE) || !is_array($MESSAGE['parts']) || !($_GET['_uid'] && $_GET['_part']) || !$MESSAGE['parts'][$part])
     return '';
     
-  $part = &$MESSAGE['parts'][$_GET['_part']];
-  
+  $part = $MESSAGE['parts'][$part];
   $attrib_str = create_attrib_string($attrib, array('id', 'class', 'style', 'cellspacing', 'cellpadding', 'border', 'summary'));
   $out = '<table '. $attrib_str . ">\n";
   
-  if ($filename)
+  if ($part->filename)
     {
     $out .= sprintf('<tr><td class="title">%s</td><td>%s</td><td>[<a href="./?%s">%s</a>]</tr>'."\n",
                     Q(rcube_label('filename')),
@@ -1230,7 +1355,7 @@ function rcmail_message_part_frame($attrib)
   {
   global $MESSAGE;
   
-  $part = $MESSAGE['parts'][$_GET['_part']];
+  $part = $MESSAGE['parts'][asciiwords(get_input_value('_part', RCUBE_INPUT_GPC))];
   $ctype_primary = strtolower($part->ctype_primary);
 
   $attrib['src'] = Q('./?'.str_replace('_frame=', ($ctype_primary=='text' ? '_show=' : '_preload='), $_SERVER['QUERY_STRING']));
@@ -1255,6 +1380,141 @@ function rcmail_compose_cleanup()
   
   unset($_SESSION['compose']);
   }
+  
+
+/**
+ * Send the given message compose object using the configured method
+ */
+function rcmail_deliver_message(&$message, $from, $mailto)
+{
+  global $CONFIG;
+
+  $headers = $message->headers();
+  $msg_body = $message->get();
+  
+  // send thru SMTP server using custom SMTP library
+  if ($CONFIG['smtp_server'])
+    {
+    // generate list of recipients
+    $a_recipients = array($mailto);
+  
+    if (strlen($headers['Cc']))
+      $a_recipients[] = $headers['Cc'];
+    if (strlen($headers['Bcc']))
+      $a_recipients[] = $headers['Bcc'];
+  
+    // clean Bcc from header for recipients
+    $send_headers = $headers;
+    unset($send_headers['Bcc']);
+
+    // send message
+    $smtp_response = array();
+    $sent = smtp_mail($from, $a_recipients, ($foo = $message->txtHeaders($send_headers)), $msg_body, $smtp_response);
+
+    // log error
+    if (!$sent)
+      raise_error(array('code' => 800, 'type' => 'smtp', 'line' => __LINE__, 'file' => __FILE__,
+                        'message' => "SMTP error: ".join("\n", $smtp_response)), TRUE, FALSE);
+    }
+  
+  // send mail using PHP's mail() function
+  else
+    {
+    // unset some headers because they will be added by the mail() function
+    $headers_enc = $message->headers($headers);
+    $headers_php = $message->_headers;
+    unset($headers_php['To'], $headers_php['Subject']);
+    
+    // reset stored headers and overwrite
+    $message->_headers = array();
+    $header_str = $message->txtHeaders($headers_php);
+  
+    if (ini_get('safe_mode'))
+      $sent = mail($headers_enc['To'], $headers_enc['Subject'], $msg_body, $header_str);
+    else
+      $sent = mail($headers_enc['To'], $headers_enc['Subject'], $msg_body, $header_str, "-f$from");
+    }
+  
+  if ($sent)  // remove MDN headers after sending
+    unset($headers['Return-Receipt-To'], $headers['Disposition-Notification-To']);
+  
+  $message->_headers = array();
+  $message->headers($headers);
+  
+  return $sent;
+}
+
+
+function rcmail_send_mdn($uid)
+{
+  global $CONFIG, $USER, $IMAP;
+  
+  $message = array('UID' => $uid);
+  $message['headers'] = $IMAP->get_headers($message['UID']);
+  $message['subject'] = rcube_imap::decode_mime_string($message['headers']->subject, $message['headers']->charset);
+  
+  if ($message['headers']->mdn_to && !$message['headers']->mdn_sent)
+  {
+    $identity = $USER->get_identity();
+    $sender = format_email_recipient($identity['email'], $identity['name']);
+    $recipient = array_shift($IMAP->decode_address_list($message['headers']->mdn_to));
+    $mailto = $recipient['mailto'];
+
+    $compose = new rc_mail_mime(rcmail_header_delm());
+    $compose->setParam(array(
+      'text_encoding' => 'quoted-printable',
+      'html_encoding' => 'quoted-printable',
+      'head_encoding' => 'quoted-printable',
+      'head_charset'  => RCMAIL_CHARSET,
+      'html_charset'  => RCMAIL_CHARSET,
+      'text_charset'  => RCMAIL_CHARSET,
+    ));
+    
+    // compose headers array
+    $headers = array(
+      'Date' => date('r'),
+      'From' => $sender,
+      'To'   => $message['headers']->mdn_to,
+      'Subject' => rcube_label('receiptread') . ': ' . $message['subject'],
+      'Message-ID' => sprintf('<%s@%s>', md5(uniqid('rcmail'.rand(),true)), rcmail_mail_domain($_SESSION['imap_host'])),
+      'X-Sender' => $identity['email'],
+      'Content-Type' => 'multipart/report; report-type=disposition-notification',
+    );
+    
+    if (!empty($CONFIG['useragent']))
+      $headers['User-Agent'] = $CONFIG['useragent'];
+
+    $body = rcube_label("yourmessage") . "\r\n\r\n" .
+      "\t" . rcube_label("to") . ': ' . rcube_imap::decode_mime_string($message['headers']->to, $message['headers']->charset) . "\r\n" .
+      "\t" . rcube_label("subject") . ': ' . $message['subject'] . "\r\n" .
+      "\t" . rcube_label("sent") . ': ' . format_date(strtotime($message['headers']->date), $CONFIG['date_long']) . "\r\n" .
+      "\r\n" . rcube_label("receiptnote") . "\r\n";
+    
+    $ua = !empty($CONFIG['useragent']) ? $CONFIG['useragent'] : "RoundCube Webmail (Version ".RCMAIL_VERSION.")";
+    $report = "Reporting-UA: $ua\r\n";
+    
+    if ($message['headers']->to)
+        $report .= "Original-Recipient: {$message['headers']->to}\r\n";
+    
+    $report .= "Final-Recipient: rfc822; {$identity['email']}\r\n" .
+               "Original-Message-ID: {$message['headers']->messageID}\r\n" .
+               "Disposition: manual-action/MDN-sent-manually; displayed\r\n";
+    
+    $compose->headers($headers, true);
+    $compose->setTXTBody($body);
+    $compose->addAttachment($report, 'message/disposition-notification', 'MDNPart2.txt', false, '7bit', 'inline');
+
+    $sent = rcmail_deliver_message($compose, $identity['email'], $mailto);
+
+    if ($sent)
+    {
+      $IMAP->set_flag($message['UID'], 'MDNSENT');
+      return true;
+    }
+  }
+  
+  return false;
+}
 
 
 // register UI objects

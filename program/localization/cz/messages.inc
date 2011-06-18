@@ -6,15 +6,16 @@
  | language/cz/messages.inc                                              |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
- | All rights reserved.                                                  |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
+ | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Martin Mrajca <martin@moonlake.cz>                            |
  |        joe <joe@humlak.cz>                                            |
+ |        Jiri Kaderavek <jiri.kaderavek@webstep.net>                    |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 869 2007-10-15 13:27:08Z yllar $
+ @version $Id: messages.inc 1068 2008-02-13 19:24:23Z yllar $
 
 */
 
@@ -75,5 +76,9 @@ $messages['copyerror'] = 'Nemohu zkopírovat žádnou adresu';
 $messages['sourceisreadonly'] = 'Tento zdroj adres je pouze pro čtení';
 $messages['errorsavingcontact'] = 'Nemohu uložit adresu kontaktu';
 $messages['movingmessage'] = 'Přesouvám zprávu...';
+$messages['receiptsent'] = 'Potvrzení o přřijetí zprávy odesláno';
+$messages['errorsendingreceipt'] = 'Potvrzení o přijetí zprávy nebylo možné odeslat';
+$messages['nodeletelastidentity'] = 'Alespoň jedna identita musí být ponechána. Identitu nelze odstranit.';
+$messages['addsubfolderhint'] = 'Tato složka bude vytvořena jako podsložka aktuálně zvolené složky';
 
 ?>

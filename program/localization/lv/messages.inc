@@ -6,15 +6,15 @@
  | language/lv/messages.inc                                              |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Rudolfs Osins <dev.random@gmail.com>                          |
- | Updated for 0.1-rc1: Mikelis Zalais <mik@prog.lv>                     |
+ |         Mikelis Zalais <mik@prog.lv>                                  |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 557 2007-05-15 06:41:32Z yllar $
+ @version $Id: messages.inc 1093 2008-02-16 11:40:18Z tomekp $
 
 */
 
@@ -74,5 +74,10 @@ $messages['copysuccess'] = 'Veiksmīgi nokopētas $nr vēstules';
 $messages['copyerror'] = 'Nevarēja nokopēt nevienu adresi';
 $messages['sourceisreadonly'] = 'Adreses avots ir lasīšanas režīmā tikai';
 $messages['errorsavingcontact'] = 'Nevarēja saglabāt kontakta adreses';
+$messages['movingmessage'] = 'Pārvietoju vēstules...';
+$messages['receiptsent'] = 'Saņemšanas apstiprinājums nosūtīts';
+$messages['errorsendingreceipt'] = 'Neizdevās nosūtīt apstiprinājumu';
+$messages['nodeletelastidentity'] = 'Šo identitāti nevar izdzēst, tā ir pati pēdējā.';
+$messages['addsubfolderhint'] = 'Šis folderis tiks izveidots kā apakšfolderis tam, kurš patreiz ir izvēlēts';
 
 ?>

@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: get.inc 884 2007-10-18 09:10:35Z thomasb $
+ $Id: get.inc 1026 2008-02-07 07:50:37Z thomasb $
 
 */
 
@@ -88,7 +88,7 @@ else if ($pid = get_input_value('_part', RCUBE_INPUT_GET))
       // we have to analyze the whole structure again to find inline objects
       list($new_parts, $new_attachments) =
         rcmail_parse_message($MESSAGE['structure'],
-                             array('safe' => (bool)$_GET['_safe'],
+                             array('safe' => intval($_GET['_safe']),
                                    'prefer_html' => TRUE,
                                    'get_url' => $GET_URL.'&_part=%s'));
 
@@ -102,16 +102,16 @@ else if ($pid = get_input_value('_part', RCUBE_INPUT_GET))
         $part->body = $IMAP->get_message_part($MESSAGE['UID'], $part->mime_id, $part);
 
       $OUTPUT = new rcube_html_page();
-      $OUTPUT->write(rcmail_print_body($part, (bool)$_GET['_safe']));
+      $OUTPUT->write(rcmail_print_body($part, intval($_GET['_safe'])));
       }
     else
       {
       header(sprintf('Content-Disposition: %s; filename="%s";',
                      $_GET['_download'] ? 'attachment' : 'inline',
-                     $part->filename ? $part->filename : "roundcube.$ctype_secondary"));
+                     $part->filename ? abbreviate_string($part->filename, 55) : "roundcube.$ctype_secondary"));
 
       // turn off output buffering and print part content
-      $IMAP->get_message_part($MESSAGE['UID'], $part->mime_id, $part->encoding, true);
+      $IMAP->get_message_part($MESSAGE['UID'], $part->mime_id, $part, true);
       }
 
     exit;
@@ -130,7 +130,7 @@ else
 
   $cont = ''; 
   list($MESSAGE['parts']) = rcmail_parse_message($MESSAGE['structure'],
-                                                 array('safe' => (bool)$_GET['_safe'],
+                                                 array('safe' => intval($_GET['_safe']),
                                                  'get_url' => $GET_URL.'&_part=%s'));
 
   $cont = "<html>\n<head><title></title>\n</head>\n<body>";

@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: move_del.inc 848 2007-10-02 08:42:18Z thomasb $
+ $Id: move_del.inc 1019 2008-02-05 21:39:08Z thomasb $
 
 */
 
@@ -60,7 +60,7 @@ else if ($_action=='delete' && !empty($_POST['_uid']))
 else
   exit;
 
-// refresh saved seach set after moving some messages
+// refresh saved search set after moving some messages
 if (($search_request = get_input_value('_search', RCUBE_INPUT_GPC)) && $IMAP->search_set)
   $_SESSION['search'][$search_request] = $IMAP->refresh_search();
 
@@ -86,7 +86,7 @@ $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($msg_count));
 
 // update mailboxlist
 $mbox = $IMAP->get_mailbox_name();
-$OUTPUT->command('set_unread_count', $mbox, $IMAP->messagecount($mbox, 'UNSEEN'));
+$OUTPUT->command('set_unread_count', $mbox, $IMAP->messagecount($mbox, 'UNSEEN'), ($mbox == 'INBOX'));
 
 if ($_action=='moveto' && $target)
   $OUTPUT->command('set_unread_count', $target, $IMAP->messagecount($target, 'UNSEEN'));

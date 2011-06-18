@@ -1,5 +1,4 @@
 <?php
-
 /*
  +-----------------------------------------------------------------------+
  | program/include/rcube_ldap.inc                                        |
@@ -15,7 +14,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_ldap.inc 787 2007-09-09 17:58:13Z thomasb $
+ $Id: rcube_ldap.inc 1152 2008-02-28 20:01:57Z thomasb $
 
 */
 
@@ -286,9 +285,12 @@ class rcube_ldap
     }
     $filter .= ')';
     
+    // avoid double-wildcard if $value is empty
+    $filter = preg_replace('/\*+/', '*', $filter);
+    
     // add general filter to query
     if (!empty($this->prop['filter']))
-      $filter = '(&'.$this->prop['filter'] . $filter . ')';
+      $filter = '(&(' . preg_replace('/^\(|\)$/', '', $this->prop['filter']) . ')' . $filter . ')';
 
     // set filter string and execute search
     $this->set_search_set($filter);
