@@ -5,7 +5,7 @@
  | program/steps/mail/autocomplete.inc                                   |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2008, RoundCube Dev Team                                |
+ | Copyright (C) 2008-2009, RoundCube Dev Team                           |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -21,10 +21,11 @@
 
 $MAXNUM = 15;  // same limit as in app.js
 $contacts = array();
+$book_types = (array) $RCMAIL->config->get('autocomplete_addressbooks', 'sql');
 
-if ($search = get_input_value('_search', RCUBE_INPUT_POST)) {
+if ($book_types && $search = get_input_value('_search', RCUBE_INPUT_POST)) {
 
-  foreach ($RCMAIL->config->get('autocomplete_addressbooks', array('sql')) as $id) {
+  foreach ($book_types as $id) {
     $abook = $RCMAIL->get_address_book($id);
     $abook->set_pagesize($MAXNUM);
 
@@ -43,7 +44,7 @@ if ($search = get_input_value('_search', RCUBE_INPUT_POST)) {
   sort($contacts);
 }
 
-$OUTPUT->command('ksearch_query_results', $contacts);
+$OUTPUT->command('ksearch_query_results', $contacts, $search);
 $OUTPUT->send();
 
 ?>

@@ -6,14 +6,14 @@
 | language/lt_LT/messages.inc                                           |
 |                                                                       |
 | Language file of the RoundCube Webmail client                         |
-| Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
+| Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
 | Author: Martynas Bendorius <martynas@evanet.lt>                       |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 2184 2008-12-21 09:30:25Z yllar $
+@version $Id: messages.inc 2237 2009-01-17 01:55:39Z till $
 
 */
 

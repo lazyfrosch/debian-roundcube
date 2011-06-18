@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: func.inc 2164 2008-12-16 19:05:50Z thomasb $
+ $Id: func.inc 2206 2008-12-31 17:52:55Z yllar $
 
 */
 
@@ -88,7 +88,7 @@ function rcmail_user_prefs_block($part, $no_override, $attrib)
       $select_timezone->add('(GMT -1:00) Azores, Cape Verde Islands', '-1');
       $select_timezone->add('(GMT) Western Europe, London, Lisbon, Casablanca', '0');
       $select_timezone->add('(GMT +1:00) Central European Time', '1');
-      $select_timezone->add('(GMT +2:00) EET: Kaliningrad, South Africa', '2');
+      $select_timezone->add('(GMT +2:00) EET: Tallinn, Helsinki, Kaliningrad, South Africa', '2');
       $select_timezone->add('(GMT +3:00) Baghdad, Kuwait, Riyadh, Moscow, Nairobi', '3');
       $select_timezone->add('(GMT +3:30) Tehran', '3.5');
       $select_timezone->add('(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi', '4');

@@ -2,9 +2,9 @@
 /*
  +-------------------------------------------------------------------------+
  | RoundCube Webmail IMAP Client                                           |
- | Version 0.2-stable                                                      |
+ | Version 0.2.1                                                           |
  |                                                                         |
- | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                   |
+ | Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                   |
  |                                                                         |
  | This program is free software; you can redistribute it and/or modify    |
  | it under the terms of the GNU General Public License version 2          |
@@ -23,7 +23,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                          |
  +-------------------------------------------------------------------------+
 
- $Id: index.php 2201 2008-12-30 14:33:28Z thomasb $
+ $Id: index.php 2348 2009-03-10 08:13:26Z thomasb $
 
 */
 
@@ -72,6 +72,10 @@ if ($RCMAIL->action=='error' && !empty($_GET['_code'])) {
 
 // try to log in
 if ($RCMAIL->action=='login' && $RCMAIL->task=='mail') {
+  // purge the session in case of new login when a session already exists 
+  $RCMAIL->kill_session(); 
+  
+  // set IMAP host
   $host = $RCMAIL->autoselect_host();
   
   // check if client supports cookies

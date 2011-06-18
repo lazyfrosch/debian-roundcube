@@ -5,7 +5,7 @@
  | program/include/rcmail.php                                            |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2008, RoundCube Dev. - Switzerland                      |
+ | Copyright (C) 2008-2009, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -47,7 +47,7 @@ class rcmail
   /**
    * This implements the 'singleton' design pattern
    *
-   * @return object qvert The one and only instance
+   * @return object rcmail The one and only instance
    */
   static function get_instance()
   {

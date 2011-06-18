@@ -6,7 +6,7 @@
 | language/ru_RU/messages.inc                                           |
 |                                                                       |
 | Language file of the RoundCube Webmail client                         |
-| Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
+| Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -15,7 +15,7 @@
 |         Artur Smolkin <admin@roundcube.ru>                            |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 2105 2008-12-01 17:50:13Z alec $
+@version $Id: messages.inc 2237 2009-01-17 01:55:39Z till $
 
 */
 

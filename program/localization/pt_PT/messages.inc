@@ -6,7 +6,7 @@
 | language/pt_PT/messages.inc                                           |
 |                                                                       |
 | Language file of the RoundCube Webmail client                         |
-| Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
+| Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -15,7 +15,7 @@
 |         Nuno Costa <nuno@criacaoweb.net>                              |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 2045 2008-11-11 15:09:24Z yllar $
+@version $Id: messages.inc 2237 2009-01-17 01:55:39Z till $
 
 */
 
