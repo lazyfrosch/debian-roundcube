@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: func.inc 2206 2008-12-31 17:52:55Z yllar $
+ $Id: func.inc 2483 2009-05-15 10:22:29Z thomasb $
 
 */
 
@@ -469,30 +469,11 @@ function rcmail_get_skins()
   }
 
 
-function rcmail_get_email()
-  {
-  global $RCMAIL;
-  
-  if (strpos($RCMAIL->user->data['username'], '@'))
-    return $RCMAIL->user->data['username'];
-  else {
-    if ($RCMAIL->config->get('virtuser_file'))
-      $user_email = rcube_user::user2email($RCMAIL->user->data['username']);
-
-    if ($user_email == '')
-      $user_email = sprintf('%s@%s', $RCMAIL->user->data['username'], 
-    	    $RCMAIL->config->mail_domain($_SESSION['imap_host']));
-
-    return $user_email;
-    }		      
-  }
-
 // register UI objects
 $OUTPUT->add_handlers(array(
   'userprefs' => 'rcmail_user_prefs_form',
   'identitieslist' => 'rcmail_identities_list',
   'itentitieslist' => 'rcmail_identities_list'  // keep this for backward compatibility
 ));
-
 
 ?>

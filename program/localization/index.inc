@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: index.inc 2284 2009-02-09 12:47:50Z yllar $
+ $Id: index.inc 2483 2009-05-15 10:22:29Z thomasb $
 
 */
 
@@ -68,6 +68,7 @@ $rcube_languages = array(
   'lt_LT' => 'Lithuanian',
   'mk_MK' => 'Macedonian',
   'ms_MY' => 'Malay',
+  'mr_IN' => 'Marathi',
   'nl_NL' => 'Nederlands',
   'ne_NP' => 'Nepali',
   'nb_NO' => 'Norsk (Bokmål)',
@@ -117,6 +118,7 @@ $rcube_language_aliases = array(
   'ne' => 'ne_NP',
   'no' => 'nn_NO',
   'ms' => 'ms_MY',
+  'mr' => 'mr_IN',
   'pl' => 'pl_PL',
   'tw' => 'zh_TW',
   'si' => 'si_LK',

@@ -14,7 +14,7 @@
 |         Laurens Vets <laurens@daemon.be>                              |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2237 2009-01-17 01:55:39Z till $
+@version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
 
 */
 
@@ -121,7 +121,7 @@ $labels['select'] = 'Selecteren';
 $labels['all'] = 'Alles';
 $labels['none'] = 'Geen';
 $labels['unread'] = 'Ongelezen';
-$labels['flagged'] = 'Gemarkeerd';
+$labels['flagged'] = 'Geselecteerd';
 $labels['unanswered'] = 'Onbeantwoord';
 $labels['filter'] = 'Filter';
 $labels['compact'] = 'Comprimeren';

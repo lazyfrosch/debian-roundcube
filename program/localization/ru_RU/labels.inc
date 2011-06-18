@@ -12,10 +12,10 @@
 +-----------------------------------------------------------------------+
 | Author: Maxim Zenin <maxx@webmechanics.ru>                            |
 |         Vladimir Kulev <me@lightoze.net>                              |
-|         Artur Smolkin <admin@roundcube.ru>                            |
+|         Artur Smolkin <artsmolkin@ya.ru>                              |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2237 2009-01-17 01:55:39Z till $
+@version $Id: labels.inc 2483 2009-05-15 10:22:29Z thomasb $
 
 */
 
@@ -133,6 +133,8 @@ $labels['unknown'] = 'неизвестно';
 $labels['unlimited'] = 'без ограничений';
 $labels['quicksearch'] = 'Быстрый поиск';
 $labels['resetsearch'] = 'Сброс';
+$labels['searchmod'] = 'Варианты поиска';
+$labels['msgtext'] = 'Всё сообщение';
 $labels['openinextwin'] = 'Открыть в новом окне';
 $labels['compose'] = 'Написать сообщение';
 $labels['savemessage'] = 'Сохранить черновик';
