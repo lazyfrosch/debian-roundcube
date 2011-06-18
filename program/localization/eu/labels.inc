@@ -9,10 +9,10 @@
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
- | Author: pi <pi@beobide.net>                                           |
+ | Author: Bicyus <bicyus@tenkanet.com>                                  |
  +-----------------------------------------------------------------------+
 
- $Id: labels.inc 549 2007-05-01 18:53:56Z thomasb $
+ $Id: labels.inc 842 2007-10-01 13:55:02Z tomekp $
 
 */
 
@@ -139,13 +139,8 @@ $labels['previouspage'] = 'Aurreko sorta ikusi';
 $labels['firstpage'] = 'Lehenengo sorta ikusi';
 $labels['nextpage'] = 'Hurrengo sorta ikusi';
 $labels['lastpage'] = 'Azken sorta ikusi';
-$labels['ldapsearch'] = 'LDAP direktorio bilaketa';
-$labels['ldappublicsearchname'] = 'Harremanetarako izena';
-$labels['ldappublicsearchtype'] = 'Parekatze zehatza?';
-$labels['ldappublicserverselect'] = 'Zerbitzariak hautatu';
-$labels['ldappublicsearchfield'] = 'Bilatu hemen';
-$labels['ldappublicsearchform'] = 'Kontaktu bat bilatu';
-$labels['ldappublicsearch'] = 'Bilatu';
+$labels['groups'] = 'Taldeak';
+$labels['personaladrbook'] = 'Helbide pertsonalak';
 $labels['settingsfor'] = 'Honen ezarpenak:';
 $labels['preferences'] = 'Hobespenak';
 $labels['userpreferences'] = 'Erabiltzaile hobespenak';

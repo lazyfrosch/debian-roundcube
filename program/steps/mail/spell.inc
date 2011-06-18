@@ -5,7 +5,7 @@
  | program/steps/mail/spell.inc                                          |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005, RoundCube Dev. - Switzerland                      |
+ | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -18,7 +18,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: spell.inc 321 2006-08-20 14:06:30Z thomasb $
+ $Id: spell.inc 850 2007-10-03 00:13:32Z ihug $
 
 */
 

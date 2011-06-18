@@ -2,7 +2,7 @@
 /*
  +-----------------------------------------------------------------------+
  | RoundCube Webmail IMAP Client                                         |
- | Version 0.1-rc1-dependent                                             |
+ | Version 0.1-rc2-dependent                                             |
  |                                                                       |
  | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
@@ -36,12 +36,12 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: index.php 618 2007-06-13 07:03:59Z thomasb $
+ $Id: index.php 903 2007-10-22 06:52:13Z thomasb $
 
 */
 
 // application constants
-define('RCMAIL_VERSION', '0.1-rc1');
+define('RCMAIL_VERSION', '0.1-rc2');
 define('RCMAIL_CHARSET', 'UTF-8');
 define('JS_OBJECT_NAME', 'rcmail');
 
@@ -66,11 +66,12 @@ if (!defined('PATH_SEPARATOR'))
 // instead the ones provided by RC
 ini_set('include_path', $INSTALL_PATH.PATH_SEPARATOR.$INSTALL_PATH.'program'.PATH_SEPARATOR.$INSTALL_PATH.'program/lib'.PATH_SEPARATOR.ini_get('include_path'));
 
-ini_set('session.name', 'sessid');
+ini_set('session.name', 'roundcube_sessid');
 ini_set('session.use_cookies', 1);
 ini_set('session.gc_maxlifetime', 21600);
 ini_set('session.gc_divisor', 500);
 ini_set('error_reporting', E_ALL&~E_NOTICE); 
+set_magic_quotes_runtime(0);
 
 // increase maximum execution time for php scripts
 // (does not work in safe mode)
@@ -81,7 +82,6 @@ require_once('include/rcube_shared.inc');
 require_once('include/rcube_imap.inc');
 require_once('include/bugs.inc');
 require_once('include/main.inc');
-require_once('include/cache.inc');
 require_once('PEAR.php');
 
 
@@ -172,8 +172,8 @@ if ($_action=='login' && $_task=='mail')
   }
   else
   {
-    $OUTPUT->show_message("loginfailed", 'warning');
-    $_SESSION['user_id'] = '';
+    $OUTPUT->show_message($IMAP->error_code == -1 ? 'imaperror' : 'loginfailed', 'warning');
+    rcmail_kill_session();
   }
 }
 
@@ -201,8 +201,8 @@ if (!empty($_SESSION['user_id']) && $_task=='mail')
   $conn = $IMAP->connect($_SESSION['imap_host'], $_SESSION['username'], decrypt_passwd($_SESSION['password']), $_SESSION['imap_port'], $_SESSION['imap_ssl']);
   if (!$conn)
   {
-    $OUTPUT->show_message('imaperror', 'error');
-    $_SESSION['user_id'] = '';
+    $OUTPUT->show_message($IMAP->error_code == -1 ? 'imaperror' : 'sessionerror', 'error');
+    rcmail_kill_session();
   }
   else
     rcmail_set_imap_prop();
@@ -218,6 +218,16 @@ if (empty($_SESSION['user_id']))
   $_task = 'login';
 }
 
+
+// check client X-header to verify request origin
+if ($OUTPUT->ajax_call)
+{
+  if (empty($CONFIG['devel_mode']) && !rc_request_header('X-RoundCube-Referer'))
+  {
+    header('HTTP/1.1 404 Not Found');
+    die("Invalid Request");
+  }
+}
 
 
 // set task and action to client

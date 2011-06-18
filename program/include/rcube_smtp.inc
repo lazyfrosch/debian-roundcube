@@ -5,7 +5,7 @@
  | program/include/rcube_smtp.inc                                        |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005, RoundCube Dev. - Switzerland                      |
+ | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,10 +15,15 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_smtp.inc 587 2007-05-28 19:21:36Z thomasb $
+ $Id: rcube_smtp.inc 805 2007-09-20 13:36:57Z robin $
 
 */
 
+/**
+ * SMTP delivery functions
+ *
+ * @package Mail
+ */
 
 // include required PEAR classes
 require_once('Net/SMTP.php');
@@ -47,7 +52,6 @@ $SMTP_CONN = null;
  * @param string The full text of the message body, including any Mime parts, etc.
  *
  * @return bool  Returns TRUE on success, or FALSE on error
- * @access public
  */
 function smtp_mail($from, $recipients, &$headers, &$body, &$response)
   {
@@ -72,7 +76,7 @@ function smtp_mail($from, $recipients, &$headers, &$body, &$response)
   // create Net_SMTP object and connect to server
   if (!is_object($smtp_conn))
     {
-    $helo_host = !empty($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost';
+    $helo_host = empty($CONFIG['smtp_helo_host']) ? (empty($_SERVER['SERVER_NAME']) ? 'localhost' : $_SERVER['SERVER_NAME']) : $CONFIG['smtp_helo_host'];
     $SMTP_CONN = new Net_SMTP($smtp_host, $smtp_port, $helo_host);
 
     // set debugging
@@ -342,6 +346,9 @@ function smtp_parse_rfc822($recipients)
   }
 
 
+/**
+ * @access private
+ */
 function smtp_explode_quoted_str($delimiter, $string)
   {
   $quotes=explode("\"", $string);

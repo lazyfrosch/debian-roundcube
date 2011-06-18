@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: func.inc 579 2007-05-18 13:11:22Z thomasb $
+ $Id: func.inc 892 2007-10-20 21:47:11Z thomasb $
 
 */
 
@@ -26,7 +26,10 @@ $sql_result = $DB->query("SELECT username, mail_host FROM ".get_table_name('user
                           $_SESSION['user_id']);
                                  
 if ($USER_DATA = $DB->fetch_assoc($sql_result))
-  $OUTPUT->set_pagetitle(sprintf('%s %s@%s', rcube_label('settingsfor'), $USER_DATA['username'], $USER_DATA['mail_host']));
+{
+  $username = $USER_DATA['username'] . (!strpos($USER_DATA['username'], '@') ? '@'.$USER_DATA['mail_host'] : '');
+  $OUTPUT->set_pagetitle(sprintf('%s %s', rcube_label('settingsfor'), $username));
+}
 
 
 
@@ -34,7 +37,7 @@ function rcmail_user_prefs_form($attrib)
   {
   global $DB, $CONFIG, $sess_user_lang;
 
-  $no_override = is_array($CONFIG['dont_override']) ? array_flip($CONFIG['dont_override']) : array();
+  $no_override = !empty($CONFIG['dont_override']) ? array_flip((array)$CONFIG['dont_override']) : array('preview_pane'=>true);
 
   // add some labels to client
   rcube_add_label('nopagesizewarning');
@@ -97,7 +100,7 @@ function rcmail_user_prefs_form($attrib)
     $select_timezone->add('(GMT +8:00) Beijing, Perth, Singapore, Taipei', '8');
     $select_timezone->add('(GMT +9:00) Tokyo, Seoul, Yakutsk', '9');
     $select_timezone->add('(GMT +9:30) Adelaide, Darwin', '9.5');
-    $select_timezone->add('(GMT +10:00) EAST/AEST: Guam, Vladivostok', '10');
+    $select_timezone->add('(GMT +10:00) EAST/AEST: Sydney, Guam, Vladivostok', '10');
     $select_timezone->add('(GMT +11:00) Magadan, Solomon Islands', '11');
     $select_timezone->add('(GMT +12:00) Auckland, Wellington, Kamchatka', '12');
     $select_timezone->add('(GMT +13:00) Tonga, Pheonix Islands', '13');
@@ -158,7 +161,7 @@ function rcmail_user_prefs_form($attrib)
     }
 
   // Show checkbox for HTML Editor
-  if (false && !isset($no_override['htmleditor']))
+  if (!isset($no_override['htmleditor']) && $CONFIG['enable_htmleditor'])
     {
     $field_id = 'rcmfd_htmleditor';
     $input_htmleditor = new checkbox(array('name' => '_htmleditor', 'id' => $field_id, 'value' => 1));
@@ -169,7 +172,7 @@ function rcmail_user_prefs_form($attrib)
     }
 
   // show config parameter for preview pane
-  if (false && !isset($no_override['preview_pane']))
+  if (!isset($no_override['preview_pane']))
     {
     $field_id = 'rcmfd_preview';
     $input_preview = new checkbox(array('name' => '_preview_pane', 'id' => $field_id, 'value' => 1));

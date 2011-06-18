@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: save.inc 543 2007-04-28 18:07:12Z thomasb $
+ $Id: save.inc 638 2007-07-03 17:25:05Z thomasb $
 
 */
 
@@ -83,7 +83,7 @@ if (!empty($cid))
 else
 {
   // check for existing contacts
-  $existing = $CONTACTS->search('email', $a_record['email'], false);
+  $existing = $CONTACTS->search('email', $a_record['email'], true, false);
   
   // show warning message
   if ($existing->count)

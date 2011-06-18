@@ -5,7 +5,7 @@
  | program/steps/mail/compose.inc                                        |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005, RoundCube Dev. - Switzerland                      |
+ | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: compose.inc 579 2007-05-18 13:11:22Z thomasb $
+ $Id: compose.inc 892 2007-10-20 21:47:11Z thomasb $
 
 */
 
@@ -42,8 +42,6 @@ if ($_action=='remove-attachment' && preg_match('/^rcmfile([0-9]+)$/', $_POST['_
     }
   }
 
-// this version does not support HTML mails
-$CONFIG['htmleditor'] = false;
 
 $MESSAGE_FORM = NULL;
 $MESSAGE = NULL;
@@ -65,6 +63,9 @@ rcube_add_label('nosubject', 'norecipientwarning', 'nosubjectwarning', 'nobodywa
 // add config parameter to client script
 $OUTPUT->set_env('draft_autosave', !empty($CONFIG['drafts_mbox']) ? $CONFIG['draft_autosave'] : 0);
 
+// no html editor if globally disabled
+if (!$CONFIG['enable_htmleditor'])
+  $CONFIG['htmleditor'] = false;
 
 // get reference message and set compose mode
 if ($msg_uid = get_input_value('_reply_uid', RCUBE_INPUT_GET))
@@ -147,7 +148,7 @@ function rcmail_compose_headers($attrib)
         $header = 'bcc';
         }
         
-      $allow_attrib = array('id', 'class', 'style', 'cols', 'rows', 'wrap', 'tabindex');
+      $allow_attrib = array('id', 'class', 'style', 'cols', 'rows', 'tabindex');
       $field_type = 'textarea';            
       break;
 
@@ -407,6 +408,13 @@ function rcmail_compose_body($attrib)
       }
 
     $body = rcmail_create_draft_body($body, $isHtml);
+    }
+
+  if ($CONFIG['enable_htmleditor'])
+    {
+    $OUTPUT->include_script('tiny_mce/tiny_mce.js');
+    $OUTPUT->include_script("editor.js");
+    $OUTPUT->add_script('rcmail_editor_init("$__skin_path");');
     }
 
   $out = $form_start ? "$form_start\n" : '';
@@ -779,6 +787,9 @@ function rcmail_receipt_checkbox($attrib)
 function rcmail_editor_selector($attrib)
 {
   global $CONFIG, $MESSAGE, $compose_mode;
+  
+  if (!$CONFIG['enable_htmleditor'])
+    return '';
 
   $choices = array(
     'html'  => 'htmltoggle',
@@ -860,6 +871,7 @@ $OUTPUT->add_handlers(array(
   'composeattachmentform' => 'rcmail_compose_attachment_form',
   'composeattachment' => 'rcmail_compose_attachment_field',
   'priorityselector' => 'rcmail_priority_selector',
+  'editorselector' => 'rcmail_editor_selector',
   'receiptcheckbox' => 'rcmail_receipt_checkbox',
 ));
 

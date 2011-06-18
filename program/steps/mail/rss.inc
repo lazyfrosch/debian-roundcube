@@ -5,7 +5,7 @@
  | program/steps/mail/rss.inc                                            |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005, RoundCube Dev. - Switzerland                      |
+ | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Sjon Hortensius <sjon@hortensius.net>                         |
  +-----------------------------------------------------------------------+
 
- $Id: rss.inc 320 2006-08-18 12:48:33Z thomasb $
+ $Id: rss.inc 850 2007-10-03 00:13:32Z ihug $
 
 */
 

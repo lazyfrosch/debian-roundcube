@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /*
 
@@ -13,7 +13,7 @@
  | Author: Stephan Diehl <info@sd-edv.de>                                |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 557 2007-05-15 06:41:32Z yllar $
+ @version $Id: messages.inc 842 2007-10-01 13:55:02Z tomekp $
 
 */
 
@@ -73,5 +73,6 @@ $messages['copysuccess'] = '$nr Adressen erfolgreich kopiert';
 $messages['copyerror'] = 'Die Adressen konnten nicht kopiert werden';
 $messages['sourceisreadonly'] = 'Das Adressverzeichnis kann nicht verändert werden';
 $messages['errorsavingcontact'] = 'Die Änderungen konnten nicht gespeichert werden';
+$messages['movingmessage'] = 'Die E-Mail wird verschoben...';
 
 ?>

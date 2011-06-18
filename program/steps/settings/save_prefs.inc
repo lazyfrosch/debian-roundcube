@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: save_prefs.inc 543 2007-04-28 18:07:12Z thomasb $
+ $Id: save_prefs.inc 768 2007-09-01 14:55:10Z till $
 
 */
 
@@ -40,6 +40,16 @@ if (isset($_POST['_language']))
   {
   $sess_user_lang = $_SESSION['user_lang'] = get_input_value('_language', RCUBE_INPUT_POST);
   rcmail_set_locale($sess_user_lang);
+  }
+
+// force min size
+if ($a_user_prefs['pagesize'] < 1)
+  {
+  $a_user_prefs['pagesize'] = 10;
+  }
+if (isset($CONFIG['max_pagesize']) && ($a_user_prefs['pagesize'] > $CONFIG['max_pagesize']))
+  {
+  $a_user_prefs['pagesize'] = (int) $CONFIG['max_pagesize'];
   }
 
 if (rcmail_save_user_prefs($a_user_prefs))
