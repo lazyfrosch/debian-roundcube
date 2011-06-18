@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: session.inc 850 2007-10-03 00:13:32Z ihug $
+ $Id: session.inc 1063 2008-02-13 05:26:47Z till $
 
 */
 
@@ -172,8 +172,13 @@ function sess_regenerate_id()
   sess_destroy(session_id());
 
   session_id($random);
-  $cookie = session_get_cookie_params();
-  setcookie(session_name(), $random, $cookie['lifetime'], $cookie['path']);
+
+  $cookie    = session_get_cookie_params();
+  $_lifetime = $cookie['lifetime'] ? time() + $cookie['lifetime'] : 0;
+
+  setcookie(session_name(), '', time() - 3600);
+  setcookie(session_name(), $random, $_lifetime, $cookie['path'],
+    $cookie['domain']);
 
   return true;
   }

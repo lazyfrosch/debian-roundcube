@@ -6,7 +6,7 @@
  | language/de_CH/labels.inc                                             |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
@@ -14,7 +14,7 @@
  | Corrections: Alexander Stiebing <ja.stiebing[NOSPAM]@web.de>          |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 816 2007-09-26 08:13:21Z thomasb $
+ @version $Id: labels.inc 1075 2008-02-13 23:43:04Z thomasb $
 
 */
 
@@ -110,6 +110,9 @@ $labels['lastmessage']      = 'Die letzte Nachricht anzeigen';
 $labels['lastmessages']     = 'Die letzten Nachrichten anzeigen';
 $labels['backtolist']       = 'Zurück zur Liste';
 $labels['viewsource']       = 'Quelltext anzeigen';
+$labels['markmessages']     = 'Nachrichten markieren';
+$labels['markread']         = 'Als gelesen';
+$labels['markunread']       = 'Als ungelesen';
 
 $labels['select'] = 'Auswählen';
 $labels['all']    = 'Alle';
@@ -161,6 +164,11 @@ $labels['addcc'] = 'Cc hinzufügen';
 $labels['addbcc'] = 'Bcc hinzufügen';
 $labels['addreplyto'] = 'Antwortadresse hinzufügen';
 
+// mdn
+$labels['mdnrequest'] = 'Der Sender dieser Nachricht hat eine Empfangsbestätigung angefordert. Möchten Sie diese jetzt senden?';
+$labels['receiptread'] = 'Empfangsbestätigung (gelesen)';
+$labels['yourmessage'] = 'Dieses ist eine Empfangsbestätigung für Ihre Nachricht';
+$labels['receiptnote'] = 'Hinweis: Der Empfänger hat den Empfang der Nachricht bestätigt. Dieses ist keine Garantie, dass die Nachricht gelesen und verstanden wurde.';
 
 // address book // Adressbuch
 $labels['name']      = 'Anzeigename';
@@ -224,6 +232,7 @@ $labels['folder']  = 'Ordner';
 $labels['folders']  = 'Ordner';
 $labels['foldername']  = 'Ordnername';
 $labels['subscribed']  = 'Abonniert';
+$labels['messagecount'] = 'Nachrichten';
 $labels['create']      = 'Erstellen';
 $labels['createfolder']  = 'Neuen Ordner erstellen';
 $labels['rename'] = 'Umbenennen';

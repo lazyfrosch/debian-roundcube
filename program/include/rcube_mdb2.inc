@@ -16,7 +16,7 @@
  | Author: Lukas Kahwe Smith <smith@pooteeweet.org>                      |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_mdb2.inc 850 2007-10-03 00:13:32Z ihug $
+ $Id: rcube_mdb2.inc 1084 2008-02-14 23:12:23Z till $
 
 */
 
@@ -94,15 +94,17 @@ class rcube_mdb2
   function dsn_connect($dsn)
     {
     // Use persistent connections if available
-    $dbh = MDB2::connect($dsn, array('persistent' => $this->db_pconn, 'portability' => MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_EMPTY_TO_NULL));
+    $dbh = MDB2::connect($dsn,
+      array('persistent' => $this->db_pconn,
+        'portability' => MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_EMPTY_TO_NULL));
 
-    if (PEAR::isError($dbh))
+    if (MDB2::isError($dbh))
       {
       $this->db_error = TRUE;
       $this->db_error_msg = $dbh->getMessage();
       
-      raise_error(array('code' => 500, 'type' => 'db', 'line' => __LINE__, 'file' => __FILE__,
-                        'message' => $dbh->getMessage()), TRUE, FALSE);
+      raise_error(array('code' => 500, 'type' => 'db', 'line' => __LINE__,
+        'file' => __FILE__, 'message' => $dbh->getUserInfo()), TRUE, FALSE);
       }
     else if ($this->db_provider=='sqlite')
       {

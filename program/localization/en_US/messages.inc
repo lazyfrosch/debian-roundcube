@@ -6,14 +6,14 @@
  | language/en_US/messages.inc                                           |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 842 2007-10-01 13:55:02Z tomekp $
+ @version $Id: messages.inc 1052 2008-02-12 18:41:53Z thomasb $
 
 */
 
@@ -74,5 +74,9 @@ $messages['copyerror'] = 'Could not copy any addresses';
 $messages['sourceisreadonly'] = 'This address source is read only';
 $messages['errorsavingcontact'] = 'Could not save the contact address';
 $messages['movingmessage'] = 'Moving message...';
+$messages['receiptsent'] = 'Successfully sent a read receipt';
+$messages['errorsendingreceipt'] = 'Could not send the receipt';
+$messages['nodeletelastidentity'] = 'You cannot delete this identity, it\'s your last one.';
+$messages['addsubfolderhint'] = 'This folder will be created as subfolder of the currently selected one';
 
 ?>

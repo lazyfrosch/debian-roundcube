@@ -6,14 +6,14 @@
  | language/nl_NL/labels.inc                                             |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Mark Moses <mark@katmoda.com>                                 |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 844 2007-10-02 05:33:18Z tomekp $
+ @version $Id: labels.inc 1183 2008-03-04 22:10:15Z yllar $
 
 */
 
@@ -22,7 +22,7 @@ $labels['welcome'] = 'Welkom bij $product';
 $labels['username'] = 'Gebruikersnaam';
 $labels['password'] = 'Wachtwoord';
 $labels['server'] = 'Server';
-$labels['login'] = 'Login';
+$labels['login'] = 'Inloggen';
 $labels['logout'] = 'Uitloggen';
 $labels['mail'] = 'E-Mail';
 $labels['settings'] = 'Persoonlijke Instellingen';
@@ -35,7 +35,7 @@ $labels['junk'] = 'SPAM';
 $labels['subject'] = 'Onderwerp';
 $labels['from'] = 'Afzender';
 $labels['to'] = 'Ontvanger';
-$labels['cc'] = 'kopie';
+$labels['cc'] = 'Kopie';
 $labels['bcc'] = 'Bcc';
 $labels['replyto'] = 'Antwoord-aan';
 $labels['date'] = 'Datum';
@@ -87,6 +87,9 @@ $labels['lastmessage'] = 'Toon het laatste bericht';
 $labels['lastmessages'] = 'Toon laatste lijst met berichten';
 $labels['backtolist'] = 'Terug naar berichtenoverzicht';
 $labels['viewsource'] = 'Toon bron';
+$labels['markmessages'] = 'Markeer berichten';
+$labels['markread'] = 'Gelezen';
+$labels['markunread'] = 'Ongelezen';
 $labels['select'] = 'Selecteer';
 $labels['all'] = 'Allemaal';
 $labels['none'] = 'Geen';
@@ -103,7 +106,7 @@ $labels['compose'] = 'Maak een bericht';
 $labels['savemessage'] = 'Bewaar als concept';
 $labels['sendmessage'] = 'Verstuur het bericht nu';
 $labels['addattachment'] = 'Voeg een bijlage toe';
-$labels['charset'] = 'karakterset';
+$labels['charset'] = 'Karakterset';
 $labels['editortype'] = 'Opmaak';
 $labels['returnreceipt'] = 'Ontvangstbevestiging';
 $labels['checkspelling'] = 'Controleer spelling';
@@ -124,6 +127,10 @@ $labels['plaintoggle'] = 'Gewone tekst';
 $labels['addcc'] = 'Kopie toevoegen';
 $labels['addbcc'] = 'Bcc toevoegen';
 $labels['addreplyto'] = 'Antwoord-aan toevoegen';
+$labels['mdnrequest'] = 'De afzender van dit bericht heeft gevraagd of er een melding kan worden verzonden als dit bericht is ontvangen. Wilt u de een melding verzenden?';
+$labels['receiptread'] = 'Ontvangstbevestiging (gelezen)';
+$labels['yourmessage'] = 'Dit is een ontvangstbevestiging voor uw bericht';
+$labels['receiptnote'] = 'Let op: Deze bevestigt alleen dat uw bericht bij de geaddresseerde is binnen gekomen. Er is geen garantie dat de geaddresseerde het bericht daadwerkelijk heeft gelezen of de inhoud heeft begrepen.';
 $labels['name'] = 'Naam';
 $labels['firstname'] = 'Voornaam';
 $labels['surname'] = 'Achternaam';
@@ -171,6 +178,7 @@ $labels['folder'] = 'Map';
 $labels['folders'] = 'Mappen';
 $labels['foldername'] = 'Mapnaam';
 $labels['subscribed'] = 'Geabonneerd';
+$labels['messagecount'] = 'Berichten';
 $labels['create'] = 'Nieuw';
 $labels['createfolder'] = 'Maak nieuwe map';
 $labels['rename'] = 'Wijzig naam';

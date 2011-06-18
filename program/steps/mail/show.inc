@@ -5,7 +5,7 @@
  | program/steps/mail/show.inc                                           |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,11 +15,12 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: show.inc 668 2007-08-10 08:27:40Z thomasb $
+ $Id: show.inc 1046 2008-02-11 23:07:44Z thomasb $
 
 */
 
 require_once('Mail/mimeDecode.php');
+require_once('lib/rc_mail_mime.inc');
 
 $PRINT_MODE = $_action=='print' ? TRUE : FALSE;
 
@@ -41,12 +42,18 @@ if ($_GET['_uid'])
       return;
       }
     }
+    
+  // check if safe flag is set
+  if ($MESSAGE['is_safe'] = intval($_GET['_safe']))
+    $_SESSION['safe_messages'][$MESSAGE['UID']] = true;
+  else if ($_SESSION['safe_messages'][$MESSAGE['UID']])
+    $MESSAGE['is_safe'] = 1;
 
   // calculate Etag for this request
-  $etag = md5($MESSAGE['UID'].$IMAP->get_mailbox_name().session_id().($PRINT_MODE?1:0));
+  $etag = md5($MESSAGE['UID'].$IMAP->get_mailbox_name().session_id().intval($MESSAGE['headers']->mdn_sent).intval($MESSAGE['is_safe']).intval($PRINT_MODE));
 
   // allow caching, unless remote images are present
-  if ((bool)get_input_value('_safe', RCUBE_INPUT_GET))
+  if ((bool)$MESSAGE['is_safe'])
     send_nocacheing_headers();
   else if (empty($CONFIG['devel_mode']))
     send_modified_header($_SESSION['login_time'], $etag);
@@ -57,7 +64,7 @@ if ($_GET['_uid'])
   if ($MESSAGE['structure'] = $IMAP->get_structure($MESSAGE['UID']))
     list($MESSAGE['parts'], $MESSAGE['attachments']) = rcmail_parse_message(
       $MESSAGE['structure'],
-      array('safe' => (bool)$_GET['_safe'],
+      array('safe' => $MESSAGE['is_safe'],
             'prefer_html' => $CONFIG['prefer_html'],
             'get_url' => $GET_URL.'&_part=%s')
       );
@@ -71,12 +78,28 @@ if ($_GET['_uid'])
 
   // give message uid to the client
   $OUTPUT->set_env('uid', $MESSAGE['UID']);
-  $OUTPUT->set_env('safemode', (bool)$_GET['_safe']);
+  $OUTPUT->set_env('safemode', $MESSAGE['is_safe']);
+  
+  // check for unset disposition notification
+  if ($MESSAGE['headers']->mdn_to && !$MESSAGE['headers']->mdn_sent && $IMAP->get_mailbox_name() != $CONFIG['drafts_mbox'])
+  {
+    if (intval($CONFIG['mdn_requests']) === 1)
+    {
+      if (rcmail_send_mdn($MESSAGE['UID']))
+        $OUTPUT->show_message('receiptsent', 'confirmation');
+    }
+    else if (empty($CONFIG['mdn_requests']))
+    {
+      rcube_add_label('mdnrequest');
+      $OUTPUT->set_env('mdn_request', true);
+    }
+  }
 
-  $next = $prev = -1;
+
+  $next = $prev = $first = $last = -1;
   // get previous, first, next and last message UID
-  if (!($_SESSION['sort_col'] == 'date' && $_SESSION['sort_order'] == 'DESC') && 
-      $IMAP->get_capability('sort')) 
+  if ((!($_SESSION['sort_col'] == 'date' && $_SESSION['sort_order'] == 'DESC') &&
+      $IMAP->get_capability('sort')) || !empty($_REQUEST['_search']))
     {
     // Only if we use custom sorting
     $a_msg_index = $IMAP->message_index(NULL, $_SESSION['sort_col'], $_SESSION['sort_order']);

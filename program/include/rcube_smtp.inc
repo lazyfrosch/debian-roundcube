@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_smtp.inc 805 2007-09-20 13:36:57Z robin $
+ $Id: rcube_smtp.inc 1136 2008-02-25 10:17:35Z till $
 
 */
 
@@ -62,19 +62,19 @@ function smtp_mail($from, $recipients, &$headers, &$body, &$response)
   $smtp_host_url = parse_url($CONFIG['smtp_server']);
   
   // overwrite port
-  if ($smtp_host_url['host'] && $smtp_host_url['port'])
+  if (isset($smtp_host_url['host']) && isset($smtp_host_url['port']))
     {
     $smtp_host = $smtp_host_url['host'];
     $smtp_port = $smtp_host_url['port'];
     }
 
   // re-write smtp host
-  if ($smtp_host_url['host'] && $smtp_host_url['scheme'])
+  if (isset($smtp_host_url['host']) && isset($smtp_host_url['scheme']))
     $smtp_host = sprintf('%s://%s', $smtp_host_url['scheme'], $smtp_host_url['host']);
 
 
   // create Net_SMTP object and connect to server
-  if (!is_object($smtp_conn))
+  if (!is_object($SMTP_CONN))
     {
     $helo_host = empty($CONFIG['smtp_helo_host']) ? (empty($_SERVER['SERVER_NAME']) ? 'localhost' : $_SERVER['SERVER_NAME']) : $CONFIG['smtp_helo_host'];
     $SMTP_CONN = new Net_SMTP($smtp_host, $smtp_port, $helo_host);
@@ -112,7 +112,7 @@ function smtp_mail($from, $recipients, &$headers, &$body, &$response)
       if (PEAR::isError($result))
         {
         smtp_reset();
-        $response[] .= "Authentication failure: ".$result->getMessage();
+        $response[] .= 'Authentication failure: ' . $result->getMessage() . ' (Code: ' . $result->getCode() . ')';
         return FALSE;
         }
       }

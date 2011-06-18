@@ -3,7 +3,7 @@
  | RoundCube List Widget                                                 |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2006, RoundCube Dev, - Switzerland                      |
+ | Copyright (C) 2006-2008, RoundCube Dev, - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
@@ -32,8 +32,8 @@ function rcube_list_widget(list, p)
   this.rows = [];
   this.selection = [];
   
+  this.subject_col = -1;
   this.shiftkey = false;
-
   this.multiselect = false;
   this.draggable = false;
   this.keyboard = false;
@@ -207,11 +207,12 @@ blur: function()
  */
 drag_row: function(e, id)
 {
-  this.in_selection_before = this.in_selection(id) ? id : false;
-
   // don't do anything (another action processed before)
-  if (this.dont_select)
+  var evtarget = rcube_event.get_target(e);
+  if (this.dont_select || (evtarget && (evtarget.tagName == 'INPUT' || evtarget.tagName == 'IMG')))
     return false;
+
+  this.in_selection_before = this.in_selection(id) ? id : false;
 
   // selects currently unselected row
   if (!this.in_selection_before)
@@ -239,7 +240,11 @@ click_row: function(e, id)
 {
   var now = new Date().getTime();
   var mod_key = rcube_event.get_modifier(e);
-
+  var evtarget = rcube_event.get_target(e);
+  
+  if ((evtarget && (evtarget.tagName == 'INPUT' || evtarget.tagName == 'IMG')))
+    return false;
+  
   // don't do anything (another action processed before)
   if (this.dont_select)
     {
@@ -503,9 +508,12 @@ highlight_row: function(id, multiple)
 {
   if (this.rows[id] && !multiple)
   {
-    this.clear_selection();
-    this.selection[0] = id;
-    this.set_classname(this.rows[id].obj, 'selected', true)
+    if (!this.in_selection(id))
+    {
+      this.clear_selection();
+      this.selection[0] = id;
+      this.set_classname(this.rows[id].obj, 'selected', true);
+    }
   }
   else if (this.rows[id])
   {
@@ -535,8 +543,6 @@ key_press: function(e)
   if (this.focused != true) 
     return true;
 
-  this.shiftkey = e.shiftKey;
-
   var keyCode = document.layers ? e.which : document.all ? event.keyCode : document.getElementById ? e.keyCode : 0;
   var mod_key = rcube_event.get_modifier(e);
   switch (keyCode)
@@ -547,6 +553,7 @@ key_press: function(e)
       break;
 
     default:
+      this.shiftkey = e.shiftKey;
       this.key_pressed = keyCode;
       this.trigger_event('keypress');
   }
@@ -611,7 +618,7 @@ drag_mouse_move: function(e)
   
     // get subjects of selectedd messages
     var names = '';
-    var c, node, subject, obj;
+    var c, i, node, subject, obj;
     for(var n=0; n<this.selection.length; n++)
     {
       if (n>12)  // only show 12 lines
@@ -625,13 +632,20 @@ drag_mouse_move: function(e)
         obj = this.rows[this.selection[n]].obj;
         subject = '';
 
-        for(c=0; c<obj.childNodes.length; c++)
-          if (obj.childNodes[c].nodeName=='TD' && (node = obj.childNodes[c].firstChild) && (node.nodeType==3 || node.nodeName=='A'))
+        for(c=0, i=0; i<obj.childNodes.length; i++)
+        {
+          if (obj.childNodes[i].nodeName == 'TD')
           {
-            subject = node.nodeType==3 ? node.data : node.innerHTML;
-            names += (subject.length > 50 ? subject.substring(0, 50)+'...' : subject) + '<br />';
-            break;
+            if (((node = obj.childNodes[i].firstChild) && (node.nodeType==3 || node.nodeName=='A')) &&
+              (this.subject_col < 0 || (this.subject_col >= 0 && this.subject_col == c)))
+            {
+              subject = node.nodeType==3 ? node.data : node.innerHTML;
+              names += (subject.length > 50 ? subject.substring(0, 50)+'...' : subject) + '<br />';
+              break;
+            }
+            c++;
           }
+        }
       }
     }
 

@@ -6,7 +6,7 @@
  | language/it/labels.inc                                                |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
@@ -14,7 +14,7 @@
  |         Yusef Maali <contact@yusefmaali.net>                          |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 869 2007-10-15 13:27:08Z yllar $
+ @version $Id: labels.inc 1068 2008-02-13 19:24:23Z yllar $
 
 */
 
@@ -88,6 +88,9 @@ $labels['lastmessage'] = 'Visualizza l\'ultimo messaggio';
 $labels['lastmessages'] = 'Visualizza l\'ultimo set di messaggi';
 $labels['backtolist'] = 'Torna alla lista messaggi';
 $labels['viewsource'] = 'Visualizza sorgente messaggio';
+$labels['markmessages'] = 'Marca i messaggi';
+$labels['markread'] = 'Letti';
+$labels['markunread'] = 'Non letti';
 $labels['select'] = 'Seleziona';
 $labels['all'] = 'Tutti';
 $labels['none'] = 'Nessuno';
@@ -125,6 +128,10 @@ $labels['plaintoggle'] = 'Testo semplice';
 $labels['addcc'] = 'Aggiungi Cc';
 $labels['addbcc'] = 'Aggiungi Bcc';
 $labels['addreplyto'] = 'Aggiungi Rispondi a';
+$labels['mdnrequest'] = 'Il mittente richiede di ricevere una notifica dell\'avvenuta lettura del messaggio. Si desidera inviare tale notifica?';
+$labels['receiptread'] = 'Ricevuta di ritorno (letto)';
+$labels['yourmessage'] = 'Questa è la ricevuta di ritorno del mesaggio inviato';
+$labels['receiptnote'] = 'Nota: questa Ricevuta di ritorno attesta solamente che il messaggio è stato visualizzato nel computer del destinatario. Non c\'è pertanto alcuna garanzia che il destinatario abbia letto o compreso il suo contenuto.';
 $labels['name'] = 'Nome visualizzato';
 $labels['firstname'] = 'Nome';
 $labels['surname'] = 'Cognome';
@@ -172,6 +179,7 @@ $labels['folder'] = 'Cartella';
 $labels['folders'] = 'Cartelle';
 $labels['foldername'] = 'Nome cartella';
 $labels['subscribed'] = 'Sottoscritta';
+$labels['messagecount'] = 'Messaggi';
 $labels['create'] = 'Crea';
 $labels['createfolder'] = 'Crea nuova cartella';
 $labels['rename'] = 'Rinomina';

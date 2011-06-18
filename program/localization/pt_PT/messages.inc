@@ -6,7 +6,7 @@
  | language/pt_PT/messages.inc                                           |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
@@ -14,7 +14,7 @@
  |          João Vale <jpvale@gmail.com>                                 |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 873 2007-10-16 19:06:34Z yllar $
+ @version $Id: messages.inc 1068 2008-02-13 19:24:23Z yllar $
 
 */
 
@@ -75,5 +75,9 @@ $messages['copyerror'] = 'Não foi possível copiar os endereços';
 $messages['sourceisreadonly'] = 'Esta fonte de endereços é só de leitura';
 $messages['errorsavingcontact'] = 'Não foi possível guardar o endereço de contacto';
 $messages['movingmessage'] = 'Movendo mensagem...';
+$messages['receiptsent'] = 'Recibo de leitura enviado';
+$messages['errorsendingreceipt'] = 'Não foi possível enviar o recibo';
+$messages['nodeletelastidentity'] = 'Esta é a última identidade, não é possível apagá-la.';
+$messages['addsubfolderhint'] = 'Esta pasta será criada como uma sub-pasta da que está seleccionada';
 
 ?>

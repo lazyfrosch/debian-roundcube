@@ -6,14 +6,14 @@
  | language/ar/labels.inc                                                |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Ossama Khayat <okhayat@yahoo.com>                             |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 842 2007-10-01 13:55:02Z tomekp $
+ @version $Id: labels.inc 1068 2008-02-13 19:24:23Z yllar $
 
 */
 
@@ -75,6 +75,7 @@ $labels['replytomessage'] = 'الرد على الرسالة';
 $labels['replytoallmessage'] = 'الرد على المرسل وجميع مستقبلي الرسالة';
 $labels['forwardmessage'] = 'تمرير الرسالة';
 $labels['deletemessage'] = 'حذف الرسالة إلى المهملات';
+$labels['movemessagetotrash'] = 'انقل الرسالة إلى سلة المهملات';
 $labels['printmessage'] = 'طباعة هذه الرسالة';
 $labels['previousmessage'] = 'عرض الرسالة السابقة';
 $labels['previousmessages'] = 'عرض المجموعة السابقة من الرسائل';
@@ -86,6 +87,9 @@ $labels['lastmessage'] = 'عرض الرسالة الأخيرة';
 $labels['lastmessages'] = 'عرض مجموعة الرسائل الأخيرة';
 $labels['backtolist'] = 'العودة إلى لائحة الرسائل';
 $labels['viewsource'] = 'إظهار المصدر';
+$labels['markmessages'] = 'وسم الرسالة';
+$labels['markread'] = 'كمقروءة';
+$labels['markunread'] = 'كغير مقروءة';
 $labels['select'] = 'تحديد';
 $labels['all'] = 'الكل';
 $labels['none'] = 'لا شيء';
@@ -99,8 +103,8 @@ $labels['unlimited'] = 'غير محدود';
 $labels['quicksearch'] = 'البحث السريع';
 $labels['resetsearch'] = 'استعادة البحث للافتراضي';
 $labels['compose'] = 'إنشاء رسالة';
-$labels['sendmessage'] = 'إرسال الرسالة الآن';
 $labels['savemessage'] = 'حفظ هذه المسودة';
+$labels['sendmessage'] = 'إرسال الرسالة الآن';
 $labels['addattachment'] = 'إرفاق ملف';
 $labels['charset'] = 'مجموعة المحارف';
 $labels['editortype'] = 'نوع المُحرّر';
@@ -120,6 +124,13 @@ $labels['nosubject'] = '(دون موضوع)';
 $labels['showimages'] = 'إظهار الصور';
 $labels['htmltoggle'] = 'HTML';
 $labels['plaintoggle'] = 'نص مجرد';
+$labels['addcc'] = 'أضف CC';
+$labels['addbcc'] = 'أضف BCC';
+$labels['addreplyto'] = 'أضيف Reply-To';
+$labels['mdnrequest'] = 'طلب المرسل إعلامه عند قراءتك لرسالته. هل تود إعلام المرسل؟';
+$labels['receiptread'] = 'إيصال الاستلام )بالقراءة)';
+$labels['yourmessage'] = 'هذا إيصال بقراءة رسالتك';
+$labels['receiptnote'] = 'ملاحظة: يُعلمك هذا الإيصال بأن رسالتك قد ظهرت على جهاز المستقبِل. ليست هناك أية ضمانات أن المستقبل قد قرأ أو فهم محتويات الرسالة.';
 $labels['name'] = 'اسم العرض';
 $labels['firstname'] = 'الإسم الأول';
 $labels['surname'] = 'الإسم الأخير';
@@ -167,6 +178,7 @@ $labels['folder'] = 'مجلد';
 $labels['folders'] = 'مجلدات';
 $labels['foldername'] = 'اسم المجلد';
 $labels['subscribed'] = 'مشترك';
+$labels['messagecount'] = 'الرسائل';
 $labels['create'] = 'إنشاء';
 $labels['createfolder'] = 'إنشاء مجلد جديد';
 $labels['rename'] = 'إعادة التسمية';

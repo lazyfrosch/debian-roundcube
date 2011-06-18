@@ -312,6 +312,13 @@ class rcmail_template extends rcube_html_page
     if (!$this->framed && !empty($this->js_env))
       $out .= ($this->ajax_call ? 'this' : JS_OBJECT_NAME) . '.set_env('.json_serialize($this->js_env).");\n";
     
+    // add command to set page title
+    if ($this->ajax_call && !empty($this->pagetitle))
+      $out .= sprintf(
+        "this.set_pagetitle('%s');\n",
+        JQ((!empty($this->config['product_name']) ? $this->config['product_name'].' :: ' : '') . $this->pagetitle)
+      );
+
     foreach ($this->js_commands as $i => $args)
     {
       $method = array_shift($args);
@@ -326,12 +333,7 @@ class rcmail_template extends rcube_html_page
         join(',', $args));
     }
     
-    // add command to set page title
-    if ($this->ajax_call && !empty($this->pagetitle))
-      $out .= sprintf(
-        "this.set_pagetitle('%s');\n",
-        JQ((!empty($this->config['product_name']) ? $this->config['product_name'].' :: ' : '') . $this->pagetitle)
-      );
+
     
     return $out;
   }
@@ -356,7 +358,7 @@ class rcmail_template extends rcube_html_page
    */
   function parse_with_globals($input)
   {
-    $GLOBALS['__comm_path'] = urlencode($GLOBALS['COMM_PATH']);
+    $GLOBALS['__comm_path'] = Q($GLOBALS['COMM_PATH']);
     return preg_replace('/\$(__[a-z0-9_\-]+)/e', '$GLOBALS["\\1"]', $input);
   }
   
@@ -451,8 +453,7 @@ class rcmail_template extends rcube_html_page
     {
       // return a button
       case 'button':
-        if ($attrib['command'])
-          return $this->button($attrib);
+        return $this->button($attrib);
         break;
 
       // show a label
@@ -580,7 +581,7 @@ class rcmail_template extends rcube_html_page
 
     $skin_path = $this->config['skin_path'];
 
-    if (!($attrib['command'] || $attrib['name']))
+    if (!($attrib['command'] || $attrib['name'] || $attrib['onclick']))
       return '';
 
     // try to find out the button type
@@ -761,27 +762,15 @@ function rcmail_message_container($attrib)
  */
 function rcmail_current_username($attrib)
   {
-  global $DB;
+  global $USER;
   static $s_username;
 
   // alread fetched  
   if (!empty($s_username))
     return $s_username;
 
-  // get e-mail address form default identity
-  $sql_result = $DB->query(
-    "SELECT email AS mailto
-     FROM ".get_table_name('identities')."
-     WHERE  user_id=?
-     AND    standard=1
-     AND    del<>1",
-    $_SESSION['user_id']);
-                                   
-  if ($DB->num_rows($sql_result))
-    {
-    $sql_arr = $DB->fetch_assoc($sql_result);
-    $s_username = $sql_arr['mailto'];
-    }
+  if ($sql_arr = $USER->get_identity())
+    $s_username = $sql_arr['email'];
   else if (strstr($_SESSION['username'], '@'))
     $s_username = $_SESSION['username'];
   else
@@ -831,12 +820,12 @@ function rcmail_login_form($attrib)
         }
     }
       
-    $fields['host'] = isset($select_host) ? $select_host->show($_POST['_host']) : null;
+    $fields['host'] = isset($select_host) ? $select_host->show(get_input_value('_host', RCUBE_INPUT_POST)) : null;
     }
   else if (!strlen($CONFIG['default_host']))
     {
     $input_host = new textfield(array('name' => '_host', 'id' => 'rcmloginhost', 'size' => 30));
-    $fields['host'] = $input_host->show($_POST['_host']);
+    $fields['host'] = $input_host->show(get_input_value('_host', RCUBE_INPUT_POST));
     }
 
   $form_name = strlen($attrib['form']) ? $attrib['form'] : 'form';

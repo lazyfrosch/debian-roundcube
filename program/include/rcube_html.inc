@@ -292,10 +292,6 @@ class rcube_form_element
       if ((strpos($key,'on')===0 && $value==''))
         continue;
 
-      // encode textarea content
-      if ($key=='value')
-        $value = Q($value, 'strict', FALSE);
-
       // attributes with no value
       if (in_array($key, array('checked', 'multiple', 'disabled', 'selected', 'nowrap')))
       {
@@ -304,11 +300,11 @@ class rcube_form_element
       }
       // don't convert size of value attribute
       else if ($key=='value')
-        $attrib_arr[] = sprintf('%s="%s"', $this->_conv_case($key, 'attrib'), $value);
+        $attrib_arr[] = sprintf('%s="%s"', $this->_conv_case($key, 'attrib'), Q($value, 'strict', false));
         
       // regular tag attributes
       else
-        $attrib_arr[] = sprintf('%s="%s"', $this->_conv_case($key, 'attrib'), $this->_conv_case($value, 'value'));
+        $attrib_arr[] = sprintf('%s="%s"', $this->_conv_case($key, 'attrib'), $this->_conv_case(Q($value), 'value'));
     }
 
     return sizeof($attrib_arr) ? ' '.implode(' ', $attrib_arr) : '';
@@ -620,10 +616,10 @@ class select extends rcube_form_element
     if (is_array($names))
     {
       foreach ($names as $i => $text)
-        $this->options[] = array('text' => $text, 'value' => (string)$values[$i]);
+        $this->options[] = array('text' => $text, 'value' => $values[$i]);
     }
     else
-      $this->options[] = array('text' => $names, 'value' => (string)$values);
+      $this->options[] = array('text' => $names, 'value' => $values);
   }
 
 
@@ -640,7 +636,7 @@ class select extends rcube_form_element
     $value_str = $this->_conv_case(' value="%s"', 'attrib');
     
     if (!is_array($select))
-      $select = array((string)$select);
+      $select = array($select);
 
     foreach ($this->options as $option)
     {
@@ -651,7 +647,7 @@ class select extends rcube_form_element
                    
       $options_str .= sprintf("<%s%s%s>%s</%s>\n",
                              $this->_conv_case('option', 'tag'),
-                             !empty($option['value']) ? sprintf($value_str, Q($option['value'])) : '',
+                             isset($option['value']) ? sprintf($value_str, Q($option['value'])) : '',
                              $selected, 
                              Q($option['text'], 'strict', FALSE),
                              $this->_conv_case('option', 'tag'));

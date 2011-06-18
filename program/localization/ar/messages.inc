@@ -6,14 +6,14 @@
  | language/ar/messages.inc                                              |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Ossama Khayat <okhayat@yahoo.com>                             |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 842 2007-10-01 13:55:02Z tomekp $
+ @version $Id: messages.inc 1068 2008-02-13 19:24:23Z yllar $
 
 */
 
@@ -73,5 +73,10 @@ $messages['copysuccess'] = 'تم نسخ $nr رسائل بنجاح';
 $messages['copyerror'] = 'لم يمكن نسخ أية عناوين';
 $messages['sourceisreadonly'] = 'لا يمكن تعديل مصدر العنوان هذا';
 $messages['errorsavingcontact'] = 'تعذر حفظ عنوان المراسل';
+$messages['movingmessage'] = 'جاري نقل الرسالة...';
+$messages['receiptsent'] = 'أرسل إيصال الاستلام بنجاح';
+$messages['errorsendingreceipt'] = 'تعذر إرسال إيصال الاستلام';
+$messages['nodeletelastidentity'] = 'لا يمكن حذف هذا السجل حيث أنه الوحيد المتبقي.';
+$messages['addsubfolderhint'] = 'سيتم إنشاء هذا المجلد كمجلد فرعي للمحدد.';
 
 ?>

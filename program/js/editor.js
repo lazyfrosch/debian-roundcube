@@ -22,15 +22,15 @@ function rcmail_editor_init(skin_path)
                  apply_source_formatting : true,
                  theme : 'advanced',
                  plugins : 'emotions,media,nonbreaking,table,searchreplace,spellchecker,visualchars',
-                 theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,bullist,numlist,outdent,indent,separator,link,unlink,emotions,forecolor,backcolor,formatselect,fontselect,fontsizeselect',
-                 theme_advanced_buttons2 : 'undo,redo,image,media,hr,charmap,code,nonbreaking,visualchars,separator,search,replace,spellchecker,separator,tablecontrols',
+                 theme_advanced_buttons1 : 'bold,italic,underline,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,bullist,numlist,outdent,indent,separator,emotions,charmap,code,forecolor,backcolor,fontselect,fontsizeselect, separator,undo,redo,image,media',
+                 theme_advanced_buttons2 : '',
                  theme_advanced_buttons3 : '',
                  theme_advanced_toolbar_location : 'top',
                  theme_advanced_toolbar_align : 'left',
                  extended_valid_elements : 'font[face|size|color|style],span[id|class|align|style]',
                  content_css : skin_path + '/editor_content.css',
-                 popups_css : skin_path + '/editor_popup.css',
-                 editor_css : skin_path + '/editor_ui.css'
+                 editor_css : skin_path + '/editor_ui.css',
+                 external_image_list_url : 'program/js/editor_images.js'
                });
   }
 
@@ -63,9 +63,10 @@ function rcmail_toggle_editor(toggler)
   // determine the currently displayed editor
 
   var htmlFlag = document.getElementsByName('_is_html')[0];
-  var currentEditor = htmlFlag.value;
+  var isHtml = htmlFlag.value;
 
-  if (selectedEditor == currentEditor)
+  if (((selectedEditor == 'plain') && (isHtml == "0")) ||
+      ((selectedEditor == 'html') && (isHtml == "1")))
     {
     return;
     }

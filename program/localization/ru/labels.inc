@@ -6,15 +6,16 @@
  | language/ru_RU/labels.inc                                             |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Maxim Zenin <maxx@webmechanics.ru>                            |
  |         Vladimir Kulev <me@lightoze.net>                              |
+ |         Artur Smolkin <admin@roundcube.ru>                            |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 584 2007-05-24 03:49:19Z estadtherr $
+ @version $Id: labels.inc 1134 2008-02-22 15:05:18Z yllar $
 
 */
 
@@ -76,6 +77,7 @@ $labels['replytomessage'] = 'Ответить';
 $labels['replytoallmessage'] = 'Ответить всем';
 $labels['forwardmessage'] = 'Переслать';
 $labels['deletemessage'] = 'В корзину';
+$labels['movemessagetotrash'] = 'Переместить сообщение в корзину';
 $labels['printmessage'] = 'Печать';
 $labels['previousmessage'] = 'Показать предыдущее сообщение';
 $labels['previousmessages'] = 'Предыдущее';
@@ -87,6 +89,9 @@ $labels['lastmessage'] = 'Показать последнее сообщение
 $labels['lastmessages'] = 'Последнее сообщение';
 $labels['backtolist'] = 'К списку сообщений';
 $labels['viewsource'] = 'Исходный текст';
+$labels['markmessages'] = 'Отметить сообщение';
+$labels['markread'] = 'как прочитанное';
+$labels['markunread'] = 'как непрочитанное';
 $labels['select'] = 'Выбрать';
 $labels['all'] = 'Все';
 $labels['none'] = 'Ничего';
@@ -100,8 +105,8 @@ $labels['unlimited'] = 'без ограничений';
 $labels['quicksearch'] = 'Быстрый поиск';
 $labels['resetsearch'] = 'Сброс';
 $labels['compose'] = 'Написать сообщение';
-$labels['sendmessage'] = 'Отправить сейчас';
 $labels['savemessage'] = 'Сохранить черновик';
+$labels['sendmessage'] = 'Отправить сейчас';
 $labels['addattachment'] = 'Добавить вложение';
 $labels['charset'] = 'Кодировка';
 $labels['editortype'] = 'Редактор';
@@ -121,6 +126,13 @@ $labels['nosubject'] = '(без темы)';
 $labels['showimages'] = 'Показать изображения';
 $labels['htmltoggle'] = 'HTML';
 $labels['plaintoggle'] = 'Обычный текст';
+$labels['addcc'] = 'Копия';
+$labels['addbcc'] = 'Скрытая копия';
+$labels['addreplyto'] = 'Обратный адрес';
+$labels['mdnrequest'] = 'Отправитель этого сообщения запросил уведомление о прочтении. Отправить уведомление?';
+$labels['receiptread'] = 'Уведомление о прочтении';
+$labels['yourmessage'] = 'Это уведомление о прочтении вашего сообщения';
+$labels['receiptnote'] = 'Это уведомление означает только, что сообщение было открыто получателем, и не гарантирует того, что оно было прочитано и (или) понято.';
 $labels['name'] = 'Отображаемое имя';
 $labels['firstname'] = 'Имя';
 $labels['surname'] = 'Фамилия';
@@ -168,6 +180,7 @@ $labels['folder'] = 'Папка';
 $labels['folders'] = 'Папки';
 $labels['foldername'] = 'Имя папки';
 $labels['subscribed'] = 'Подписан';
+$labels['messagecount'] = 'сообщения';
 $labels['create'] = 'Создать';
 $labels['createfolder'] = 'Создать новую папку';
 $labels['rename'] = 'Переименовать';

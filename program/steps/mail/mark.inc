@@ -14,7 +14,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: mark.inc 573 2007-05-18 11:29:25Z thomasb $
+ $Id: mark.inc 1019 2008-02-05 21:39:08Z thomasb $
 
 */
 
@@ -32,7 +32,7 @@ if (($uids = get_input_value('_uid', RCUBE_INPUT_POST)) && ($flag = get_input_va
   if ($marked != -1)
   {
     $mbox_name = $IMAP->get_mailbox_name();
-    $OUTPUT->command('set_unread_count', $mbox_name, $IMAP->messagecount($mbox_name, 'UNSEEN'));
+    $OUTPUT->command('set_unread_count', $mbox_name, $IMAP->messagecount($mbox_name, 'UNSEEN'), ($mbox_name == 'INBOX'));
     $OUTPUT->send();
   }
 }

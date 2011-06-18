@@ -6,16 +6,18 @@
  | language/pl/messages.inc                                              |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
- | Author: Tomasz Pajor     <t.pajor@kei.pl>                             |
- | Author: Sławomir Cichoń  <slawek.cichon@gmail.com>                    |
- |         Janusz Zamecki   <janusz@zamecki.eu>                          |
+ | Author: Tomasz Pajor        <t.pajor@kei.pl>                          |
+ | Author: Sławomir Cichoń     <slawek.cichon@gmail.com>                 |
+ |         Janusz Zamecki      <janusz@zamecki.eu>                       |
+ |         Mariusz Szulerecki  <nob@force.eu.org>                        |
+ |         Wojciech Szczepucha <donkoyote@gmail.com>                     |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 815 2007-09-26 08:03:07Z tomekp $
+ @version $Id: messages.inc 1086 2008-02-15 05:43:32Z tomekp $
 
 */
 
@@ -76,5 +78,9 @@ $messages['copyerror'] = 'Nie można skopiować żadnego adresu';
 $messages['sourceisreadonly'] = 'Źródło adresu jest tylko do odczytu';
 $messages['errorsavingcontact'] = 'Nie można było zapisać adresu kontaktu';
 $messages['movingmessage'] = 'Przenoszenie wiadomości...';
+$messages['receiptsent'] = 'Pomyślnie wysłano potwierdzenie dostarczenia';
+$messages['errorsendingreceipt'] = 'Nie można wysłać potwierdzenia';
+$messages['nodeletelastidentity'] = 'Nie można skasować tej tożsamości, ponieważ jest ostatnią.';
+$messages['addsubfolderhint'] = 'Ten folder zostanie utworzony jako podfolder aktualnie wybranego.';
 
 ?>

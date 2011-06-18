@@ -5,7 +5,7 @@
  | program/include/rcube_imap.inc                                        |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005-2006, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_imap.inc 883 2007-10-17 21:27:20Z thomasb $
+ $Id: rcube_imap.inc 1050 2008-02-12 14:06:26Z thomasb $
 
 */
 
@@ -35,7 +35,7 @@ require_once('lib/mime.inc');
  *
  * @package    Mail
  * @author     Thomas Bruederli <roundcube@gmail.com>
- * @version    1.39
+ * @version    1.40
  * @link       http://ilohamail.org
  */
 class rcube_imap
@@ -97,17 +97,17 @@ class rcube_imap
    * @param  string   Username for IMAP account
    * @param  string   Password for IMAP account
    * @param  number   Port to connect to
-   * @param  boolean  Use SSL connection
+   * @param  string   SSL schema (either ssl or tls) or null if plain connection
    * @return boolean  TRUE on success, FALSE on failure
    * @access public
    */
-  function connect($host, $user, $pass, $port=143, $use_ssl=FALSE)
+  function connect($host, $user, $pass, $port=143, $use_ssl=null)
     {
     global $ICL_SSL, $ICL_PORT, $IMAP_USE_INTERNAL_DATE;
     
     // check for Open-SSL support in PHP build
     if ($use_ssl && in_array('openssl', get_loaded_extensions()))
-      $ICL_SSL = TRUE;
+      $ICL_SSL = $use_ssl == 'imaps' ? 'ssl' : $use_ssl;
     else if ($use_ssl)
       {
       raise_error(array('code' => 403, 'type' => 'imap', 'file' => __FILE__,
@@ -441,7 +441,7 @@ class rcube_imap
       $mailbox = $this->mailbox;
       
     // count search set
-    if ($this->search_string && $mailbox == $this->mailbox && $mode == 'ALL')
+    if ($this->search_string && $mailbox == $this->mailbox && $mode == 'ALL' && !$force)
       return count((array)$this->search_set);
 
     $a_mailbox_cache = $this->get_cache('messagecount');
@@ -527,10 +527,7 @@ class rcube_imap
     if ($this->search_string && $mailbox == $this->mailbox)
       return $this->_list_header_set($mailbox, $this->search_set, $page, $sort_field, $sort_order);
 
-    if ($sort_field!=NULL)
-      $this->sort_field = $sort_field;
-    if ($sort_order!=NULL)
-      $this->sort_order = strtoupper($sort_order);
+    $this->_set_sort_order($sort_field, $sort_order);
 
     $max = $this->_messagecount($mailbox);
     $start_msg = ($this->list_page-1) * $this->page_size;
@@ -647,10 +644,7 @@ class rcube_imap
     if (!strlen($mailbox) || empty($msgs))
       return array();
 
-    if ($sort_field!=NULL)
-      $this->sort_field = $sort_field;
-    if ($sort_order!=NULL)
-      $this->sort_order = strtoupper($sort_order);
+    $this->_set_sort_order($sort_field, $sort_order);
 
     $max = count($msgs);
     $start_msg = ($this->list_page-1) * $this->page_size;
@@ -764,13 +758,20 @@ class rcube_imap
    */
   function message_index($mbox_name='', $sort_field=NULL, $sort_order=NULL)
     {
-    if ($sort_field!=NULL)
-      $this->sort_field = $sort_field;
-    if ($sort_order!=NULL)
-      $this->sort_order = strtoupper($sort_order);
+    $this->_set_sort_order($sort_field, $sort_order);
 
     $mailbox = $mbox_name ? $this->_mod_mailbox($mbox_name) : $this->mailbox;
-    $key = "$mbox:".$this->sort_field.":".$this->sort_order.".msgi";
+    $key = "{$mailbox}:{$this->sort_field}:{$this->sort_order}:{$this->search_string}.msgi";
+
+    // we have a saved search result. get index from there
+    if (!isset($this->cache[$key]) && $this->search_string && $mailbox == $this->mailbox)
+    {
+      $this->cache[$key] = $a_msg_headers = array();
+      $this->_fetch_headers($mailbox, join(',', $this->search_set), $a_msg_headers, NULL);
+
+      foreach (iil_SortHeaders($a_msg_headers, $this->sort_field, $this->sort_order) as $i => $msg)
+        $this->cache[$key][] = $msg->uid;
+    }
 
     // have stored it in RAM
     if (isset($this->cache[$key]))
@@ -943,6 +944,20 @@ class rcube_imap
       
     return $this->get_search_set();
     }
+  
+  
+  /**
+   * Check if the given message ID is part of the current search set
+   *
+   * @return boolean True on match or if no search request is stored
+   */
+  function in_searchset($msgid)
+  {
+    if (!empty($this->search_string))
+      return in_array("$msgid", (array)$this->search_set, true);
+    else
+      return true;
+  }
 
 
   /**
@@ -967,8 +982,8 @@ class rcube_imap
     // write headers cache
     if ($headers)
       {
-      if ($is_uid)
-        $this->uid_id_map[$mbox_name][$uid] = $headers->id;
+      if ($headers->uid && $headers->id)
+        $this->uid_id_map[$mailbox][$headers->uid] = $headers->id;
 
       $this->add_message_cache($mailbox.'.msg', $headers->id, $headers);
       }
@@ -1005,7 +1020,7 @@ class rcube_imap
     if (!empty($structure))
       {
       $this->_msg_id = $msg_id;
-      $headers = $this->get_headers($msg_id, NULL, FALSE);
+      $headers = $this->get_headers($uid);
       
       $struct = &$this->_structure_part($structure);
       $struct->headers = get_object_vars($headers);
@@ -1130,10 +1145,14 @@ class rcube_imap
       }
       
     // normalize filename property
-    if (!empty($struct->d_parameters['filename']))
-      $struct->filename = $this->decode_mime_string($struct->d_parameters['filename']);
-    else if (!empty($struct->ctype_parameters['name']))
-      $struct->filename = $this->decode_mime_string($struct->ctype_parameters['name']);
+    if ($filename_mime = $struct->d_parameters['filename'] ? $struct->d_parameters['filename'] : $struct->ctype_parameters['name'])
+      $struct->filename = $this->decode_mime_string($filename_mime);
+    else if ($filename_encoded = $struct->d_parameters['filename*'] ? $struct->d_parameters['filename*'] : $struct->ctype_parameters['name*'])
+    {
+      // decode filename according to RFC 2231, Section 4
+      list($filename_charset,, $filename_urlencoded) = split('\'', $filename_encoded);
+      $struct->filename = rcube_charset_convert(urldecode($filename_urlencoded), $filename_charset);
+    }
     else if (!empty($struct->headers['content-description']))
       $struct->filename = $this->decode_mime_string($struct->headers['content-description']);
       
@@ -1201,15 +1220,22 @@ class rcube_imap
 
     if ($print)
       {
-      iil_C_HandlePartBody($this->conn, $this->mailbox, $msg_id, $part, ($o_part->encoding=='base64'?3:2));
-      $body = TRUE;
+      $mode = $o_part->encoding == 'base64' ? 3 : ($o_part->encoding == 'quoted-printable' ? 1 : 2);
+      $body = iil_C_HandlePartBody($this->conn, $this->mailbox, $msg_id, $part, $mode);
+      
+      // we have to decode the part manually before printing
+      if ($mode == 1)
+        {
+        echo $this->mime_decode($body, $o_part->encoding);
+        $body = true;
+        }
       }
     else
       {
       $body = iil_C_HandlePartBody($this->conn, $this->mailbox, $msg_id, $part, 1);
 
       // decode part body
-      if ($o_part->encoding=='base64' || $o_part->encoding=='quoted-printable')
+      if ($o_part->encoding)
         $body = $this->mime_decode($body, $o_part->encoding);
 
       // convert charset (if text or message part)
@@ -1278,7 +1304,7 @@ class rcube_imap
    * Set message flag to one or several messages
    *
    * @param mixed  Message UIDs as array or as comma-separated string
-   * @param string Flag to set: SEEN, UNDELETED, DELETED, RECENT, ANSWERED, DRAFT
+   * @param string Flag to set: SEEN, UNDELETED, DELETED, RECENT, ANSWERED, DRAFT, MDNSENT
    * @return boolean True on success, False on failure
    */
   function set_flag($uids, $flag)
@@ -1759,13 +1785,17 @@ class rcube_imap
           $deleted = TRUE;
 
         foreach ($all_mboxes as $c_mbox)
-          if (preg_match('/^'.preg_quote($mailbox.$this->delimiter).'/', $c_mbox))
+          {
+          $regex = preg_quote($mailbox . $this->delimiter, '/');
+          $regex = '/^' . $regex . '/';
+          if (preg_match($regex, $c_mbox))
             {
             iil_C_UnSubscribe($this->conn, $c_mbox);
             $result = iil_C_DeleteFolder($this->conn, $c_mbox);
             if ($result>=0)
               $deleted = TRUE;
             }
+          }
         }
 
     // clear mailboxlist cache
@@ -2059,10 +2089,8 @@ class rcube_imap
    */
   function &get_cached_message($key, $uid, $struct=false)
     {
-    if (!$this->caching_enabled)
-      return FALSE;
-
     $internal_key = '__single_msg';
+    
     if ($this->caching_enabled && (!isset($this->cache[$internal_key][$uid]) ||
         ($struct && empty($this->cache[$internal_key][$uid]->structure))))
       {
@@ -2123,9 +2151,17 @@ class rcube_imap
    */
   function add_message_cache($key, $index, $headers, $struct=null)
     {
-    if (!$this->caching_enabled || empty($key) || !is_object($headers) || empty($headers->uid))
+    if (empty($key) || !is_object($headers) || empty($headers->uid))
+        return;
+    
+    // add to internal (fast) cache
+    $this->cache['__single_msg'][$headers->uid] = $headers;
+    $this->cache['__single_msg'][$headers->uid]->structure = $struct;
+    
+    // no further caching
+    if (!$this->caching_enabled)
       return;
-      
+    
     // check for an existing record (probly headers are cached but structure not)
     $sql_result = $this->db->query(
         "SELECT message_id
@@ -2432,6 +2468,17 @@ class rcube_imap
     return $mbox_name;
     }
 
+  /**
+   * Validate the given input and save to local properties
+   * @access private
+   */
+  function _set_sort_order($sort_field, $sort_order)
+  {
+    if ($sort_field != null)
+      $this->sort_field = asciiwords($sort_field);
+    if ($sort_order != null)
+      $this->sort_order = strtoupper($sort_order) == 'DESC' ? 'DESC' : 'ASC';
+  }
 
   /**
    * Sort mailboxes first by default folders and then in alphabethical order
@@ -2447,7 +2494,7 @@ class rcube_imap
       if ($folder{0}=='.')
         continue;
 
-      if (($p = array_search(strtolower($folder), $this->default_folders_lc))!==FALSE)
+      if (($p = array_search(strtolower($folder), $this->default_folders_lc)) !== false && !$a_defaults[$p])
         $a_defaults[$p] = $folder;
       else
         $a_out[] = $folder;
@@ -2481,7 +2528,16 @@ class rcube_imap
     if (!$mbox_name)
       $mbox_name = $this->mailbox;
       
-    return iil_C_ID2UID($this->conn, $mbox_name, $id);
+    $index = array_flip((array)$this->uid_id_map[$mbox_name]);
+    if (isset($index[$id]))
+      $uid = $index[$id];
+    else
+      {
+      $uid = iil_C_ID2UID($this->conn, $mbox_name, $id);
+      $this->uid_id_map[$mbox_name][$uid] = $id;
+      }
+    
+    return $uid;
     }
 
 

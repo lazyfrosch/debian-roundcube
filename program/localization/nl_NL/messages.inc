@@ -6,14 +6,14 @@
  | language/nl_NL/messages.inc                                           |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Mark Moses <mark@katmoda.com>                                 |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 844 2007-10-02 05:33:18Z tomekp $
+ @version $Id: messages.inc 1087 2008-02-15 07:49:48Z robin $
 
 */
 
@@ -74,5 +74,8 @@ $messages['copyerror'] = 'Kan geen adressen kopiëren';
 $messages['sourceisreadonly'] = 'Het adres kan niet worden opgeslagen';
 $messages['errorsavingcontact'] = 'Kan het ontvanger-adres niet opslaan';
 $messages['movingmessage'] = 'Bericht verplaatsen...';
-
+$messages['receiptsent'] = 'Ontvangstbevestiging is verstuurd';
+$messages['errorsendingreceipt'] = 'Kan de ontvangstbevestiging niet versturen';
+$messages['nodeletelastidentity'] = 'U kunt dit afzenderadres niet verwijderen';
+$messages['addsubfolderhint'] = 'Deze map zal worden aangemaakt onder de geselecteerde map';
 ?>

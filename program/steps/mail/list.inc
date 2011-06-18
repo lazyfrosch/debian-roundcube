@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: list.inc 850 2007-10-03 00:13:32Z ihug $
+ $Id: list.inc 1019 2008-02-05 21:39:08Z thomasb $
 
 */
 
@@ -40,9 +40,10 @@ else
 $mbox_name = $IMAP->get_mailbox_name();
 
 // fetch message headers
-if ($count = $IMAP->messagecount($mbox_name, 'ALL', !empty($_REQUEST['_refresh'])))
+if ($IMAP->messagecount($mbox_name, 'ALL', !empty($_REQUEST['_refresh'])))
   $a_headers = $IMAP->list_headers($mbox_name, NULL, $sort_col, $sort_order);
 
+$count = $IMAP->messagecount($mbox_name);
 $unseen = $IMAP->messagecount($mbox_name, 'UNSEEN', !empty($_REQUEST['_refresh']));
 
 // update message count display
@@ -51,9 +52,6 @@ $OUTPUT->set_env('messagecount', $count);
 $OUTPUT->set_env('pagecount', $pages);
 $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($count));
 
-// update mailboxlist
-$OUTPUT->command('set_unread_count', $mbox_name, $unseen);
-
 
 // add message rows
 if (isset($a_headers) && count($a_headers))
@@ -61,6 +59,9 @@ if (isset($a_headers) && count($a_headers))
 else
   $OUTPUT->show_message('nomessagesfound', 'notice');
   
+// update mailboxlist
+$OUTPUT->command('set_unread_count', $mbox_name, $unseen, ($mbox_name == 'INBOX'));
+
 // send response
 $OUTPUT->send();
 

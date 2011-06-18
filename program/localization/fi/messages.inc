@@ -6,7 +6,7 @@
  | language/fi/messages.inc                                              |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
@@ -14,7 +14,7 @@
  |         Veljo Velling <veve@utu.fi>                                   |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 612 2007-06-12 18:17:21Z thomasb $
+ @version $Id: messages.inc 1151 2008-02-28 19:56:47Z thomasb $
 
 */
 
@@ -55,7 +55,7 @@ $messages['nopagesizewarning'] = 'Anna sivukoko';
 $messages['norecipientwarning'] = 'Anna ainakin yksi vastaanottaja';
 $messages['nosubjectwarning'] = '"Otsikko" -kenttä on tyhjä. Haluaisitko kirjoittaa viestillesi otsikon?';
 $messages['nobodywarning'] = 'Lähetetäänkö viesti ilman tekstiä?';
-$messages['notsentwarning'] = 'Viestiä ei lähetetty. Haluatko poistaa viestin?';
+$messages['notsentwarning'] = 'Viestiä ei lähethttp://translator.roundcube.net/index.phpetty. Haluatko poistaa viestin?';
 $messages['noldapserver'] = 'Valitse LDAP -palvelin';
 $messages['nocontactsreturned'] = 'Yhtään kontaktia ei löytynyt';
 $messages['nosearchname'] = 'Anna kontaktin nimi tai sähköpostiosoite';
@@ -74,5 +74,10 @@ $messages['copysuccess'] = 'Kopioitu $nr osoitetta onnistuneesti';
 $messages['copyerror'] = 'Yhtään osoitetta ei voitu kopioida';
 $messages['sourceisreadonly'] = 'Tämän osoitteen lähde on kirjoitussuojattu';
 $messages['errorsavingcontact'] = 'Yhteystietoa ei voitu tallentaa';
+$messages['movingmessage'] = 'Siirretään viestiä...';
+$messages['receiptsent'] = 'Lukukuittaus lähetetty onnistuneesti';
+$messages['errorsendingreceipt'] = 'Lukukuittausta ei voitu lähettää';
+$messages['nodeletelastidentity'] = 'Et voi poistaa tätä identiteettiä, koska se on ainoa jäljelläoleva';
+$messages['addsubfolderhint'] = 'Uusi kansio luodaan valitun kansion alikansiona';
 
 ?>

@@ -1,6 +1,44 @@
 CHANGELOG RoundCube Webmail
 ---------------------------
 
+- Added interactive installer script
+- Fix folder adding/renaming inspired by #1484800
+- Localize folder name in page title (#1484785)
+- Fix code using wrong variable name (#1484018)
+- Allow to send mail with BCC recipients only
+- condense TinyMCE toolbar down to one line, removing table buttons (#1484747)
+- Add function to mark the selected messages as read/unread (#1457360)
+- Also do charset decoding as suggested in RFC 2231 (fix #1484321)
+- Show message count in folder list and hint when creating a subfolder
+- Distinguish ssl and tls for imap connections (#1484667)
+- Added some charset aliases to fix typical mis-labelling (#1484565)
+- Remember decision to display images for a certain message during session (#1484754)
+- Truncate attachment filenames to 55 characters due to an IE bug (#1484757)
+- Make sending of read receipts configurable
+- Respect config when localize folder names (#1484707)
+- Also respect receipt and priority settings when re-opening a draft message
+- Remember search results (closes #1483883), patch by the_glu
+- Add Received header on outgoing mail
+- Upgrade to TinyMCE 2.1.3
+- Allow inserting image attachments into HTML messages while composing (#1484557)
+- Implement Message-Disposition-Notification (Receipts)
+- Fix overriding of session vars when register_globals is on (#1484670)
+- Fix bug with case-sensitive folder names (#1484245)
+- Don't create default folders by default
+- Fixed some potential security risks (audited by Andris)
+- Only show new messages if they match the current search (#1484176)
+- Switch to/from when searcing in Sent folder (#1484555)
+- Correctly read the References header (#1484646)
+- Unset old cookie before sending a new value (#1484639)
+- Correctly decode attachments when downloading them (#1484645 and #1484642)
+- Suppress IE errors when clearing attachments form (#1484356)
+- Log error when login fails due to auto_create_user turned off
+- Filter linked/imported CSS files (closes #1484056)
+- Improve message compose screen (closes #1484383)
+- Select next row after removing one from list (#1484387)
+
+RELEASE 0.1-RC2
+
 - Enable drag-&-dropping of folders to a new parent and allow to create subfolders (#1457344)
 - Suppress IE errors when clearing attachments form (#1484356)
 - Set preferences field in user table to NULL (#1484386)
@@ -50,7 +88,7 @@ CHANGELOG RoundCube Webmail
 - Prevent default events on subject links (#1484399)
 - Use HTTP-POST requests for actions that change state
 
-RELEASE 0.1.-RC1
+RELEASE 0.1-RC1
 
 - Use global filters and bind username/ for Ldap searches (#1484159)
 - Hide quota display if imap server does not support it
@@ -152,5 +190,4 @@ RELEASE 0.1.-RC1
   Now based on the message structure delivered by the IMAP server.
 - Fixed some XSS and SQL injection issues
 - Fixed charset problems with folder renaming
-
 

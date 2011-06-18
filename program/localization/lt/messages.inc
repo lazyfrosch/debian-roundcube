@@ -6,14 +6,14 @@
  | language/lt/messages.inc                                              |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
- | Author: Martynas Bendorius <martynas@e-vaizdas.net>                   |
+ | Author: Martynas Bendorius <martynas@evanet.lt>                       |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 853 2007-10-03 19:47:40Z yllar $
+ @version $Id: messages.inc 1128 2008-02-21 07:43:23Z yllar $
 
 */
 
@@ -74,5 +74,9 @@ $messages['copyerror'] = 'Adresų kopijuoti negalima';
 $messages['sourceisreadonly'] = 'Šis adreso šaltinis yra tik skaitymui';
 $messages['errorsavingcontact'] = 'Kontakto adreso išsaugoti negalima';
 $messages['movingmessage'] = 'Perkeliamas laiškas...';
+$messages['receiptsent'] = 'Sėkmingai išsiųstas laiško perskaitymo patvirtinimas';
+$messages['errorsendingreceipt'] = 'Nepavyko išsiųsti laiško perskaitymo patvirtinimo';
+$messages['nodeletelastidentity'] = 'Jūs negalite ištrinti šios tapatybės, kadangi ji yra vienintelė likusi.';
+$messages['addsubfolderhint'] = 'Šis aplankas bus sukurtas kaip poaplankis, kurį esate pažymėjęs';
 
-?> 
+?>
