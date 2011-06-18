@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: bugs.inc 90 2005-12-11 23:19:48Z roundcube $
+ $Id: bugs.inc 347 2006-09-16 22:58:51Z estadtherr $
 
 */
 
@@ -114,6 +114,5 @@ function log_bug($arg_arr)
     flush();
     }
   }
-
 
 ?>

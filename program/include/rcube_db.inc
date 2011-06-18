@@ -5,7 +5,7 @@
  | program/include/rcube_db.inc                                          |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005, RoundCube Dev. - Switzerland                      |
+ | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -17,7 +17,7 @@
  |         Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_db.inc 262 2006-06-25 09:17:07Z thomasb $
+ $Id: rcube_db.inc 543 2007-04-28 18:07:12Z thomasb $
 
 */
 
@@ -102,7 +102,7 @@ class rcube_db
       $this->db_error = TRUE;
       $this->db_error_msg = $dbh->getMessage();
 
-      raise_error(array('code' => 500, 'type' => 'db', 'line' => __LINE__, 'file' => __FILE__,
+      raise_error(array('code' => 603, 'type' => 'db', 'line' => __LINE__, 'file' => __FILE__,
                         'message' => $this->db_error_msg), TRUE, FALSE);
                         
       return FALSE;
@@ -292,14 +292,17 @@ class rcube_db
     switch($this->db_provider)
       {
       case 'pgsql':
-        // PostgreSQL uses sequences
         $result = &$this->db_handle->getOne("SELECT CURRVAL('$sequence')");
         if (DB::isError($result))
-          {
           raise_error(array('code' => 500, 'type' => 'db', 'line' => __LINE__, 'file' => __FILE__, 
                             'message' => $result->getMessage()), TRUE, FALSE);
-          }
+        return $result;
 
+      case 'mssql':
+        $result = &$this->db_handle->getOne("SELECT @@IDENTITY");
+        if (DB::isError($result))
+          raise_error(array('code' => 500, 'type' => 'db', 'line' => __LINE__, 'file' => __FILE__, 
+                            'message' => $result->getMessage()), TRUE, FALSE);
         return $result;
                 
       case 'mysql': // This is unfortuneate
@@ -307,7 +310,7 @@ class rcube_db
 
       case 'mysqli':
         return mysqli_insert_id($this->db_handle->connection);
-	
+
       case 'sqlite':
         return sqlite_last_insert_rowid($this->db_handle->connection);
 
@@ -357,12 +360,14 @@ class rcube_db
    */
   function _fetch_row($result, $mode)
     {
-    if (DB::isError($result))
+    if (!$result || DB::isError($result))
       {
       raise_error(array('code' => 500, 'type' => 'db', 'line' => __LINE__, 'file' => __FILE__,
                         'message' => $this->db_link->getMessage()), TRUE, FALSE);
       return FALSE;
       }
+      elseif (!is_object($result))
+      return FALSE;
                          
     return $result->fetchRow($mode);
     }
@@ -421,6 +426,25 @@ class rcube_db
     }
 
 
+  /*
+   * Return SQL function for current time and date
+   *
+   * @return string SQL function to use in query
+   * @access public
+   */
+  function now()
+    {
+    switch($this->db_provider)
+      {
+      case 'mssql':
+        return "getdate()";
+
+      default:
+        return "now()";
+      }
+    }
+
+
   /**
    * Return SQL statement to convert a field value into a unix timestamp
    *
@@ -434,7 +458,9 @@ class rcube_db
       {
       case 'pgsql':
         return "EXTRACT (EPOCH FROM $field)";
-        break;
+
+      case 'mssql':
+        return "datediff(s, '1970-01-01 00:00:00', $field)";
 
       default:
         return "UNIX_TIMESTAMP($field)";
@@ -456,7 +482,7 @@ class rcube_db
       case 'mysqli':
       case 'mysql':
       case 'sqlite':
-        return "FROM_UNIXTIME($timestamp)";
+        return sprintf("FROM_UNIXTIME(%d)", $timestamp);
 
       default:
         return date("'Y-m-d H:i:s'", $timestamp);

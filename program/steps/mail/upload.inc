@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: upload.inc 297 2006-08-06 15:55:11Z thomasb $
+ $Id: upload.inc 543 2007-04-28 18:07:12Z thomasb $
 
 */
 
@@ -26,8 +26,8 @@ if (!$_SESSION['compose'])
   }
 
 
-// create temp dir for file uploads
-$temp_dir = rcmail_create_compose_tempdir();
+// use common temp dir for file uploads
+$temp_dir = unslashify($CONFIG['temp_dir']);
 
 
 if (!is_array($_SESSION['compose']['attachments']))
@@ -47,34 +47,39 @@ foreach ($_FILES['_attachments']['tmp_name'] as $i => $filepath)
                                                   'path' => $tmpfname);
 
     if (is_file($CONFIG['skin_path'] . '/images/icons/remove-attachment.png'))
-      $button = sprintf('<img src="%s/images/icons/remove-attachment.png" alt="%s" border="0" style="padding-right:2px;vertical-align:middle" />',
-                        $CONFIG['skin_path'],
-                        rcube_label('delete'));
+      $button = sprintf(
+        '<img src="%s/images/icons/remove-attachment.png" alt="%s" border="0" style="padding-right:2px;vertical-align:middle" />',
+        $CONFIG['skin_path'],
+        Q(rcube_label('delete')));
     else
-      $button = rcube_label('delete');
+      $button = Q(rcube_label('delete'));
 
-    $content = sprintf('<a href="#delete" onclick="return %s.command(\\\'remove-attachment\\\', \\\'rcmfile%d\\\', this)" title="%s">%s</a>%s',
-                       $JS_OBJECT_NAME,
-                       $id,
-                       rcube_label('delete'),
-                       $button,
-                       rep_specialchars_output($_FILES['_attachments']['name'][$i], 'js'));
+    $content = sprintf(
+      '<a href="#delete" onclick="return %s.command(\'remove-attachment\', \'rcmfile%d\', this)" title="%s">%s</a>%s',
+      JS_OBJECT_NAME,
+      $id,
+      Q(rcube_label('delete')),
+      $button,
+      Q($_FILES['_attachments']['name'][$i]));
 
-    $response .= sprintf('parent.%s.add2attachment_list(\'rcmfile%d\',\'%s\');',
-                         $JS_OBJECT_NAME,
-                         $id,
-                         $content);
+    $OUTPUT->command('add2attachment_list', "rcmfile$id", $content);
+    }
+  else // upload failed
+    {
+    $err = $_FILES['_attachments']['error'][$i];
+    if ($err == UPLOAD_ERR_INI_SIZE || $err == UPLOAD_ERR_FORM_SIZE)
+      $msg = rcube_label(array('name' => 'filesizeerror', 'vars' => array('size' => show_bytes(parse_bytes(ini_get('upload_max_filesize'))))));
+    else
+      $msg = rcube_label('fileuploaderror');
+    
+    $OUTPUT->command('display_message', $msg, 'error');
     }
   }
 
 
 // send html page with JS calls as response
-$frameout = <<<EOF
-$response
-parent.$JS_OBJECT_NAME.show_attachment_form(false);
-parent.$JS_OBJECT_NAME.auto_save_start();
-EOF;
-
-rcube_iframe_response($frameout);
+$OUTPUT->command('show_attachment_form', false);
+$OUTPUT->command('auto_save_start', false);
+$OUTPUT->send('iframe');
 
 ?>

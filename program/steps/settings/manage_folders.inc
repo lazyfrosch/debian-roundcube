@@ -5,7 +5,7 @@
  | program/steps/settings/manage_folders.inc                             |
  |                                                                       |
  | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005, RoundCube Dev. - Switzerland                      |
+ | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: manage_folders.inc 285 2006-07-30 19:38:06Z thomasb $
+ $Id: manage_folders.inc 573 2007-05-18 11:29:25Z thomasb $
 
 */
 
@@ -26,82 +26,81 @@ rcmail_imap_init(TRUE);
 // subscribe to one or more mailboxes
 if ($_action=='subscribe')
   {
-  if (strlen($_GET['_mboxes']))
-    $IMAP->subscribe(array($_GET['_mboxes']));
+  if ($mboxes = get_input_value('_mboxes', RCUBE_INPUT_POST))
+    $IMAP->subscribe(array($mboxes));
 
-  if ($REMOTE_REQUEST)
-    rcube_remote_response('// subscribed');
+  if ($OUTPUT->ajax_call)
+    $OUTPUT->remote_response('// subscribed');
   }
 
 // unsubscribe one or more mailboxes
 else if ($_action=='unsubscribe')
   {
-  if (strlen($_GET['_mboxes']))
-    $IMAP->unsubscribe(array($_GET['_mboxes']));
+  if ($mboxes = get_input_value('_mboxes', RCUBE_INPUT_POST))
+    $IMAP->unsubscribe(array($mboxes));
 
-  if ($REMOTE_REQUEST)
-    rcube_remote_response('// unsubscribed');
+  if ($OUTPUT->ajax_call)
+    $OUTPUT->remote_response('// unsubscribed');
   }
 
 // create a new mailbox
 else if ($_action=='create-folder')
   {
-  if (!empty($_GET['_name']))
-    $create = $IMAP->create_mailbox(trim(get_input_value('_name', RCUBE_INPUT_GET)), TRUE);
+  if (!empty($_POST['_name']))
+    $create = $IMAP->create_mailbox(trim(get_input_value('_name', RCUBE_INPUT_POST, FALSE, 'UTF-7')), TRUE);
 
-  if ($create && $REMOTE_REQUEST)
+  if ($create && $OUTPUT->ajax_call)
     {
-    $commands = sprintf("this.add_folder_row('%s')", rep_specialchars_output($create, 'js'));
-    rcube_remote_response($commands);
+    $OUTPUT->command('add_folder_row', $create, rcube_charset_convert($create, 'UTF-7'));
+    $OUTPUT->send();
     }
-  else if (!$create && $REMOTE_REQUEST)
+  else if (!$create && $OUTPUT->ajax_call)
     {
-    $commands = show_message('errorsaving', 'error');
-    rcube_remote_response($commands);
+    $OUTPUT->show_message('errorsaving', 'error');
+    $OUTPUT->remote_response();
     }
   else if (!$create)
-    show_message('errorsaving', 'error');
+    $OUTPUT->show_message('errorsaving', 'error');
   }
 
 // rename a mailbox
 else if ($_action=='rename-folder')
   {
-  if (!empty($_GET['_folder_oldname']) && !empty($_GET['_folder_newname']))
-    $rename = $IMAP->rename_mailbox(get_input_value('_folder_oldname', RCUBE_INPUT_GET), trim(get_input_value('_folder_newname', RCUBE_INPUT_GET)));
-
-  if ($rename && $REMOTE_REQUEST)
+  if (!empty($_POST['_folder_oldname']) && !empty($_POST['_folder_newname']))
+    $rename = $IMAP->rename_mailbox(($oldname = get_input_value('_folder_oldname', RCUBE_INPUT_POST)), trim(get_input_value('_folder_newname', RCUBE_INPUT_POST, FALSE, 'UTF-7')));
+    
+  if ($rename && $OUTPUT->ajax_call)
     {
-    $commands = sprintf("this.replace_folder_row('%s','%s');",
-                        addslashes(rep_specialchars_output($rename, 'js')),
-                        rep_specialchars_output($_GET['_folder_oldname'], 'js'));
-    rcube_remote_response($commands);
+    $OUTPUT->command('replace_folder_row', $oldname, $rename, rcube_charset_convert($rename, 'UTF-7'));
+    $OUTPUT->command('reset_folder_rename');
+    $OUTPUT->send();
     }
-  else if (!$rename && $REMOTE_REQUEST)
+  else if (!$rename && $OUTPUT->ajax_call)
     {
-    $commands = "this.reset_folder_rename();\n";
-    $commands .= show_message('errorsaving', 'error');
-    rcube_remote_response($commands);
+    $OUTPUT->command('reset_folder_rename');
+    $OUTPUT->show_message('errorsaving', 'error');
+    $OUTPUT->send();
     }
   else if (!$rename)
-    show_message('errorsaving', 'error');
+    $OUTPUT->show_message('errorsaving', 'error');
   }
 
 // delete an existing IMAP mailbox
 else if ($_action=='delete-folder')
   {
-  if (!empty($_GET['_mboxes']))
-    $deleted = $IMAP->delete_mailbox(array(get_input_value('_mboxes', RCUBE_INPUT_GET)));
+  if ($mboxes = get_input_value('_mboxes', RCUBE_INPUT_POST))
+    $deleted = $IMAP->delete_mailbox(array($mboxes));
 
-  if ($REMOTE_REQUEST && $deleted)
+  if ($OUTPUT->ajax_call && $deleted)
     {
-    $commands = sprintf("this.remove_folder_row('%s');\n", rep_specialchars_output(get_input_value('_mboxes', RCUBE_INPUT_GET), 'js'));
-    $commands .= show_message('folderdeleted', 'confirmation');
-    rcube_remote_response($commands);
+    $OUTPUT->command('remove_folder_row', get_input_value('_mboxes', RCUBE_INPUT_POST));
+    $OUTPUT->show_message('folderdeleted', 'confirmation');
+    $OUTPUT->send();
     }
-  else if ($REMOTE_REQUEST)
+  else if ($OUTPUT->ajax_call)
     {
-    $commands = show_message('errorsaving', 'error');
-    rcube_remote_response($commands);
+    $OUTPUT->show_message('errorsaving', 'error');
+    $OUTPUT->send();
     }
   }
 
@@ -110,7 +109,7 @@ else if ($_action=='delete-folder')
 // build table with all folders listed by server
 function rcube_subscription_form($attrib)
   {
-  global $IMAP, $CONFIG, $OUTPUT, $JS_OBJECT_NAME;
+  global $IMAP, $CONFIG, $OUTPUT;
 
   list($form_start, $form_end) = get_form_tags($attrib, 'folders');
   unset($attrib['form']);
@@ -135,11 +134,13 @@ function rcube_subscription_form($attrib)
 
 
   // get folders from server
+  $IMAP->clear_cache('mailboxes');
+
   $a_unsubscribed = $IMAP->list_unsubscribed();
   $a_subscribed = $IMAP->list_mailboxes();
   $a_js_folders = array();
  
-  $checkbox_subscribe = new checkbox(array('name' => '_subscribed[]', 'onclick' => "$JS_OBJECT_NAME.command(this.checked?'subscribe':'unsubscribe',this.value)"));
+  $checkbox_subscribe = new checkbox(array('name' => '_subscribed[]', 'onclick' => JS_OBJECT_NAME.".command(this.checked?'subscribe':'unsubscribe',this.value)"));
   
   if (!empty($attrib['deleteicon']))
     $del_button = sprintf('<img src="%s%s" alt="%s" border="0" />', $CONFIG['skin_path'], $attrib['deleteicon'], rcube_label('delete'));
@@ -154,28 +155,34 @@ function rcube_subscription_form($attrib)
   // create list of available folders
   foreach ($a_unsubscribed as $i => $folder)
     {
+    $subscribed = in_array($folder, $a_subscribed);
     $protected = ($CONFIG['protect_default_folders'] == TRUE && in_array($folder,$CONFIG['default_imap_folders']));
     $zebra_class = $i%2 ? 'even' : 'odd';
-    $folder_js = rep_specialchars_output($folder, 'js');
+    $folder_js = JQ($folder);
+    $folder_html = $CONFIG['protect_default_folders'] && in_array($folder, $CONFIG['default_imap_folders']) ? rcube_label(strtolower($folder)) : rcube_charset_convert($folder, 'UTF-7');
     
     if (!$protected)
-      $a_js_folders['rcmrow'.($i+1)] = $folder_js;
+      $a_js_folders['rcmrow'.($i+1)] = array($folder, rcube_charset_convert($folder, 'UTF-7'));
 
-    $out .= sprintf('<tr id="rcmrow%d" class="%s"><td>%s</td><td>%s</td>',
+    $out .= sprintf('<tr id="rcmrow%d" class="%s"><td>%s</td>',
                     $i+1,
                     $zebra_class,
-                    rep_specialchars_output(rcube_charset_convert($folder, 'UTF-7', 'UTF-8'), 'html', 'all'),
-                    $checkbox_subscribe->show(in_array($folder, $a_subscribed)?$folder:'', array('value' => $folder, 'disabled' => $protected)));
+                    Q($folder_html));
+                    
+    if ($protected)
+      $out .= '<td>&nbsp;'.($subscribed ? '&#x2022;' : '-').'</td>';
+    else
+      $out .= '<td>'.$checkbox_subscribe->show($subscribed?$folder:'', array('value' => $folder)).'</td>';
 
     // add rename and delete buttons
     if (!$protected)
       $out .= sprintf('<td><a href="#rename" onclick="%s.command(\'rename-folder\',\'%s\')" title="%s">%s</a>'.
                       '<td><a href="#delete" onclick="%s.command(\'delete-folder\',\'%s\')" title="%s">%s</a></td>',
-                      $JS_OBJECT_NAME,
+                      JS_OBJECT_NAME,
                       $folder_js,
                       rcube_label('renamefolder'),
                       $edit_button,
-                      $JS_OBJECT_NAME,
+                      JS_OBJECT_NAME,
                       $folder_js,
                       rcube_label('deletefolder'),
                       $del_button);
@@ -188,10 +195,8 @@ function rcube_subscription_form($attrib)
   $out .= "</tbody>\n</table>";
   $out .= "\n$form_end";
 
-
-  $javascript = sprintf("%s.gui_object('subscriptionlist', '%s');\n", $JS_OBJECT_NAME, $attrib['id']);
-  $javascript .= sprintf("%s.set_env('subscriptionrows', %s);", $JS_OBJECT_NAME, array2js($a_js_folders));
-  $OUTPUT->add_script($javascript);
+  $OUTPUT->add_gui_object('subscriptionlist', $attrib['id']);
+  $OUTPUT->set_env('subscriptionrows', $a_js_folders);
 
   return $out;  
   }
@@ -199,8 +204,6 @@ function rcube_subscription_form($attrib)
 
 function rcube_create_folder_form($attrib)
   {
-  global $JS_OBJECT_NAME;
-
   list($form_start, $form_end) = get_form_tags($attrib, 'create-folder');
   unset($attrib['form']);
 
@@ -215,7 +218,7 @@ function rcube_create_folder_form($attrib)
     {
     $button = new input_field(array('type' => 'button',
                                     'value' => rcube_label('create'),
-                                    'onclick' => "$JS_OBJECT_NAME.command('create-folder',this.form)"));
+                                    'onclick' => JS_OBJECT_NAME.".command('create-folder',this.form)"));
     $out .= $button->show();
     }
 
@@ -226,7 +229,7 @@ function rcube_create_folder_form($attrib)
 
 function rcube_rename_folder_form($attrib)
   {
-  global $CONFIG, $IMAP, $JS_OBJECT_NAME;
+  global $CONFIG, $IMAP;
 
   list($form_start, $form_end) = get_form_tags($attrib, 'rename-folder');
   unset($attrib['form']);
@@ -255,7 +258,7 @@ function rcube_rename_folder_form($attrib)
     {
     $button = new input_field(array('type' => 'button',
                                     'value' => rcube_label('rename'),
-                                    'onclick' => "$JS_OBJECT_NAME.command('rename-folder',this.form)"));
+                                    'onclick' => JS_OBJECT_NAME.".command('rename-folder',this.form)"));
     $out .= $button->show();
     }
 
@@ -265,9 +268,15 @@ function rcube_rename_folder_form($attrib)
   }
 
 
+// register UI objects
+$OUTPUT->add_handlers(array(
+  'foldersubscription' => 'rcube_subscription_form',
+  'createfolder' => 'rcube_create_folder_form',
+  'renamefolder' => 'rcube_rename_folder_form'
+));
+
 // add some labels to client
 rcube_add_label('deletefolderconfirm');
 
-
-parse_template('managefolders');
+$OUTPUT->send('managefolders');
 ?>

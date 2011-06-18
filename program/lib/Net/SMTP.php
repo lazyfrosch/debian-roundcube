@@ -18,7 +18,7 @@
 // |          Damian Alejandro Fernandez Sosa <damlists@cnba.uba.ar>      |
 // +----------------------------------------------------------------------+
 //
-// $Id: SMTP.php 17 2005-10-03 20:25:31Z roundcube $
+// $Id: SMTP.php 399 2006-12-06 21:37:37Z thomasb $
 
 require_once 'PEAR.php';
 require_once 'Net/Socket.php';
@@ -760,7 +760,7 @@ class Net_SMTP
      * @access public
      * @since  1.0
      */
-    function data($data)
+    function data(&$data)
     {
         /* RFC 1870, section 3, subsection 3 states "a value of zero
          * indicates that no fixed maximum message size is in force".
@@ -784,7 +784,8 @@ class Net_SMTP
             return $error;
         }
 
-        if (PEAR::isError($result = $this->_send($data . "\r\n.\r\n"))) {
+        $data .= "\r\n.\r\n";
+        if (PEAR::isError($result = $this->_send($data))) {
             return $result;
         }
         if (PEAR::isError($error = $this->_parseResponse(250))) {

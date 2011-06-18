@@ -40,9 +40,9 @@ importing the table layout and granting the proper permissions to the
 roundcube user. Here is an example of that procedure:
 
 # mysql
-> CREATE DATABASE 'roundcubemail';
+> CREATE DATABASE roundcubemail;
 > GRANT ALL PRIVILEGES ON roundcubemail.* TO roundcube@localhost
-        IDENTIFIED BY 'password';
+    IDENTIFIED BY 'password';
 > quit
 # mysql roundcubemail < SQL/mysql.initial.sql
 
@@ -53,12 +53,16 @@ For MySQL version 4.1 and up, it's recommended to create the database for
 RoundCube with utf-8 charset. Here's an example of the init procedure:
 
 # mysql
-> CREATE DATABASE 'roundcubemail' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+> CREATE DATABASE roundcubemail DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 > GRANT ALL PRIVILEGES ON roundcubemail.* TO roundcube@localhost
-        IDENTIFIED BY 'password';
+    IDENTIFIED BY 'password';
 > quit
 
 # mysql roundcubemail < SQL/mysql5.initial.sql
+
+Note: 'password' is the master password for the roundcube user. It is strongly
+recommended you replace this with a more secure password. Please keep in
+mind: You need to specify this password later in 'config/db.inc.php'.
 
 
 * SQLite
@@ -97,11 +101,13 @@ CONFIGURATION
 =============
 
 Change the files in config/* according your to environment and your needs.
-Details about the config paramaters can be found in the config files.
+Details about the config parameters can be found in the config files
+or in the wiki: http://trac.roundcube.net/trac.cgi/wiki/Howto_Config
 
 
 UPGRADING
 =========
+
 If you already have a previous version of RoundCube installed,
 please refer to the instructions in UPGRADING guide.
 
