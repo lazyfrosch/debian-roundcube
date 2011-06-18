@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcmail.php 4396 2011-01-06 12:41:16Z thomasb $
+ $Id: rcmail.php 4509 2011-02-09 10:51:50Z thomasb $
 
 */
 
@@ -673,9 +673,9 @@ class rcmail
     // Check if we need to add domain
     if (!empty($config['username_domain']) && strpos($username, '@') === false) {
       if (is_array($config['username_domain']) && isset($config['username_domain'][$host]))
-        $username .= '@'.rcube_parse_host($config['username_domain'][$host]);
+        $username .= '@'.rcube_parse_host($config['username_domain'][$host], $host);
       else if (is_string($config['username_domain']))
-        $username .= '@'.rcube_parse_host($config['username_domain']);
+        $username .= '@'.rcube_parse_host($config['username_domain'], $host);
     }
 
     // Convert username to lowercase. If IMAP backend
@@ -691,12 +691,12 @@ class rcmail
 
     // Here we need IDNA ASCII
     // Only rcube_contacts class is using domain names in Unicode
-    $host = idn_to_ascii($host);
+    $host = rcube_idn_to_ascii($host);
     if (strpos($username, '@')) {
       // lowercase domain name
       list($local, $domain) = explode('@', $username);
       $username = $local . '@' . mb_strtolower($domain);
-      $username = idn_to_ascii($username);
+      $username = rcube_idn_to_ascii($username);
     }
 
     // user already registered -> overwrite username

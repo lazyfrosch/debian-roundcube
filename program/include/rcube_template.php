@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_template.php 4404 2011-01-12 10:26:32Z alec $
+ $Id: rcube_template.php 4509 2011-02-09 10:51:50Z thomasb $
 
  */
 
@@ -1031,7 +1031,7 @@ class rcube_template extends rcube_html_page
             $username = $this->app->user->get_username();
         }
 
-        return idn_to_utf8($username);
+        return rcube_idn_to_utf8($username);
     }
 
 
@@ -1229,8 +1229,8 @@ class rcube_template extends rcube_html_page
             'UTF-8'        => 'UTF-8 ('.rcube_label('unicode').')',
             'US-ASCII'     => 'ASCII ('.rcube_label('english').')',
             'ISO-8859-1'   => 'ISO-8859-1 ('.rcube_label('westerneuropean').')',
-            'ISO-8859-2'   => 'ISO-8895-2 ('.rcube_label('easterneuropean').')',
-            'ISO-8859-4'   => 'ISO-8895-4 ('.rcube_label('baltic').')',
+            'ISO-8859-2'   => 'ISO-8859-2 ('.rcube_label('easterneuropean').')',
+            'ISO-8859-4'   => 'ISO-8859-4 ('.rcube_label('baltic').')',
             'ISO-8859-5'   => 'ISO-8859-5 ('.rcube_label('cyrillic').')',
             'ISO-8859-6'   => 'ISO-8859-6 ('.rcube_label('arabic').')',
             'ISO-8859-7'   => 'ISO-8859-7 ('.rcube_label('greek').')',

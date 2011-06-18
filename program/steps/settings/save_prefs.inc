@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: save_prefs.inc 4169 2010-11-02 14:53:54Z alec $
+ $Id: save_prefs.inc 4469 2011-01-29 14:55:12Z thomasb $
 
 */
 
@@ -128,6 +128,8 @@ switch ($CURR_SECTION)
 
     if (isset($CONFIG['max_pagesize']) && ($a_user_prefs['pagesize'] > $CONFIG['max_pagesize']))
       $a_user_prefs['pagesize'] = (int) $CONFIG['max_pagesize'];
+
+    $a_user_prefs['timezone'] = $_SESSION['timezone'] = (string) $a_user_prefs['timezone'];
 
   break;
   case 'mailbox':

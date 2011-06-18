@@ -16,7 +16,7 @@
 |         Teotónio Ricardo <teotonio.ricardo@webtuga.pt>               |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 4386 2011-01-04 08:35:46Z yllar $
+@version $Id: messages.inc 4469 2011-01-29 14:55:12Z thomasb $
 
 */
 
@@ -140,5 +140,6 @@ $messages['namecannotbeempty'] = 'O nome não pode estar em branco';
 $messages['nametoolong'] = 'O nome é demasiado longo';
 $messages['folderupdated'] = 'Actualização da pasta concluída com sucesso';
 $messages['foldercreated'] = 'Pasta criada com sucesso';
+$messages['invalidimageformat'] = 'Formato de imagem não suportado';
 
 ?>

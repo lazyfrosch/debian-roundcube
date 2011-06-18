@@ -14,9 +14,9 @@
 |         Takashi Takamatsu <taka717@gmail.com>                         |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 4368 2010-12-27 08:51:22Z yllar $
+@version $Id: messages.inc 4469 2011-01-29 14:55:12Z thomasb $
 
-//  EN-Revision: 4321
+//  EN-Revision: 4424
 
 */
 
@@ -140,5 +140,6 @@ $messages['namecannotbeempty'] = '名前は空にできません。';
 $messages['nametoolong'] = '名前が長すぎます。';
 $messages['folderupdated'] = 'フォルダーの更新に成功しました。';
 $messages['foldercreated'] = 'フォルダーの作成に成功しました。';
+$messages['invalidimageformat'] = '画像の形式が正しくありません。';
 
 ?>

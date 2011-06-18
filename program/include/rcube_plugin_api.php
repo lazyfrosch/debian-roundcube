@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_plugin_api.php 4154 2010-10-29 08:42:28Z alec $
+ $Id: rcube_plugin_api.php 4469 2011-01-29 14:55:12Z thomasb $
 
 */
 
@@ -395,7 +395,7 @@ class rcube_plugin_api
   {
     if ($this->output->type == 'html') {
       $src = $this->resource_url($fn);
-      $this->output->add_header(html::tag('link', array('rel' => "stylesheet", 'type' => "text/css", 'href' => $src)));
+      $this->output->include_css($src);
     }
   }
   
@@ -437,4 +437,3 @@ class rcube_plugin_api
   }
 
 }
-
