@@ -6,7 +6,7 @@
  | language/ro/messages.inc                                              |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
@@ -14,7 +14,7 @@
  |         Ispas Dorin <dorinxp2004@yahoo.com>                           |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 1149 2008-02-28 19:52:09Z thomasb $
+ @version $Id: messages.inc 2237 2009-01-17 01:55:39Z till $
 
 */
 

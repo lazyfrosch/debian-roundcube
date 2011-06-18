@@ -15,18 +15,15 @@
  | Author: Sjon Hortensius <sjon@hortensius.net>                         |
  +-----------------------------------------------------------------------+
 
- $Id: rss.inc 931 2007-11-25 19:45:38Z thomasb $
+ $Id: rss.inc 2223 2009-01-08 14:12:00Z alec $
 
 */
-
-require_once('Mail/mimeDecode.php');
 
 
 function rss_encode($string){
 	$string = rep_specialchars_output($string, 'xml');
 	return $string;
 }
-
 
 
 $REMOTE_REQUEST = TRUE;

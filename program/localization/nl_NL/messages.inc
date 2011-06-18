@@ -6,7 +6,7 @@
 | language/nl_NL/messages.inc                                           |
 |                                                                       |
 | Language file of the RoundCube Webmail client                         |
-| Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
+| Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -14,7 +14,7 @@
 |         Lazlo Westerhof <roundcube@lazlo.me>                          |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 2037 2008-11-04 07:46:29Z robin $
+@version $Id: messages.inc 2237 2009-01-17 01:55:39Z till $
 
 */
 

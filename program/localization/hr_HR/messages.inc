@@ -6,14 +6,14 @@
 | language/hr/messages.inc                                              |
 |                                                                       |
 | Language file of the RoundCube Webmail client                         |
-| Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
+| Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
 | Author: Edi Budimilic <edi@gemstudio.hr>                              |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 2102 2008-12-01 10:46:11Z yllar $
+@version $Id: messages.inc 2237 2009-01-17 01:55:39Z till $
 
 */
 

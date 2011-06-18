@@ -6,7 +6,7 @@
 | language/de_CH/labels.inc                                             |
 |                                                                       |
 | Language file of the RoundCube Webmail client                         |
-| Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
+| Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -14,7 +14,7 @@
 | Corrections: Alexander Stiebing <ja.stiebing[NOSPAM]@web.de>          |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2124 2008-12-06 17:59:26Z thomasb $
+@version $Id: labels.inc 2316 2009-02-27 10:54:17Z thomasb $
 
 */
 
@@ -94,7 +94,7 @@ $labels['longoct'] = 'Oktober';
 $labels['longnov'] = 'November';
 $labels['longdec'] = 'Dezember';
 $labels['today'] = 'Heute';
-$labels['checkmail'] = 'Überprüfung auf neue Anzeigen';
+$labels['checkmail'] = 'Auf neue Nachrichten prüfen';
 $labels['writenewmessage'] = 'Neue Nachricht schreiben';
 $labels['replytomessage'] = 'Antwort verfassen';
 $labels['replytoallmessage'] = 'Antwort an Absender und alle Empfänger verfassen';
@@ -216,7 +216,7 @@ $labels['htmlsignature'] = 'HTML-Signatur';
 $labels['previewpane'] = 'Nachrichtenvorschau anzeigen';
 $labels['skin'] = 'Oberflächendesign';
 $labels['logoutclear'] = 'Papierkorb beim Abmelden leeren';
-$labels['logoutcompact'] = 'Posteingang beim Abmleden packen';
+$labels['logoutcompact'] = 'Posteingang beim Abmelden packen';
 $labels['uisettings'] = 'Benutzeroberfläche';
 $labels['serversettings'] = 'Server-Einstellungen';
 $labels['mailboxview'] = 'Mailbox-Ansicht';
@@ -227,10 +227,10 @@ $labels['ignore'] = 'ignorieren';
 $labels['readwhendeleted'] = 'Beim Löschen als gelesen markieren';
 $labels['flagfordeletion'] = 'Als gelöscht markieren anstatt in den Papierkorb verschieben';
 $labels['skipdeleted'] = 'Zeige keine gelöschten Nachrichten an';
-$labels['showremoteimages'] = 'Zeige entfernte eingebettete Bilder an';
+$labels['showremoteimages'] = 'Eingebettete Bilder vom Internet laden';
 $labels['fromknownsenders'] = 'bei bekannten Absendern';
 $labels['always'] = 'immer';
-$labels['showinlineimages'] = 'Stelle angehängte Bilder unter der Nachricht dar';
+$labels['showinlineimages'] = 'Angehängte Bilder unter der Nachricht anzeigen';
 $labels['autosavedraft'] = 'Entwurf autom. speichern';
 $labels['everynminutes'] = 'alle $n Minuten';
 $labels['keepaliveevery'] = '$n Minute(n)';

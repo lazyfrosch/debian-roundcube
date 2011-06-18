@@ -6,7 +6,7 @@
 | language/cs_CZ/labels.inc                                                |
 |                                                                       |
 | Language file of the RoundCube Webmail client                         |
-| Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
+| Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -15,7 +15,7 @@
 |        Jiri Kaderavek <jiri.kaderavek@webstep.net>                    |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2115 2008-12-04 10:21:34Z alec $
+@version $Id: labels.inc 2237 2009-01-17 01:55:39Z till $
 
 */
 
@@ -122,6 +122,9 @@ $labels['select'] = 'Vybrat';
 $labels['all'] = 'Vše';
 $labels['none'] = 'Nic';
 $labels['unread'] = 'Nepřečtené';
+$labels['flagged'] = 'Označené';
+$labels['unanswered'] = 'Neoznačené';
+$labels['filter'] = 'Filtr';
 $labels['compact'] = 'Zmenšit';
 $labels['empty'] = 'Vymazat';
 $labels['purge'] = 'Vyprázdnit';
@@ -157,9 +160,9 @@ $labels['plaintoggle'] = 'Prostý text';
 $labels['savesentmessagein'] = 'Ukládat odeslané zprávy v';
 $labels['dontsave'] = 'neukládat';
 $labels['maxuploadsize'] = 'Maximální povolená velikost souboru je $size';
-$labels['addcc'] = 'Přidat pole \"Kopie\"';
-$labels['addbcc'] = 'Přidat pole \"Skrytá Kopie\"';
-$labels['addreplyto'] = 'Přidat pole \"Odpověď\"';
+$labels['addcc'] = 'Přidat pole "Kopie"';
+$labels['addbcc'] = 'Přidat pole "Skrytá Kopie"';
+$labels['addreplyto'] = 'Přidat pole "Odpověď"';
 $labels['mdnrequest'] = 'Odesílatel této zprávy si přeje být upozorněn na to, že jste zprávu obdrželi. Chcete přijetí zprávy potvrdit?';
 $labels['receiptread'] = 'Potvrzení o přijetí zprávy';
 $labels['yourmessage'] = 'Toto je potvrzení o přijetí Vaší zprávy';
@@ -224,12 +227,25 @@ $labels['autosend'] = 'poslat automaticky';
 $labels['ignore'] = 'ignorovat';
 $labels['readwhendeleted'] = 'Při odstranění označit zprávu jako přečtenou';
 $labels['flagfordeletion'] = 'Zprávu nemazat, pouze označit pro odstranění';
+$labels['skipdeleted'] = 'Nezobrazovat smazané zprávy';
+$labels['showremoteimages'] = 'Zobrazovat obrázky uložené mimo mail';
+$labels['fromknownsenders'] = 'od známých uživatelů';
+$labels['always'] = 'vždy';
 $labels['showinlineimages'] = 'Zobrazovat připojené obrázky pod textem';
 $labels['autosavedraft'] = 'Automaticky uložit rozepsané zprávy';
 $labels['everynminutes'] = 'každých $n minut';
+$labels['keepaliveevery'] = 'každých $n minut';
+$labels['keepalive'] = 'Zkontrolovat nové zprávy';
 $labels['never'] = 'nikdy';
 $labels['messagesdisplaying'] = 'Zobrazování zpráv';
 $labels['messagescomposition'] = 'Psaní zpráv';
+$labels['mimeparamfolding'] = 'Jména příloh';
+$labels['2231folding'] = 'Podle RFC 2231 (Thunderbird)';
+$labels['miscfolding'] = 'RFC 2047/2231 (MS Outlook)';
+$labels['2047folding'] = 'Podle RFC 2047 (ostatní)';
+$labels['advancedoptions'] = 'Pokročilá nastavení';
+$labels['focusonnewmessage'] = 'Aktivovat okno prohlížeče při príchozí zprávě';
+$labels['checkallfolders'] = 'Kontrolovat nové zprávy ve všech složkách';
 $labels['folder'] = 'Složka';
 $labels['folders'] = 'Složky';
 $labels['foldername'] = 'Jméno složky';
@@ -245,5 +261,9 @@ $labels['specialfolders'] = 'Speciální složky';
 $labels['sortby'] = 'Seřadit podle';
 $labels['sortasc'] = 'Seřadit vzestupně';
 $labels['sortdesc'] = 'Seřadit sestupně';
+$labels['B'] = 'B';
+$labels['KB'] = 'KB';
+$labels['MB'] = 'MB';
+$labels['GB'] = 'GB';
 
 ?>
