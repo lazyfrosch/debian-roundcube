@@ -6,14 +6,14 @@
  | language/en_US/labels.inc                                             |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 842 2007-10-01 13:55:02Z tomekp $
+ @version $Id: labels.inc 1052 2008-02-12 18:41:53Z thomasb $
 
 */
 
@@ -109,6 +109,9 @@ $labels['lastmessage']      = 'Show the last message';
 $labels['lastmessages']     = 'Show last set of messages';
 $labels['backtolist']       = 'Back to message list';
 $labels['viewsource']       = 'Show source';
+$labels['markmessages']     = 'Mark messages';
+$labels['markread']         = 'As read';
+$labels['markunread']       = 'As unread';
 
 $labels['select'] = 'Select';
 $labels['all'] = 'All';
@@ -160,6 +163,11 @@ $labels['addcc'] = 'Add Cc';
 $labels['addbcc'] = 'Add Bcc';
 $labels['addreplyto'] = 'Add Reply-To';
 
+// mdn
+$labels['mdnrequest'] = 'The sender of this message has asked to be notified when you read this message. Do you wish to notify the sender?';
+$labels['receiptread'] = 'Return Receipt (read)';
+$labels['yourmessage'] = 'This is a Return Receipt for your message';
+$labels['receiptnote'] = 'Note: This receipt only acknowledges that the message was displayed on the recipient\'s computer. There is no guarantee that the recipient has read or understood the message contents.';
 
 // address boook
 $labels['name']      = 'Display name';
@@ -223,6 +231,7 @@ $labels['folder']  = 'Folder';
 $labels['folders']  = 'Folders';
 $labels['foldername']  = 'Folder name';
 $labels['subscribed']  = 'Subscribed';
+$labels['messagecount'] = 'Messages';
 $labels['create']  = 'Create';
 $labels['createfolder']  = 'Create new folder';
 $labels['rename'] = 'Rename';

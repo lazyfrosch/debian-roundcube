@@ -6,16 +6,18 @@
  | language/pl/labels.inc                                                |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
- | Author: Tomasz Pajor     <t.pajor@kei.pl>                             |
- |         Sławomir Cichoń  <slawek.cichon@gmail.com>                    |
- |         Janusz Zamecki   <janusz@zamecki.eu>                          |
+ | Author: Tomasz Pajor        <t.pajor@kei.pl>                          |
+ |         Sławomir Cichoń     <slawek.cichon@gmail.com>                 |
+ |         Janusz Zamecki      <janusz@zamecki.eu>                       |
+ |         Mariusz Szulerecki  <nob@force.eu.org>                        |
+ |         Wojciech Szczepucha <donkoyote@gmail.com>                     |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 819 2007-09-26 08:26:58Z tomekp $
+ @version $Id: labels.inc 1160 2008-03-01 15:32:44Z yllar $
 
 */
 
@@ -89,11 +91,14 @@ $labels['lastmessage'] = 'Pokaż ostatnią';
 $labels['lastmessages'] = 'Pokaż ostatnie';
 $labels['backtolist'] = 'Pokaż listę wiadomości';
 $labels['viewsource'] = 'Pokaż źródło';
-$labels['select'] = 'Wybierz';
-$labels['all'] = 'Zaznacz wszystkie';
-$labels['none'] = 'Anuluj zaznaczenie';
-$labels['unread'] = 'Zaznacz nieprzeczytane';
-$labels['compact'] = 'Kompaktuj';
+$labels['markmessages'] = 'Oznacz wiadomość';
+$labels['markread'] = 'Jako przeczytaną';
+$labels['markunread'] = 'Jako nieprzeczytaną';
+$labels['select'] = 'Zaznacz';
+$labels['all'] = 'Wszystkie';
+$labels['none'] = 'Anuluj';
+$labels['unread'] = 'Nieprzeczytane';
+$labels['compact'] = 'Upakuj';
 $labels['empty'] = 'Opróżnij';
 $labels['purge'] = 'Oczyść';
 $labels['quota'] = 'Użyte miejsce';
@@ -123,9 +128,13 @@ $labels['nosubject'] = '(brak tematu)';
 $labels['showimages'] = 'Wyświetl obrazki';
 $labels['htmltoggle'] = 'HTML';
 $labels['plaintoggle'] = 'Zwykły tekst';
-$labels['addcc'] = 'Dodaj Cc'; 
-$labels['addbcc'] = 'Dodaj Bcc'; 
+$labels['addcc'] = 'Dodaj Cc';
+$labels['addbcc'] = 'Dodaj Bcc';
 $labels['addreplyto'] = 'Dodaj Reply-To';
+$labels['mdnrequest'] = 'Nadawca poprosił o potwierdzenie przeczytania tej wiadomości. Czy chcesz go powiadomić?';
+$labels['receiptread'] = 'Potwierdzenie odbioru';
+$labels['yourmessage'] = 'To jest potwierdzenie dostarczenia Twojej wiadomości';
+$labels['receiptnote'] = 'Uwaga: To potwierdzenie dostarczenia wiadomości oznacza tylko, że wiadomość została wyświetlona na komputerze adresata. Nie ma żadnej gwarancji, że odbiorca przeczytał czy też zrozumiał treść wiadomości.';
 $labels['name'] = 'Nazwa';
 $labels['firstname'] = 'Imię';
 $labels['surname'] = 'Nazwisko';
@@ -173,6 +182,7 @@ $labels['folder'] = 'Folder';
 $labels['folders'] = 'Foldery';
 $labels['foldername'] = 'Nazwa folderu';
 $labels['subscribed'] = 'Zasubskrybowany';
+$labels['messagecount'] = 'Wiadomości';
 $labels['create'] = 'Utwórz';
 $labels['createfolder'] = 'Utwórz nowy folder';
 $labels['rename'] = 'Zmień nazwę';

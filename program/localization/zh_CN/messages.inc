@@ -6,15 +6,14 @@
  | localization/zh_CN/messages.inc                                       |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
- | Author: kourge <kourge@gmail.com>                                     |
- |         Xue zhong sheng <xue.zhongsheng@gmail.com>                    |
+ | Author: Xue zhong sheng <xue.zhongsheng@gmail.com>                    |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 672 2007-08-10 14:46:53Z thomasb $
+ @version $Id: messages.inc 1143 2008-02-26 20:50:10Z yllar $
 
 */
 

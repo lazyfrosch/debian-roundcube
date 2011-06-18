@@ -6,7 +6,7 @@
  | language/fr/labels.inc                                                |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
@@ -77,6 +77,7 @@ $labels['replytomessage'] = 'Répondre au message';
 $labels['replytoallmessage'] = 'Répondre à tous';
 $labels['forwardmessage'] = 'Transmettre le message';
 $labels['deletemessage'] = 'Déplacer le message dans la corbeille';
+$labels['movemessagetotrash'] = 'Déplacer le message dans la corbeille';
 $labels['printmessage'] = 'Imprimer ce message';
 $labels['previousmessage'] = 'Voir le message précédent';
 $labels['previousmessages'] = 'Voir les messages précédents';
@@ -88,6 +89,9 @@ $labels['lastmessage'] = 'Voir le dernier message';
 $labels['lastmessages'] = 'Voir la dernière page de messages';
 $labels['backtolist'] = 'Retourner à la liste des messages';
 $labels['viewsource'] = 'Voir le source';
+$labels['markmessages'] = 'Marquer les messages';
+$labels['markread'] = 'Comme lus';
+$labels['markunread'] = 'Comme non lus';
 $labels['select'] = 'Sélectionner';
 $labels['all'] = 'Tous';
 $labels['none'] = 'Aucun';
@@ -101,8 +105,8 @@ $labels['unlimited'] = 'illimitée';
 $labels['quicksearch'] = 'Recherche rapide';
 $labels['resetsearch'] = 'Réinitialiser la recherche';
 $labels['compose'] = 'Composer un nouveau message';
-$labels['sendmessage'] = 'Envoyer le message maintenant';
 $labels['savemessage'] = 'Sauvegarder ce brouillon';
+$labels['sendmessage'] = 'Envoyer le message maintenant';
 $labels['addattachment'] = 'Joindre un fichier';
 $labels['charset'] = 'Encodage';
 $labels['editortype'] = 'Type d\'éditeur';
@@ -122,6 +126,13 @@ $labels['nosubject'] = '(pas de sujet)';
 $labels['showimages'] = 'Afficher les images';
 $labels['htmltoggle'] = 'HTML';
 $labels['plaintoggle'] = 'texte brut';
+$labels['addcc'] = 'Ajouter Cc';
+$labels['addbcc'] = 'Ajouter Cci';
+$labels['addreplyto'] = 'Ajouter Répondre à';
+$labels['mdnrequest'] = 'L\'expéditeur de ce message a demandé d\'être prévenu quand vous lirez ce message. Souhaitez-vous prévenir l\'expéditeur ?';
+$labels['receiptread'] = 'Accusé de réception (lire)';
+$labels['yourmessage'] = 'Ceci est un accusé de réception pour votre message';
+$labels['receiptnote'] = 'Note : Cet accusé de réception indique seulement que le message a été affiché sur l\'ordinateur du destinataire. Il n\'y a aucune garantie que le destinataire a lu ou compris le contenu du message.';
 $labels['name'] = 'Nom à afficher';
 $labels['firstname'] = 'Prénom';
 $labels['surname'] = 'Nom';
@@ -143,7 +154,7 @@ $labels['firstpage'] = 'Voir la première page';
 $labels['nextpage'] = 'Montrer page suivante';
 $labels['lastpage'] = 'Voir la dernière page';
 $labels['groups'] = 'Groupes';
-$labels['personaladrbook'] = 'Adresses personnelle';
+$labels['personaladrbook'] = 'Adresses personnelles';
 $labels['settingsfor'] = 'Paramètres pour';
 $labels['preferences'] = 'Préférences';
 $labels['userpreferences'] = 'Préférences utilisateur';
@@ -169,6 +180,7 @@ $labels['folder'] = 'Dossier';
 $labels['folders'] = 'Dossiers';
 $labels['foldername'] = 'Nom du dossier';
 $labels['subscribed'] = 'Abonné';
+$labels['messagecount'] = 'Messages';
 $labels['create'] = 'Créer';
 $labels['createfolder'] = 'Créer un nouveau dossier';
 $labels['rename'] = 'Renommer';

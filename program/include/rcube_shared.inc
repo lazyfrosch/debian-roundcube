@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_shared.inc 839 2007-09-29 18:15:05Z thomasb $
+ $Id: rcube_shared.inc 1078 2008-02-14 01:33:02Z till $
 
 */
 
@@ -246,8 +246,8 @@ function send_modified_header($mdate, $etag=null)
     $iscached = true;
   
   $etag = $etag ? "\"$etag\"" : null;
-  if ($etag && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag)
-    $iscached = true;
+  if ($etag)
+    $iscached = ($_SERVER['HTTP_IF_NONE_MATCH'] == $etag);
   
   if ($iscached)
     header("HTTP/1.x 304 Not Modified");
@@ -557,9 +557,9 @@ function rc_request_header($name)
  * @param string Input string
  * @param int    Max. length
  * @param string Replace removed chars with this
- * @return string Abbrevated string
+ * @return string Abbreviated string
  */
-function abbrevate_string($str, $maxlength, $place_holder='...')
+function abbreviate_string($str, $maxlength, $place_holder='...')
 {
   $length = rc_strlen($str);
   $first_part_length = floor($maxlength/2) - rc_strlen($place_holder);
@@ -674,5 +674,42 @@ function strrstr($haystack, $needle)
   }
 }
 
+/**
+ * A method to guess the mime_type of an attachment.
+ *
+ * @param string $path     Path to the file.
+ * @param string $failover Mime type supplied for failover.
+ *
+ * @return string
+ * @author Till Klampaeckel <till@php.net>
+ * @see    http://de2.php.net/manual/en/ref.fileinfo.php
+ * @see    http://de2.php.net/mime_content_type
+ */
+function rc_mime_content_type($path, $failover = 'unknown/unknown')
+{
+    global $CONFIG;
+
+    $mime_magic = $CONFIG['mime_magic'];
+
+    if (function_exists('mime_content_type')) {
+        return mime_content_type($path);
+    }
+    if (!extension_loaded('fileinfo')) { 
+        if (!dl('fileinfo.' . PHP_SHLIB_SUFFIX)) {
+            return $failover;
+        }
+    }
+    $finfo = finfo_open(FILEINFO_MIME, $mime_magic);
+    if (!$finfo) {
+        return $failover;
+    }
+    $mime_type = finfo_file($finfo,$path);
+    if (!$mime_type) {
+        return $failover;
+    }
+    finfo_close($finfo);
+
+    return $mime_type;
+}
 
 ?>

@@ -6,14 +6,14 @@
  | language/de_CH/messages.inc                                           |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 549 2007-05-01 18:53:56Z thomasb $
+ @version $Id: messages.inc 1075 2008-02-13 23:43:04Z thomasb $
 
 */
 
@@ -74,5 +74,12 @@ $messages['copysuccess'] = '$nr Adressen erfolgreich kopiert';
 $messages['copyerror'] = 'Die Adressen konnten nicht kopiert werden';
 $messages['sourceisreadonly'] = 'Das Adressverzeichnis kann nicht verändert werden';
 $messages['errorsavingcontact'] = 'Die Änderungen konnten nicht gespeichert werden';
+
+$messages['movingmessage'] = 'Die E-Mail wird verschoben...';
+$messages['receiptsent'] = 'Bestätigung erfolgreich gesendet';
+$messages['errorsendingreceipt'] = 'Bestätigung konnte nicht gesendet werden';
+
+$messages['nodeletelastidentity'] = 'Sie können diesen Absender nicht löschen';
+$messages['addsubfolderhint'] = 'Wird als Unterdornder des aktuell selektieren Ordners erstellt';
 
 ?>

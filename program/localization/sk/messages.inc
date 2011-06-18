@@ -6,15 +6,15 @@
  | language/sk/messages.inc                                              |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
- | Author: Lukas Kraic <lukas.kraic@truni.sk>                            |
- |         Marek Kutnar marek19@zmail.sk>                                |
+ | Author: Marek Kutnar <marek19@zmail.sk>                               |
+ |         Lukas Kraic  <lukas.kraic@truni.sk>                           |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 842 2007-10-01 13:55:02Z tomekp $
+ @version $Id: messages.inc 1153 2008-02-28 20:04:12Z thomasb $
 
 */
 
@@ -74,5 +74,10 @@ $messages['copysuccess'] = 'Úspešne skopírovanie $nr adries';
 $messages['copyerror'] = 'Nemôžem skopírovať žiadnu adresu';
 $messages['sourceisreadonly'] = 'Tento zdroj adries je len na čítanie';
 $messages['errorsavingcontact'] = 'Nemôžem uložit adresu kontaktu';
+$messages['movingmessage'] = 'Presúvam správu...';
+$messages['receiptsent'] = 'Potvrdenie o prijatí správy odoslané';
+$messages['errorsendingreceipt'] = 'Potvrdenie o prijatí správy nebolo možné odoslať';
+$messages['nodeletelastidentity'] = 'Identita sa nedá odstrániť, je posledná a musí zostať.';
+$messages['addsubfolderhint'] = 'Táto zložka bude vytvorená ako podzložka aktualne zvolenej zložky';
 
 ?>

@@ -6,7 +6,7 @@
  | language/et_EE/labels.inc                                             |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
@@ -87,6 +87,9 @@ $labels['lastmessage'] = 'Näita viimast kirja';
 $labels['lastmessages'] = 'Näita viimast kirjade komplekti';
 $labels['backtolist'] = 'Tagasi kirjade nimekirja';
 $labels['viewsource'] = 'Näita lähtekoodi';
+$labels['markmessages'] = 'Märgi kirjad';
+$labels['markread'] = 'Loetuks';
+$labels['markunread'] = 'Mitte loetuks';
 $labels['select'] = 'Vali';
 $labels['all'] = 'kõik';
 $labels['none'] = 'mitte midagi';
@@ -124,6 +127,10 @@ $labels['plaintoggle'] = 'Lihttekst';
 $labels['addcc'] = 'Lisa koopia';
 $labels['addbcc'] = 'Lisa pimekoopia';
 $labels['addreplyto'] = 'Lisa vastus aadressile';
+$labels['mdnrequest'] = 'Selle kirja saatja soovib saada kinnitust kirja lugemise kohta. Soovid kinnituse saata ?';
+$labels['receiptread'] = 'Kättesaamiskinnitus (leotud)';
+$labels['yourmessage'] = 'See on sinu saadetud kirja kättesaamiskinnitus';
+$labels['receiptnote'] = 'Märkus: Kättesaamiskinnituse saamine tähendab ainult seda, et saaja on kirja avanud. Pole mingit garantiid, et ta kirja tegelikult luges ja selle sisust aru sai.';
 $labels['name'] = 'Näidatav nimi';
 $labels['firstname'] = 'Eesnimi';
 $labels['surname'] = 'Perekonnanimi';
@@ -171,6 +178,7 @@ $labels['folder'] = 'Kaust';
 $labels['folders'] = 'Kaustad';
 $labels['foldername'] = 'Kausta nimi';
 $labels['subscribed'] = 'Näitan';
+$labels['messagecount'] = 'Kirju';
 $labels['create'] = 'Loo';
 $labels['createfolder'] = 'Uue kausta loomine';
 $labels['rename'] = 'Nimeta ümber';

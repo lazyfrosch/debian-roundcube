@@ -17,7 +17,7 @@
  |         Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_db.inc 666 2007-08-07 21:02:12Z thomasb $
+ $Id: rcube_db.inc 1089 2008-02-15 13:20:07Z till $
 
 */
 
@@ -25,8 +25,7 @@
 /**
  * Obtain the PEAR::DB class that is used for abstraction
  */
-require_once('DB.php');
-
+require_once 'DB.php';
 
 /**
  * Database independent query interface
@@ -423,6 +422,22 @@ class rcube_db
       $this->db_connect('r');
 			
     return $this->db_handle->quoteIdentifier($str);
+    }
+
+
+  /**
+   * Escapes a string
+   *
+   * @param  string  The string to be escaped
+   * @return string  The escaped string
+   * @access public
+   */
+  function escapeSimple($str)
+    {
+    if (!$this->db_handle)
+      $this->db_connect('r');
+
+    return $this->db_handle->escapeSimple($str);
     }
 
 

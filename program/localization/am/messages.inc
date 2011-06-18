@@ -6,14 +6,14 @@
  | language/am/messages.inc                                              |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Vahan Yerkanian <vahan@arminco.com>                           |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 584 2007-05-24 03:49:19Z estadtherr $
+ @version $Id: messages.inc 1160 2008-03-01 15:32:44Z yllar $
 
 */
 
@@ -73,5 +73,10 @@ $messages['copysuccess'] = '$nr հասցեների կրկնօրինակումը 
 $messages['copyerror'] = 'Հասցեների կրկնօրինակումը ձախողվեց';
 $messages['sourceisreadonly'] = 'Այս հասցեն պաշտպանված է';
 $messages['errorsavingcontact'] = 'Հասցեի գրանցումն ձախողվեց';
+$messages['movingmessage'] = 'Նամակը տեղափոխվում է…';
+$messages['receiptsent'] = 'Նամակի ընթերցման ծանուցագիրն ուղարկված է';
+$messages['errorsendingreceipt'] = 'Ծանուցագրի ուղարկումը ձախողվեց';
+$messages['nodeletelastidentity'] = 'Անհնար է ջնջել վերջին տարբերակը';
+$messages['addsubfolderhint'] = 'Այս դարակը կստեղծվի որպես նշվածի ենթադարակ';
 
 ?>

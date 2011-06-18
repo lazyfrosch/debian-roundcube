@@ -6,7 +6,7 @@
  | language/ca/messages.inc                                              |
  |                                                                       |
  | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2008, RoundCube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
@@ -14,7 +14,7 @@
  |         Simo <sim6@graciasensefils.net>                               |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 872 2007-10-16 09:27:16Z yllar $
+ @version $Id: messages.inc 1143 2008-02-26 20:50:10Z yllar $
 
 */
 
@@ -75,5 +75,9 @@ $messages['copyerror'] = 'No s\'ha pogut copiar cap adreça';
 $messages['sourceisreadonly'] = 'Aquesta adreça és només de lectura.';
 $messages['errorsavingcontact'] = 'No s\'ha pogut guardar l\'adreça de contacte';
 $messages['movingmessage'] = 'Movent el missatge...';
+$messages['receiptsent'] = 'Confirmació de lectura enviada satisfactòriament';
+$messages['errorsendingreceipt'] = 'No es pot enviar la confirmació';
+$messages['nodeletelastidentity'] = 'No pots eliminar aquesta identitat, és l\'última.';
+$messages['addsubfolderhint'] = 'Aquesta carpeta serà creada com a subcarpeta de la seleccionada actualment';
 
 ?>
