@@ -1,4 +1,4 @@
--- RoundCube Webmail initial database structure
+-- Roundcube Webmail initial database structure
 
 -- 
 -- Table structure for table `cache`
@@ -19,7 +19,7 @@ CREATE INDEX ix_cache_created ON cache(created);
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table contacts
+-- Table structure for table contacts and related
 -- 
 
 CREATE TABLE contacts (
@@ -28,13 +28,33 @@ CREATE TABLE contacts (
   changed datetime NOT NULL default '0000-00-00 00:00:00',
   del tinyint NOT NULL default '0',
   name varchar(128) NOT NULL default '',
-  email varchar(128) NOT NULL default '',
+  email varchar(255) NOT NULL default '',
   firstname varchar(128) NOT NULL default '',
   surname varchar(128) NOT NULL default '',
   vcard text NOT NULL default ''
 );
 
 CREATE INDEX ix_contacts_user_id ON contacts(user_id, email);
+
+
+CREATE TABLE contactgroups (
+  contactgroup_id integer NOT NULL PRIMARY KEY,
+  user_id integer NOT NULL default '0',
+  changed datetime NOT NULL default '0000-00-00 00:00:00',
+  del tinyint NOT NULL default '0',
+  name varchar(128) NOT NULL default ''
+);
+
+CREATE INDEX ix_contactgroups_user_id ON contactgroups(user_id, del);
+
+
+CREATE TABLE contactgroupmembers (
+  contactgroup_id integer NOT NULL,
+  contact_id integer NOT NULL default '0',
+  created datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY (contactgroup_id, contact_id)
+);
+
 
 -- --------------------------------------------------------
 
@@ -45,6 +65,7 @@ CREATE INDEX ix_contacts_user_id ON contacts(user_id, email);
 CREATE TABLE identities (
   identity_id integer NOT NULL PRIMARY KEY,
   user_id integer NOT NULL default '0',
+  changed datetime NOT NULL default '0000-00-00 00:00:00',
   del tinyint NOT NULL default '0',
   standard tinyint NOT NULL default '0',
   name varchar(128) NOT NULL default '',
@@ -56,7 +77,7 @@ CREATE TABLE identities (
   html_signature tinyint NOT NULL default '0'
 );
 
-CREATE INDEX ix_identities_user_id ON identities(user_id);
+CREATE INDEX ix_identities_user_id ON identities(user_id, del);
 
 
 -- --------------------------------------------------------
@@ -71,12 +92,12 @@ CREATE TABLE users (
   mail_host varchar(128) NOT NULL default '',
   alias varchar(128) NOT NULL default '',
   created datetime NOT NULL default '0000-00-00 00:00:00',
-  last_login datetime NOT NULL default '0000-00-00 00:00:00',
+  last_login datetime DEFAULT NULL,
   language varchar(5),
   preferences text NOT NULL default ''
 );
 
-CREATE INDEX ix_users_username ON users(username);
+CREATE UNIQUE INDEX ix_users_username ON users(username, mail_host);
 CREATE INDEX ix_users_alias ON users(alias);
 
 -- --------------------------------------------------------

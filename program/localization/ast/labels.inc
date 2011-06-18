@@ -3,10 +3,10 @@
 /*
 
 +-----------------------------------------------------------------------+
-| language/ast/labels.inc                                             |
+| language/ast/labels.inc                                               |
 |                                                                       |
-| Language file of the RoundCube Webmail client                         |
-| Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
+| Language file of the Roundcube Webmail client                         |
+| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -15,7 +15,7 @@
 |         http://softastur.org                                          |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2124 2009-02-02 03:55:53Z mikelg $
+@version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -253,7 +253,6 @@ $labels['advancedoptions'] = 'Opciones avanzaes';
 $labels['focusonnewmessage'] = 'Poner el focu nos mensaxes nuevos';
 $labels['checkallfolders'] = 'Guetar mensaxes nuevos en toles bandexes';
 $labels['displaynext'] = 'Depués de mover/desaniciar amosar el mensaxe que sigue darréu';
-$labels['indexsort'] = 'Usar l\'indiz del mensaxe pa ordenalu por fecha';
 $labels['mainoptions'] = 'Opciones principales';
 $labels['section'] = 'Seición';
 $labels['maintenance'] = 'Mantenimientu';
@@ -266,9 +265,6 @@ $labels['subscribed'] = 'Soscrita';
 $labels['messagecount'] = 'Mensaxes';
 $labels['create'] = 'Facer';
 $labels['createfolder'] = 'Facer una bandexa nueva';
-$labels['rename'] = 'Renomar';
-$labels['renamefolder'] = 'Renomar bandexa';
-$labels['deletefolder'] = 'Desaniciar bandexa';
 $labels['managefolders'] = 'Alministrar bandexes';
 $labels['specialfolders'] = 'Bandexes especiales';
 $labels['sortby'] = 'Ordenar por';

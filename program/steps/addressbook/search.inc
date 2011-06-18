@@ -4,8 +4,8 @@
  +-----------------------------------------------------------------------+
  | program/steps/addressbook/search.inc                                  |
  |                                                                       |
- | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | This file is part of the Roundcube Webmail client                     |
+ | Copyright (C) 2005-2007, Roundcube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -38,8 +38,8 @@ if ($result->count > 0)
 }
 else
 {
-  $OUTPUT->show_message('nocontactsfound', 'warning');
-  $search_request = -1;
+  $OUTPUT->show_message('nocontactsfound', 'notice');
+  $search_request = null;
 }
 
 // update message count display
@@ -49,5 +49,3 @@ $OUTPUT->command('set_rowcount', rcmail_get_rowcount_text());
   
 // send response
 $OUTPUT->send();
-
-?>

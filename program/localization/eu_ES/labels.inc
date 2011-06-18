@@ -4,8 +4,8 @@
 +-----------------------------------------------------------------------+
 | language/eu_ES/labels.inc                                             |
 |                                                                       |
-| Language file of the RoundCube Webmail client                         |
-| Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
+| Language file of the Roundcube Webmail client                         |
+| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -13,7 +13,7 @@
 |         Bihar <gaurdabihar@gmail.com>                                 |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 2513 2009-05-21 12:59:19Z alec $
+@version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
 
 */
 
@@ -224,9 +224,6 @@ $labels['subscribed'] = 'Harpideturik';
 $labels['messagecount'] = 'Mezuak';
 $labels['create'] = 'Sortu';
 $labels['createfolder'] = 'Karpeta berria sortu';
-$labels['rename'] = 'Berrizendatu';
-$labels['renamefolder'] = 'Karpeta berrizendatu';
-$labels['deletefolder'] = 'Karpeta ezabatu';
 $labels['managefolders'] = 'Karpeta kudeaketa';
 $labels['specialfolders'] = 'Karpeta bereziak';
 $labels['sortby'] = 'Honela ordenatu';

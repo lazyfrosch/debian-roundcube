@@ -4,8 +4,8 @@
  +-----------------------------------------------------------------------+
  | program/localization/index.inc                                        |
  |                                                                       |
- | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
+ | This file is part of the Roundcube Webmail client                     |
+ | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: index.inc 2991 2009-09-25 12:23:46Z alec $
+ $Id: index.inc 3989 2010-09-25 13:03:53Z alec $
 
 */
 
@@ -29,15 +29,15 @@ $rcube_languages = array(
   'ar_SA' => 'Arabic (العربية)',
   'hy_AM' => 'Armenian (Հայերեն)',
   'ast'	  => 'Asturiana (Asturianu)',
-  'az_AZ' => 'Azerbaijani (Azəri)',
+  'az_AZ' => 'Azerbaijani (Azərbaycanca)',
   'eu_ES' => 'Basque (Euskara)',
   'bn_BD' => 'Bengali (বাংলা)',
   'bs_BA' => 'Bosnian (Bošnjački)',
   'br'	  => 'Breton (Brezhoneg)',
   'bg_BG' => 'Bulgarian (Български)',
   'ca_ES' => 'Catalan (Català)',
-  'zh_CN' => 'Chinese (普通话)',
-  'zh_TW' => 'Chinese (國語)',
+  'zh_CN' => 'Chinese (简体中文)',
+  'zh_TW' => 'Chinese (正體中文)',
   'hr_HR' => 'Croatian (Hrvatski)',
   'cs_CZ' => 'Czech (Česky)',
   'da_DK' => 'Danish (Dansk)',
@@ -63,6 +63,7 @@ $rcube_languages = array(
   'ga_IE' => 'Irish (Gaedhilge)',
   'it_IT' => 'Italian (Italiano)',
   'ja_JP' => 'Japanese (日本語)',
+  'kh_KH' => 'Khmer (ភាសាខ្មែរ)',
   'ko_KR' => 'Korean (한국어)',
   'ku'    => 'Kurdish (Kurmancî)',
   'lv_LV' => 'Latvian (Latviešu)',
@@ -87,6 +88,7 @@ $rcube_languages = array(
   'es_AR' => 'Spanish (Argentina)',
   'es_ES' => 'Spanish (Español)',
   'sv_SE' => 'Swedish (Svenska)',
+  'ta_IN' => 'Tamil (தமிழ்)',
   'th_TH' => 'Thai (ไทย)',
   'tr_TR' => 'Turkish (Türkçe)',
   'uk_UA' => 'Ukrainian (Українська)',

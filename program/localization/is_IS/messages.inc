@@ -5,15 +5,15 @@
  +-----------------------------------------------------------------------+
  | language/en_GB/messages.inc                                           |
  |                                                                       |
- | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2007, RoundCube Dev. - Switzerland                 |
+ | Language file of the Roundcube Webmail client                         |
+ | Copyright (C) 2005-2007, Roundcube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Weiran Zhang (weiran@weiran.co.uk)                            |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 466 2007-02-06 09:17:01Z tomekp $
+ @version $Id: messages.inc 3989 2010-09-25 13:03:53Z alec $
 
 */
 

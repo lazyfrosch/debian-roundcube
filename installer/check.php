@@ -1,41 +1,65 @@
 <form action="index.php" method="get">
 <?php
 
-$required_php_exts = array('PCRE' => 'pcre', 'DOM' => 'dom',
-    'Session' => 'session', 'XML' => 'xml');
+$required_php_exts = array(
+    'PCRE'      => 'pcre',
+    'DOM'       => 'dom',
+    'Session'   => 'session',
+    'XML'       => 'xml',
+    'JSON'      => 'json'
+);
 
-$optional_php_exts = array('FileInfo' => 'fileinfo', 'Libiconv' => 'iconv',
-    'Multibyte' => 'mbstring', 'OpenSSL' => 'openssl', 'Mcrypt' => 'mcrypt',
-    'GD' => 'gd');
+$optional_php_exts = array(
+    'FileInfo'  => 'fileinfo',
+    'Libiconv'  => 'iconv',
+    'Multibyte' => 'mbstring',
+    'OpenSSL'   => 'openssl',
+    'Mcrypt'    => 'mcrypt',
+    'Intl'      => 'intl',
+);
 
-$required_libs = array('PEAR' => 'PEAR.php', 'MDB2' => 'MDB2.php',
-    'Net_SMTP' => 'Net/SMTP.php', 'Mail_mime' => 'Mail/mime.php',
-    'iilConnection' => 'lib/imap.inc');
+$required_libs = array(
+    'PEAR'      => 'PEAR.php',
+    'MDB2'      => 'MDB2.php',
+    'Net_SMTP'  => 'Net/SMTP.php',
+    'Mail_mime' => 'Mail/mime.php',
+);
 
-$supported_dbs = array('MySQL' => 'mysql', 'MySQLi' => 'mysqli',
-    'PostgreSQL' => 'pgsql', 'SQLite (v2)' => 'sqlite');
+$supported_dbs = array(
+    'MySQL'         => 'mysql',
+    'MySQLi'        => 'mysqli',
+    'PostgreSQL'    => 'pgsql',
+    'SQLite (v2)'   => 'sqlite',
+);
 
-$ini_checks = array('file_uploads' => 1, 'session.auto_start' => 0,
-    'zend.ze1_compatibility_mode' => 0, 'mbstring.func_overload' => 0,
-    'suhosin.session.encrypt' => 0);
+$ini_checks = array(
+    'file_uploads'                  => 1,
+    'session.auto_start'            => 0,
+    'zend.ze1_compatibility_mode'   => 0,
+    'mbstring.func_overload'        => 0,
+    'suhosin.session.encrypt'       => 0,
+);
 
-$optional_checks = array('date.timezone' => '-NOTEMPTY-');
+$optional_checks = array(
+    'date.timezone' => '-NOTEMPTY-',
+);
 
 $source_urls = array(
-    'Sockets' => 'http://www.php.net/manual/en/ref.sockets.php',
-    'Session' => 'http://www.php.net/manual/en/ref.session.php',
-    'PCRE' => 'http://www.php.net/manual/en/ref.pcre.php',
-    'FileInfo' => 'http://www.php.net/manual/en/ref.fileinfo.php',
-    'Libiconv' => 'http://www.php.net/manual/en/ref.iconv.php',
-    'Multibyte' => 'http://www.php.net/manual/en/ref.mbstring.php',
-    'Mcrypt' => 'http://www.php.net/manual/en/ref.mcrypt.php',
-    'OpenSSL' => 'http://www.php.net/manual/en/ref.openssl.php',
-    'GD' => 'http://www.php.net/manual/en/ref.image.php',
-    'PEAR' => 'http://pear.php.net',
-    'MDB2' => 'http://pear.php.net/package/MDB2',
-    'Net_SMTP' => 'http://pear.php.net/package/Net_SMTP',
+    'Sockets'   => 'http://www.php.net/manual/en/book.sockets.php',
+    'Session'   => 'http://www.php.net/manual/en/book.session.php',
+    'PCRE'      => 'http://www.php.net/manual/en/book.pcre.php',
+    'FileInfo'  => 'http://www.php.net/manual/en/book.fileinfo.php',
+    'Libiconv'  => 'http://www.php.net/manual/en/book.iconv.php',
+    'Multibyte' => 'http://www.php.net/manual/en/book.mbstring.php',
+    'Mcrypt'    => 'http://www.php.net/manual/en/book.mcrypt.php',
+    'OpenSSL'   => 'http://www.php.net/manual/en/book.openssl.php',
+    'JSON'      => 'http://www.php.net/manual/en/book.json.php',
+    'DOM'       => 'http://www.php.net/manual/en/book.dom.php',
+    'Intl'      => 'http://www.php.net/manual/en/book.intl.php',
+    'PEAR'      => 'http://pear.php.net',
+    'MDB2'      => 'http://pear.php.net/package/MDB2',
+    'Net_SMTP'  => 'http://pear.php.net/package/Net_SMTP',
     'Mail_mime' => 'http://pear.php.net/package/Mail_mime',
-    'DOM' => 'http://www.php.net/manual/en/intro.dom.php'
 );
 
 echo '<input type="hidden" name="_step" value="' . ($RCI->configured ? 3 : 2) . '" />';
@@ -53,14 +77,14 @@ if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '>=')) {
 ?>
 
 <h3>Checking PHP extensions</h3>
-<p class="hint">The following modules/extensions are <em>required</em> to run RoundCube:</p>
+<p class="hint">The following modules/extensions are <em>required</em> to run Roundcube:</p>
 <?php
 
 // get extensions location
 $ext_dir = ini_get('extension_dir');
 
 $prefix = (PHP_SHLIB_SUFFIX === 'dll') ? 'php_' : '';
-foreach ($required_php_exts AS $name => $ext) {
+foreach ($required_php_exts as $name => $ext) {
     if (extension_loaded($ext)) {
         $RCI->pass($name);
     } else {
@@ -76,7 +100,7 @@ foreach ($required_php_exts AS $name => $ext) {
 <p class="hint">The next couple of extensions are <em>optional</em> and recommended to get the best performance:</p>
 <?php
 
-foreach ($optional_php_exts AS $name => $ext) {
+foreach ($optional_php_exts as $name => $ext) {
     if (extension_loaded($ext)) {
         $RCI->pass($name);
     }
@@ -97,7 +121,7 @@ foreach ($optional_php_exts AS $name => $ext) {
 <?php
 
 $prefix = (PHP_SHLIB_SUFFIX === 'dll') ? 'php_' : '';
-foreach ($supported_dbs AS $database => $ext) {
+foreach ($supported_dbs as $database => $ext) {
     if (extension_loaded($ext)) {
         $RCI->pass($database);
     }
@@ -132,7 +156,7 @@ foreach ($required_libs as $classname => $file) {
 ?>
 
 <h3>Checking php.ini/.htaccess settings</h3>
-<p class="hint">The following settings are <em>required</em> to run RoundCube:</p>
+<p class="hint">The following settings are <em>required</em> to run Roundcube:</p>
 
 <?php
 
@@ -183,7 +207,7 @@ foreach ($optional_checks as $var => $val) {
 <?php
 
 if ($RCI->failures) {
-  echo '<p class="warning">Sorry but your webserver does not meet the requirements for RoundCube!<br />
+  echo '<p class="warning">Sorry but your webserver does not meet the requirements for Roundcube!<br />
             Please install the missing modules or fix the php.ini settings according to the above check results.<br />
             Hint: only checks showing <span class="fail">NOT OK</span> need to be fixed.</p>';
 }

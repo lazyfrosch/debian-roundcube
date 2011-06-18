@@ -4,15 +4,15 @@
  +-----------------------------------------------------------------------+
  | localization/hi/messages.inc                                          |
  |                                                                       |
- | Language file of the RoundCube Webmail client                         |
- | Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
+ | Language file of the Roundcube Webmail client                         |
+ | Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Aniruddha "Karim" Shankar <karim@sarai.net>                   |
  +-----------------------------------------------------------------------+
 
- @version $Id$
+ @version $Id: messages.inc 3989 2010-09-25 13:03:53Z alec $
 
 */
 

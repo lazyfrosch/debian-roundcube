@@ -4,8 +4,8 @@
  +-----------------------------------------------------------------------+
  | Configuration file for database access                                |
  |                                                                       |
- | This file is part of the RoundCube Webmail client                     |
- | Copyright (C) 2005-2009, RoundCube Dev. - Switzerland                 |
+ | This file is part of the Roundcube Webmail client                     |
+ | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
@@ -17,7 +17,7 @@ $rcmail_config = array();
 // PEAR database DSN for read/write operations
 // format is db_provider://user:password@host/database 
 // For examples see http://pear.php.net/manual/en/package.database.mdb2.intro-dsn.php
-// currently supported db_providers: mysql, mysqli, pgsql, sqlite, mssql
+// currently supported db_providers: mysql, mysqli, pgsql, sqlite, mssql or sqlsrv
 
 $rcmail_config['db_dsnw'] = 'mysql://roundcube:pass@localhost/roundcubemail';
 // postgres example: 'pgsql://roundcube:pass@localhost/roundcubemail';
@@ -44,6 +44,10 @@ $rcmail_config['db_table_identities'] = 'identities';
 
 $rcmail_config['db_table_contacts'] = 'contacts';
 
+$rcmail_config['db_table_contactgroups'] = 'contactgroups';
+
+$rcmail_config['db_table_contactgroupmembers'] = 'contactgroupmembers';
+
 $rcmail_config['db_table_session'] = 'session';
 
 $rcmail_config['db_table_cache'] = 'cache';
@@ -58,10 +62,12 @@ $rcmail_config['db_sequence_identities'] = 'identity_ids';
 
 $rcmail_config['db_sequence_contacts'] = 'contact_ids';
 
+$rcmail_config['db_sequence_contactgroups'] = 'contactgroups_ids';
+
 $rcmail_config['db_sequence_cache'] = 'cache_ids';
 
 $rcmail_config['db_sequence_messages'] = 'message_ids';
 
 
 // end db config file
-?>
+
