@@ -33,11 +33,12 @@ msgstr "Automaattisesti asetettavat verkkopalvelimet:"
 #. Type: multiselect
 #. Description
 #: ../templates:2002
-#| msgid ""
-#| "RoundCube supports any web server supported by PHP, however only Apache "
-#| "can be configured automatically."
-msgid "RoundCube supports any web server supported by PHP, however only Apache 2 and lighttpd can be configured automatically."
-msgstr "RoundCube tukee mitä tahansa verkkopalvelinta, joka tukee PHP:ta. Vain Apache 2 ja lighttpd voidaan kuitenkin asettaa automaattisesti."
+msgid ""
+"RoundCube supports any web server supported by PHP, however only Apache 2 "
+"and lighttpd can be configured automatically."
+msgstr ""
+"RoundCube tukee mitä tahansa verkkopalvelinta, joka tukee PHP:ta. Vain "
+"Apache 2 ja lighttpd voidaan kuitenkin asettaa automaattisesti."
 
 #. Type: multiselect
 #. Description
@@ -54,8 +55,12 @@ msgstr "Tulisiko verkkopalvelimet käynnistää uudelleen nyt?"
 #. Type: boolean
 #. Description
 #: ../templates:3001
-msgid "In order to activate the new configuration, the reconfigured web server(s) have to be restarted."
-msgstr "Uusien asetusten ottamiseksi käyttöön asetetut verkkopalvelimet tulee käynnistää uudelleen."
+msgid ""
+"In order to activate the new configuration, the reconfigured web server(s) "
+"have to be restarted."
+msgstr ""
+"Uusien asetusten ottamiseksi käyttöön asetetut verkkopalvelimet tulee "
+"käynnistää uudelleen."
 
 #. Type: string
 #. Description
@@ -72,14 +77,24 @@ msgstr "Valitse IMAP-palvelimet, joita käytetään RoundCuben kanssa."
 #. Type: string
 #. Description
 #: ../templates:4001
-msgid "If this is left blank, a text box will be displayed at login. Entering a space-separated list of hosts will display a pull-down menu. Entering a single host will enforce using this host."
-msgstr "Jos tämä kenttä jätetään tyhjäksi, kirjautumisvaiheessa näytetään tekstikenttä. Jos tässä kentässä on välilyönnein eroteltu lista palvelimista, kirjauduttaessa näytetään alasvetovalikko. Yhden palvelimen syöttäminen pakottaa kyseisen palvelimen käyttöön."
+msgid ""
+"If this is left blank, a text box will be displayed at login. Entering a "
+"space-separated list of hosts will display a pull-down menu. Entering a "
+"single host will enforce using this host."
+msgstr ""
+"Jos tämä kenttä jätetään tyhjäksi, kirjautumisvaiheessa näytetään "
+"tekstikenttä. Jos tässä kentässä on välilyönnein eroteltu lista "
+"palvelimista, kirjauduttaessa näytetään alasvetovalikko. Yhden palvelimen "
+"syöttäminen pakottaa kyseisen palvelimen käyttöön."
 
 #. Type: string
 #. Description
 #: ../templates:4001
-msgid "To use SSL connections, please enter host names as 'ssl://hostname:993'."
-msgstr "SSL-yhteydet saadaan käyttöön syöttämällä palvelimien verkkonimet muodossa ”ssl://verkkonimi:993”."
+msgid ""
+"To use SSL connections, please enter host names as 'ssl://hostname:993'."
+msgstr ""
+"SSL-yhteydet saadaan käyttöön syöttämällä palvelimien verkkonimet muodossa "
+"”ssl://verkkonimi:993”."
 
 #. Type: select
 #. Description

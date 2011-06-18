@@ -38,9 +38,6 @@ msgstr "Веб-сервер(ы), которые нужно настроить а
 #. Type: multiselect
 #. Description
 #: ../templates:2002
-#| msgid ""
-#| "RoundCube supports any web server supported by PHP, however only Apache "
-#| "can be configured automatically."
 msgid ""
 "RoundCube supports any web server supported by PHP, however only Apache 2 "
 "and lighttpd can be configured automatically."
@@ -65,9 +62,6 @@ msgstr "Перезапустить веб-сервер(ы) прямо сейча
 #. Type: boolean
 #. Description
 #: ../templates:3001
-#| msgid ""
-#| "In order to activate the new configuration, the reconfigured web servers "
-#| "have to be restarted."
 msgid ""
 "In order to activate the new configuration, the reconfigured web server(s) "
 "have to be restarted."
@@ -135,4 +129,3 @@ msgid ""
 msgstr ""
 "Однако, язык по умолчанию будет использован для выдачи приглашения к входу и "
 "во время первого подключения пользователя."
-

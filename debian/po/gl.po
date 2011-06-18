@@ -35,9 +35,6 @@ msgstr "Servidor(es) web a reconfigurar automaticamente:"
 #. Type: multiselect
 #. Description
 #: ../templates:2002
-#| msgid ""
-#| "RoundCube supports any web server supported by PHP, however only Apache "
-#| "can be configured automatically."
 msgid ""
 "RoundCube supports any web server supported by PHP, however only Apache 2 "
 "and lighttpd can be configured automatically."

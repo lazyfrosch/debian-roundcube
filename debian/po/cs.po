@@ -36,9 +36,6 @@ msgstr "Webové servery, které se mají nastavit automaticky:"
 #. Type: multiselect
 #. Description
 #: ../templates:2002
-#| msgid ""
-#| "RoundCube supports any web server supported by PHP, however only Apache "
-#| "can be configured automatically."
 msgid ""
 "RoundCube supports any web server supported by PHP, however only Apache 2 "
 "and lighttpd can be configured automatically."
@@ -65,9 +62,6 @@ msgstr "Mají se webové servery restartovat nyní?"
 #. Type: boolean
 #. Description
 #: ../templates:3001
-#| msgid ""
-#| "In order to activate the new configuration, the reconfigured web servers "
-#| "have to be restarted."
 msgid ""
 "In order to activate the new configuration, the reconfigured web server(s) "
 "have to be restarted."

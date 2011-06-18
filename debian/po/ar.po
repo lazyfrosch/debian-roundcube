@@ -37,13 +37,12 @@ msgstr "خادم الوب المطلوب تهيئته آلياً:"
 #. Type: multiselect
 #. Description
 #: ../templates:2002
-#| msgid ""
-#| "RoundCube supports any web server supported by PHP, however only Apache "
-#| "can be configured automatically."
 msgid ""
 "RoundCube supports any web server supported by PHP, however only Apache 2 "
 "and lighttpd can be configured automatically."
-msgstr "يدعم RoundCube أي خادم وب يدعمه PHP، ولكن يمكن تهيئة Apache وlighttpd فقط آلياً."
+msgstr ""
+"يدعم RoundCube أي خادم وب يدعمه PHP، ولكن يمكن تهيئة Apache وlighttpd فقط "
+"آلياً."
 
 #. Type: multiselect
 #. Description
@@ -62,9 +61,6 @@ msgstr "هل تريد تشغيل خادم الوب الآن؟"
 #. Type: boolean
 #. Description
 #: ../templates:3001
-#| msgid ""
-#| "In order to activate the new configuration, the reconfigured web servers "
-#| "have to be restarted."
 msgid ""
 "In order to activate the new configuration, the reconfigured web server(s) "
 "have to be restarted."
@@ -127,4 +123,3 @@ msgid ""
 msgstr ""
 "على أي، سيتم استخدام اللغة الافتراضية لشاشة تسجيل الدخول والاتصال الأول "
 "للمستخدمين."
-
