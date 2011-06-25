@@ -6,8 +6,8 @@ Uploaders: Vincent Bernat <bernat@debian.org>, Romain Beauxis <toots@rastageeks.
 Build-Depends: cdbs, debhelper (>= 5), dh-buildinfo, po-debconf, yui-compressor
 Homepage: http://www.roundcube.net/
 Standards-Version: 3.9.2
-Vcs-Svn: svn://svn.debian.org/svn/pkg-roundcube/trunk
-Vcs-Browser: http://svn.debian.org/wsvn/pkg-roundcube/trunk/
+Vcs-Git: git://anonscm.debian.org/pkg-roundcube/roundcube.git
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-roundcube/roundcube.git
 
 Package: roundcube-core
 Architecture: all
