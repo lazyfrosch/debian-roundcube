@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_shared.inc 4509 2011-02-09 10:51:50Z thomasb $
+ $Id: rcube_shared.inc 4729 2011-05-04 18:53:11Z alec $
 
 */
 
@@ -232,7 +232,7 @@ function make_absolute_url($path, $base_url)
   }
 
   // $path is absolute
-  if ($path{0}=='/')
+  if ($path[0] == '/')
     $abs_path = $host_url.$path;
   else
   {
@@ -244,13 +244,13 @@ function make_absolute_url($path, $base_url)
       {
         if (strrpos($base_url, '/'))
           $base_url = substr($base_url, 0, strrpos($base_url, '/'));
-        
+
         $path = substr($path, 3);
       }
 
     $abs_path = $base_url.'/'.$path;
   }
-    
+
   return $abs_path;
 }
 

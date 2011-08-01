@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcmail.php 4626 2011-03-31 12:32:44Z alec $
+ $Id: rcmail.php 4779 2011-05-17 15:35:14Z alec $
 
 */
 
@@ -1078,6 +1078,9 @@ class rcmail
       if (is_object($book))
         $book->close();
 
+    if (is_object($this->imap))
+      $this->imap->close();
+
     // before closing the database connection, write session data
     if ($_SERVER['REMOTE_ADDR'])
       session_write_close();
@@ -1192,9 +1195,6 @@ class rcmail
         ), true, true);
       }
     }
-
-    if (is_object($this->imap))
-      $this->imap->close();
 
     return $base64 ? base64_encode($cipher) : $cipher;
   }

@@ -1,6 +1,18 @@
 CHANGELOG Roundcube Webmail
 ===========================
 
+- Fix identities "reply-to" and "bcc" fields have a bogus value when left empty (#1487943)
+- Fix issue which cases IMAP disconnection when encrypt() method was used (#1487900)
+- Fix some CSS issues in Settings for Internet Explorer
+- Fixed handling of folder with name "0" in folder selector
+- Fix bug where messages were deleted instead moved to trash folder after Shift key was used (#1487902)
+- Fix relative URLs handling according to a <base> in HTML (#1487889)
+- Fix handling of top-level domains with more than 5 chars or unicode chars (#1487883)
+- Fix usage of non-standard HTTP error codes (#1487797)
+- Fix PHP warning on mistaken in_array() usage (#1487901)
+
+RELEASE 0.5.2
+-------------
 - TinyMCE 3.4.2 now compatible with IE9
 - PEAR::Net_SMTP 1.5.2, fixed timeout issue (#1487843)
 - Fix bug where template name without plugin prefix was used in render_page hook

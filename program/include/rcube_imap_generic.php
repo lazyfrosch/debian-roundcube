@@ -21,7 +21,7 @@
  | Author: Ryo Chijiiwa <Ryo@IlohaMail.org>                              |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_imap_generic.php 4643 2011-04-11 12:24:00Z alec $
+ $Id: rcube_imap_generic.php 4729 2011-05-04 18:53:11Z alec $
 
 */
 
@@ -777,13 +777,6 @@ class rcube_imap_generic
                 // Now we're secure, capabilities need to be reread
                 $this->clearCapability();
             }
-
-            // Use best (for security) supported authentication method
-            foreach (array('DIGEST-MD5', 'CRAM-MD5', 'CRAM_MD5', 'PLAIN', 'LOGIN') as $auth_method) {
-                if (in_array($auth_method, $auth_methods)) {
-                    break;
-                }
-            }
         }
 
         // Send ID info
@@ -1214,8 +1207,8 @@ class rcube_imap_generic
     {
         if (is_array($items) && !empty($items)) {
             foreach ($items as $key => $value) {
-                $args[] = $this->escape($key);
-                $args[] = $this->escape($value);
+                $args[] = $this->escape($key, true);
+                $args[] = $this->escape($value, true);
             }
         }
 
@@ -1226,7 +1219,7 @@ class rcube_imap_generic
 
         if ($code == self::ERROR_OK && preg_match('/\* ID /i', $response)) {
             $response = substr($response, 5); // remove prefix "* ID "
-            $items    = $this->tokenizeResponse($response);
+            $items    = $this->tokenizeResponse($response, 1);
             $result   = null;
 
             for ($i=0, $len=count($items); $i<$len; $i += 2) {
