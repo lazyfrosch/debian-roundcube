@@ -1,3 +1,10 @@
+roundcube (0.5.3+dfsg-1~bpo60+1) squeeze-backports; urgency=low
+
+  * Rebuild for squeeze-backports.
+  * Configure git-buildpackage to use squeeze-backports branch.
+
+ -- Jérémy Bobbio <lunar@debian.org>  Mon, 01 Aug 2011 11:00:05 +0200
+
 roundcube (0.5.3+dfsg-1) unstable; urgency=low
 
   * New upstream release.
