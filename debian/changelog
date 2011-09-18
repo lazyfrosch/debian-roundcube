@@ -1,6 +1,8 @@
-roundcube (0.5.3+dfsg-2) UNRELEASED; urgency=low
+roundcube (0.5.4+dfsg-1) unstable; urgency=high
 
   [ Vincent Bernat ]
+  * New upstream version.
+     + Fix XSS vulnerability in UI messages (Closes: #641996).
   * Switch to Git for version control thanks to Jérémy
     Bobbio. debian/control updated.
   * Ship INSTALL. Closes: #633698.
