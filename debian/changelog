@@ -1,3 +1,17 @@
+roundcube (0.5.4+dfsg-1) unstable; urgency=high
+
+  [ Vincent Bernat ]
+  * New upstream version.
+     + Fix XSS vulnerability in UI messages (Closes: #641996).
+  * Switch to Git for version control thanks to Jérémy
+    Bobbio. debian/control updated.
+  * Ship INSTALL. Closes: #633698.
+
+  [ Jérémy Bobbio ]
+  * Re-add 'password' plugin to roundcube-plugins.
+
+ -- Vincent Bernat <bernat@debian.org>  Wed, 13 Jul 2011 08:33:01 +0200
+
 roundcube (0.5.3+dfsg-1~bpo60+1) squeeze-backports; urgency=low
 
   * Rebuild for squeeze-backports.

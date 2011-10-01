@@ -4,6 +4,11 @@ include /usr/share/cdbs/1/rules/debhelper.mk
 
 DEB_INSTALL_CHANGELOGS_ALL=CHANGELOG
 
+DEB_DH_INSTALL_ARGS = \
+	--exclude=chgsaslpasswd.c \
+	--exclude=chgvirtualminpasswd.c \
+	--exclude=chpass-wrapper.py
+
 binary-install/roundcube-core::
 	# Install config files
 	install -m 0640 $(CURDIR)/config/db.inc.php.dist $(CURDIR)/debian/roundcube-core/etc/roundcube/db.inc.php

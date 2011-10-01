@@ -1,0 +1,3 @@
+plugins/password/drivers/chgsaslpasswd.c
+plugins/password/drivers/chgvirtualminpasswd.c
+plugins/password/drivers/chpass-wrapper.py
