@@ -495,6 +495,19 @@ Copyright: 2002-2003 Richard Heyes
            2006-2008 Anish Mistry
 License: BSD-2-clause
 
+Files: plugins/enigma/lib/Crypt/*
+Copyright: 2005-2010 silverorange
+License: LGPL-2.1
+
+Files: plugins/acl/acl.php
+Copyright: Copyright (C) 2011, Kolab Systems AG
+License: GPL-2
+
+Files: plugins/redundant_attachments/redundant_attachments.php
+Copyright: Copyright (C) 2011, The Roundcube Dev Team
+           Copyright (C) 2011, Kolab Systems AG
+License: GPL-2
+
 Files: debian/*
 Copryight: 2007-2011, Vincent Bernat <bernat@debian.org>
            2007-2011, Romain Beauxis <toots@rastageeks.org>
