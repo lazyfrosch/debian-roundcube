@@ -6,6 +6,93 @@ Source: http://roundcube.net/download
 Files: *
 Copyright: 2005-2011, Roundcube Dev. - Switzerland
 License: GPL-2
+
+Files: skins/default/*
+Copyright: 2005-2011, Roundcube Dev. - Switzerland
+License: CC-BY-SA-3
+
+Files: program/js/googiespell.js*
+Copyright: 2006 Amir Salihefendic
+           2009 Aleksander Machniak
+License: GPL-2
+
+Files: program/js/jquery*.js
+Copyright: 2010 John Resig
+           2010 The Dojo Foundation
+License: GPL-2 or Expat
+ Also includes sizzle.js, licensed under Expat, BSD-3-clause and
+ GPL-2. This file is not shipped in the resulting Debian packages. We
+ use system-included jQuery.
+
+Files: program/js/tiny_mce/*
+Copyright: 2003-2006 Moxiecode Systems AB
+License: LGPL-2.1
+
+Files: program/lib/enriched.inc
+Copyright: 2000-2003 Ryo Chijiiwa <Ryo@IlohaMail.org>
+License: GPL-2
+
+Files: program/lib/html2text.php
+Copyright: 2005-2007 Jon Abernathy <jon@chuggnutt.com>
+License: GPL-2+
+
+Files: program/lib/tnef_decoder.php
+Copyright: 2002-2010 The Horde Project (http://www.horde.org/)
+License: LGPL-2.1
+
+Files: program/lib/utf7.inc
+Copyright: 2000 Edmund Grimley Evans <edmundo@rano.org>
+License: GPL-2+
+
+Files: program/lib/washtml.php
+Copyright: 2007 Frederic Motte <fmotte@ubixis.com>
+License: BSD-2-clause
+
+Files: plugins/managesieve/lib/Net/Sieve.php
+Copyright: 2002-2003 Richard Heyes
+           2006-2008 Anish Mistry
+License: BSD-2-clause
+
+Files: plugins/enigma/lib/Crypt/*
+Copyright: 2005-2010 silverorange
+License: LGPL-2.1
+
+Files: plugins/acl/acl.php
+Copyright: Copyright (C) 2011, Kolab Systems AG
+License: GPL-2
+
+Files: plugins/redundant_attachments/redundant_attachments.php
+Copyright: Copyright (C) 2011, The Roundcube Dev Team
+           Copyright (C) 2011, Kolab Systems AG
+License: GPL-2
+
+Files: debian/*
+Copryight: 2007-2011, Vincent Bernat <bernat@debian.org>
+           2007-2011, Romain Beauxis <toots@rastageeks.org>
+License: GPL-2
+
+License: BSD-2-clause
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+ .
+ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+License: GPL-2
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License version 2
  as published by the Free Software Foundation.
@@ -23,8 +110,6 @@ License: GPL-2
  License version 2 can be found in the file
  `/usr/share/common-licenses/GPL-2'.
 
-Files: skins/default/*
-Copyright: 2005-2011, Roundcube Dev. - Switzerland
 License: CC-BY-SA-3
  The theme uses icons originally designed by Stephen Horlander and
  Kevin Gerich for Mozilla.org. In case of redistribution giving credit
@@ -399,19 +484,6 @@ License: CC-BY-SA-3
    included in the License; this License is not intended to restrict
    the license of any rights under applicable law.
 
-Files: program/js/googiespell.js*
-Copyright: 2006 Amir Salihefendic
-           2009 Aleksander Machniak
-License: GPL-2
-
-Files: program/js/jquery*.js
-Copyright: 2010 John Resig
-           2010 The Dojo Foundation
-License: GPL-2 or Expat
- Also includes sizzle.js, licensed under Expat, BSD-3-clause and
- GPL-2. This file is not shipped in the resulting Debian packages. We
- use system-included jQuery.
-
 License: Expat
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -431,8 +503,6 @@ License: Expat
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 
-Files: program/js/tiny_mce/*
-Copyright: 2003-2006 Moxiecode Systems AB
 License: LGPL-2.1
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License version 2.1
@@ -451,64 +521,21 @@ License: LGPL-2.1
  License version 2.1 can be found in the file
  `/usr/share/common-licenses/LGPL-2.1'.
 
-Files: program/lib/enriched.inc
-Copyright: 2000-2003 Ryo Chijiiwa <Ryo@IlohaMail.org>
-License: GPL-2
-
-Files: program/lib/html2text.php
-Copyright: 2005-2007 Jon Abernathy <jon@chuggnutt.com>
 License: GPL-2+
-
-Files: program/lib/tnef_decoder.php
-Copyright: 2002-2010 The Horde Project (http://www.horde.org/)
-License: LGPL-2.1
-
-Files: program/lib/utf7.inc
-Copyright: 2000 Edmund Grimley Evans <edmundo@rano.org>
-License: GPL-2+
-
-Files: program/lib/washtml.php
-Copyright: 2007 Frederic Motte <fmotte@ubixis.com>
-License: BSD-2-clause
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions
- are met:
- 1. Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer.
- 2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions and the following disclaimer in the
-    documentation and/or other materials provided with the distribution.
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or (at
+ your option) any later version.
  .
- THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-Files: plugins/managesieve/lib/Net/Sieve.php
-Copyright: 2002-2003 Richard Heyes
-           2006-2008 Anish Mistry
-License: BSD-2-clause
-
-Files: plugins/enigma/lib/Crypt/*
-Copyright: 2005-2010 silverorange
-License: LGPL-2.1
-
-Files: plugins/acl/acl.php
-Copyright: Copyright (C) 2011, Kolab Systems AG
-License: GPL-2
-
-Files: plugins/redundant_attachments/redundant_attachments.php
-Copyright: Copyright (C) 2011, The Roundcube Dev Team
-           Copyright (C) 2011, Kolab Systems AG
-License: GPL-2
-
-Files: debian/*
-Copryight: 2007-2011, Vincent Bernat <bernat@debian.org>
-           2007-2011, Romain Beauxis <toots@rastageeks.org>
-License: GPL-2
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License along
+ with this program; if not, write to the Free Software Foundation, Inc.,
+ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ .
+ On Debian systems, the full text of the GNU General Public
+ License version 2 can be found in the file
+ `/usr/share/common-licenses/GPL-2'.
