@@ -5,7 +5,7 @@
  | program/steps/settings/save_prefs.inc                                 |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2009, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: save_prefs.inc 4643 2011-04-11 12:24:00Z alec $
+ $Id: save_prefs.inc 5151 2011-08-31 12:49:44Z alec $
 
 */
 
@@ -37,9 +37,9 @@ switch ($CURR_SECTION)
     );
 
   break;
+
   case 'mailbox':
     $a_user_prefs = array(
-      'focus_on_new_message' => isset($_POST['_focus_on_new_message']) ? TRUE : FALSE,
       'preview_pane'         => isset($_POST['_preview_pane']) ? TRUE : FALSE,
       'preview_pane_mark_read' => isset($_POST['_preview_pane_mark_read']) ? intval($_POST['_preview_pane_mark_read']) : $CONFIG['preview_pane_mark_read'],
       'autoexpand_threads'   => isset($_POST['_autoexpand_threads']) ? intval($_POST['_autoexpand_threads']) : 0,
@@ -49,6 +49,7 @@ switch ($CURR_SECTION)
     );
 
   break;
+
   case 'mailview':
     $a_user_prefs = array(
       'prefer_html'     => isset($_POST['_prefer_html']) ? TRUE : FALSE,
@@ -59,6 +60,7 @@ switch ($CURR_SECTION)
     );
 
   break;
+
   case 'compose':
     $a_user_prefs = array(
       'htmleditor'         => intval($_POST['_htmleditor']),
@@ -68,6 +70,7 @@ switch ($CURR_SECTION)
       'mdn_default'        => isset($_POST['_mdn_default']) ? TRUE : FALSE,
       'dsn_default'        => isset($_POST['_dsn_default']) ? TRUE : FALSE,
       'reply_same_folder'  => isset($_POST['_reply_same_folder']) ? TRUE : FALSE,
+      'spellcheck_before_send' => isset($_POST['_spellcheck_before_send']) ? TRUE : FALSE,
       'show_sig'           => isset($_POST['_show_sig']) ? intval($_POST['_show_sig']) : 1,
       'top_posting'        => !empty($_POST['_top_posting']),
       'strip_existing_sig' => isset($_POST['_strip_existing_sig']),
@@ -75,6 +78,14 @@ switch ($CURR_SECTION)
     );
 
   break;
+
+  case 'addressbook':
+    $a_user_prefs = array(
+      'default_addressbook' => get_input_value('_default_addressbook', RCUBE_INPUT_POST, true),
+    );
+
+  break;
+
   case 'server':
     $a_user_prefs = array(
       'read_when_deleted' => isset($_POST['_read_when_deleted']) ? TRUE : FALSE,
@@ -86,12 +97,13 @@ switch ($CURR_SECTION)
     );
 
   break;
+
   case 'folders':
     $a_user_prefs = array(
-      'drafts_mbox' => get_input_value('_drafts_mbox', RCUBE_INPUT_POST),
-      'sent_mbox'   => get_input_value('_sent_mbox', RCUBE_INPUT_POST),
-      'junk_mbox'   => get_input_value('_junk_mbox', RCUBE_INPUT_POST),
-      'trash_mbox'  => get_input_value('_trash_mbox', RCUBE_INPUT_POST),
+      'drafts_mbox' => get_input_value('_drafts_mbox', RCUBE_INPUT_POST, true),
+      'sent_mbox'   => get_input_value('_sent_mbox', RCUBE_INPUT_POST, true),
+      'junk_mbox'   => get_input_value('_junk_mbox', RCUBE_INPUT_POST, true),
+      'trash_mbox'  => get_input_value('_trash_mbox', RCUBE_INPUT_POST, true),
     );
 
   break;
@@ -129,7 +141,7 @@ switch ($CURR_SECTION)
     if (isset($CONFIG['max_pagesize']) && ($a_user_prefs['pagesize'] > $CONFIG['max_pagesize']))
       $a_user_prefs['pagesize'] = (int) $CONFIG['max_pagesize'];
 
-    $a_user_prefs['timezone'] = $_SESSION['timezone'] = (string) $a_user_prefs['timezone'];
+    $a_user_prefs['timezone'] = (string) $a_user_prefs['timezone'];
 
   break;
   case 'mailbox':

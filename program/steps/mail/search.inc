@@ -11,7 +11,7 @@
  |         Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: search.inc 4321 2010-12-08 12:52:04Z alec $
+ $Id: search.inc 4812 2011-05-27 13:01:05Z alec $
 
 */
 
@@ -27,10 +27,11 @@ $_SESSION['page'] = 1;
 $imap_charset = RCMAIL_CHARSET;
 
 // get search string
-$str = get_input_value('_q', RCUBE_INPUT_GET);
-$filter = get_input_value('_filter', RCUBE_INPUT_GET);
-$mbox = get_input_value('_mbox', RCUBE_INPUT_GET);
+$str     = get_input_value('_q', RCUBE_INPUT_GET, true);
+$mbox    = get_input_value('_mbox', RCUBE_INPUT_GET, true);
+$filter  = get_input_value('_filter', RCUBE_INPUT_GET);
 $headers = get_input_value('_headers', RCUBE_INPUT_GET);
+
 $search_request = md5($mbox.$filter.$str);
 
 // add list filter string

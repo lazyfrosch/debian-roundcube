@@ -91,7 +91,8 @@ class password extends rcube_plugin
             $charset    = strtoupper($rcmail->config->get('password_charset', 'ISO-8859-1'));
             $rc_charset = strtoupper($rcmail->output->get_charset());
 
-            $curpwd = get_input_value('_curpasswd', RCUBE_INPUT_POST, true, $charset);
+            $sespwd = $rcmail->decrypt($_SESSION['password']);
+            $curpwd = $confirm ? get_input_value('_curpasswd', RCUBE_INPUT_POST, true, $charset) : $sespwd;
             $newpwd = get_input_value('_newpasswd', RCUBE_INPUT_POST, true);
             $conpwd = get_input_value('_confpasswd', RCUBE_INPUT_POST, true);
 
@@ -115,7 +116,7 @@ class password extends rcube_plugin
             else if ($conpwd != $newpwd) {
                 $rcmail->output->command('display_message', $this->gettext('passwordinconsistency'), 'error');
             }
-            else if ($confirm && $rcmail->decrypt($_SESSION['password']) != $curpwd) {
+            else if ($confirm && $sespwd != $curpwd) {
                 $rcmail->output->command('display_message', $this->gettext('passwordincorrect'), 'error');
             }
             else if ($required_length && strlen($newpwd) < $required_length) {
@@ -125,12 +126,20 @@ class password extends rcube_plugin
             else if ($check_strength && (!preg_match("/[0-9]/", $newpwd) || !preg_match("/[^A-Za-z0-9]/", $newpwd))) {
                 $rcmail->output->command('display_message', $this->gettext('passwordweak'), 'error');
             }
+            // password is the same as the old one, do nothing, return success
+            else if ($sespwd == $newpwd) {
+                $rcmail->output->command('display_message', $this->gettext('successfullysaved'), 'confirmation');
+            }
             // try to save the password
             else if (!($res = $this->_save($curpwd, $newpwd))) {
                 $rcmail->output->command('display_message', $this->gettext('successfullysaved'), 'confirmation');
 
+		// allow additional actions after password change (e.g. reset some backends)
+		$plugin = $rcmail->plugins->exec_hook('password_change', array(
+		    'old_pass' => $curpwd, 'new_pass' => $newpwd));
+
                 // Reset session password
-                $_SESSION['password'] = $rcmail->encrypt($newpwd);
+                $_SESSION['password'] = $rcmail->encrypt($plugin['new_pass']);
 
                 // Log password change
                 if ($rcmail->config->get('password_log')) {

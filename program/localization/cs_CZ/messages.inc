@@ -6,7 +6,7 @@
 | language/cs_CZ/messages.inc                                              |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -16,7 +16,7 @@
 |        Ales Pospichal <ales@pospichalales.info>                       |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 4304 2010-12-03 10:58:40Z alec $
+@version $Id: messages.inc 4671 2011-04-20 08:47:44Z thomasb $
 
 */
 
@@ -27,6 +27,8 @@ $messages['sessionerror'] = 'Vaše přihlášení je neplatné nebo vypršelo';
 $messages['imaperror'] = 'Připojení na IMAP server selhalo';
 $messages['servererror'] = 'Chyba serveru!';
 $messages['servererrormsg'] = 'Chyba serveru: $msg';
+$messages['errorreadonly'] = 'Příkaz nelze provést, složka je určena jen ke čtení.';
+$messages['errornoperm'] = 'Příkaz nelze provést, nemáte oprávnění.';
 $messages['invalidrequest'] = 'Nesprávný požadavek. Data nebyla uložena.';
 $messages['nomessagesfound'] = 'Ve schránce nebyla nalezena žádná zpráva';
 $messages['loggedout'] = 'Byli jste úspěšně odhlášeni. Nashledanou!';
@@ -60,6 +62,8 @@ $messages['deletefolderconfirm'] = 'Chcete opravdu smazat tento adresář?';
 $messages['purgefolderconfirm'] = 'Opravdu chcete smazat všechny zprávy v této složce?';
 $messages['folderdeleting'] = 'Odstraňuji složku...';
 $messages['foldermoving'] = 'Přesouvám složku...';
+$messages['foldersubscribing'] = 'Připojuji složku...';
+$messages['folderunsubscribing'] = 'Odpojuji složku...';
 $messages['formincomplete'] = 'Formulář nebyl korektně vyplněn';
 $messages['noemailwarning'] = 'Zadejte, prosím, platnou e-mailovou adresu';
 $messages['nonamewarning'] = 'Zadejte, prosím, jméno';
@@ -79,6 +83,10 @@ $messages['searching'] = 'Vyhledávám...';
 $messages['checking'] = 'Kontroluji...';
 $messages['nospellerrors'] = 'Nebyly nalezeny žádné chyby';
 $messages['folderdeleted'] = 'Složka byla úspěšně vymazána';
+$messages['foldersubscribed'] = 'Složka byla úspěšně připojena';
+$messages['folderunsubscribed'] = 'Slažka byla úspěšně odpojena';
+$messages['folderpurged'] = 'Složka byla úspěšně vyprázdněna';
+$messages['folderexpunged'] = 'Složka byla úspěšně zkomprimována';
 $messages['deletedsuccessfully'] = 'Úspěšně smazáno';
 $messages['converting'] = 'Odstraňuji formátování ze zprávy...';
 $messages['messageopenerror'] = 'Nemohu načíst zprávu ze serveru';
@@ -102,7 +110,8 @@ $messages['contactaddedtogroup'] = 'Kontakty byly úspěšně přidány do této
 $messages['contactremovedfromgroup'] = 'Kontakty byly odstraněny z této skupiny';
 $messages['importwait'] = 'Importuji, prosím čekejte...';
 $messages['importerror'] = 'Během importu nastala chyba! Nahraný soubor není ve formátu vCard.';
-$messages['importconfirm'] = 'Úspěšně naimportováno $inserted kontaktů, $skipped existujících záznamů přeskočeno:$names';
+$messages['importconfirm'] = 'Úspěšně naimportováno $inserted kontaktů, $skipped existujících záznamů přeskočeno: $names';
+$messages['importconfirmskipped'] = '<b>Přeskočeno $skipped existing entries</b>';
 $messages['opnotpermitted'] = 'Operace není povolena!';
 $messages['nofromaddress'] = 'Chybějící e-mailová adresa v označeném profilu';
 $messages['editorwarning'] = 'Přepnutím do režimu prostého textu ztratíte veškeré formátování. Chcete pokračovat?';
@@ -128,5 +137,10 @@ $messages['messagemoved'] = 'Zpráva byla přesunuta';
 $messages['messagecopied'] = 'Zpráva byla zkopirována';
 $messages['messagemarked'] = 'Zpráva označena';
 $messages['autocompletechars'] = 'Napište alespoň $min znaků pro automatické doplnění';
+$messages['namecannotbeempty'] = 'Jméno musí být vyplněno';
+$messages['nametoolong'] = 'Jméno je příliš dlouhé';
+$messages['folderupdated'] = 'Složka byla úspěšně aktualizována';
+$messages['foldercreated'] = 'Složka byla úspěšně vytvořena';
+$messages['invalidimageformat'] = 'Formát obrázku není podporován';
 
 ?>

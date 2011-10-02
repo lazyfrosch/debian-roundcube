@@ -5,7 +5,7 @@
 | language/da_DK/labels.inc                                             |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -14,7 +14,7 @@
 |         Søren Aggeboe <soren@aggeboe.dk>                              |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4469 2011-01-29 14:55:12Z thomasb $
+@version $Id: labels.inc 4462 2011-01-28 16:01:03Z thomasb $
 
 */
 

@@ -5,7 +5,7 @@
  | program/include/rcube_smtp.php                                        |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2010, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_smtp.php 4666 2011-04-17 09:34:02Z alec $
+ $Id: rcube_smtp.php 5033 2011-08-09 09:46:54Z alec $
 
 */
 
@@ -439,14 +439,14 @@ class rcube_smtp
     // if we're passed an array, assume addresses are valid and implode them before parsing.
     if (is_array($recipients))
       $recipients = implode(', ', $recipients);
-    
+
     $addresses = array();
     $recipients = rcube_explode_quoted_string(',', $recipients);
 
     reset($recipients);
     while (list($k, $recipient) = each($recipients))
     {
-      $a = explode(" ", $recipient);
+      $a = rcube_explode_quoted_string(' ', $recipient);
       while (list($k2, $word) = each($a))
       {
         if (strpos($word, "@") > 0 && $word[strlen($word)-1] != '"')
@@ -457,6 +457,7 @@ class rcube_smtp
         }
       }
     }
+
     return $addresses;
   }
 

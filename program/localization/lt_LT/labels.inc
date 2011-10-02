@@ -6,7 +6,7 @@
 | language/lt_LT/labels.inc                                             |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -14,7 +14,7 @@
 |          Rimas Kudelis <rq@akl.lt>                                    |
 +-----------------------------------------------------------------------+'
 
-@version $Id: labels.inc 4368 2010-12-27 08:51:22Z yllar $
+@version $Id: labels.inc 5175 2011-09-05 18:42:24Z thomasb $
 
 */
 
@@ -101,18 +101,16 @@ $labels['replytomessage'] = 'Atsakyti siuntėjui';
 $labels['replytoallmessage'] = 'Atsakyti el. pašto grupei arba laiško siuntėjui ir visiems jo gavėjams';
 $labels['replyall'] = 'Atsakyti visiems';
 $labels['replylist'] = 'Atsakyti el. pašto grupei';
+$labels['forwardinline'] = 'Persiųsti cituojant';
+$labels['forwardattachment'] = 'Persiųsti priedu';
 $labels['forwardmessage'] = 'Persiųsti laišką';
 $labels['deletemessage'] = 'Pašalinti laišką';
 $labels['movemessagetotrash'] = 'Perkelti laišką į šiukšlinę';
 $labels['printmessage'] = 'Atspausdinti laišką';
 $labels['previousmessage'] = 'Rodyti ankstesnį laišką';
-$labels['previousmessages'] = 'Rodyti ankstesius laiškus';
 $labels['firstmessage'] = 'Rodyti pirmąjį laišką';
-$labels['firstmessages'] = 'Rodyti pirmuosius laiškus';
 $labels['nextmessage'] = 'Rodyti tolesnį laišką';
-$labels['nextmessages'] = 'Rodyti tolesnius laiškus';
 $labels['lastmessage'] = 'Rodyti paskutinį laišką';
-$labels['lastmessages'] = 'Rodyti paskutinius laiškus';
 $labels['backtolist'] = 'Grižti į laiškų sarašą';
 $labels['viewsource'] = 'Rodyti pirminį tekstą';
 $labels['markmessages'] = 'Pažymėti laiškus';
@@ -155,7 +153,6 @@ $labels['listmode'] = 'Sąrašo rodymo veiksena';
 $labels['folderactions'] = 'Veiksmai su aplankais…';
 $labels['compact'] = 'Suspausti';
 $labels['empty'] = 'Ištuštinti';
-$labels['purge'] = 'Išvalyti';
 $labels['quota'] = 'Disko naudojimas';
 $labels['unknown'] = 'nežinomas';
 $labels['unlimited'] = 'neribotas';
@@ -174,12 +171,14 @@ $labels['charset'] = 'Koduotė';
 $labels['editortype'] = 'Laiško tipas';
 $labels['returnreceipt'] = 'Prašyti pristatymo pažymos';
 $labels['dsn'] = 'Laiško pristatymo pažyma';
+$labels['mailreplyintro'] = '$date, $sender rašė:';
 $labels['editidents'] = 'Tvarkyti tapatybes';
 $labels['checkspelling'] = 'Tikrinti rašybą';
 $labels['resumeediting'] = 'Tęsti redagavimą';
 $labels['revertto'] = 'Atstatyti į';
 $labels['attachments'] = 'Pridėti failai';
 $labels['upload'] = 'Įkelti';
+$labels['uploadprogress'] = '$percent ($current iš $total)';
 $labels['close'] = 'Užverti';
 $labels['messageoptions'] = 'Laiško savybės…';
 $labels['low'] = 'Žemas';
@@ -206,16 +205,61 @@ $labels['receiptnote'] = 'Pastaba: šia pažyma patvirtinamas tik faktas, jog la
 $labels['name'] = 'Rodomas vardas';
 $labels['firstname'] = 'Vardas';
 $labels['surname'] = 'Pavardė';
+$labels['middlename'] = 'Kiti vardai';
+$labels['nameprefix'] = 'Titulas';
+$labels['namesuffix'] = 'Sufiksas';
+$labels['nickname'] = 'Pravardė';
+$labels['jobtitle'] = 'Pareigos';
+$labels['department'] = 'Padalinys';
+$labels['gender'] = 'Lytis';
+$labels['maidenname'] = 'Mergautinė pavardė';
 $labels['email'] = 'El. paštas';
+$labels['phone'] = 'Telefono numeris';
+$labels['address'] = 'Adresas';
+$labels['street'] = 'Gatvė, namas ir butas';
+$labels['locality'] = 'Miestas';
+$labels['zipcode'] = 'Pašto kodas';
+$labels['region'] = 'Regionas';
+$labels['country'] = 'Valstybė';
+$labels['birthday'] = 'Gimimo data';
+$labels['anniversary'] = 'Jubiliejus';
+$labels['website'] = 'Svetainė';
+$labels['instantmessenger'] = 'Tikralaikiai pokalbiai';
+$labels['notes'] = 'Pastabos';
+$labels['male'] = 'vyras';
+$labels['female'] = 'moteris';
+$labels['manager'] = 'Vadybininkas(-ė)';
+$labels['assistant'] = 'Padėjėjas(-a)';
+$labels['spouse'] = 'Sutuoktinis';
+$labels['allfields'] = 'Visi laukai';
+$labels['search'] = 'Paieška';
+$labels['advsearch'] = 'Išplėstinė paieška';
+$labels['other'] = 'Kita';
+$labels['typehome'] = 'Namų';
+$labels['typework'] = 'Darbo';
+$labels['typeother'] = 'Kitas';
+$labels['typemobile'] = 'Mobilusis';
+$labels['typemain'] = 'Pagrindinis';
+$labels['typehomefax'] = 'Namų faksas';
+$labels['typeworkfax'] = 'Darbo faksas';
+$labels['typecar'] = 'Automobilyje';
+$labels['typepager'] = 'Pranešimų gaviklis';
+$labels['typevideo'] = 'Vaizdo';
+$labels['typeassistant'] = 'Padėjėjo(-os)';
+$labels['typehomepage'] = 'Tinklalapis';
+$labels['addfield'] = 'Pridėti lauką…';
 $labels['addcontact'] = 'Pridėti adresatą';
 $labels['editcontact'] = 'Taisyti adresatą';
 $labels['contacts'] = 'Adresatai';
 $labels['contactproperties'] = 'Adresato savybės';
+$labels['personalinfo'] = 'Asmeniniai duomenys';
 $labels['edit'] = 'Redaguoti';
 $labels['cancel'] = 'Atsisakyti';
 $labels['save'] = 'Įrašyti';
 $labels['delete'] = 'Pašalinti';
 $labels['rename'] = 'Pervardinti';
+$labels['addphoto'] = 'Pridėti';
+$labels['replacephoto'] = 'Pakeisti';
 $labels['newcontact'] = 'Sukurti naują adresatą';
 $labels['deletecontact'] = 'Ištrinti pažymėtus adresatus';
 $labels['composeto'] = 'Rašyti laišką';
@@ -225,6 +269,8 @@ $labels['export'] = 'Eksportuoti';
 $labels['exportvcards'] = 'Eksportuoti adresatus  „vCard“ formatu';
 $labels['newcontactgroup'] = 'Kurti adresatų grupę';
 $labels['groupactions'] = 'Adresatų grupėms taikomi veiksmai…';
+$labels['grouprename'] = 'Pervardinti grupę';
+$labels['groupdelete'] = 'Pašalinti grupę';
 $labels['previouspage'] = 'Rodyti ankstesnį puslapį';
 $labels['firstpage'] = 'Rodyti pirmąjį puslapį';
 $labels['nextpage'] = 'Rodyti tolesnį puslapį';
@@ -235,6 +281,7 @@ $labels['personaladrbook'] = 'Asmeniniai adresai';
 $labels['import'] = 'Importuoti';
 $labels['importcontacts'] = 'Importuoti adresatus';
 $labels['importfromfile'] = 'Importuoti iš failo:';
+$labels['importtarget'] = 'Pridėti naujus adresatus į adresų knygą:';
 $labels['importreplace'] = 'Perrašyti visą adresų knygą';
 $labels['importtext'] = 'Jūs galite įkelti adresatus iš egzistuojančios adresų knygos.<br/>Šiuo metu galima importuoti adresus iš <a href="http://en.wikipedia.org/wiki/VCard">vCard</a> tipo failų.';
 $labels['done'] = 'Baigta';
@@ -320,6 +367,8 @@ $labels['afternseconds'] = 'praėjus $n sek.';
 $labels['reqmdn'] = 'Visuomet prašyti patvirtinimo, jog laiškas perskaitytas';
 $labels['reqdsn'] = 'Visuomet prašyti laiško pristatymo pažymos';
 $labels['replysamefolder'] = 'Atsakymus talpinti į tą patį aplanką, kuriame yra pirminis laiškas';
+$labels['defaultaddressbook'] = 'Pridėti naujus adresatus į pasirinktąją adresų knygą';
+$labels['spellcheckbeforesend'] = 'Tikrinti rašybą prieš išsiunčiant laišką';
 $labels['folder'] = 'Aplankas';
 $labels['folders'] = 'Aplankai';
 $labels['foldername'] = 'Aplanko vardas';
@@ -336,9 +385,14 @@ $labels['location'] = 'Vieta';
 $labels['info'] = 'Informacija';
 $labels['getfoldersize'] = 'Spustelėkite, norėdami sužinoti aplanko dydį';
 $labels['changesubscription'] = 'Spustelėkite, norėdami keisti prenumeratos nuostatas';
+$labels['foldertype'] = 'Aplanko tipas';
+$labels['personalfolder'] = 'Asmeninis aplankas';
+$labels['otherfolder'] = 'Kito naudotojo aplankas';
+$labels['sharedfolder'] = 'Viešas aplankas';
 $labels['sortby'] = 'Rikiuoti pagal';
 $labels['sortasc'] = 'Rikiuoti didėjančiai';
 $labels['sortdesc'] = 'Rikiuoti mažėjančiai';
+$labels['undo'] = 'Atšaukti';
 $labels['B'] = 'B';
 $labels['KB'] = 'KB';
 $labels['MB'] = 'MB';

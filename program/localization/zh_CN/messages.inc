@@ -14,7 +14,7 @@
 |         Zhang Huang bin <michaelbibby@gmail.com>                      |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 4405 2011-01-12 11:56:25Z thomasb $
+@version $Id: messages.inc 5067 2011-08-14 18:47:58Z thomasb $
 
 */
 

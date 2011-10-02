@@ -3,14 +3,14 @@
  | Roundcube common js library                                           |
  |                                                                       |
  | This file is part of the Roundcube web development suite              |
- | Copyright (C) 2005-2007, Roundcube Dev, - Switzerland                 |
+ | Copyright (C) 2005-2007, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
  
- $Id: common.js 4729 2011-05-04 18:53:11Z alec $
+ $Id: common.js 5281 2011-09-27 07:29:49Z alec $
 */
 
 // Constants
@@ -55,16 +55,13 @@ function roundcube_browser()
   this.ie7 = (this.dom && this.appver.indexOf('MSIE 7')>0);
   this.ie6 = (this.dom && !this.ie8 && !this.ie7 && this.appver.indexOf('MSIE 6')>0);
 
-  this.mz = (this.dom && this.ver >= 5);  // (this.dom && this.product=='Gecko')
   this.ns = ((this.ver < 5 && this.name == 'Netscape') || (this.ver >= 5 && this.vendor.indexOf('Netscape') >= 0));
-  this.ns6 = (this.ns && parseInt(this.vendver) == 6);  // (this.mz && this.ns) ? true : false;
-  this.ns7 = (this.ns && parseInt(this.vendver) == 7);  // this.agent.indexOf('Netscape/7')>0);
   this.chrome = (this.agent_lc.indexOf('chrome') > 0);
   this.safari = (!this.chrome && (this.agent_lc.indexOf('safari') > 0 || this.agent_lc.indexOf('applewebkit') > 0));
+  this.mz = (this.dom && !this.ie && !this.ns && !this.chrome && !this.safari && this.agent.indexOf('Mozilla') >= 0);
   this.konq   = (this.agent_lc.indexOf('konqueror') > 0);
   this.iphone = (this.safari && this.agent_lc.indexOf('iphone') > 0);
   this.ipad = (this.safari && this.agent_lc.indexOf('ipad') > 0);
-
   this.opera = window.opera ? true : false;
 
   if (this.opera && window.RegExp)
@@ -81,7 +78,7 @@ function roundcube_browser()
     this.vendver = (/khtml\/([0-9\.]+)/.test(this.agent_lc)) ? parseFloat(RegExp.$1) : 0;
 
   // get real language out of safari's user agent
-  if(this.safari && (/;\s+([a-z]{2})-[a-z]{2}\)/.test(this.agent_lc)))
+  if (this.safari && (/;\s+([a-z]{2})-[a-z]{2}\)/.test(this.agent_lc)))
     this.lang = RegExp.$1;
 
   this.dhtml = ((this.ie4 && this.win) || this.ie5 || this.ie6 || this.ns4 || this.mz);
@@ -129,10 +126,6 @@ function roundcube_browser()
       classname += ' iphone';
     else if (this.ipad)
       classname += ' ipad';
-    else if (this.ns6)
-      classname += ' netscape6';
-    else if (this.ns7)
-      classname += ' netscape7';
 
     if (document.documentElement)
       document.documentElement.className += classname;
@@ -167,7 +160,7 @@ get_keycode: function(e)
 get_button: function(e)
 {
   e = e || window.event;
-  return e && (typeof e.button != 'undefined') ? e.button : (e && e.which ? e.which : 0);
+  return e && e.button !== undefined ? e.button : (e && e.which ? e.which : 0);
 },
 
 /**
@@ -318,7 +311,7 @@ addEventListener: function(evt, func, obj)
  */
 removeEventListener: function(evt, func, obj)
 {
-  if (typeof obj == 'undefined')
+  if (obj === undefined)
     obj = window;
 
   for (var h,i=0; this._events && this._events[evt] && i < this._events[evt].length; i++)
@@ -335,28 +328,45 @@ removeEventListener: function(evt, func, obj)
 triggerEvent: function(evt, e)
 {
   var ret, h;
-  if (typeof e == 'undefined')
+  if (e === undefined)
     e = this;
-  else if (typeof e == 'object')
+  else if (typeof e === 'object')
     e.event = evt;
 
   if (this._events && this._events[evt] && !this._event_exec) {
     this._event_exec = true;
     for (var i=0; i < this._events[evt].length; i++) {
       if ((h = this._events[evt][i])) {
-        if (typeof h.func == 'function')
+        if (typeof h.func === 'function')
           ret = h.func.call ? h.func.call(h.obj, e) : h.func(e);
-        else if (typeof h.obj[h.func] == 'function')
+        else if (typeof h.obj[h.func] === 'function')
           ret = h.obj[h.func](e);
 
         // cancel event execution
-        if (typeof ret != 'undefined' && !ret)
+        if (ret !== undefined && !ret)
           break;
+      }
+    }
+    if (ret && ret.event) {
+      try {
+        delete ret.event;
+      } catch (err) {
+        // IE6-7 doesn't support deleting HTMLFormElement attributes (#1488017)
+        $(ret).removeAttr('event');
       }
     }
   }
 
   this._event_exec = false;
+  if (e.event) {
+    try {
+      delete e.event;
+    } catch (err) {
+      // IE6-7 doesn't support deleting HTMLFormElement attributes (#1488017)
+      $(e).removeAttr('event');
+    }
+  }
+
   return ret;
 }
 
@@ -385,21 +395,17 @@ function rcube_layer(id, attributes)
       parent = arg.parent,
       obj = document.createElement('DIV');
 
-    with (obj) {
-      id = this.name;
-      with (style) {
-	    position = 'absolute';
-        visibility = (vis) ? (vis==2) ? 'inherit' : 'visible' : 'hidden';
-        left = l+'px';
-        top = t+'px';
-        if (w)
-	      width = w.toString().match(/\%$/) ? w : w+'px';
-        if (h)
-	      height = h.toString().match(/\%$/) ? h : h+'px';
-        if (z)
-          zIndex = z;
-	  }
-    }
+    obj.id = this.name;
+    obj.style.position = 'absolute';
+    obj.style.visibility = (vis) ? (vis==2) ? 'inherit' : 'visible' : 'hidden';
+    obj.style.left = l+'px';
+    obj.style.top = t+'px';
+    if (w)
+	  obj.style.width = w.toString().match(/\%$/) ? w : w+'px';
+    if (h)
+	  obj.style.height = h.toString().match(/\%$/) ? h : h+'px';
+    if (z)
+      obj.style.zIndex = z;
 
     if (parent)
       parent.appendChild(obj);
@@ -529,7 +535,7 @@ function rcube_clone_object(obj)
   var out = {};
 
   for (var key in obj) {
-    if (obj[key] && typeof obj[key] == 'object')
+    if (obj[key] && typeof obj[key] === 'object')
       out[key] = clone_object(obj[key]);
     else
       out[key] = obj[key];
@@ -582,8 +588,8 @@ function rcube_find_object(id, d)
 // determine whether the mouse is over the given object or not
 function rcube_mouse_is_over(ev, obj)
 {
-  var mouse = rcube_event.get_mouse_pos(ev);
-  var pos = $(obj).offset();
+  var mouse = rcube_event.get_mouse_pos(ev),
+    pos = $(obj).offset();
 
   return ((mouse.x >= pos.left) && (mouse.x < (pos.left + obj.offsetWidth)) &&
     (mouse.y >= pos.top) && (mouse.y < (pos.top + obj.offsetHeight)));
@@ -603,18 +609,23 @@ function setCookie(name, value, expires, path, domain, secure)
 
 function getCookie(name)
 {
-  var dc = document.cookie;
-  var prefix = name + "=";
-  var begin = dc.indexOf("; " + prefix);
+  var dc = document.cookie,
+    prefix = name + "=",
+    begin = dc.indexOf("; " + prefix);
+
   if (begin == -1) {
     begin = dc.indexOf(prefix);
-    if (begin != 0) return null;
+    if (begin != 0)
+      return null;
   }
-  else
-    begin += 2;  
-  var end = document.cookie.indexOf(";", begin);
+  else {
+    begin += 2;
+  }
+
+  var end = dc.indexOf(";", begin);
   if (end == -1)
     end = dc.length;
+
   return unescape(dc.substring(begin + prefix.length, end));
 };
 
@@ -634,7 +645,7 @@ function rcube_console()
       else
         msg += '\n--------------------------------------\n';
 
-      // Konqueror doesn't allows to just change value of hidden element
+      // Konqueror doesn't allow to just change the value of hidden element
       if (bw.konq) {
         box.innerText += msg;
         box.value = box.innerText;
@@ -653,9 +664,6 @@ function rcube_console()
 
 var bw = new roundcube_browser();
 bw.set_html_class();
-
-if (!window.console) 
-  console = new rcube_console();
 
 
 // Add escape() method to RegExp object

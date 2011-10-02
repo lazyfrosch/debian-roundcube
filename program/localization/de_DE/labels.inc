@@ -6,14 +6,15 @@
 | language/de_DE/labels.inc                                             |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
+| Author:      Thomas Bruederli <roundcube@gmail.com>                   |
 | Author: Marcel Schlesinger <info@marcel-schlesinger.de>               |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4509 2011-02-09 10:51:50Z thomasb $
+@version $Id: labels.inc 5040 2011-08-10 11:09:16Z thomasb $
 
 */
 
@@ -172,6 +173,7 @@ $labels['charset'] = 'Zeichensatz';
 $labels['editortype'] = 'Editor Typ';
 $labels['returnreceipt'] = 'Empfangsbestätigung (MSN)';
 $labels['dsn'] = 'Übermittlungsbestätigung (DSN)';
+$labels['mailreplyintro'] = 'Am $date, schrieb $sender:';
 $labels['editidents'] = 'Absender ändern';
 $labels['checkspelling'] = 'Rechtschreibung prüfen';
 $labels['resumeediting'] = 'Bearbeitung fortsetzen';
@@ -197,7 +199,7 @@ $labels['addcc'] = 'Cc hinzufügen';
 $labels['addbcc'] = 'Bcc hinzufügen';
 $labels['addreplyto'] = 'Antwortadresse hinzufügen';
 $labels['addfollowupto'] = 'Followup-To hinzufügen';
-$labels['mdnrequest'] = 'Der Sender dieser Nachricht möchte gerne eine Empfangsbestätigung. Wollen Sie dieses bestätigen?';
+$labels['mdnrequest'] = 'Der Sender dieser Nachricht möchte gerne eine Lesebestätigung. Wollen Sie dieses bestätigen?';
 $labels['receiptread'] = 'Empfangsbestätigung (gelesen)';
 $labels['yourmessage'] = 'Dies ist eine Empfangsbestätigung für Ihre Nachricht';
 $labels['receiptnote'] = 'Hinweis: Der Empfänger hat den Empfang der Nachricht bestätigt. Dies ist keine Garantie, dass die Nachricht gelesen und verstanden wurde.';
@@ -297,8 +299,8 @@ $labels['serversettings'] = 'Server-Einstellungen';
 $labels['mailboxview'] = 'Mailbox-Ansicht';
 $labels['mdnrequests'] = 'Empfangsbestätigung senden';
 $labels['askuser'] = 'immer fragen';
-$labels['autosend'] = 'automatisch senden';
-$labels['autosendknown'] = 'nur an meine Kontakte senden';
+$labels['autosend'] = 'Lesebestätigung automatisch senden';
+$labels['autosendknown'] = 'Lesebestätigung nur an meine Kontakte senden';
 $labels['autosendknownignore'] = 'für bekannte Absender, sonst ignorieren';
 $labels['ignore'] = 'ignorieren';
 $labels['readwhendeleted'] = 'Beim Löschen als gelesen markieren';
@@ -343,7 +345,7 @@ $labels['belowquote'] = 'unter der Originalnachricht einfügen';
 $labels['abovequote'] = 'über der Originalnachricht einfügen';
 $labels['insertsignature'] = 'Signatur einfügen';
 $labels['previewpanemarkread'] = 'Nachricht in Vorschau als gelesen markieren';
-$labels['afternseconds'] = 'nach $n Sekuden';
+$labels['afternseconds'] = 'nach $n Sekunden';
 $labels['reqmdn'] = 'Empfangsbestätigung (MSN) immer anfordern';
 $labels['reqdsn'] = 'Übermittlungsbestätigung (DSN) immer anfordern';
 $labels['replysamefolder'] = 'Antworten im selben Ordner wie Original speichern';

@@ -6,7 +6,7 @@
 | language/nl_NL/messages.inc                                           |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -16,7 +16,7 @@
 |         Justin van Beusekom <j.v.beusekom@beus-it.nl>                 |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 4368 2010-12-27 08:51:22Z yllar $
+@version $Id: messages.inc 5067 2011-08-14 18:47:58Z thomasb $
 
 */
 
@@ -27,6 +27,7 @@ $messages['sessionerror'] = 'Uw sessie is verlopen of ongeldig';
 $messages['imaperror'] = 'Connectie met IMAP server mislukt';
 $messages['servererror'] = 'Server Fout!';
 $messages['servererrormsg'] = 'Server Fout: $msg';
+$messages['databaserror'] = 'Database Fout!';
 $messages['errorreadonly'] = 'Niet in staat om de bewerking uit te voeren. Map is alleen-lezen';
 $messages['errornoperm'] = 'Niet in staat om de bewerking uit te voeren. Toestemming geweigerd';
 $messages['invalidrequest'] = 'Ongeldige aanvraag! Er zijn geen gegevens opgeslagen.';
@@ -85,7 +86,7 @@ $messages['nospellerrors'] = 'Geen spelfouten gevonden';
 $messages['folderdeleted'] = 'Map successvol verwijderd';
 $messages['foldersubscribed'] = 'Folder succesvol geabonneerd';
 $messages['folderunsubscribed'] = 'Folder succesvol uitgeschreven';
-$messages['folderpurged'] = 'Folder met succes verwijderd';
+$messages['folderpurged'] = 'Folder met succes geleegd';
 $messages['folderexpunged'] = 'Folder succesvol geleegd';
 $messages['deletedsuccessfully'] = 'Successvol verwijderd';
 $messages['converting'] = 'Opmaak van bericht verwijderen...';
@@ -111,6 +112,7 @@ $messages['contactremovedfromgroup'] = 'Contact(en) met succes verwijderd aan de
 $messages['importwait'] = 'Importeren, even geduld...';
 $messages['importerror'] = 'Importeren mislukt! Het verstuurde bestand is geen geldig vCard bestand.';
 $messages['importconfirm'] = '<b>Er zijn $inserted contactpersonen succesvol geïmporteerd, en $skipped bestaande overgeslagen</b>:<p><em>$names</em></p>';
+$messages['importconfirmskipped'] = '<b>$skipped bestaande contactpersonen overgeslagen</b>';
 $messages['opnotpermitted'] = 'Deze verrichting is niet toegestaan!';
 $messages['nofromaddress'] = 'Het e-mailadres mist in de geselecteerde identiteit';
 $messages['editorwarning'] = 'Door het overschakelen naar de platte tekst editor gaat alle opmaak verloren. Weet je zeker dat je verder wil gaan?';
@@ -128,6 +130,8 @@ $messages['maxgroupmembersreached'] = 'Het aantal leden van de groep groter is d
 $messages['internalerror'] = 'Er is een interne fout opgetreden. Probeer het nogmaals';
 $messages['contactdelerror'] = 'Kon contact(en) niet verwijderen';
 $messages['contactdeleted'] = 'Contact(en) succesvol verwijderd';
+$messages['contactrestoreerror'] = 'Verwijderde contactpersonen konden niet hersteld worden';
+$messages['contactrestored'] = 'Contactpersonen succesvol hersteld';
 $messages['groupdeleted'] = 'Groep succesvol verwijderd';
 $messages['grouprenamed'] = 'Groep succesvol hernoemd';
 $messages['groupcreated'] = 'Groep succesvol aangemaakt';
@@ -140,5 +144,8 @@ $messages['namecannotbeempty'] = 'Naam kan niet leeg zijn';
 $messages['nametoolong'] = 'Naam is te lang';
 $messages['folderupdated'] = 'Map succesvol bijgewerkt';
 $messages['foldercreated'] = 'Map succesvol aangemaakt';
+$messages['invalidimageformat'] = 'Geen geldig afbeeldings formaat';
+$messages['mispellingsfound'] = 'Spelfouten gedetecteerd in bericht';
+$messages['itemsdeleted'] = '$num items zijn verwijderd';
 
 ?>

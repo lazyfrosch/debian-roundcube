@@ -7,12 +7,27 @@
  * It's clickable interface which operates on text scripts and communicates
  * with server using managesieve protocol. Adds Filters tab in Settings.
  *
- * @version 3.0
- * @author Aleksander 'A.L.E.C' Machniak <alec@alec.pl>
+ * @version 4.3
+ * @author Aleksander Machniak <alec@alec.pl>
  *
  * Configuration (see config.inc.php.dist)
  *
- * $Id: managesieve.php 4555 2011-02-16 10:48:11Z alec $
+ * Copyright (C) 2008-2011, The Roundcube Dev Team
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * $Id: managesieve.php 4983 2011-07-28 07:31:16Z alec $
  */
 
 class managesieve extends rcube_plugin
@@ -60,8 +75,10 @@ class managesieve extends rcube_plugin
             'filtersetform'  => array($this, 'filterset_form'),
         ));
 
-        require_once($this->home . '/lib/Net/Sieve.php');
-        require_once($this->home . '/lib/rcube_sieve.php');
+        // Add include path for internal classes
+        $include_path = $this->home . '/lib' . PATH_SEPARATOR;
+        $include_path .= ini_get('include_path');
+        set_include_path($include_path);
 
         $host = rcube_parse_host($this->rc->config->get('managesieve_host', 'localhost'));
         $port = $this->rc->config->get('managesieve_port', 2000);
@@ -360,6 +377,8 @@ class managesieve extends rcube_plugin
             $reasons = $_POST['_action_reason'];
             $addresses = $_POST['_action_addresses'];
             $days = $_POST['_action_days'];
+            $subject = $_POST['_action_subject'];
+            $flags = $_POST['_action_flags'];
 
             // we need a "hack" for radiobuttons
             foreach ($sizeitems as $item)
@@ -373,12 +392,13 @@ class managesieve extends rcube_plugin
 
             if ($name == '')
                 $this->errors['name'] = $this->gettext('cannotbeempty');
-            else
+            else {
                 foreach($this->script as $idx => $rule)
                     if($rule['name'] == $name && $idx != $fid) {
                         $this->errors['name'] = $this->gettext('ruleexist');
                         break;
                     }
+            }
 
             $i = 0;
             // rules
@@ -481,15 +501,17 @@ class managesieve extends rcube_plugin
                 $target = $this->strip_value($act_targets[$idx]);
 
                 switch ($type) {
+
                 case 'fileinto':
                 case 'fileinto_copy':
                     $mailbox = $this->strip_value($mailboxes[$idx]);
-                    $this->form['actions'][$i]['target'] = $mailbox;
+                    $this->form['actions'][$i]['target'] = $this->mod_mailbox($mailbox, 'in');
                     if ($type == 'fileinto_copy') {
                         $type = 'fileinto';
                         $this->form['actions'][$i]['copy'] = true;
                     }
                     break;
+
                 case 'reject':
                 case 'ereject':
                     $target = $this->strip_value($area_targets[$idx]);
@@ -498,6 +520,7 @@ class managesieve extends rcube_plugin
  //                 if ($target == '')
 //                      $this->errors['actions'][$i]['targetarea'] = $this->gettext('cannotbeempty');
                     break;
+
                 case 'redirect':
                 case 'redirect_copy':
                     $this->form['actions'][$i]['target'] = $target;
@@ -512,12 +535,29 @@ class managesieve extends rcube_plugin
                         $this->form['actions'][$i]['copy'] = true;
                     }
                     break;
+
+                case 'addflag':
+                case 'setflag':
+                case 'removeflag':
+                    $_target = array();
+                    if (empty($flags[$idx])) {
+                        $this->errors['actions'][$i]['target'] = $this->gettext('noflagset');
+                    }
+                    else {
+                        foreach ($flags[$idx] as $flag) {
+                            $_target[] = $this->strip_value($flag);
+                        }
+                    }
+                    $this->form['actions'][$i]['target'] = $_target;
+                    break;
+
                 case 'vacation':
                     $reason = $this->strip_value($reasons[$idx]);
                     $this->form['actions'][$i]['reason']    = str_replace("\r\n", "\n", $reason);
                     $this->form['actions'][$i]['days']      = $days[$idx];
+                    $this->form['actions'][$i]['subject']   = $subject[$idx];
                     $this->form['actions'][$i]['addresses'] = explode(',', $addresses[$idx]);
-// @TODO: vacation :subject, :mime, :from, :handle
+// @TODO: vacation :mime, :from, :handle
 
                     if ($this->form['actions'][$i]['addresses']) {
                         foreach($this->form['actions'][$i]['addresses'] as $aidx => $address) {
@@ -848,7 +888,7 @@ class managesieve extends rcube_plugin
 
         // headers select
         $select_header = new html_select(array('name' => "_header[]", 'id' => 'header'.$id,
-            'onchange' => 'header_select(' .$id .')'));
+            'onchange' => 'rule_header_select(' .$id .')'));
         foreach($this->headers as $name => $val)
             $select_header->add(Q($this->gettext($name)), Q($val));
         $select_header->add(Q($this->gettext('size')), 'size');
@@ -893,8 +933,12 @@ class managesieve extends rcube_plugin
         $select_op->add(Q($this->gettext('filterisnot')), 'notis');
         $select_op->add(Q($this->gettext('filterexists')), 'exists');
         $select_op->add(Q($this->gettext('filternotexists')), 'notexists');
-//      $select_op->add(Q($this->gettext('filtermatches')), 'matches');
-//      $select_op->add(Q($this->gettext('filternotmatches')), 'notmatches');
+        $select_op->add(Q($this->gettext('filtermatches')), 'matches');
+        $select_op->add(Q($this->gettext('filternotmatches')), 'notmatches');
+		if (in_array('regex', $this->exts)) {
+            $select_op->add(Q($this->gettext('filterregex')), 'regex');
+            $select_op->add(Q($this->gettext('filternotregex')), 'notregex');
+        }
 		if (in_array('relational', $this->exts)) {
 			$select_op->add(Q($this->gettext('countisgreaterthan')), 'count-gt');
 			$select_op->add(Q($this->gettext('countisgreaterthanequal')), 'count-ge');
@@ -991,6 +1035,11 @@ class managesieve extends rcube_plugin
         if (in_array('vacation', $this->exts))
             $select_action->add(Q($this->gettext('messagereply')), 'vacation');
         $select_action->add(Q($this->gettext('messagedelete')), 'discard');
+        if (in_array('imapflags', $this->exts) || in_array('imap4flags', $this->exts)) {
+            $select_action->add(Q($this->gettext('setflags')), 'setflag');
+            $select_action->add(Q($this->gettext('addflags')), 'addflag');
+            $select_action->add(Q($this->gettext('removeflags')), 'removeflag');
+        }
         $select_action->add(Q($this->gettext('rulestop')), 'stop');
 
         $select_type = $action['type'];
@@ -1018,11 +1067,15 @@ class managesieve extends rcube_plugin
         $out .= '<div id="action_vacation' .$id.'" style="display:' .($action['type']=='vacation' ? 'inline' : 'none') .'">';
         $out .= '<span class="label">'. Q($this->gettext('vacationreason')) .'</span><br />'
             .'<textarea name="_action_reason[]" id="action_reason' .$id. '" '
-            .'rows="3" cols="40" '. $this->error_class($id, 'action', 'reason', 'action_reason') . '>'
+            .'rows="3" cols="45" '. $this->error_class($id, 'action', 'reason', 'action_reason') . '>'
             . Q($action['reason'], 'strict', false) . "</textarea>\n";
+        $out .= '<br /><span class="label">' .Q($this->gettext('vacationsubject')) . '</span><br />'
+            .'<input type="text" name="_action_subject[]" id="action_subject'.$id.'" '
+            .'value="' . (is_array($action['subject']) ? Q(implode(', ', $action['subject']), 'strict', false) : $action['subject']) . '" size="50" '
+            . $this->error_class($id, 'action', 'subject', 'action_subject') .' />';
         $out .= '<br /><span class="label">' .Q($this->gettext('vacationaddresses')) . '</span><br />'
             .'<input type="text" name="_action_addresses[]" id="action_addr'.$id.'" '
-            .'value="' . (is_array($action['addresses']) ? Q(implode(', ', $action['addresses']), 'strict', false) : $action['addresses']) . '" size="40" '
+            .'value="' . (is_array($action['addresses']) ? Q(implode(', ', $action['addresses']), 'strict', false) : $action['addresses']) . '" size="50" '
             . $this->error_class($id, 'action', 'addresses', 'action_addr') .' />';
         $out .= '<br /><span class="label">' . Q($this->gettext('vacationdays')) . '</span><br />'
             .'<input type="text" name="_action_days[]" id="action_days'.$id.'" '
@@ -1030,46 +1083,41 @@ class managesieve extends rcube_plugin
             . $this->error_class($id, 'action', 'days', 'action_days') .' />';
         $out .= '</div>';
 
+        // flags
+        $flags = array(
+            'read'      => '\\Seen',
+            'answered'  => '\\Answered',
+            'flagged'   => '\\Flagged',
+            'deleted'   => '\\Deleted',
+            'draft'     => '\\Draft',
+        );
+        $flags_target = (array)$action['target'];
+
+        $out .= '<div id="action_flags' .$id.'" style="display:' 
+            . (preg_match('/^(set|add|remove)flag$/', $action['type']) ? 'inline' : 'none') . '"'
+            . $this->error_class($id, 'action', 'flags', 'action_flags') . '>';
+        foreach ($flags as $fidx => $flag) {
+            $out .= '<input type="checkbox" name="_action_flags[' .$id .'][]" value="' . $flag . '"'
+                . (in_array_nocase($flag, $flags_target) ? 'checked="checked"' : '') . ' />'
+                . Q($this->gettext('flag'.$fidx)) .'<br>';
+        }
+        $out .= '</div>';
+
         // mailbox select
-        $out .= '<select id="action_mailbox' .$id. '" name="_action_mailbox[]" style="display:'
-            .(!isset($action) || $action['type']=='fileinto' ? 'inline' : 'none'). '">';
-
-        $this->rc->imap_connect();
-
-        $a_folders = $this->rc->imap->list_mailboxes();
-        $delimiter = $this->rc->imap->get_hierarchy_delimiter();
-
-        // set mbox encoding
-        $mbox_encoding = $this->rc->config->get('managesieve_mbox_encoding', 'UTF7-IMAP');
-
         if ($action['type'] == 'fileinto')
-            $mailbox = $action['target'];
+            $mailbox = $this->mod_mailbox($action['target'], 'out');
         else
             $mailbox = '';
 
-        foreach ($a_folders as $folder) {
-            $utf7folder = $this->rc->imap->mod_mailbox($folder);
-            $names = explode($delimiter, rcube_charset_convert($folder, 'UTF7-IMAP'));
-            $name  = $names[sizeof($names)-1];
-
-            if ($replace_delimiter = $this->rc->config->get('managesieve_replace_delimiter'))
-                $utf7folder = str_replace($delimiter, $replace_delimiter, $utf7folder);
-
-            // convert to Sieve implementation encoding
-            $utf7folder = $this->mbox_encode($utf7folder, $mbox_encoding);
-
-            if ($folder_class = rcmail_folder_classname($name))
-                $foldername = $this->gettext($folder_class);
-            else
-                $foldername = $name;
-
-            $out .= sprintf('<option value="%s"%s>%s%s</option>'."\n",
-                htmlspecialchars($utf7folder),
-                ($mailbox == $utf7folder ? ' selected="selected"' : ''),
-                str_repeat('&nbsp;', 4 * (sizeof($names)-1)),
-                Q(abbreviate_string($foldername, 40 - (2 * sizeof($names)-1))));
-        }
-        $out .= '</select>';
+        $this->rc->imap_connect();
+        $select = rcmail_mailbox_select(array(
+	        'realnames' => false,
+	        'maxlength' => 100,
+	        'id' => 'action_mailbox' . $id,
+	        'name' => '_action_mailbox[]',
+	        'style' => 'display:'.(!isset($action) || $action['type']=='fileinto' ? 'inline' : 'none')
+	    ));
+        $out .= $select->show($mailbox);
         $out .= '</td>';
 
         // add/del buttons
@@ -1115,11 +1163,6 @@ class managesieve extends rcube_plugin
         return '';
     }
 
-    private function mbox_encode($text, $encoding)
-    {
-        return rcube_charset_convert($text, 'UTF7-IMAP', $encoding);
-    }
-
     private function add_tip($id, $str, $error=false)
     {
         if ($error)
@@ -1137,4 +1180,32 @@ class managesieve extends rcube_plugin
         $this->rc->output->add_script($script, 'foot');
     }
 
+    /**
+     * Converts mailbox name from/to UTF7-IMAP from/to internal Sieve encoding
+     * with delimiter replacement.
+     *
+     * @param string $mailbox Mailbox name
+     * @param string $mode    Conversion direction ('in'|'out')
+     *
+     * @return string Mailbox name
+     */
+    private function mod_mailbox($mailbox, $mode = 'out')
+    {
+        $delimiter         = $_SESSION['imap_delimiter'];
+        $replace_delimiter = $this->rc->config->get('managesieve_replace_delimiter');
+        $mbox_encoding     = $this->rc->config->get('managesieve_mbox_encoding', 'UTF7-IMAP');
+
+        if ($mode == 'out') {
+            $mailbox = rcube_charset_convert($mailbox, $mbox_encoding, 'UTF7-IMAP');
+            if ($replace_delimiter && $replace_delimiter != $delimiter)
+                $mailbox = str_replace($replace_delimiter, $delimiter, $mailbox);
+        }
+        else {
+            $mailbox = rcube_charset_convert($mailbox, 'UTF7-IMAP', $mbox_encoding);
+            if ($replace_delimiter && $replace_delimiter != $delimiter)
+                $mailbox = str_replace($delimiter, $replace_delimiter, $mailbox);
+        }
+
+        return $mailbox;
+    }
 }

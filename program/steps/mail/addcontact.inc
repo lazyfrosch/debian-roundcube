@@ -5,7 +5,7 @@
  | program/steps/mail/addcontact.inc                                     |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2009, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: addcontact.inc 4509 2011-02-09 10:51:50Z thomasb $
+ $Id: addcontact.inc 4933 2011-07-18 16:57:15Z thomasb $
 
 */
 
@@ -23,8 +23,17 @@
 if (!$OUTPUT->ajax_call)
   return;
 
-$done = false;
-$CONTACTS = $RCMAIL->get_address_book(null, true);
+$abook = $RCMAIL->config->get('default_addressbook');
+
+// Get configured addressbook
+$CONTACTS = $RCMAIL->get_address_book($abook, true);
+
+// Get first writeable addressbook if the configured doesn't exist
+// This can happen when user deleted the addressbook (e.g. Kolab folder)
+if ($abook == null || !is_object($CONTACTS)) {
+  $source = reset($RCMAIL->get_address_sources(true));
+  $CONTACTS = $RCMAIL->get_address_book($source['id'], true);
+}
 
 if (!empty($_POST['_address']) && is_object($CONTACTS))
 {
@@ -41,16 +50,15 @@ if (!empty($_POST['_address']) && is_object($CONTACTS))
       $OUTPUT->show_message('errorsavingcontact', 'error');
       $OUTPUT->send();
     }
-    else if (!check_email($contact['email'], false)) {
+    
+    $email = rcube_idn_to_ascii($contact['email']);
+    if (!check_email($email, false)) {
       $OUTPUT->show_message('emailformaterror', 'error', array('email' => $contact['email']));
       $OUTPUT->send();
     }
 
     $contact['email'] = rcube_idn_to_utf8($contact['email']);
-
-    // use email address part for name
-    if (empty($contact['name']) || $contact['name'] == $contact['email'])
-      $contact['name'] = ucfirst(preg_replace('/[\.\-]/', ' ', substr($contact['email'], 0, strpos($contact['email'], '@'))));
+    $contact['name'] = rcube_addressbook::compose_display_name($contact);
 
     // check for existing contacts
     $existing = $CONTACTS->search('email', $contact['email'], true, false);

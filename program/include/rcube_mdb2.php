@@ -5,7 +5,7 @@
  | program/include/rcube_mdb2.php                                        |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2009, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -16,7 +16,7 @@
  | Author: Lukas Kahwe Smith <smith@pooteeweet.org>                      |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_mdb2.php 4643 2011-04-11 12:24:00Z alec $
+ $Id: rcube_mdb2.php 4810 2011-05-27 11:02:51Z alec $
 
 */
 
@@ -30,7 +30,7 @@
  * @author     David Saez Padros <david@ols.es>
  * @author     Thomas Bruederli <roundcube@gmail.com>
  * @author     Lukas Kahwe Smith <smith@pooteeweet.org>
- * @version    1.17
+ * @version    1.18
  * @link       http://pear.php.net/package/MDB2
  */
 class rcube_mdb2
@@ -44,6 +44,7 @@ class rcube_mdb2
     var $db_error_msg = '';
 
     private $debug_mode = false;
+    private $write_failure = false;
     private $a_query_results = array('dummy');
     private $last_res_id = 0;
     private $tables;
@@ -83,7 +84,7 @@ class rcube_mdb2
             'persistent'       => $this->db_pconn,
             'emulate_prepared' => $this->debug_mode,
             'debug'            => $this->debug_mode,
-            'debug_handler'    => 'mdb2_debug_handler',
+            'debug_handler'    => array($this, 'debug_handler'),
             'portability'      => MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_EMPTY_TO_NULL);
 
         if ($this->db_provider == 'pgsql') {
@@ -124,7 +125,7 @@ class rcube_mdb2
         // Already connected
         if ($this->db_connected) {
             // connected to read-write db, current connection is ok
-            if ($this->db_mode == 'w')
+            if ($this->db_mode == 'w' && !$this->write_failure)
                 return;
 
             // no replication, current connection is ok for read and write
@@ -142,7 +143,9 @@ class rcube_mdb2
 
         $this->db_handle = $this->dsn_connect($dsn);
         $this->db_connected = !PEAR::isError($this->db_handle);
-        $this->db_mode = $mode;
+
+        if ($this->db_connected)
+          $this->db_mode = $mode;
     }
 
 
@@ -183,6 +186,16 @@ class rcube_mdb2
     function is_connected()
     {
         return PEAR::isError($this->db_handle) ? false : $this->db_connected;
+    }
+
+
+    /**
+     * Is database replication configured?
+     * This returns true if dsnw != dsnr
+     */
+    function is_replicated()
+    {
+      return !empty($this->db_dsnr) && $this->db_dsnw != $this->db_dsnr;
     }
 
 
@@ -243,6 +256,10 @@ class rcube_mdb2
         // Read or write ?
         $mode = (strtolower(substr(trim($query),0,6)) == 'select') ? 'r' : 'w';
 
+        // don't event attempt to connect if previous write-operation failed
+        if ($this->write_failure && $mode == 'w')
+            return false;
+
         $this->db_connect($mode);
 
         // check connection before proceeding
@@ -266,13 +283,19 @@ class rcube_mdb2
 
                 raise_error(array('code' => 500, 'type' => 'db',
                     'line' => __LINE__, 'file' => __FILE__,
-                    'message' => $this->db_error_msg), true, true);
+                    'message' => $this->db_error_msg), true, false);
+                
+                $result = false;
             }
             else {
                 $result = $q->execute($params);
                 $q->free();
             }
         }
+
+        // remember that write-operation failed
+        if ($mode == 'w' && ($result === false || PEAR::isError($result)))
+            $this->write_failure = true;
 
         // add result, even if it's an error
         return $this->_add_result($result);
@@ -289,7 +312,7 @@ class rcube_mdb2
      */
     function num_rows($res_id=null)
     {
-        if (!$this->db_handle)
+        if (!$this->db_connected)
             return false;
 
         if ($result = $this->_get_result($res_id))
@@ -308,10 +331,10 @@ class rcube_mdb2
      */
     function affected_rows($res_id = null)
     {
-        if (!$this->db_handle)
+        if (!$this->db_connected)
             return false;
 
-        return (int) $this->_get_result($res_id);
+        return $this->_get_result($res_id);
     }
 
 
@@ -325,7 +348,7 @@ class rcube_mdb2
      */
     function insert_id($table = '')
     {
-        if (!$this->db_handle || $this->db_mode == 'r')
+        if (!$this->db_connected || $this->db_mode == 'r')
             return false;
 
         if ($table) {
@@ -413,6 +436,23 @@ class rcube_mdb2
 
 
     /**
+     * Wrapper for SHOW COLUMNS command
+     *
+     * @param string Table name
+     * @return array List of table cols
+     */
+    function list_cols($table)
+    {
+        $this->db_handle->loadModule('Manager');
+        if (!PEAR::isError($result = $this->db_handle->listTableFields($table))) {
+            return $result;
+        }
+        
+        return null;
+    }
+
+
+    /**
      * Formats input so it can be safely used in a query
      *
      * @param  mixed  $input  Value to quote
@@ -430,7 +470,7 @@ class rcube_mdb2
         if (!$this->db_handle)
             $this->db_connect('r');
 
-        return $this->db_handle->quote($input, $type);
+        return $this->db_connected ? $this->db_handle->quote($input, $type) : addslashes($input);
     }
 
 
@@ -461,7 +501,7 @@ class rcube_mdb2
         if (!$this->db_handle)
             $this->db_connect('r');
 
-        return $this->db_handle->quoteIdentifier($str);
+        return $this->db_connected ? $this->db_handle->quoteIdentifier($str) : $str;
     }
 
 
@@ -524,9 +564,12 @@ class rcube_mdb2
     /**
      * Return SQL statement to convert a field value into a unix timestamp
      *
+     * This method is deprecated and should not be used anymore due to limitations
+     * of timestamp functions in Mysql (year 2038 problem)
+     *
      * @param  string $field Field name
      * @return string  SQL statement to use in query
-     * @access public
+     * @deprecated
      */
     function unixtimestamp($field)
     {
@@ -574,6 +617,34 @@ class rcube_mdb2
             default:
                 return $this->quote_identifier($column).' LIKE '.$this->quote($value);
         }
+    }
+
+    /**
+     * Abstract SQL statement for value concatenation
+     *
+     * @return string SQL statement to be used in query
+     * @access public
+     */
+    function concat(/* col1, col2, ... */)
+    {
+        $func = '';
+        $args = func_get_args();
+
+        switch($this->db_provider) {
+            case 'mysql':
+            case 'mysqli':
+                $func = 'CONCAT';
+                $delim = ', ';
+                break;
+            case 'mssql':
+            case 'sqlsrv':
+                $delim = ' + ';
+                break;
+            default:
+                $delim = ' || ';
+        }
+
+        return $func . '(' . join($delim, $args) . ')';
     }
 
 
@@ -703,7 +774,7 @@ class rcube_mdb2
      */
     private function _sqlite_prepare()
     {
-        include_once('include/rcube_sqlite.inc');
+        include_once(INSTALL_PATH . 'program/include/rcube_sqlite.inc');
 
         // we emulate via callback some missing MySQL function
         sqlite_create_function($this->db_handle->connection,
@@ -716,16 +787,17 @@ class rcube_mdb2
             'md5', 'rcube_sqlite_md5');
     }
 
-}  // end class rcube_db
 
-
-/* this is our own debug handler for the MDB2 connection */
-function mdb2_debug_handler(&$db, $scope, $message, $context = array())
-{
-    if ($scope != 'prepare') {
-        $debug_output = sprintf('%s(%d): %s;',
-            $scope, $db->db_index, rtrim($message, ';'));
-        write_log('sql', $debug_output);
+    /**
+     * Debug handler for the MDB2
+     */
+    function debug_handler(&$db, $scope, $message, $context = array())
+    {
+        if ($scope != 'prepare') {
+            $debug_output = sprintf('%s(%d): %s;',
+                $scope, $db->db_index, rtrim($message, ';'));
+            write_log('sql', $debug_output);
+        }
     }
-}
 
+}  // end class rcube_db

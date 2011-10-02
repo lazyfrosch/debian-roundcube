@@ -361,7 +361,7 @@ echo $text_sentmbox->show($RCI->getprop('sent_mbox'));
 ?>
 <div>Store sent messages in this folder</div>
 
-<p class="hint">Leave blank if sent messages should not be stored</p>
+<p class="hint">Leave blank if sent messages should not be stored. Note: folder must include namespace prefix if any.</p>
 </dd>
 
 <dt class="propname">trash_mbox</dt>
@@ -374,7 +374,7 @@ echo $text_trashmbox->show($RCI->getprop('trash_mbox'));
 ?>
 <div>Move messages to this folder when deleting them</div>
 
-<p class="hint">Leave blank if they should be deleted directly</p>
+<p class="hint">Leave blank if they should be deleted directly. Note: folder must include namespace prefix if any.</p>
 </dd>
 
 <dt class="propname">drafts_mbox</dt>
@@ -387,7 +387,7 @@ echo $text_draftsmbox->show($RCI->getprop('drafts_mbox'));
 ?>
 <div>Store draft messages in this folder</div>
 
-<p class="hint">Leave blank if they should not be stored</p>
+<p class="hint">Leave blank if they should not be stored. Note: folder must include namespace prefix if any.</p>
 </dd>
 
 <dt class="propname">junk_mbox</dt>
@@ -399,6 +399,10 @@ echo $text_junkmbox->show($RCI->getprop('junk_mbox'));
 
 ?>
 <div>Store spam messages in this folder</div>
+
+<p class="hint">Note: folder must include namespace prefix if any.</p>
+</dd>
+
 </dd>
 </dl>
 </fieldset>
@@ -500,11 +504,24 @@ echo $input_locale->show($RCI->getprop('language'));
 <dd>
 <?php
 
-$input_skin = new html_inputfield(array('name' => '_skin', 'size' => 30, 'id' => "cfgskin"));
+$input_skin = new html_select(array('name' => '_skin', 'id' => "cfgskin"));
+$input_skin->add($RCI->list_skins());
 echo $input_skin->show($RCI->getprop('skin'));
 
 ?>
 <div>Name of interface skin (folder in /skins)</div>
+</dd>
+
+<dt class="propname">skin_logo</dt>
+<dd>
+<?php
+
+$input_skin = new html_inputfield(array('name' => '_skin_logo', 'size' => 50, 'id' => "cfgskinlogo"));
+echo $input_skin->show($RCI->getprop('skin_logo'));
+
+?>
+<div>Custom image to display instead of the Roundcube logo.</div>
+<p class="hint">Enter a URL relative to the document root of this Roundcube installation.</p>
 </dd>
 
 <dt class="propname">pagesize <span class="userconf">*</span></dt>

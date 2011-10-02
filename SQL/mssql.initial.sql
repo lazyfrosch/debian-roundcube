@@ -16,7 +16,8 @@ CREATE TABLE [dbo].[contacts] (
 	[email] [varchar] (255) COLLATE Latin1_General_CI_AI NOT NULL ,
 	[firstname] [varchar] (128) COLLATE Latin1_General_CI_AI NOT NULL ,
 	[surname] [varchar] (128) COLLATE Latin1_General_CI_AI NOT NULL ,
-	[vcard] [text] COLLATE Latin1_General_CI_AI NULL 
+	[vcard] [text] COLLATE Latin1_General_CI_AI NULL ,
+	[words] [text] COLLATE Latin1_General_CI_AI NULL 
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
@@ -194,6 +195,8 @@ ALTER TABLE [dbo].[contactgroupmembers] ADD
 	CONSTRAINT [DF_contactgroupmembers_created] DEFAULT (getdate()) FOR [created]
 GO
 
+CREATE  INDEX [IX_contactgroupmembers_contact_id] ON [dbo].[contactgroupmembers]([contact_id]) ON [PRIMARY]
+GO
 
 ALTER TABLE [dbo].[identities] ADD 
 	CONSTRAINT [DF_identities_user] DEFAULT ('0') FOR [user_id],

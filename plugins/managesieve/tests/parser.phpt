@@ -3,10 +3,10 @@ Main test of script parser
 --SKIPIF--
 --FILE--
 <?php
-include('../lib/rcube_sieve.php');
+include '../lib/rcube_sieve_script.php';
 
 $txt = '
-require ["fileinto","vacation","reject","relational","comparator-i;ascii-numeric"];
+require ["fileinto","vacation","reject","relational","comparator-i;ascii-numeric","imapflags"];
 # rule:[spam]
 if anyof (header :contains "X-DSPAM-Result" "Spam")
 {
@@ -49,6 +49,11 @@ if size :over 5000K {
 # rule:[redirect]
 if header :value "ge" :comparator "i;ascii-numeric"
     ["X-Spam-score"] ["14"] {redirect "test@test.tld";}
+# rule:[imapflags]
+if header :matches "Subject" "^Test$" {
+    setflag "\\\\Seen";
+    addflag ["\\\\Answered","\\\\Deleted"];
+}
 ';
 
 $s = new rcube_sieve_script($txt);
@@ -56,7 +61,7 @@ echo $s->as_text();
 
 ?>
 --EXPECT--
-require ["fileinto","vacation","reject","relational","comparator-i;ascii-numeric"];
+require ["fileinto","vacation","reject","relational","comparator-i;ascii-numeric","imapflags"];
 # rule:[spam]
 if header :contains "X-DSPAM-Result" "Spam"
 {
@@ -100,4 +105,10 @@ if size :over 5000K
 if header :value "ge" :comparator "i;ascii-numeric" "X-Spam-score" "14"
 {
 	redirect "test@test.tld";
+}
+# rule:[imapflags]
+if header :matches "Subject" "^Test$"
+{
+	setflag "\\Seen";
+	addflag ["\\Answered","\\Deleted"];
 }

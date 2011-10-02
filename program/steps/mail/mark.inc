@@ -4,7 +4,7 @@
  | program/steps/mail/mark.inc                                           |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2009, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -14,7 +14,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: mark.inc 4321 2010-12-08 12:52:04Z alec $
+ $Id: mark.inc 4410 2011-01-12 18:25:02Z thomasb $
 
 */
 

@@ -5,7 +5,7 @@
  | rcube_shared.inc                                                      |
  |                                                                       |
  | This file is part of the Roundcube PHP suite                          |
- | Copyright (C) 2005-2007, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2007, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | CONTENTS:                                                             |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_shared.inc 4729 2011-05-04 18:53:11Z alec $
+ $Id: rcube_shared.inc 4710 2011-04-29 08:17:42Z alec $
 
 */
 
@@ -140,7 +140,7 @@ function in_array_nocase($needle, $haystack)
 function get_boolean($str)
 {
   $str = strtolower($str);
-  if (in_array($str, array('false', '0', 'no', 'nein', ''), TRUE))
+  if (in_array($str, array('false', '0', 'no', 'off', 'nein', ''), TRUE))
     return FALSE;
   else
     return TRUE;
@@ -180,7 +180,7 @@ function parse_bytes($str)
 
   return floatval($bytes);
 }
-    
+
 /**
  * Create a human readable string for a number of bytes
  *
@@ -189,24 +189,23 @@ function parse_bytes($str)
  */
 function show_bytes($bytes)
 {
-  if ($bytes > 1073741824)
+  if ($bytes >= 1073741824)
   {
     $gb = $bytes/1073741824;
     $str = sprintf($gb>=10 ? "%d " : "%.1f ", $gb) . rcube_label('GB');
   }
-  else if ($bytes > 1048576)
+  else if ($bytes >= 1048576)
   {
     $mb = $bytes/1048576;
     $str = sprintf($mb>=10 ? "%d " : "%.1f ", $mb) . rcube_label('MB');
   }
-  else if ($bytes > 1024)
+  else if ($bytes >= 1024)
     $str = sprintf("%d ",  round($bytes/1024)) . rcube_label('KB');
   else
     $str = sprintf('%d ', $bytes) . rcube_label('B');
 
   return $str;
 }
-
 
 /**
  * Convert paths like ../xxx to an absolute path using a base url
@@ -484,6 +483,25 @@ function rc_mime_content_type($path, $name, $failover = 'application/octet-strea
 
     return $mime_type;
 }
+
+
+/**
+ * Detect image type of the given binary data by checking magic numbers
+ *
+ * @param string  Binary file content
+ * @return string Detected mime-type or jpeg as fallback
+ */
+function rc_image_content_type($data)
+{
+    $type = 'jpeg';
+    if      (preg_match('/^\x89\x50\x4E\x47/', $data)) $type = 'png';
+    else if (preg_match('/^\x47\x49\x46\x38/', $data)) $type = 'gif';
+    else if (preg_match('/^\x00\x00\x01\x00/', $data)) $type = 'ico';
+//  else if (preg_match('/^\xFF\xD8\xFF\xE0/', $data)) $type = 'jpeg';
+
+    return 'image/' . $type;
+}
+
 
 /**
  * A method to guess encoding of a string.

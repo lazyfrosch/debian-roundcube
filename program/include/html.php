@@ -5,7 +5,7 @@
  | program/include/html.php                                              |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2010, Roundcube Dev, - Switzerland                 |
+ | Copyright (C) 2005-2010, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: html.php 4216 2010-11-12 10:47:04Z alec $
+ $Id: html.php 4867 2011-06-18 11:28:43Z alec $
 
  */
 
@@ -71,6 +71,9 @@ class html
      */
     public static function tag($tagname, $attrib = array(), $content = null, $allowed_attrib = null)
     {
+        if (is_string($attrib))
+            $attrib = array('class' => $attrib);
+
         $inline_tags = array('a','span','img');
         $suffix = $attrib['nl'] || ($content && $attrib['nl'] !== false && !in_array($tagname, $inline_tags)) ? "\n" : '';
 
@@ -147,7 +150,7 @@ class html
             $attr = array('href' => $attr);
         }
         return self::tag('a', $attr, $cont, array_merge(self::$common_attrib,
-	    array('href','target','name','onclick','onmouseover','onmouseout','onmousedown','onmouseup')));
+	    array('href','target','name','rel','onclick','onmouseover','onmouseout','onmousedown','onmouseup')));
     }
 
     /**
@@ -268,7 +271,7 @@ class html_inputfield extends html
     protected $type = 'text';
     protected $allowed = array('type','name','value','size','tabindex',
 	'autocomplete','checked','onchange','onclick','disabled','readonly',
-	'spellcheck','results','maxlength','src');
+	'spellcheck','results','maxlength','src','multiple');
 
     /**
      * Object constructor
@@ -501,7 +504,7 @@ class html_select extends html
     protected $tagname = 'select';
     protected $options = array();
     protected $allowed = array('name','size','tabindex','autocomplete',
-	'multiple','onchange','disabled');
+	'multiple','onchange','disabled','rel');
     
     /**
      * Add a new option to this drop-down
@@ -520,7 +523,6 @@ class html_select extends html
             $this->options[] = array('text' => $names, 'value' => $values);
         }
     }
-
 
     /**
      * Get HTML code for this object
@@ -560,7 +562,7 @@ class html_table extends html
 {
     protected $tagname = 'table';
     protected $allowed = array('id','class','style','width','summary',
-	'cellpadding','cellspacing','border');
+	    'cellpadding','cellspacing','border');
 
     private $header = array();
     private $rows = array();
@@ -627,24 +629,23 @@ class html_table extends html
     public function remove_column($class)
     {
         // Remove the header
-        foreach($this->header as $index=>$header){
-            if($header->attrib['class'] == $class){
+        foreach ($this->header as $index=>$header){
+            if ($header->attrib['class'] == $class){
                 unset($this->header[$index]);
                 break;
             }
         }
 
         // Remove cells from rows
-        foreach($this->rows as $i=>$row){
-            foreach($row->cells as $j=>$cell){
-                if($cell->attrib['class'] == $class){
+        foreach ($this->rows as $i=>$row){
+            foreach ($row->cells as $j=>$cell){
+                if ($cell->attrib['class'] == $class){
                     unset($this->rows[$i]->cells[$j]);
                     break;
                 }
             }
         }
     }
-
 
     /**
      * Jump to next row
@@ -661,16 +662,35 @@ class html_table extends html
     }
 
     /**
-     * Set current row attrib
+     * Set row attributes
      *
-     * @param array $attr Row attributes
+     * @param array $attr  Row attributes
+     * @param int   $index Optional row index (default current row index)
      */
-    public function set_row_attribs($attr = array())
+    public function set_row_attribs($attr = array(), $index = null)
     {
         if (is_string($attr))
     	    $attr = array('class' => $attr);
 
-        $this->rows[$this->rowindex]->attrib = $attr;
+        if ($index === null)
+            $index = $this->rowindex;
+
+        $this->rows[$index]->attrib = $attr;
+    }
+
+    /**
+     * Get row attributes
+     *
+     * @param int $index Row index
+     *
+     * @return array Row attributes
+     */
+    public function get_row_attribs($index = null)
+    {
+        if ($index === null)
+            $index = $this->rowindex;
+
+        return $this->rows[$index] ? $this->rows[$index]->attrib : null;
     }
 
     /**
@@ -683,7 +703,7 @@ class html_table extends html
     {
         if (is_array($attrib))
             $this->attrib = array_merge($this->attrib, $attrib);
-        
+
         $thead = $tbody = "";
 
         // include <thead>
@@ -692,7 +712,7 @@ class html_table extends html
             foreach ($this->header as $c => $col) {
                 $rowcontent .= self::tag('td', $col->attrib, $col->content);
             }
-            $thead = self::tag('thead', null, self::tag('tr', null, $rowcontent));
+            $thead = self::tag('thead', null, self::tag('tr', null, $rowcontent, parent::$common_attrib));
         }
 
         foreach ($this->rows as $r => $row) {
@@ -702,7 +722,7 @@ class html_table extends html
             }
 
             if ($r < $this->rowindex || count($row->cells)) {
-                $tbody .= self::tag('tr', $row->attrib, $rowcontent);
+                $tbody .= self::tag('tr', $row->attrib, $rowcontent, parent::$common_attrib);
             }
         }
 
@@ -716,7 +736,7 @@ class html_table extends html
         unset($this->attrib['cols'], $this->attrib['rowsonly']);
         return parent::show();
     }
-    
+
     /**
      * Count number of rows
      *
@@ -726,5 +746,15 @@ class html_table extends html
     {
       return count($this->rows);
     }
+
+    /**
+     * Remove table body (all rows)
+     */
+    public function remove_body()
+    {
+        $this->rows     = array();
+        $this->rowindex = 0;
+    }
+
 }
 

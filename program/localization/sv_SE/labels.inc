@@ -6,7 +6,7 @@
 | language/sv_SE/labels.inc                                             |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -15,7 +15,7 @@
 |         Andreas Henriksson <andreas@fatal.se>                         |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4469 2011-01-29 14:55:12Z thomasb $
+@version $Id: labels.inc 5175 2011-09-05 18:42:24Z thomasb $
 
 */
 
@@ -102,18 +102,16 @@ $labels['replytomessage'] = 'Svara avsändaren';
 $labels['replytoallmessage'] = 'Svara avsändaren och alla mottagare';
 $labels['replyall'] = 'Svara alla';
 $labels['replylist'] = 'Svara lista';
+$labels['forwardinline'] = 'Vidarebefordra infogat';
+$labels['forwardattachment'] = 'Vidarebefordra som bilaga';
 $labels['forwardmessage'] = 'Vidarebefordra meddelande';
 $labels['deletemessage'] = 'Ta bort meddelande';
 $labels['movemessagetotrash'] = 'Flytta meddelande till papperskorgen';
 $labels['printmessage'] = 'Skriv ut';
 $labels['previousmessage'] = 'Visa föregående meddelande';
-$labels['previousmessages'] = 'Visa föregående sida';
 $labels['firstmessage'] = 'Visa första meddelandet';
-$labels['firstmessages'] = 'Visa första sidan';
 $labels['nextmessage'] = 'Visa nästa meddelande';
-$labels['nextmessages'] = 'Visa nästa sida';
 $labels['lastmessage'] = 'Visa sista meddelandet';
-$labels['lastmessages'] = 'Visa sista sidan';
 $labels['backtolist'] = 'Tillbaka till meddelandelistan';
 $labels['viewsource'] = 'Visa källkod';
 $labels['markmessages'] = 'Märk meddelande';
@@ -174,12 +172,14 @@ $labels['charset'] = 'Teckenkodning';
 $labels['editortype'] = 'Textredigerare';
 $labels['returnreceipt'] = 'Mottagarkvitto';
 $labels['dsn'] = 'Leveransstatusmeddelande';
+$labels['mailreplyintro'] = '$date skrev $sender:';
 $labels['editidents'] = 'Ändra identiteter';
 $labels['checkspelling'] = 'Kontrollera stavning';
 $labels['resumeediting'] = 'Återuppta redigering';
 $labels['revertto'] = 'Återgå till';
 $labels['attachments'] = 'Bilagor';
 $labels['upload'] = 'Bifoga';
+$labels['uploadprogress'] = '$percent ($current av $total)';
 $labels['close'] = 'Stäng';
 $labels['messageoptions'] = 'Meddelandealternativ';
 $labels['low'] = 'Låg';
@@ -232,11 +232,28 @@ $labels['female'] = 'Kvinna';
 $labels['manager'] = 'Chef';
 $labels['assistant'] = 'Assistent';
 $labels['spouse'] = 'Make/Maka';
+$labels['allfields'] = 'Alla fält';
+$labels['search'] = 'Sök';
+$labels['advsearch'] = 'Sök avancerat';
+$labels['other'] = 'Annan';
+$labels['typehome'] = 'Hem';
+$labels['typework'] = 'Arbete';
+$labels['typeother'] = 'Annat';
+$labels['typemobile'] = 'Mobil';
+$labels['typemain'] = 'Huvudsakligt';
+$labels['typehomefax'] = 'Fax hem';
+$labels['typeworkfax'] = 'Fax arbete';
+$labels['typecar'] = 'Bil';
+$labels['typepager'] = 'Personsökare';
+$labels['typevideo'] = 'Video';
+$labels['typeassistant'] = 'Assistent';
+$labels['typehomepage'] = 'Webbsida';
 $labels['addfield'] = 'Lägg till fält...';
 $labels['addcontact'] = 'Lägg till ny kontakt';
 $labels['editcontact'] = 'Ändra kontakt';
 $labels['contacts'] = 'Kontakter';
 $labels['contactproperties'] = 'Kontaktegenskaper';
+$labels['personalinfo'] = 'Personlig information';
 $labels['edit'] = 'Redigera';
 $labels['cancel'] = 'Avbryt';
 $labels['save'] = 'Spara';
@@ -253,6 +270,8 @@ $labels['export'] = 'Exportera';
 $labels['exportvcards'] = 'Exportera kontakter';
 $labels['newcontactgroup'] = 'Ny kontaktgrupp';
 $labels['groupactions'] = 'Hantera kontaktgrupper';
+$labels['grouprename'] = 'Ändra gruppnamn';
+$labels['groupdelete'] = 'Ta bort grupp';
 $labels['previouspage'] = 'Visa föregående sida';
 $labels['firstpage'] = 'Visa första sidan';
 $labels['nextpage'] = 'Visa nästa sida';
@@ -263,6 +282,7 @@ $labels['personaladrbook'] = 'Personliga adresser';
 $labels['import'] = 'Importera';
 $labels['importcontacts'] = 'Importera kontakter';
 $labels['importfromfile'] = 'Importera från fil:';
+$labels['importtarget'] = 'Lägg till nya kontakter till adressbok:';
 $labels['importreplace'] = 'Ersätt samtliga kontakter i adressboken';
 $labels['importtext'] = 'Kontakter kan importeras från en befintlig adressbok.<br/>För närvarande stöds import av adresser i <a href="http://en.wikipedia.org/wiki/VCard">vCard</a>-format.';
 $labels['done'] = 'Klart';
@@ -348,6 +368,8 @@ $labels['afternseconds'] = 'Efter $n sekunder';
 $labels['reqmdn'] = 'Begär alltid mottagarkvitto';
 $labels['reqdsn'] = 'Begär alltid leveransstatusmeddelande';
 $labels['replysamefolder'] = 'Placera svar i samma katalog som besvarat meddelande';
+$labels['defaultaddressbook'] = 'Lägg till nya kontakter i vald adressbok';
+$labels['spellcheckbeforesend'] = 'Kontrollera stavning innan meddelanden skickas';
 $labels['folder'] = 'Katalog';
 $labels['folders'] = 'Kataloger';
 $labels['foldername'] = 'Katalognamn';
@@ -364,9 +386,14 @@ $labels['location'] = 'Plats';
 $labels['info'] = 'Information';
 $labels['getfoldersize'] = 'Klicka för katalogstorlek';
 $labels['changesubscription'] = 'Klicka för att ändra prenumeration';
+$labels['foldertype'] = 'Katalogtyp';
+$labels['personalfolder'] = 'Privat katalog';
+$labels['otherfolder'] = 'Annan användares katalog';
+$labels['sharedfolder'] = 'Publik katalog';
 $labels['sortby'] = 'Sortera på';
 $labels['sortasc'] = 'Sortera stigande';
 $labels['sortdesc'] = 'Sortera fallande';
+$labels['undo'] = 'Ångra';
 $labels['B'] = 'B';
 $labels['KB'] = 'KB';
 $labels['MB'] = 'MB';

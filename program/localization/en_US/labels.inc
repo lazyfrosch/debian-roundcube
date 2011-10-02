@@ -6,14 +6,14 @@
  | language/en_US/labels.inc                                             |
  |                                                                       |
  | Language file of the Roundcube Webmail client                         |
- | Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2010, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- @version $Id: labels.inc 4362 2010-12-22 18:45:15Z alec $
+ @version $Id: labels.inc 5165 2011-09-05 08:49:04Z thomasb $
 
 */
 
@@ -28,7 +28,7 @@ $labels['login']     = 'Login';
 
 // taskbar
 $labels['logout']   = 'Logout';
-$labels['mail']     = 'E-Mail';
+$labels['mail']     = 'Mail';
 $labels['settings'] = 'Settings';
 $labels['addressbook'] = 'Address Book';
 
@@ -123,18 +123,16 @@ $labels['replytomessage']   = 'Reply to sender';
 $labels['replytoallmessage'] = 'Reply to list or to sender and all recipients';
 $labels['replyall']         = 'Reply all';
 $labels['replylist']        = 'Reply list';
+$labels['forwardinline']    = 'Forward inline';
+$labels['forwardattachment'] = 'Forward as attachment';
 $labels['forwardmessage']   = 'Forward the message';
 $labels['deletemessage']    = 'Delete message';
 $labels['movemessagetotrash'] = 'Move message to trash';
 $labels['printmessage']     = 'Print this message';
-$labels['previousmessage']  = 'Show the previous message';
-$labels['previousmessages'] = 'Show previous set of messages';
-$labels['firstmessage']     = 'Show the first message';
-$labels['firstmessages']    = 'Show first set of messages';
-$labels['nextmessage']      = 'Show the next message';
-$labels['nextmessages']     = 'Show next set of messages';
-$labels['lastmessage']      = 'Show the last message';
-$labels['lastmessages']     = 'Show last set of messages';
+$labels['previousmessage']  = 'Show previous message';
+$labels['firstmessage']     = 'Show first message';
+$labels['nextmessage']      = 'Show next message';
+$labels['lastmessage']      = 'Show last message';
 $labels['backtolist']       = 'Back to message list';
 $labels['viewsource']       = 'Show source';
 $labels['markmessages']     = 'Mark messages';
@@ -204,6 +202,7 @@ $labels['charset']        = 'Charset';
 $labels['editortype']     = 'Editor type';
 $labels['returnreceipt']  = 'Return receipt';
 $labels['dsn']            = 'Delivery status notification';
+$labels['mailreplyintro'] = 'On $date, $sender wrote:';
 
 $labels['editidents']    = 'Edit identities';
 $labels['checkspelling'] = 'Check spelling';
@@ -212,6 +211,7 @@ $labels['revertto']      = 'Revert to';
 
 $labels['attachments'] = 'Attachments';
 $labels['upload'] = 'Upload';
+$labels['uploadprogress'] = '$percent ($current from $total)';
 $labels['close']  = 'Close';
 $labels['messageoptions']  = 'Message options...';
 
@@ -243,21 +243,70 @@ $labels['yourmessage'] = 'This is a Return Receipt for your message';
 $labels['receiptnote'] = 'Note: This receipt only acknowledges that the message was displayed on the recipient\'s computer. There is no guarantee that the recipient has read or understood the message contents.';
 
 // address boook
-$labels['name']      = 'Display name';
-$labels['firstname'] = 'First name';
-$labels['surname']   = 'Last name';
-$labels['email']     = 'E-Mail';
+$labels['name']         = 'Display Name';
+$labels['firstname']    = 'First Name';
+$labels['surname']      = 'Last Name';
+$labels['middlename']   = 'Middle Name';
+$labels['nameprefix']   = 'Prefix';
+$labels['namesuffix']   = 'Suffix';
+$labels['nickname']     = 'Nickname';
+$labels['jobtitle']     = 'Job Title';
+$labels['organization'] = 'Company';
+$labels['department']   = 'Department';
+$labels['gender']       = 'Gender';
+$labels['maidenname']   = 'Maiden Name';
+$labels['email']        = 'Email';
+$labels['phone']        = 'Phone';
+$labels['address']      = 'Address';
+$labels['street']       = 'Street';
+$labels['locality']     = 'City';
+$labels['zipcode']      = 'ZIP Code';
+$labels['region']       = 'State/Province';
+$labels['country']      = 'Country';
+$labels['birthday']     = 'Birthday';
+$labels['anniversary']  = 'Anniversary';
+$labels['website']      = 'Website';
+$labels['instantmessenger'] = 'IM';
+$labels['notes'] = 'Notes';
+$labels['male']   = 'male';
+$labels['female'] = 'female';
+$labels['manager'] = 'Manager';
+$labels['assistant'] = 'Assistant';
+$labels['spouse'] = 'Spouse';
+$labels['allfields'] = 'All fields';
+$labels['search'] = 'Search';
+$labels['advsearch'] = 'Advanced Search';
+$labels['other'] = 'Other';
 
+$labels['typehome']   = 'Home';
+$labels['typework']   = 'Work';
+$labels['typeother']  = 'Other';
+$labels['typemobile']  = 'Mobile';
+$labels['typemain']  = 'Main';
+$labels['typehomefax']  = 'Home Fax';
+$labels['typeworkfax']  = 'Work Fax';
+$labels['typecar']  = 'Car';
+$labels['typepager']  = 'Pager';
+$labels['typevideo']  = 'Video';
+$labels['typeassistant']  = 'Assistant';
+$labels['typehomepage']  = 'Home Page';
+$labels['typeblog'] = 'Blog';
+$labels['typeprofile'] = 'Profile';
+
+$labels['addfield'] = 'Add field...';
 $labels['addcontact'] = 'Add new contact';
 $labels['editcontact'] = 'Edit contact';
 $labels['contacts'] = 'Contacts';
 $labels['contactproperties'] = 'Contact properties';
+$labels['personalinfo'] = 'Personal information';
 
 $labels['edit']   = 'Edit';
 $labels['cancel'] = 'Cancel';
 $labels['save']   = 'Save';
 $labels['delete'] = 'Delete';
 $labels['rename'] = 'Rename';
+$labels['addphoto'] = 'Add';
+$labels['replacephoto'] = 'Replace';
 
 $labels['newcontact']     = 'Create new contact card';
 $labels['deletecontact']  = 'Delete selected contacts';
@@ -268,11 +317,13 @@ $labels['export']         = 'Export';
 $labels['exportvcards']   = 'Export contacts in vCard format';
 $labels['newcontactgroup'] = 'Create new contact group';
 $labels['groupactions']   = 'Actions for contact groups...';
+$labels['grouprename']    = 'Rename group';
+$labels['groupdelete']    = 'Delete group';
 
-$labels['previouspage']   = 'Show previous set';
-$labels['firstpage']      = 'Show first set';
-$labels['nextpage']       = 'Show next set';
-$labels['lastpage']       = 'Show last set';
+$labels['previouspage']   = 'Show previous page';
+$labels['firstpage']      = 'Show first page';
+$labels['nextpage']       = 'Show next page';
+$labels['lastpage']       = 'Show last page';
 
 $labels['group'] = 'Group';
 $labels['groups'] = 'Groups';
@@ -281,6 +332,7 @@ $labels['personaladrbook'] = 'Personal Addresses';
 $labels['import'] = 'Import';
 $labels['importcontacts'] = 'Import contacts';
 $labels['importfromfile'] = 'Import from file:';
+$labels['importtarget'] = 'Add new contacts to address book:';
 $labels['importreplace'] = 'Replace the entire address book';
 $labels['importtext'] = 'You can upload contacts from an existing address book.<br/>We currently support importing addresses from the <a href="http://en.wikipedia.org/wiki/VCard">vCard</a> data format.';
 $labels['done'] = 'Done';
@@ -372,6 +424,8 @@ $labels['afternseconds']  = 'after $n seconds';
 $labels['reqmdn'] = 'Always request a return receipt';
 $labels['reqdsn'] = 'Always request a delivery status notification';
 $labels['replysamefolder'] = 'Place replies in the folder of the message being replied to';
+$labels['defaultaddressbook'] = 'Add new contacts to the selected addressbook';
+$labels['spellcheckbeforesend'] = 'Check spelling before sending a message';
 
 $labels['folder']  = 'Folder';
 $labels['folders']  = 'Folders';
@@ -389,10 +443,15 @@ $labels['location'] = 'Location';
 $labels['info'] = 'Information';
 $labels['getfoldersize'] = 'Click to get folder size';
 $labels['changesubscription'] = 'Click to change subscription';
+$labels['foldertype'] = 'Folder Type';
+$labels['personalfolder']  = 'Private Folder';
+$labels['otherfolder']  = 'Other User\'s Folder';
+$labels['sharedfolder']  = 'Public Folder';
 
 $labels['sortby'] = 'Sort by';
 $labels['sortasc']  = 'Sort ascending';
 $labels['sortdesc'] = 'Sort descending';
+$labels['undo'] = 'Undo';
 
 // units
 $labels['B'] = 'B';

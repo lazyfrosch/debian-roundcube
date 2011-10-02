@@ -6,7 +6,7 @@
 | language/pt_PT/labels.inc                                             |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -17,7 +17,7 @@
 |          Teotónio Ricardo <teotonio.ricardo@webtuga.pt>              |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4469 2011-01-29 14:55:12Z thomasb $
+@version $Id: labels.inc 5175 2011-09-05 18:42:24Z thomasb $
 
 */
 
@@ -104,18 +104,16 @@ $labels['replytomessage'] = 'Responder';
 $labels['replytoallmessage'] = 'Responder a todos';
 $labels['replyall'] = 'Responder a todos';
 $labels['replylist'] = 'Lista de resposta';
+$labels['forwardinline'] = 'Reencaminhar';
+$labels['forwardattachment'] = 'Reencaminhar como anexo';
 $labels['forwardmessage'] = 'Reencaminhar';
 $labels['deletemessage'] = 'Eliminar';
 $labels['movemessagetotrash'] = 'Mover para reciclagem';
 $labels['printmessage'] = 'Imprimir';
 $labels['previousmessage'] = 'Mensagem anterior';
-$labels['previousmessages'] = 'Página anterior';
 $labels['firstmessage'] = 'Primeira mensagem';
-$labels['firstmessages'] = 'Primeira página';
 $labels['nextmessage'] = 'Próxima mensagem';
-$labels['nextmessages'] = 'Próxima página';
 $labels['lastmessage'] = 'Última mensagem';
-$labels['lastmessages'] = 'Última página';
 $labels['backtolist'] = 'Voltar';
 $labels['viewsource'] = 'Mostrar código fonte';
 $labels['markmessages'] = 'Marcar mensagens';
@@ -176,12 +174,15 @@ $labels['charset'] = 'Charset';
 $labels['editortype'] = 'Tipo de editor';
 $labels['returnreceipt'] = 'Confirmação de leitura';
 $labels['dsn'] = 'Recibo de entrega';
+$labels['mailreplyintro'] = 'Em $date, $sender escreveu:';
+$labels['originalmessage'] = 'Mensagem Original';
 $labels['editidents'] = 'Editar entidades';
 $labels['checkspelling'] = 'Verificar ortografia';
 $labels['resumeediting'] = 'Continuar a edição';
 $labels['revertto'] = 'Reverter para';
 $labels['attachments'] = 'Anexos';
 $labels['upload'] = 'Carregar';
+$labels['uploadprogress'] = '$percent ($current de $total)';
 $labels['close'] = 'Fechar';
 $labels['messageoptions'] = 'Opções de mensagens...';
 $labels['low'] = 'Baixa';
@@ -234,6 +235,24 @@ $labels['female'] = 'feminino';
 $labels['manager'] = 'Gerente';
 $labels['assistant'] = 'Assistente';
 $labels['spouse'] = 'Cônjuge';
+$labels['allfields'] = 'Todos os campos';
+$labels['search'] = 'Pesquisa';
+$labels['advsearch'] = 'Pesquisa avançada';
+$labels['other'] = 'Outro';
+$labels['typehome'] = 'Residência';
+$labels['typework'] = 'Empresa';
+$labels['typeother'] = 'Outro';
+$labels['typemobile'] = 'Telemóvel';
+$labels['typemain'] = 'Principal';
+$labels['typehomefax'] = 'Fax da residência';
+$labels['typeworkfax'] = 'Fax da empresa';
+$labels['typecar'] = 'Carro';
+$labels['typepager'] = 'Pager';
+$labels['typevideo'] = 'Vídeo';
+$labels['typeassistant'] = 'Assistente';
+$labels['typehomepage'] = 'Página Inicial';
+$labels['typeblog'] = 'Blog';
+$labels['typeprofile'] = 'Perfil';
 $labels['addfield'] = 'Adicionar campo...';
 $labels['addcontact'] = 'Criar novo contacto';
 $labels['editcontact'] = 'Editar contacto';
@@ -256,6 +275,8 @@ $labels['export'] = 'Exportar';
 $labels['exportvcards'] = 'Exportar contactos no formato vCard';
 $labels['newcontactgroup'] = 'Criar novo grupo de contactos';
 $labels['groupactions'] = 'Acções para grupo de contactos...';
+$labels['grouprename'] = 'Renomear grupo';
+$labels['groupdelete'] = 'Eliminar grupo';
 $labels['previouspage'] = 'Exibir página anterior';
 $labels['firstpage'] = 'Exibir primeira página';
 $labels['nextpage'] = 'Exibir próxima página';
@@ -266,6 +287,7 @@ $labels['personaladrbook'] = 'Endereços pessoais';
 $labels['import'] = 'Importar';
 $labels['importcontacts'] = 'Importar contactos';
 $labels['importfromfile'] = 'Importar do ficheiro:';
+$labels['importtarget'] = 'Adicionar novo contacto ao livro de endereços:';
 $labels['importreplace'] = 'Substituir todo o livro de endereços';
 $labels['importtext'] = 'Pode submeter contactos a partir de um livro de endereços. Actualmente suportamos importação de endereços no formato vCard.';
 $labels['done'] = 'Terminado';
@@ -351,6 +373,8 @@ $labels['afternseconds'] = 'após $n segundos';
 $labels['reqmdn'] = 'Pedir sempre um recibo de leitura';
 $labels['reqdsn'] = 'Pedir sempre um recibo de entrega';
 $labels['replysamefolder'] = 'Guardar as respostas na mesma pasta da mensagem original';
+$labels['defaultaddressbook'] = 'Adicionar novo contacto ao livro de endereços selecionado';
+$labels['spellcheckbeforesend'] = 'Verificar ortografia antes de enviar a mensagem';
 $labels['folder'] = 'Pasta';
 $labels['folders'] = 'Pastas';
 $labels['foldername'] = 'Nome da pasta';
@@ -367,9 +391,14 @@ $labels['location'] = 'Localização';
 $labels['info'] = 'Informação';
 $labels['getfoldersize'] = 'Clique para obter o tamanho da pasta';
 $labels['changesubscription'] = 'Clique para alterar a subscrição';
+$labels['foldertype'] = 'Tipo de pasta';
+$labels['personalfolder'] = 'Pasta privada';
+$labels['otherfolder'] = 'Outro tipo de pasta';
+$labels['sharedfolder'] = 'Pasta pública';
 $labels['sortby'] = 'Ordenar por';
 $labels['sortasc'] = 'Ordenação Ascendente';
 $labels['sortdesc'] = 'Ordenação Descendente';
+$labels['undo'] = 'Anular';
 $labels['B'] = 'B';
 $labels['KB'] = 'KB';
 $labels['MB'] = 'MB';

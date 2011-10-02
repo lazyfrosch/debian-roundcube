@@ -5,7 +5,7 @@
  | program/steps/settings/func.inc                                       |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2007, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2007, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: func.inc 4509 2011-02-09 10:51:50Z thomasb $
+ $Id: func.inc 4875 2011-06-23 17:43:44Z alec $
 
 */
 
@@ -131,6 +131,7 @@ function rcmail_user_prefs($current=null)
   $sections['mailbox'] = array('id' => 'mailbox', 'section' => rcube_label('mailboxview'));
   $sections['compose'] = array('id' => 'compose', 'section' => rcube_label('messagescomposition'));
   $sections['mailview'] = array('id' => 'mailview','section' => rcube_label('messagesdisplaying'));
+  $sections['addressbook'] = array('id' => 'addressbook','section' => rcube_label('addressbook'));
   $sections['folders'] = array('id' => 'folders', 'section' => rcube_label('specialfolders'));
   $sections['server'] = array('id' => 'server',  'section' => rcube_label('serversettings'));
 
@@ -349,16 +350,6 @@ function rcmail_user_prefs($current=null)
       );
     }
 
-    if (!isset($no_override['focus_on_new_message'])) {
-      $field_id = 'rcmfd_focus_on_new_message';
-      $input_focus_on_new_message = new html_checkbox(array('name' => '_focus_on_new_message', 'id' => $field_id, 'value' => 1));
-
-      $blocks['new_message']['options']['focus_on_new_message'] = array(
-        'title' => html::label($field_id, Q(rcube_label('focusonnewmessage'))),
-        'content' => $input_focus_on_new_message->show($config['focus_on_new_message']?1:0),
-      );
-    }
-
     if (!isset($no_override['keep_alive'])) {
       $field_id = 'rcmfd_keep_alive';
       $select_keep_alive = new html_select(array('name' => '_keep_alive', 'id' => $field_id));
@@ -554,6 +545,16 @@ function rcmail_user_prefs($current=null)
       );
     }
 
+    if (!isset($no_override['spellcheck_before_send']) && $config['enable_spellcheck']) {
+      $field_id = 'rcmfd_spellcheck_before_send';
+      $input_spellcheck = new html_checkbox(array('name' => '_spellcheck_before_send', 'id' => $field_id, 'value' => 1));
+
+      $blocks['main']['options']['spellcheck_before_send'] = array(
+        'title' => html::label($field_id, Q(rcube_label('spellcheckbeforesend'))),
+        'content' => $input_spellcheck->show($config['spellcheck_before_send']?1:0),
+      );
+    }
+
     if (!isset($no_override['show_sig'])) {
       $field_id = 'rcmfd_show_sig';
       $select_show_sig = new html_select(array('name' => '_show_sig', 'id' => $field_id));
@@ -587,6 +588,32 @@ function rcmail_user_prefs($current=null)
       $blocks['sig']['options']['strip_existing_sig'] = array(
         'title' => html::label($field_id, Q(rcube_label('replyremovesignature'))),
         'content' => $input_stripexistingsig->show($config['strip_existing_sig']?1:0),
+      );
+    }
+
+    break;
+
+
+    // Addressbook config
+    case 'addressbook':
+
+    $blocks = array(
+      'main' => array('name' => Q(rcube_label('mainoptions'))),
+    );
+
+    if (!isset($no_override['default_addressbook'])
+      && ($books = $RCMAIL->get_address_sources(true))
+    ) {
+      $field_id = 'rcmfd_default_addressbook';
+      $select_abook = new html_select(array('name' => '_default_addressbook', 'id' => $field_id));
+
+      foreach ($books as $book) {
+        $select_abook->add($book['name'], $book['id']);
+      }
+
+      $blocks['main']['options']['default_addressbook'] = array(
+        'title' => html::label($field_id, Q(rcube_label('defaultaddressbook'))),
+        'content' => $select_abook->show($config['default_addressbook']),
       );
     }
 
@@ -756,6 +783,47 @@ function rcmail_get_skins()
   return $skins;
 }
 
+
+function rcmail_folder_options($mailbox)
+{
+    global $RCMAIL;
+
+    $options = $RCMAIL->imap->mailbox_info($mailbox);
+    $options['protected'] = $options['is_root'] || ($options['special'] && $RCMAIL->config->get('protect_default_folders'));
+
+    return $options;
+}
+
+/**
+ * Updates (or creates) folder row in the subscriptions table
+ *
+ * @param string $name      Folder name
+ * @param string $oldname   Old folder name (for update)
+ * @param bool   $subscribe Checks subscription checkbox
+ * @param string $class     CSS class name for folder row
+ */
+function rcmail_update_folder_row($name, $oldname=null, $subscribe=false, $class_name=null)
+{
+    global $IMAP, $CONFIG, $OUTPUT;
+
+    $delimiter    = $IMAP->get_hierarchy_delimiter();
+    $name_utf8    = rcube_charset_convert($name, 'UTF7-IMAP');
+    $protected    = ($CONFIG['protect_default_folders'] == true && in_array($name, $CONFIG['default_imap_folders']));
+
+    $foldersplit  = explode($delimiter, $IMAP->mod_mailbox($name));
+    $level        = count($foldersplit) - 1;
+    $display_name = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $level)
+        . Q($protected ? rcmail_localize_foldername($name) : rcube_charset_convert($foldersplit[$level], 'UTF7-IMAP'));
+
+    if ($oldname === null)
+        $OUTPUT->command('add_folder_row', $name_utf8, $display_name, $protected, $subscribe,
+            false, $class_name);
+    else
+        $OUTPUT->command('replace_folder_row', rcube_charset_convert($oldname, 'UTF7-IMAP'),
+            $name_utf8, $display_name, $protected, $class_name);
+}
+
+
 // register UI objects
 $OUTPUT->add_handlers(array(
   'prefsframe' => 'rcmail_preferences_frame',
@@ -763,3 +831,14 @@ $OUTPUT->add_handlers(array(
   'identitieslist' => 'rcmail_identities_list',
 ));
 
+// register action aliases
+$RCMAIL->register_action_map(array(
+    'folders'       => 'folders.inc',
+    'rename-folder' => 'folders.inc',
+    'delete-folder' => 'folders.inc',
+    'subscribe'     => 'folders.inc',
+    'unsubscribe'   => 'folders.inc',
+    'purge'         => 'folders.inc',
+    'folder-size'   => 'folders.inc',
+    'add-identity'  => 'edit_identity.inc',
+));

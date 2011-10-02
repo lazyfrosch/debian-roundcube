@@ -86,7 +86,8 @@ CREATE TABLE `contacts` (
  `email` varchar(255) NOT NULL,
  `firstname` varchar(128) NOT NULL DEFAULT '',
  `surname` varchar(128) NOT NULL DEFAULT '',
- `vcard` text NULL,
+ `vcard` longtext NULL,
+ `words` text NULL,
  `user_id` int(10) UNSIGNED NOT NULL DEFAULT '0',
  PRIMARY KEY(`contact_id`),
  CONSTRAINT `user_id_fk_contacts` FOREIGN KEY (`user_id`)
@@ -116,7 +117,8 @@ CREATE TABLE `contactgroupmembers` (
   CONSTRAINT `contactgroup_id_fk_contactgroups` FOREIGN KEY (`contactgroup_id`)
     REFERENCES `contactgroups`(`contactgroup_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `contact_id_fk_contacts` FOREIGN KEY (`contact_id`)
-    REFERENCES `contacts`(`contact_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    REFERENCES `contacts`(`contact_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  INDEX `contactgroupmembers_contact_index` (`contact_id`)
 ) /*!40000 ENGINE=INNODB */;
 
 

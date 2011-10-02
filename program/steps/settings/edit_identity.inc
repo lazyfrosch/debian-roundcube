@@ -5,7 +5,7 @@
  | program/steps/settings/edit_identity.inc                              |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2007, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2007, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: edit_identity.inc 4509 2011-02-09 10:51:50Z thomasb $
+ $Id: edit_identity.inc 4668 2011-04-19 20:41:24Z thomasb $
 
 */
 
@@ -28,7 +28,7 @@ if (($_GET['_iid'] || $_POST['_iid']) && $RCMAIL->action=='edit-identity') {
   if (is_array($IDENTITY_RECORD))
     $OUTPUT->set_env('iid', $IDENTITY_RECORD['identity_id']);
   else {
-    $OUTPUT->show_message('opnotpermitted', 'error');
+    $OUTPUT->show_message('databaserror', 'error');
     // go to identities page
     rcmail_overwrite_action('identities');
     return;

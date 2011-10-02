@@ -6,7 +6,7 @@
 | language/nl_NL/labels.inc                                             |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -17,7 +17,7 @@
 |         Justin van Beusekom <j.v.beusekom@beus-it.nl>                 |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4368 2010-12-27 08:51:22Z yllar $
+@version $Id: labels.inc 4549 2011-02-15 14:33:45Z robin $
 
 */
 
@@ -158,7 +158,6 @@ $labels['listmode'] = 'Lijstweergave mode';
 $labels['folderactions'] = 'Acties voor map...';
 $labels['compact'] = 'Opschonen';
 $labels['empty'] = 'Legen';
-$labels['purge'] = 'Verwijderen';
 $labels['quota'] = 'Mailbox quotum';
 $labels['unknown'] = 'onbekend';
 $labels['unlimited'] = 'onbeperkt';
@@ -209,16 +208,56 @@ $labels['receiptnote'] = 'Let op: Dit bevestigt alleen dat uw bericht bij de gea
 $labels['name'] = 'Naam';
 $labels['firstname'] = 'Voornaam';
 $labels['surname'] = 'Achternaam';
+$labels['middlename'] = 'Tweede naam';
+$labels['nameprefix'] = 'Initialen';
+$labels['namesuffix'] = 'Aanhef';
+$labels['nickname'] = 'Schuilnaam';
+$labels['jobtitle'] = 'Functietitel';
+$labels['department'] = 'Afdeling';
+$labels['gender'] = 'Geslacht';
+$labels['maidenname'] = 'Meisjesnaam';
 $labels['email'] = 'E-Mail';
+$labels['phone'] = 'Telefoon';
+$labels['address'] = 'Adres';
+$labels['street'] = 'Straat';
+$labels['locality'] = 'Stad';
+$labels['zipcode'] = 'Postcode';
+$labels['region'] = 'Regio';
+$labels['country'] = 'Land';
+$labels['birthday'] = 'Geboortedag';
+$labels['anniversary'] = 'Verjaardag';
+$labels['website'] = 'Website';
+$labels['instantmessenger'] = 'IM';
+$labels['notes'] = 'Notities';
+$labels['male'] = 'Man';
+$labels['female'] = 'Vrouw';
+$labels['manager'] = 'Manager';
+$labels['assistant'] = 'Assistent';
+$labels['spouse'] = 'Echtgenoot';
+$labels['typehome'] = 'Thuis';
+$labels['typework'] = 'Werk';
+$labels['typeother'] = 'Anders';
+$labels['typemobile'] = 'Mobiel';
+$labels['typemain'] = 'Belangrijkste';
+$labels['typehomefax'] = 'Fax Thuis';
+$labels['typeworkfax'] = 'Fax Werk';
+$labels['typecar'] = 'Auto';
+$labels['typepager'] = 'Pieper';
+$labels['typevideo'] = 'Video';
+$labels['typeassistant'] = 'Assistent';
+$labels['addfield'] = 'Veld toevoegen...';
 $labels['addcontact'] = 'Nieuwe contactpersoon toevoegen';
 $labels['editcontact'] = 'Contactpersoon wijzigen';
 $labels['contacts'] = 'Contacten';
 $labels['contactproperties'] = 'Contact eigenschappen';
+$labels['personalinfo'] = 'Persoonlijke informatie';
 $labels['edit'] = 'Wijzig';
 $labels['cancel'] = 'Annuleer';
 $labels['save'] = 'Opslaan';
 $labels['delete'] = 'Verwijder';
 $labels['rename'] = 'Hernoem';
+$labels['addphoto'] = 'Toevoegen';
+$labels['replacephoto'] = 'Vervangen';
 $labels['newcontact'] = 'Voeg een nieuwe contactpersoon toe';
 $labels['deletecontact'] = 'Verwijder geselecteerde contacten';
 $labels['composeto'] = 'Stuur een bericht naar';

@@ -6,14 +6,14 @@
 | language/uk_UA/messages.inc                                           |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
 | Author: Volodymyr M. Kononenko aka kvm <vmkononenko@gmail.com>        |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 4368 2010-12-27 08:51:22Z yllar $
+@version $Id: messages.inc 4671 2011-04-20 08:47:44Z thomasb $
 
 */
 
@@ -108,6 +108,7 @@ $messages['contactremovedfromgroup'] = 'УКонтакти успішно вид
 $messages['importwait'] = 'Імпортування, будь ласка, зачекайте...';
 $messages['importerror'] = 'Імпорт завершився невдало! Завантажений файл не є правильним файлом vCard';
 $messages['importconfirm'] = '<b>Успішно імпортовано $inserted контактів, пропущено $skipped існуючих</b>:<p><em>$names</em></p>';
+$messages['importconfirmskipped'] = '<b>Пропущені $skipped наявні записи</b>';
 $messages['opnotpermitted'] = 'Дія заборонена!';
 $messages['nofromaddress'] = 'В обраному профілі не вистачає адреси електронної пошти';
 $messages['editorwarning'] = 'Перемикання в режим звичайного тексту спричинить втрату всього форматування. Продовжити?';
@@ -137,5 +138,6 @@ $messages['namecannotbeempty'] = 'Ім’я не може бути пустим'
 $messages['nametoolong'] = 'Занадто довге ім’я';
 $messages['folderupdated'] = 'Папка відновлена';
 $messages['foldercreated'] = 'Папка створена';
+$messages['invalidimageformat'] = 'Невірний формат зображення';
 
 ?>

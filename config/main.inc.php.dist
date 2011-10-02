@@ -5,7 +5,7 @@
  | Main configuration file                                               |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2010, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
@@ -41,6 +41,9 @@ $rcmail_config['smtp_log'] = true;
 // Log successful logins to <log_dir>/userlogins or to syslog
 $rcmail_config['log_logins'] = false;
 
+// Log session authentication errors to <log_dir>/session or to syslog
+$rcmail_config['log_session'] = false;
+
 // Log SQL queries to <log_dir>/sql or to syslog
 $rcmail_config['sql_debug'] = false;
 
@@ -64,6 +67,7 @@ $rcmail_config['smtp_debug'] = false;
 // Supported replacement variables:
 // %n - http hostname ($_SERVER['SERVER_NAME'])
 // %d - domain (http hostname without the first part)
+// %s - domain name after the '@' from e-mail address provided at login screen
 // For example %n = mail.domain.tld, %d = domain.tld
 $rcmail_config['default_host'] = '';
 
@@ -107,6 +111,13 @@ $rcmail_config['imap_auth_cid'] = null;
 
 // Optional IMAP authentication password to be used for imap_auth_cid
 $rcmail_config['imap_auth_pw'] = null;
+
+// Type of IMAP indexes cache. Supported values: 'db', 'apc' and 'memcache'.
+$rcmail_config['imap_cache'] = null;
+
+// Enables messages cache. Only 'db' cache is supported.
+$rcmail_config['messages_cache'] = false;
+
 
 // ----------------------------------
 // SMTP
@@ -168,10 +179,6 @@ $rcmail_config['log_dir'] = 'logs/';
 // use this folder to store temp files (must be writeable for apache user)
 $rcmail_config['temp_dir'] = 'temp/';
 
-// enable caching of messages and mailbox data in the local database.
-// this is recommended if the IMAP server does not run on the same machine
-$rcmail_config['enable_caching'] = false;
-
 // lifetime of message cache
 // possible units: s, m, h, d, w
 $rcmail_config['message_cache_lifetime'] = '10d';
@@ -192,12 +199,18 @@ $rcmail_config['login_autocomplete'] = 0;
 
 // If users authentication is not case sensitive this must be enabled.
 // You can also use it to force conversion of logins to lower case.
+// After enabling it all user records need to be updated, e.g. with query:
+// UPDATE users SET username = LOWER(username);
 $rcmail_config['login_lc'] = false;
 
 // automatically create a new Roundcube user when log-in the first time.
 // a new user will be created once the IMAP login succeeds.
 // set to false if only registered users can use this service
 $rcmail_config['auto_create_user'] = true;
+
+// replace Roundcube logo with this image
+// specify an URL relative to the document root of this Roundcube installation
+$rcmail_config['skin_logo'] = null;
 
 // Includes should be interpreted as PHP files
 $rcmail_config['skin_include_php'] = false;
@@ -206,15 +219,27 @@ $rcmail_config['skin_include_php'] = false;
 // must be greater than 'keep_alive'/60
 $rcmail_config['session_lifetime'] = 10;
 
+// session domain: .example.org
+$rcmail_config['session_domain'] = '';
+
+// Backend to use for session storage. Can either be 'db' (default) or 'memcache'
+// If set to memcache, a list of servers need to be specified in 'memcache_hosts'
+// Make sure the Memcache extension (http://pecl.php.net/package/memcache) version >= 2.0.0 is installed
+$rcmail_config['session_storage'] = 'db';
+
+// Use these hosts for accessing memcached
+// Define any number of hosts in the form hostname:port
+$rcmail_config['memcache_hosts'] = null; // e.g. array( 'localhost:11211', '192.168.1.12:11211' );
+
 // check client IP in session athorization
 $rcmail_config['ip_check'] = false;
 
-// Use an additional frequently changing cookie to athenticate user sessions.
-// There have been problems reported with this feature.
-$rcmail_config['double_auth'] = false;
-
 // check referer of incoming requests
 $rcmail_config['referer_check'] = false;
+
+// X-Frame-Options HTTP header value sent to prevent from Clickjacking.
+// Possible values: sameorigin|deny. Set to false in order to disable sending them
+$rcmail_config['x_frame_options'] = 'sameorigin';
 
 // this key is used to encrypt the users imap password which is stored
 // in the session record (and the client cookie if remember password is enabled).
@@ -295,9 +320,6 @@ $rcmail_config['line_length'] = 72;
 // send plaintext messages as format=flowed
 $rcmail_config['send_format_flowed'] = true;
 
-// session domain: .example.org
-$rcmail_config['session_domain'] = '';
-
 // don't allow these settings to be overriden by the user
 $rcmail_config['dont_override'] = array();
 
@@ -308,8 +330,22 @@ $rcmail_config['dont_override'] = array();
 // 3 - one identity with possibility to edit all params but not email address
 $rcmail_config['identities_level'] = 0;
 
+// Mimetypes supported by the browser.
+// attachments of these types will open in a preview window
+// either a comma-separated list or an array: 'text/plain,text/html,text/xml,image/jpeg,image/gif,image/png,application/pdf'
+$rcmail_config['client_mimetypes'] = null;  # null == default
+
 // mime magic database
 $rcmail_config['mime_magic'] = '/usr/share/misc/magic';
+
+// path to imagemagick identify binary
+$rcmail_config['im_identify_path'] = null;
+
+// path to imagemagick convert binary
+$rcmail_config['im_convert_path'] = null;
+
+// maximum size of uploaded contact photos in pixel
+$rcmail_config['contact_photo_size'] = 160;
 
 // Enable DNS checking for e-mail address validation
 $rcmail_config['email_dns_check'] = false;
@@ -350,23 +386,31 @@ $rcmail_config['date_long'] = 'd.m.Y H:i';
 // Note: $ character will be replaced with 'Today' label
 $rcmail_config['date_today'] = 'H:i';
 
+// use this format for date display without time (date or strftime format)
+$rcmail_config['date_format'] = 'Y-m-d';
+
 // store draft message is this mailbox
 // leave blank if draft messages should not be stored
+// NOTE: Use folder names with namespace prefix (INBOX. on Courier-IMAP)
 $rcmail_config['drafts_mbox'] = 'Drafts';
 
 // store spam messages in this mailbox
+// NOTE: Use folder names with namespace prefix (INBOX. on Courier-IMAP)
 $rcmail_config['junk_mbox'] = 'Junk';
 
 // store sent message is this mailbox
 // leave blank if sent messages should not be stored
+// NOTE: Use folder names with namespace prefix (INBOX. on Courier-IMAP)
 $rcmail_config['sent_mbox'] = 'Sent';
 
 // move messages to this folder when deleting them
 // leave blank if they should be deleted directly
+// NOTE: Use folder names with namespace prefix (INBOX. on Courier-IMAP)
 $rcmail_config['trash_mbox'] = 'Trash';
 
 // display these folders separately in the mailbox list.
 // these folders will also be displayed with localized names
+// NOTE: Use folder names with namespace prefix (INBOX. on Courier-IMAP)
 $rcmail_config['default_imap_folders'] = array('INBOX', 'Drafts', 'Sent', 'Junk', 'Trash');
 
 // automatically create the above listed default folders on login
@@ -405,6 +449,16 @@ $rcmail_config['max_pagesize'] = 200;
 // Must be less than 'session_lifetime'
 $rcmail_config['min_keep_alive'] = 60;
 
+// Enables files upload indicator. Requires APC installed and enabled apc.rfc1867 option.
+// By default refresh time is set to 1 second. You can set this value to true
+// or any integer value indicating number of seconds.
+$rcmail_config['upload_progress'] = false;
+
+// Specifies for how many seconds the Undo button will be available
+// after object delete action. Currently used with supporting address book sources.
+// Setting it to 0, disables the feature.
+$rcmail_config['undo_timeout'] = 0;
+
 // ----------------------------------
 // ADDRESSBOOK SETTINGS
 // ----------------------------------
@@ -418,9 +472,9 @@ $rcmail_config['address_book_type'] = 'sql';
 
 // In order to enable public ldap search, configure an array like the Verisign
 // example further below. if you would like to test, simply uncomment the example.
+// Array key must contain only safe characters, ie. a-zA-Z0-9_
 $rcmail_config['ldap_public'] = array();
 
-//
 // If you are going to use LDAP for individual address books, you will need to 
 // set 'user_specific' to true and use the variables to generate the appropriate DNs to access it.
 //
@@ -448,6 +502,7 @@ $rcmail_config['ldap_public']['Verisign'] = array(
   'hosts'         => array('directory.verisign.com'),
   'port'          => 389,
   'use_tls'	      => false,
+  'ldap_version'  => 3,       // using LDAPv3
   'user_specific' => false,   // If true the base_dn, bind_dn and bind_pass default to the user's IMAP login.
   // %fu - The full username provided, assumes the username is an email
   //       address, uses the username_domain value if not an email address.
@@ -462,25 +517,65 @@ $rcmail_config['ldap_public']['Verisign'] = array(
   // The login name is used to search for the DN to bind with
   'search_base_dn' => '',
   'search_filter'  => '',   // e.g. '(&(objectClass=posixAccount)(uid=%u))'
-
-  'writable'      => false,   // Indicates if we can write to the LDAP directory or not.
+  // Optional authentication identifier to be used as SASL authorization proxy
+  // bind_dn need to be empty
+  'auth_cid'       => '',
+  // SASL authentication method (for proxy auth), e.g. DIGEST-MD5
+  'auth_method'    => '',
+  // Indicates if the addressbook shall be displayed on the list.
+  // With this option enabled you can still search/view contacts.
+  'hidden'        => false,
+  // Indicates if we can write to the LDAP directory or not.
   // If writable is true then these fields need to be populated:
   // LDAP_Object_Classes, required_fields, LDAP_rdn
-  'LDAP_Object_Classes' => array("top", "inetOrgPerson"), // To create a new contact these are the object classes to specify (or any other classes you wish to use).
-  'required_fields'     => array("cn", "sn", "mail"),     // The required fields needed to build a new contact as required by the object classes (can include additional fields not required by the object classes).
-  'LDAP_rdn'      => 'mail', // The RDN field that is used for new entries, this field needs to be one of the search_fields, the base of base_dn is appended to the RDN to insert into the LDAP directory.
-  'ldap_version'  => 3,       // using LDAPv3
-  'search_fields' => array('mail', 'cn'),  // fields to search in
-  'name_field'    => 'cn',    // this field represents the contact's name
-  'email_field'   => 'mail',  // this field represents the contact's e-mail
-  'surname_field' => 'sn',    // this field represents the contact's last name
-  'firstname_field' => 'gn',  // this field represents the contact's first name
+  'writable'       => false,
+  // To create a new contact these are the object classes to specify
+  // (or any other classes you wish to use).
+  'LDAP_Object_Classes' => array('top', 'inetOrgPerson'),
+  // The RDN field that is used for new entries, this field needs
+  // to be one of the search_fields, the base of base_dn is appended
+  // to the RDN to insert into the LDAP directory.
+  'LDAP_rdn'       => 'mail',
+  // The required fields needed to build a new contact as required by
+  // the object classes (can include additional fields not required by the object classes).
+  'required_fields' => array('cn', 'sn', 'mail'),
+  'search_fields'   => array('mail', 'cn'),  // fields to search in
+  // mapping of contact fields to directory attributes
+  'fieldmap' => array(
+    // Roundcube  => LDAP
+    'name'        => 'cn',
+    'surname'     => 'sn',
+    'firstname'   => 'givenName',
+    'email'       => 'mail',
+    'phone:home'  => 'homePhone',
+    'phone:work'  => 'telephoneNumber',
+    'phone:mobile' => 'mobile',
+    'street'      => 'street',
+    'zipcode'     => 'postalCode',
+    'locality'    => 'l',
+    'country'     => 'c',
+    'organization' => 'o',
+  ),
   'sort'          => 'cn',    // The field to sort the listing by.
   'scope'         => 'sub',   // search mode: sub|base|list
-  'filter'        => '',      // used for basic listing (if not empty) and will be &'d with search queries. example: status=act
+  'filter'        => '(objectClass=inetOrgPerson)',      // used for basic listing (if not empty) and will be &'d with search queries. example: status=act
   'fuzzy_search'  => true,    // server allows wildcard search
-  'sizelimit'     => '0',     // Enables you to limit the count of entries fetched. Setting this to 0 means no limit. 
-  'timelimit'     => '0',     // Sets the number of seconds how long is spend on the search. Setting this to 0 means no limit. 
+  'vlv'           => false,   // Enable Virtual List View to more efficiently fetch paginated data (if server supports it)
+  'numsub_filter' => '(objectClass=organizationalUnit)',   // with VLV, we also use numSubOrdinates to query the total number of records. Set this filter to get all numSubOrdinates attributes for counting
+  'sizelimit'     => '0',     // Enables you to limit the count of entries fetched. Setting this to 0 means no limit.
+  'timelimit'     => '0',     // Sets the number of seconds how long is spend on the search. Setting this to 0 means no limit.
+
+  // definition for contact groups (uncomment if no groups are supported)
+  // for the groups base_dn, the user replacements %fu, %u, $d and %dc work as for base_dn (see above)
+  // if the groups base_dn is empty, the contact base_dn is used for the groups as well
+  // -> in this case, assure that groups and contacts are separated due to the concernig filters! 
+  'groups'        => array(
+    'base_dn'     => '',
+    'filter'      => '(objectClass=groupOfNames)',
+    'object_classes' => array("top", "groupOfNames"),
+    // name of the member attribute, e.g. uniqueMember
+    'member_attr'    => 'member',
+  ),
 );
 */
 
@@ -492,6 +587,19 @@ $rcmail_config['autocomplete_addressbooks'] = array('sql');
 // before address books will be searched. Most useful for LDAP directories that
 // may need to do lengthy results building given overly-broad searches
 $rcmail_config['autocomplete_min_length'] = 1;
+
+// Number of parallel autocomplete requests.
+// If there's more than one address book, n parallel (async) requests will be created,
+// where each request will search in one address book. By default (0), all address
+// books are searched in one request.
+$rcmail_config['autocomplete_threads'] = 0;
+
+// Max. numer of entries in autocomplete popup. Default: 15.
+$rcmail_config['autocomplete_max'] = 15;
+
+// show address fields in this order
+// available placeholders: {street}, {locality}, {zipcode}, {country}, {region}
+$rcmail_config['address_template'] = '{street}<br/>{locality} {zipcode}<br/>{country} {region}';
 
 // ----------------------------------
 // USER PREFERENCES
@@ -538,9 +646,6 @@ $rcmail_config['preview_pane'] = false;
 // Set to -1 if messages in preview pane should not be marked as read
 $rcmail_config['preview_pane_mark_read'] = 0;
 
-// focus new window if new message arrives
-$rcmail_config['focus_on_new_message'] = true;
-
 // Clear Trash on logout
 $rcmail_config['logout_purge'] = false;
 
@@ -564,8 +669,8 @@ $rcmail_config['skip_deleted'] = false;
 // False means that a message's read status is not affected by marking it as deleted
 $rcmail_config['read_when_deleted'] = true;
 
-// Set to true to newer delete messages immediately
-// Use 'Purge' to remove messages marked as deleted 
+// Set to true to never delete messages immediately
+// Use 'Purge' to remove messages marked as deleted
 $rcmail_config['flag_for_deletion'] = false;
 
 // Default interval for keep-alive/check-recent requests (in seconds)
@@ -608,6 +713,9 @@ $rcmail_config['force_7bit'] = false;
 // Please note that folder names should to be in sync with $rcmail_config['default_imap_folders']
 $rcmail_config['search_mods'] = null;  // Example: array('*' => array('subject'=>1, 'from'=>1), 'Sent' => array('subject'=>1, 'to'=>1));
 
+// Defaults of the addressbook search field configuration.
+$rcmail_config['addressbook_search_mods'] = null;  // Example: array('name'=>1, 'firstname'=>1, 'surname'=>1, 'email'=>1, '*'=>1);
+
 // 'Delete always'
 // This setting reflects if mail should be always deleted
 // when moving to Trash fails. This is necessary in some setups
@@ -628,5 +736,16 @@ $rcmail_config['dsn_default'] = 0;
 
 // Place replies in the folder of the message being replied to
 $rcmail_config['reply_same_folder'] = false;
+
+// Sets default mode of Forward feature to "forward as attachment"
+$rcmail_config['forward_attachment'] = false;
+
+// Defines address book (internal index) to which new contacts will be added
+// By default it is the first writeable addressbook.
+// Note: Use '0' for built-in address book.
+$rcmail_config['default_addressbook'] = null;
+
+// Enables spell checking before sending a message.
+$rcmail_config['spellcheck_before_send'] = false;
 
 // end of config file

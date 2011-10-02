@@ -6,14 +6,14 @@
 | language/uk_UA/labels.inc                                             |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
 | Author: Volodymyr M. Kononenko aka kvm <vmkononenko@gmail.com>        |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4368 2010-12-27 08:51:22Z yllar $
+@version $Id: labels.inc 4671 2011-04-20 08:47:44Z thomasb $
 
 */
 
@@ -105,13 +105,9 @@ $labels['deletemessage'] = 'У кошик';
 $labels['movemessagetotrash'] = 'Перемістити лист у кошик';
 $labels['printmessage'] = 'Друкувати';
 $labels['previousmessage'] = 'Показати попередній лист';
-$labels['previousmessages'] = 'Попередня сторінка листів';
 $labels['firstmessage'] = 'Показати перший лист';
-$labels['firstmessages'] = 'Перша сторінка листів';
 $labels['nextmessage'] = 'Показати наступний лист';
-$labels['nextmessages'] = 'Наступна сторінка листів';
 $labels['lastmessage'] = 'Показати останній лист';
-$labels['lastmessages'] = 'Остання сторінка листів';
 $labels['backtolist'] = 'До переліку листів';
 $labels['viewsource'] = 'Вихідний текст';
 $labels['markmessages'] = 'Позначити листи';
@@ -154,7 +150,6 @@ $labels['listmode'] = 'Режим перегляду';
 $labels['folderactions'] = 'Операції з папкою...';
 $labels['compact'] = 'Стиснути';
 $labels['empty'] = 'Спорожнити';
-$labels['purge'] = 'Очистити';
 $labels['quota'] = 'Використано';
 $labels['unknown'] = 'невідомо';
 $labels['unlimited'] = 'без обмеження';
@@ -205,15 +200,56 @@ $labels['receiptnote'] = 'Зауваження: Це повідомлення о
 $labels['name'] = 'Ім`я для відображення';
 $labels['firstname'] = 'Ім`я';
 $labels['surname'] = 'Прізвище';
+$labels['middlename'] = 'По-батькові';
+$labels['nameprefix'] = 'Префікс';
+$labels['namesuffix'] = 'Суфікс';
+$labels['nickname'] = 'Нікнейм';
+$labels['jobtitle'] = 'Посада';
+$labels['department'] = 'Відділ';
+$labels['gender'] = 'Стать';
+$labels['maidenname'] = 'Дівоче прізвище';
 $labels['email'] = 'Електронна адреса';
+$labels['phone'] = 'Телефон';
+$labels['address'] = 'Адреса';
+$labels['street'] = 'Вулиця';
+$labels['locality'] = 'Місто';
+$labels['zipcode'] = 'Індекс';
+$labels['region'] = 'Область';
+$labels['country'] = 'Страна';
+$labels['birthday'] = 'Дата народження';
+$labels['anniversary'] = 'Ювілей';
+$labels['website'] = 'Веб-сайт';
+$labels['instantmessenger'] = 'IM';
+$labels['notes'] = 'Примітки';
+$labels['male'] = 'чоловічий';
+$labels['female'] = 'жіночий';
+$labels['manager'] = 'Менеждер';
+$labels['assistant'] = 'Помічник';
+$labels['spouse'] = 'Шлюбний партнер';
+$labels['typehome'] = 'Дім';
+$labels['typework'] = 'Робота';
+$labels['typeother'] = 'Інше';
+$labels['typemobile'] = 'Мобільний';
+$labels['typemain'] = 'Основний';
+$labels['typehomefax'] = 'Домашній факс';
+$labels['typeworkfax'] = 'Робочий факс';
+$labels['typecar'] = 'Автомобіль';
+$labels['typepager'] = 'Пейджер';
+$labels['typevideo'] = 'Відео';
+$labels['typeassistant'] = 'Помічник';
+$labels['addfield'] = 'Додати поле...';
 $labels['addcontact'] = 'Додати вибрані контакти до списку контактів';
 $labels['editcontact'] = 'Редагувати контакт';
 $labels['contacts'] = 'Контакти';
 $labels['contactproperties'] = 'Властивості контакта';
+$labels['personalinfo'] = 'Особова інформація';
 $labels['edit'] = 'Правка';
 $labels['cancel'] = 'Скасувати';
 $labels['save'] = 'Зберегти';
 $labels['delete'] = 'Видалити';
+$labels['rename'] = 'Перейменувати';
+$labels['addphoto'] = 'Додати';
+$labels['replacephoto'] = 'Замінити';
 $labels['newcontact'] = 'Створити новий контакт';
 $labels['deletecontact'] = 'Видалити вибрані контакти';
 $labels['composeto'] = 'Створити листа для вибранних контактів';
@@ -334,6 +370,10 @@ $labels['location'] = 'Розташування';
 $labels['info'] = 'Інформація';
 $labels['getfoldersize'] = 'Показати розмір папки';
 $labels['changesubscription'] = 'Змінити підписку';
+$labels['foldertype'] = 'Тип каталогу';
+$labels['personalfolder'] = 'Приватний каталог';
+$labels['otherfolder'] = 'Каталог іншого користувача';
+$labels['sharedfolder'] = 'Публічний каталог';
 $labels['sortby'] = 'Відсортувати за';
 $labels['sortasc'] = 'Сортувати за зростанням';
 $labels['sortdesc'] = 'Сортувати за спаданням';

@@ -6,7 +6,7 @@
 | language/pt_PT/messages.inc                                           |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -16,7 +16,7 @@
 |         Teotónio Ricardo <teotonio.ricardo@webtuga.pt>               |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 4469 2011-01-29 14:55:12Z thomasb $
+@version $Id: messages.inc 5175 2011-09-05 18:42:24Z thomasb $
 
 */
 
@@ -27,6 +27,7 @@ $messages['sessionerror'] = 'A sua sessão é inválida ou expirou';
 $messages['imaperror'] = 'A ligação ao servidor IMAP falhou';
 $messages['servererror'] = 'Erro do Servidor!';
 $messages['servererrormsg'] = 'Erro do Servidor: $msg';
+$messages['databaserror'] = 'Erro de base de dados!';
 $messages['errorreadonly'] = 'Não foi possível efectuar a operação. A pasta é só de leitura.';
 $messages['errornoperm'] = 'Não tem permissões para efectuar esta operação.';
 $messages['invalidrequest'] = 'Pedido inválido! Não foi guardada nenhuma informação.';
@@ -35,6 +36,7 @@ $messages['loggedout'] = 'A sua sessão foi terminada com sucesso. Até breve!';
 $messages['mailboxempty'] = 'A caixa de entrada está vazia';
 $messages['loading'] = 'A carregar...';
 $messages['uploading'] = 'A enviar ficheiro...';
+$messages['uploadingmany'] = 'A carregar ficheiros...';
 $messages['loadingdata'] = 'A carregar informações...';
 $messages['checkingmail'] = 'A verificar novas mensagens...';
 $messages['sendingmessage'] = 'A enviar mensagem...';
@@ -44,6 +46,7 @@ $messages['messagesaved'] = 'Mensagem guardada como rascunho';
 $messages['successfullysaved'] = 'Guardado com sucesso';
 $messages['addedsuccessfully'] = 'Contacto adicionado com sucesso';
 $messages['contactexists'] = 'Já existe um contacto com esse e-mail';
+$messages['contactnameexists'] = 'Já existe um contacto com este nome.';
 $messages['blockedimages'] = 'Para proteger a sua privacidade, as imagens desta mensagem foram bloqueadas';
 $messages['encryptedmessage'] = 'Esta mensagem está encriptada e não pode ser exibida. Desculpe.';
 $messages['nocontactsfound'] = 'Nenhum contacto encontrado';
@@ -57,9 +60,11 @@ $messages['errorcopying'] = 'Não foi possível copiar a mensagem';
 $messages['errordeleting'] = 'Não foi possível apagar a mensagem';
 $messages['errormarking'] = 'Não foi possível marcar a mensagem.';
 $messages['deletecontactconfirm'] = 'Deseja realmente eliminar o(s) contacto(s) selecionado(s)?';
+$messages['deletegroupconfirm'] = 'Tem a certeza que pretende eliminar o grupo seleccionado?';
 $messages['deletemessagesconfirm'] = 'Deseja realmente eliminar a(s) mensagem(ns) selecionada(s)?';
 $messages['deletefolderconfirm'] = 'Deseja realmente eliminar esta pasta?';
 $messages['purgefolderconfirm'] = 'Deseja realmente eliminar todas mensagens desta pasta?';
+$messages['groupdeleting'] = 'A eliminar grupo...';
 $messages['folderdeleting'] = 'A eliminar pasta...';
 $messages['foldermoving'] = 'A mover pasta...';
 $messages['foldersubscribing'] = 'A subscrever pasta...';
@@ -98,8 +103,11 @@ $messages['sourceisreadonly'] = 'Esta origem de endereços é só de leitura';
 $messages['errorsavingcontact'] = 'Não foi possível guardar o endereço deste contacto';
 $messages['movingmessage'] = 'A mover mensagem...';
 $messages['copyingmessage'] = 'A copiar mensagem...';
+$messages['copyingcontact'] = 'A copiar contacto(s)...';
 $messages['deletingmessage'] = 'A eliminar mensagens...';
 $messages['markingmessage'] = 'A marcar mensagens...';
+$messages['addingmember'] = 'A adicionar contacto(s) ao grupo...';
+$messages['removingmember'] = 'A remover contacto(s) do grupo...';
 $messages['receiptsent'] = 'Recibo de leitura enviadocom sucesso';
 $messages['errorsendingreceipt'] = 'Não foi possível enviar o recibo';
 $messages['nodeletelastidentity'] = 'Esta é a última identidade, não é possível eliminá-la.';
@@ -111,6 +119,7 @@ $messages['contactremovedfromgroup'] = 'Contacto removido com sucesso deste grup
 $messages['importwait'] = 'A importar, por favor aguarde...';
 $messages['importerror'] = 'A importação falhou! O ficheiro submetido não é um ficheiro vCard válido.';
 $messages['importconfirm'] = '<b>$inserted contactos importados com sucesso, $skipped contactos já existentes ignorados</b>:<p><em>$names</em></p>';
+$messages['importconfirmskipped'] = 'Ignoradas $skipped entradas já existentes.';
 $messages['opnotpermitted'] = 'Operação não permitida';
 $messages['nofromaddress'] = 'Falta o endereço de e-mail na identidade seleccionada';
 $messages['editorwarning'] = 'Ao mudar para o editor Plain Text vai perder toda a formação de texto. Deseja continuar?';
@@ -128,6 +137,8 @@ $messages['maxgroupmembersreached'] = 'O número de membros do grupo ultrapassa 
 $messages['internalerror'] = 'Ocorreu um erro interno. Por favor, tente de novamente.';
 $messages['contactdelerror'] = 'Não foi possível eliminar os contactos';
 $messages['contactdeleted'] = 'Contactos eliminados com sucesso';
+$messages['contactrestoreerror'] = 'Não foi possível restaurar o(s) contacto(s) eliminados.';
+$messages['contactrestored'] = 'Contacto(s) restaurado(s) com sucesso.';
 $messages['groupdeleted'] = 'Grupo eliminado com sucesso';
 $messages['grouprenamed'] = 'Grupo renomeado com sucesso';
 $messages['groupcreated'] = 'Grupo criado com sucesso';
@@ -141,5 +152,7 @@ $messages['nametoolong'] = 'O nome é demasiado longo';
 $messages['folderupdated'] = 'Actualização da pasta concluída com sucesso';
 $messages['foldercreated'] = 'Pasta criada com sucesso';
 $messages['invalidimageformat'] = 'Formato de imagem não suportado';
+$messages['mispellingsfound'] = 'Foram detectados erros de ortografia nesta mensagem';
+$messages['parentnotwritable'] = 'Não é possível criar/mover esta pasta para a pasta seleccionada. Acesso negado.';
 
 ?>

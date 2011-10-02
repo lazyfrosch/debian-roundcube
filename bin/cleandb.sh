@@ -6,7 +6,7 @@
  | bin/cleandb.sh                                                        |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2010, Roundcube Dev. - Switzerland                      |
+ | Copyright (C) 2010, The Roundcube Dev Team                            |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -16,16 +16,13 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: cleandb.sh 4164 2010-10-31 10:38:16Z thomasb $
+ $Id: cleandb.sh 4677 2011-04-20 13:10:45Z alec $
 
 */
 
-if (php_sapi_name() != 'cli') {
-    die('Not on the "shell" (php-cli).');
-}
-
 define('INSTALL_PATH', realpath(dirname(__FILE__) . '/..') . '/' );
-require INSTALL_PATH.'program/include/iniset.php';
+
+require INSTALL_PATH.'program/include/clisetup.php';
 
 // mapping for table name => primary key
 $primary_keys = array(

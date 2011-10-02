@@ -5,7 +5,7 @@
  | program/include/rcube_browser.php                                     |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2007-2009, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2007-2009, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_browser.php 4626 2011-03-31 12:32:44Z alec $
+ $Id: rcube_browser.php 4971 2011-07-27 06:37:17Z alec $
 
 */
 
@@ -39,9 +39,9 @@ class rcube_browser
         $this->unix  = strstr($HTTP_USER_AGENT, 'unix');
 
         $this->opera = strstr($HTTP_USER_AGENT, 'opera');
-        $this->ns4 = strstr($HTTP_USER_AGENT, 'mozilla/4') && !strstr($HTTP_USER_AGENT, 'msie');
+        $this->ns4 = strstr($HTTP_USER_AGENT, 'mozilla/4') && !stristr($HTTP_USER_AGENT, 'msie');
         $this->ns  = ($this->ns4 || strstr($HTTP_USER_AGENT, 'netscape'));
-        $this->ie  = !$this->opera && strstr($HTTP_USER_AGENT, 'compatible; msie');
+        $this->ie  = !$this->opera && stristr($HTTP_USER_AGENT, 'compatible; msie');
         $this->mz  = !$this->ie && strstr($HTTP_USER_AGENT, 'mozilla/5');
         $this->chrome = strstr($HTTP_USER_AGENT, 'chrome');
         $this->khtml = strstr($HTTP_USER_AGENT, 'khtml');
@@ -68,6 +68,7 @@ class rcube_browser
         $this->dom = ($this->mz || $this->safari || ($this->ie && $this->ver>=5) || ($this->opera && $this->ver>=7));
         $this->pngalpha = $this->mz || $this->safari || ($this->ie && $this->ver>=5.5) ||
             ($this->ie && $this->ver>=5 && $this->mac) || ($this->opera && $this->ver>=7) ? true : false;
+        $this->imgdata = !$this->ie;
     }
 }
 

@@ -6,7 +6,7 @@
 | language/it_IT/messages.inc                                           |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -14,7 +14,7 @@
 |         Yusef Maali <contact@yusefmaali.net>                          |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 4469 2011-01-29 14:55:12Z thomasb $
+@version $Id: messages.inc 5175 2011-09-05 18:42:24Z thomasb $
 
 */
 
@@ -25,6 +25,7 @@ $messages['sessionerror'] = 'Sessione non valida o scaduta';
 $messages['imaperror'] = 'Impossibile connettersi al server IMAP';
 $messages['servererror'] = 'Errore del server!';
 $messages['servererrormsg'] = 'Errore del server: $msg';
+$messages['databaserror'] = 'Errore del database!';
 $messages['errorreadonly'] = 'Impossibile eseguire l\'operazione. Cartella in sola lettura';
 $messages['errornoperm'] = 'Impossibile eseguire l\'operazione. Permesso negato';
 $messages['invalidrequest'] = 'Richiesta non valida! Nessun dato salvato.';
@@ -33,6 +34,7 @@ $messages['loggedout'] = 'Sessione chiusa correttamente. Arrivederci!';
 $messages['mailboxempty'] = 'La casella è vuota';
 $messages['loading'] = 'Caricamento...';
 $messages['uploading'] = 'Caricamento file...';
+$messages['uploadingmany'] = 'Caricamento file...';
 $messages['loadingdata'] = 'Caricamento dati...';
 $messages['checkingmail'] = 'Controllo nuovi messaggi...';
 $messages['sendingmessage'] = 'Invio messaggio in corso...';
@@ -42,6 +44,7 @@ $messages['messagesaved'] = 'Messaggio salvato in bozze';
 $messages['successfullysaved'] = 'Salvato correttamente';
 $messages['addedsuccessfully'] = 'Contatto aggiunto alla rubrica';
 $messages['contactexists'] = 'Esiste già un contatto con questo indirizzo e-mail';
+$messages['contactnameexists'] = 'Esiste già un contatto con questo nome';
 $messages['blockedimages'] = 'Per proteggere la tua privacy, le immagini remote di questo messaggio sono state bloccate.';
 $messages['encryptedmessage'] = 'Questo messaggio é cifrato e non può essere visualizzato. Spiacenti!';
 $messages['nocontactsfound'] = 'Nessun contatto trovato';
@@ -55,9 +58,11 @@ $messages['errorcopying'] = 'Impossibile copiare il messaggio';
 $messages['errordeleting'] = 'Impossibile eliminare il messaggio';
 $messages['errormarking'] = 'Impossibile segnare il messaggio';
 $messages['deletecontactconfirm'] = 'Sei sicuro di voler eliminare i contatti selezionati?';
+$messages['deletegroupconfirm'] = 'Sei sicuro di voler eliminare i gruppi selezionati?';
 $messages['deletemessagesconfirm'] = 'Sei sicuro di voler eliminare i messaggi selezionati?';
 $messages['deletefolderconfirm'] = 'Sei sicuro di voler eliminare la cartella selezionata?';
 $messages['purgefolderconfirm'] = 'Sei sicuro di voler eliminare tutti i messaggi in questa cartella?';
+$messages['groupdeleting'] = 'Eliminazione gruppo...';
 $messages['folderdeleting'] = 'Eliminazione cartella...';
 $messages['foldermoving'] = 'Spostamento cartella...';
 $messages['foldersubscribing'] = 'Sottoscrizione cartella...';
@@ -95,9 +100,12 @@ $messages['copyerror'] = 'Impossibile copiare gli indirizzi';
 $messages['sourceisreadonly'] = 'La rubrica è in sola lettura';
 $messages['errorsavingcontact'] = 'Impossibile salvare il contatto';
 $messages['movingmessage'] = 'Spostamento del messaggio...';
-$messages['copyingmessage'] = 'Copia del messaggio';
-$messages['deletingmessage'] = 'Cancellazione messaggi/o';
-$messages['markingmessage'] = 'Marca messaggi/o...';
+$messages['copyingmessage'] = 'Copia del messaggio...';
+$messages['copyingcontact'] = 'Copia del contatto...';
+$messages['deletingmessage'] = 'Cancellazione messaggio...';
+$messages['markingmessage'] = 'Marca messaggio...';
+$messages['addingmember'] = 'Aggiunta contatto al gruppo...';
+$messages['removingmember'] = 'Rimozione contatto dal gruppo...';
 $messages['receiptsent'] = 'Ricevuta di ritorno inviata con successo';
 $messages['errorsendingreceipt'] = 'Impossibile spedire la ricevuta di ritorno';
 $messages['nodeletelastidentity'] = 'Impossibile eliminare l\'unica identità disponibile';
@@ -108,7 +116,8 @@ $messages['contactaddedtogroup'] = 'Contatto aggiunto con successo al gruppo';
 $messages['contactremovedfromgroup'] = 'Contatto rimosso con successo dal gruppo';
 $messages['importwait'] = 'Importazione in corso, attendere...';
 $messages['importerror'] = 'Importazione fallita! Il file caricato non è un file vCard valido.';
-$messages['importconfirm'] = '<b>Importati con successo $inserted contatti, saltate $skipped voci esistenti</b>:<p><em>$names</em></p>';
+$messages['importconfirm'] = '<b>$inserted contatti importati con successo</p>';
+$messages['importconfirmskipped'] = '<b>$skipped ignorati perché esistono già</b>';
 $messages['opnotpermitted'] = 'Operazione non consentita!';
 $messages['nofromaddress'] = 'Indirizzo e-mail mancante nell\'identità selezionata';
 $messages['editorwarning'] = 'Passare all\'editor testuale farà perdere tutte le informazioni di formattazione. Sicuro di voler continuare?';
@@ -124,8 +133,10 @@ $messages['emailformaterror'] = 'Indirizzo e-mail non corretto: $email';
 $messages['toomanyrecipients'] = 'Numero eccessivo di destinatari, ridurlo a $max';
 $messages['maxgroupmembersreached'] = 'Il numero dei membri del gruppo eccede il massimo di $max';
 $messages['internalerror'] = 'Si è verificato un errore interno. Si prega di riprovare di nuovo.';
-$messages['contactdelerror'] = 'Impossibile eliminare contatto/i';
-$messages['contactdeleted'] = 'Contatto/i correttamente eliminato';
+$messages['contactdelerror'] = 'Impossibile eliminare il/i contatto/i';
+$messages['contactdeleted'] = 'Contatto/i correttamente eliminato/i';
+$messages['contactrestoreerror'] = 'Impossibile ripristinare il/i contatto/i cancellato/i';
+$messages['contactrestored'] = 'Contatto/i ripristinato/i';
 $messages['groupdeleted'] = 'Gruppo correttamente eliminato';
 $messages['grouprenamed'] = 'Gruppo correttamente rinominato';
 $messages['groupcreated'] = 'Gruppo creato correttamente';
@@ -138,8 +149,8 @@ $messages['namecannotbeempty'] = 'Il nome non può essere vuoto';
 $messages['nametoolong'] = 'Nome troppo lungo';
 $messages['folderupdated'] = 'Cartella aggiornata correttamente';
 $messages['foldercreated'] = 'Cartella creata correttamente';
-$messages['invalidimageformat'] = 'Formato non valido';
+$messages['invalidimageformat'] = 'Formato immagine non valido';
+$messages['mispellingsfound'] = 'Sono stati riscontrati errori ortografici nel messaggio';
+$messages['parentnotwritable'] = 'Impossibile creare o muovere la cartella: accesso negato';
 
 ?>
-
-

@@ -5,7 +5,7 @@
  | program/steps/utils/modcss.inc                                        |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2007-2011, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2007-2011, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: modcss.inc 4509 2011-02-09 10:51:50Z thomasb $
+ $Id: modcss.inc 4488 2011-02-03 21:12:35Z thomasb $
 
 */
 

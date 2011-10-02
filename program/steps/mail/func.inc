@@ -5,7 +5,7 @@
  | program/steps/mail/func.inc                                           |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2010, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: func.inc 4830 2011-06-02 12:36:32Z alec $
+ $Id: func.inc 5235 2011-09-19 06:43:57Z alec $
 
 */
 
@@ -106,6 +106,7 @@ if (empty($RCMAIL->action) || $RCMAIL->action == 'list') {
   $OUTPUT->set_env('delimiter', $IMAP->get_hierarchy_delimiter());
   $OUTPUT->set_env('threading', (bool) $IMAP->threading);
   $OUTPUT->set_env('threads', $IMAP->threading || $IMAP->get_capability('THREAD'));
+  $OUTPUT->set_env('preview_pane_mark_read', $RCMAIL->config->get('preview_pane_mark_read', 0));
 
   if ($CONFIG['flag_for_deletion'])
     $OUTPUT->set_env('flag_for_deletion', true);
@@ -115,9 +116,8 @@ if (empty($RCMAIL->action) || $RCMAIL->action == 'list') {
     $OUTPUT->set_env('skip_deleted', true);
   if ($CONFIG['display_next'])
     $OUTPUT->set_env('display_next', true);
-
-  $OUTPUT->set_env('preview_pane_mark_read', $RCMAIL->config->get('preview_pane_mark_read', 0));
-
+  if ($CONFIG['forward_attachment'])
+    $OUTPUT->set_env('forward_attachment', true);
   if ($CONFIG['trash_mbox'])
     $OUTPUT->set_env('trash_mailbox', $CONFIG['trash_mbox']);
   if ($CONFIG['drafts_mbox'])
@@ -130,7 +130,7 @@ if (empty($RCMAIL->action) || $RCMAIL->action == 'list') {
       'movingmessage', 'copyingmessage', 'deletingmessage', 'markingmessage',
       'copy', 'move', 'quota');
 
-  $OUTPUT->set_pagetitle(rcmail_localize_foldername($mbox_name));
+  $OUTPUT->set_pagetitle(rcmail_localize_foldername($IMAP->mod_mailbox($mbox_name)));
 }
 
 
@@ -586,7 +586,7 @@ function rcmail_wash_html($html, $p = array(), $cid_replaces)
     if ($preg_error == PREG_RECURSION_LIMIT_ERROR)
       $errstr .= " Consider raising pcre.recursion_limit!";
 
-    raise_error(array('code' => 600, 'type' => 'php',
+    raise_error(array('code' => 620, 'type' => 'php',
         'line' => __LINE__, 'file' => __FILE__,
         'message' => $errstr), true, false);
     return '';
@@ -683,7 +683,7 @@ function rcmail_print_body($part, $p = array())
   // text/enriched
   else if ($data['type'] == 'enriched') {
     $part->ctype_secondary = 'html';
-    require_once('lib/enriched.inc');
+    require_once(INSTALL_PATH . 'program/lib/enriched.inc');
     $body = Q(enriched_to_html($data['body']), 'show');
   }
   else {
@@ -1237,7 +1237,6 @@ function rcmail_alter_html_link($matches)
 function rcmail_address_string($input, $max=null, $linked=false, $addicon=null)
 {
   global $IMAP, $RCMAIL, $PRINT_MODE, $CONFIG;
-  static $got_writable_abook = null;
 
   $a_parts = $IMAP->decode_address_list($input);
 
@@ -1248,8 +1247,8 @@ function rcmail_address_string($input, $max=null, $linked=false, $addicon=null)
   $j = 0;
   $out = '';
 
-  if ($got_writable_abook === null && $books = $RCMAIL->get_address_sources(true)) {
-    $got_writable_abook = true;
+  if ($addicon && !isset($_SESSION['writeable_abook'])) {
+    $_SESSION['writeable_abook'] = $RCMAIL->get_address_sources(true) ? true : false;
   }
 
   foreach ($a_parts as $part) {
@@ -1271,7 +1270,7 @@ function rcmail_address_string($input, $max=null, $linked=false, $addicon=null)
     }
     else if (check_email($part['mailto'], false)) {
       if ($linked) {
-        $out .= html::a(array(
+        $address = html::a(array(
             'href' => 'mailto:'.$mailto,
             'onclick' => sprintf("return %s.command('compose','%s',this)", JS_OBJECT_NAME, JQ($mailto)),
             'title' => $mailto,
@@ -1280,12 +1279,12 @@ function rcmail_address_string($input, $max=null, $linked=false, $addicon=null)
         Q($name ? $name : $mailto));
       }
       else {
-        $out .= html::span(array('title' => $mailto, 'class' => "rcmContactAddress"),
+        $address = html::span(array('title' => $mailto, 'class' => "rcmContactAddress"),
           Q($name ? $name : $mailto));
       }
 
-      if ($addicon && $got_writable_abook) {
-        $out .= '&nbsp;' . html::a(array(
+      if ($addicon && $_SESSION['writeable_abook']) {
+        $address = html::span(null, $address . html::a(array(
             'href' => "#add",
             'onclick' => sprintf("return %s.command('add-contact','%s',this)", JS_OBJECT_NAME, urlencode($string)),
             'title' => rcube_label('addtoaddressbook'),
@@ -1293,8 +1292,9 @@ function rcmail_address_string($input, $max=null, $linked=false, $addicon=null)
           html::img(array(
             'src' => $CONFIG['skin_path'] . $addicon,
             'alt' => "Add contact",
-          )));
+          ))));
       }
+      $out .= $address;
     }
     else {
       if ($name)
@@ -1425,159 +1425,16 @@ function rcmail_message_part_frame($attrib)
 /**
  * clear message composing settings
  */
-function rcmail_compose_cleanup()
+function rcmail_compose_cleanup($id)
 {
-  if (!isset($_SESSION['compose']))
+  if (!isset($_SESSION['compose_data_'.$id]))
     return;
 
   $rcmail = rcmail::get_instance();
-  $rcmail->plugins->exec_hook('attachments_cleanup', array());
-  $rcmail->session->remove('compose');
+  $rcmail->plugins->exec_hook('attachments_cleanup', array('group' => $id));
+  $rcmail->session->remove('compose_data_'.$id);
 }
 
-
-/**
- * Send the given message using the configured method
- *
- * @param object $message    Reference to Mail_MIME object
- * @param string $from       Sender address string
- * @param array  $mailto     Array of recipient address strings
- * @param array  $smtp_error SMTP error array (reference)
- * @param string $body_file  Location of file with saved message body (reference)
- * @param array  $smtp_opts  SMTP options (e.g. DSN request)
- *
- * @return boolean Send status.
- */
-function rcmail_deliver_message(&$message, $from, $mailto, &$smtp_error, &$body_file, $smtp_opts=null)
-{
-  global $CONFIG, $RCMAIL;
-
-  $headers = $message->headers();
-
-  // send thru SMTP server using custom SMTP library
-  if ($CONFIG['smtp_server']) {
-    // generate list of recipients
-    $a_recipients = array($mailto);
-
-    if (strlen($headers['Cc']))
-      $a_recipients[] = $headers['Cc'];
-    if (strlen($headers['Bcc']))
-      $a_recipients[] = $headers['Bcc'];
-
-    // clean Bcc from header for recipients
-    $send_headers = $headers;
-    unset($send_headers['Bcc']);
-    // here too, it because txtHeaders() below use $message->_headers not only $send_headers
-    unset($message->_headers['Bcc']);
-
-    $smtp_headers = $message->txtHeaders($send_headers, true);
-
-    if ($message->getParam('delay_file_io')) {
-      // use common temp dir
-      $temp_dir = $RCMAIL->config->get('temp_dir');
-      $body_file = tempnam($temp_dir, 'rcmMsg');
-      if (PEAR::isError($mime_result = $message->saveMessageBody($body_file))) {
-        raise_error(array('code' => 600, 'type' => 'php',
-            'file' => __FILE__, 'line' => __LINE__,
-            'message' => "Could not create message: ".$mime_result->getMessage()),
-            TRUE, FALSE);
-        return false;
-      }
-      $msg_body = fopen($body_file, 'r');
-    } else {
-      $msg_body = $message->get();
-    }
-
-    // send message
-    if (!is_object($RCMAIL->smtp))
-      $RCMAIL->smtp_init(true);
-
-    $sent = $RCMAIL->smtp->send_mail($from, $a_recipients, $smtp_headers, $msg_body, $smtp_opts);
-    $smtp_response = $RCMAIL->smtp->get_response();
-    $smtp_error = $RCMAIL->smtp->get_error();
-
-    // log error
-    if (!$sent)
-      raise_error(array('code' => 800, 'type' => 'smtp', 'line' => __LINE__, 'file' => __FILE__,
-                        'message' => "SMTP error: ".join("\n", $smtp_response)), TRUE, FALSE);
-  }
-  // send mail using PHP's mail() function
-  else {
-    // unset some headers because they will be added by the mail() function
-    $headers_enc = $message->headers($headers);
-    $headers_php = $message->_headers;
-    unset($headers_php['To'], $headers_php['Subject']);
-
-    // reset stored headers and overwrite
-    $message->_headers = array();
-    $header_str = $message->txtHeaders($headers_php);
-
-    // #1485779
-    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-      if (preg_match_all('/<([^@]+@[^>]+)>/', $headers_enc['To'], $m)) {
-        $headers_enc['To'] = implode(', ', $m[1]);
-      }
-    }
-
-    $msg_body = $message->get();
-
-    if (PEAR::isError($msg_body))
-      raise_error(array('code' => 600, 'type' => 'php',
-            'file' => __FILE__, 'line' => __LINE__,
-            'message' => "Could not create message: ".$msg_body->getMessage()),
-            TRUE, FALSE);
-    else {
-      $delim   = $RCMAIL->config->header_delimiter();
-      $to      = $headers_enc['To'];
-      $subject = $headers_enc['Subject'];
-      $header_str = rtrim($header_str);
-
-      if ($delim != "\r\n") {
-        $header_str = str_replace("\r\n", $delim, $header_str);
-        $msg_body   = str_replace("\r\n", $delim, $msg_body);
-        $to         = str_replace("\r\n", $delim, $to);
-        $subject    = str_replace("\r\n", $delim, $subject);
-      }
-
-      if (ini_get('safe_mode'))
-        $sent = mail($to, $subject, $msg_body, $header_str);
-      else
-        $sent = mail($to, $subject, $msg_body, $header_str, "-f$from");
-    }
-  }
-
-  if ($sent) {
-    $RCMAIL->plugins->exec_hook('message_sent', array('headers' => $headers, 'body' => $msg_body));
-
-    // remove MDN headers after sending
-    unset($headers['Return-Receipt-To'], $headers['Disposition-Notification-To']);
-
-    // get all recipients
-    if ($headers['Cc'])
-      $mailto .= $headers['Cc'];
-    if ($headers['Bcc'])
-      $mailto .= $headers['Bcc'];
-    if (preg_match_all('/<([^@]+@[^>]+)>/', $mailto, $m))
-      $mailto = implode(', ', array_unique($m[1]));
-
-    if ($CONFIG['smtp_log']) {
-      write_log('sendmail', sprintf("User %s [%s]; Message for %s; %s",
-        $RCMAIL->user->get_username(),
-        $_SERVER['REMOTE_ADDR'],
-        $mailto,
-        !empty($smtp_response) ? join('; ', $smtp_response) : ''));
-    }
-  }
-
-  if (is_resource($msg_body)) {
-    fclose($msg_body);
-  }
-
-  $message->_headers = array();
-  $message->headers($headers);
-
-  return $sent;
-}
 
 /**
  * Send the MDN response
@@ -1591,7 +1448,7 @@ function rcmail_send_mdn($message, &$smtp_error)
 {
   global $RCMAIL, $IMAP;
 
-  if (!is_a($message, rcube_message))
+  if (!is_object($message) || !is_a($message, 'rcube_message'))
     $message = new rcube_message($message);
 
   if ($message->headers->mdn_to && !$message->headers->mdn_sent &&
@@ -1658,51 +1515,6 @@ function rcmail_send_mdn($message, &$smtp_error)
   return false;
 }
 
-// Returns unique Message-ID
-function rcmail_gen_message_id()
-{
-  global $RCMAIL;
-
-  $local_part  = md5(uniqid('rcmail'.mt_rand(),true));
-  $domain_part = $RCMAIL->user->get_username('domain');
-
-  // Try to find FQDN, some spamfilters doesn't like 'localhost' (#1486924)
-  if (!preg_match('/\.[a-z]+$/i', $domain_part)) {
-    if (($host = preg_replace('/:[0-9]+$/', '', $_SERVER['HTTP_HOST']))
-      && preg_match('/\.[a-z]+$/i', $host)) {
-        $domain_part = $host;
-    }
-    else if (($host = preg_replace('/:[0-9]+$/', '', $_SERVER['SERVER_NAME']))
-      && preg_match('/\.[a-z]+$/i', $host)) {
-        $domain_part = $host;
-    }
-  }
-
-  return sprintf('<%s@%s>', $local_part, $domain_part);
-}
-
-// Returns RFC2822 formatted current date in user's timezone
-function rcmail_user_date()
-{
-  global $CONFIG;
-
-  // get user's timezone
-  if ($CONFIG['timezone'] === 'auto') {
-    $tz = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : date('Z')/3600;
-  }
-  else {
-    $tz = $CONFIG['timezone'];
-    if ($CONFIG['dst_active'])
-      $tz++;
-  }
-
-  $date = time() + $tz * 60 * 60;
-  $date = gmdate('r', $date);
-  $tz   = sprintf('%+05d', intval($tz) * 100 + ($tz - intval($tz)) * 60);
-  $date = preg_replace('/[+-][0-9]{4}$/', $tz, $date);
-
-  return $date;
-}
 
 // Fixes some content-type names
 function rcmail_fix_mimetype($name)
@@ -1780,4 +1592,17 @@ $OUTPUT->add_handlers(array(
   'searchform' => array($OUTPUT, 'search_form'),
 ));
 
-
+// register action aliases
+$RCMAIL->register_action_map(array(
+    'preview' => 'show.inc',
+    'print'   => 'show.inc',
+    'moveto'  => 'move_del.inc',
+    'delete'  => 'move_del.inc',
+    'send'    => 'sendmail.inc',
+    'expunge' => 'folders.inc',
+    'purge'   => 'folders.inc',
+    'remove-attachment'  => 'attachments.inc',
+    'display-attachment' => 'attachments.inc',
+    'upload'             => 'attachments.inc',
+    'group-expand'       => 'autocomplete.inc',
+));

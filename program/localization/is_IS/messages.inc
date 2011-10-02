@@ -6,14 +6,14 @@
  | language/en_GB/messages.inc                                           |
  |                                                                       |
  | Language file of the Roundcube Webmail client                         |
- | Copyright (C) 2005-2007, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2007, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Weiran Zhang (weiran@weiran.co.uk)                            |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 3989 2010-09-25 13:03:53Z alec $
+ @version $Id: messages.inc 4410 2011-01-12 18:25:02Z thomasb $
 
 */
 
