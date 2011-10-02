@@ -16,7 +16,7 @@ Depends: dbconfig-common, debconf | debconf-2.0, ucf,
  php5, php5-mcrypt, php5-gd, php5-intl,
  php-mdb2 (>= 2.5.0), php-auth, php-net-smtp (>= 1.4.2),
  php-net-socket, php-mail-mime (>= 1.8.0), php5-pspell,
- tinymce (>= 3), libjs-jquery (>= 1.4.2),
+ tinymce (>= 3), libjs-jquery (>= 1.6.4),
  libmagic1,
  roundcube-sqlite (= ${source:Version}) | roundcube-mysql (= ${source:Version}) | roundcube-pgsql (= ${source:Version}),
  ${misc:Depends}

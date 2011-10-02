@@ -4,6 +4,7 @@ roundcube (0.6+dfsg-1) unstable; urgency=low
       + Repack to remove SWF file without source from TinyMCE.      
       + Add SQL upgrade procedures.
       + Add new plugins: acl, enigma and newmail_notifier.
+      + Update jQuery dependency to jQuery 1.6.4.
 
  -- Vincent Bernat <bernat@debian.org>  Sun, 02 Oct 2011 15:20:57 +0200
 
