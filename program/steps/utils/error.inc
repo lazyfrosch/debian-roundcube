@@ -5,7 +5,7 @@
  | program/steps/utils/error.inc                                         |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2011, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: error.inc 4729 2011-05-04 18:53:11Z alec $
+ $Id: error.inc 4685 2011-04-22 17:48:58Z alec $
 
 */
 

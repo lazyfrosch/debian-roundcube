@@ -5,7 +5,7 @@
  | program/steps/mail/attachments.inc                                    |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2009, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,10 +15,17 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: attachments.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: attachments.inc 5229 2011-09-16 19:13:27Z thomasb $
 
 */
 
+// Upload progress update
+if (!empty($_GET['_progress'])) {
+  rcube_upload_progress();
+}
+
+$COMPOSE_ID = get_input_value('_id', RCUBE_INPUT_GPC);
+$_SESSION['compose'] = $_SESSION['compose_data_'.$COMPOSE_ID];
 
 if (!$_SESSION['compose']) {
   die("Invalid session var!");
@@ -80,22 +87,28 @@ $uploadid = get_input_value('_uploadid', RCUBE_INPUT_GET);
 
 if (is_array($_FILES['_attachments']['tmp_name'])) {
   foreach ($_FILES['_attachments']['tmp_name'] as $i => $filepath) {
-    $attachment = array(
-      'path' => $filepath,
-      'size' => $_FILES['_attachments']['size'][$i],
-      'name' => $_FILES['_attachments']['name'][$i],
-      'mimetype' => rc_mime_content_type($filepath, $_FILES['_attachments']['name'][$i], $_FILES['_attachments']['type'][$i])
-    );
+    // Process uploaded attachment if there is no error
+    $err = $_FILES['_attachments']['error'][$i];
 
-    $attachment = $RCMAIL->plugins->exec_hook('attachment_upload', $attachment);
+    if (!$err) {
+      $attachment = array(
+        'path' => $filepath,
+        'size' => $_FILES['_attachments']['size'][$i],
+        'name' => $_FILES['_attachments']['name'][$i],
+        'mimetype' => rc_mime_content_type($filepath, $_FILES['_attachments']['name'][$i], $_FILES['_attachments']['type'][$i]),
+        'group' => $COMPOSE_ID,
+      );
 
-    if ($attachment['status'] && !$attachment['abort']) {
+      $attachment = $RCMAIL->plugins->exec_hook('attachment_upload', $attachment);
+    }
+
+    if (!$err && $attachment['status'] && !$attachment['abort']) {
       $id = $attachment['id'];
-      
+
       // store new attachment in session
       unset($attachment['status'], $attachment['abort']);
       $_SESSION['compose']['attachments'][$id] = $attachment;
-      
+
       if (($icon = $_SESSION['compose']['deleteicon']) && is_file($icon)) {
         $button = html::img(array(
           'src' => $icon,
@@ -113,7 +126,7 @@ if (is_array($_FILES['_attachments']['tmp_name'])) {
       ), $button);
 
       $content .= Q($attachment['name']);
-      
+
       $OUTPUT->command('add2attachment_list', "rcmfile$id", array(
         'html' => $content,
         'name' => $attachment['name'],
@@ -121,7 +134,6 @@ if (is_array($_FILES['_attachments']['tmp_name'])) {
         'complete' => true), $uploadid);
     }
     else {  // upload failed
-      $err = $_FILES['_attachments']['error'][$i];
       if ($err == UPLOAD_ERR_INI_SIZE || $err == UPLOAD_ERR_FORM_SIZE) {
         $msg = rcube_label(array('name' => 'filesizeerror', 'vars' => array('size' => show_bytes(parse_bytes(ini_get('upload_max_filesize'))))));
       }
@@ -131,7 +143,7 @@ if (is_array($_FILES['_attachments']['tmp_name'])) {
       else {
         $msg = rcube_label('fileuploaderror');
       }
-    
+
       $OUTPUT->command('display_message', $msg, 'error');
       $OUTPUT->command('remove_from_attachment_list', $uploadid);
     }

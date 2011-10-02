@@ -6,7 +6,7 @@
 | language/es_ES/messages.inc                                            |
 |                                                                        |
 | Language file of the Roundcube Webmail client                          |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                  |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                        |
 | Licensed under the GNU GPL                                             |
 |                                                                        |
 +------------------------------------------------------------------------+
@@ -17,7 +17,7 @@
 |          José M. Ciordia <ciordia@gmail.com>                           |
 +------------------------------------------------------------------------+
 
-@version $Id: messages.inc 4368 2010-12-27 08:51:22Z yllar $
+@version $Id: messages.inc 4671 2011-04-20 08:47:44Z thomasb $
 */
 
 $messages = array();
@@ -111,6 +111,7 @@ $messages['contactremovedfromgroup'] = 'Se han borrado correctamente los contact
 $messages['importwait'] = 'Importando, espere...';
 $messages['importerror'] = '¡Error al importar! Este archivo no es un formato válido vCard.';
 $messages['importconfirm'] = '<b>Se han insertado: $inserted contactos, y se han omitido: $skipped porque ya existían</b>:<p><em>$names</em></p>';
+$messages['importconfirmskipped'] = 'Ignorar $skipped entradas existentes';
 $messages['opnotpermitted'] = '¡Operación no permitida!';
 $messages['nofromaddress'] = 'El contacto seleccionado no tiene dirección de e-mail';
 $messages['editorwarning'] = 'Cambiando a texto plano perderá el formato del mensaje. ¿Desea continuar?';
@@ -140,5 +141,6 @@ $messages['namecannotbeempty'] = 'Hay que poner el nombre';
 $messages['nametoolong'] = 'El nombre es demasiado largo';
 $messages['folderupdated'] = 'Bandeja actualizada correctamente';
 $messages['foldercreated'] = 'Bandeja creada correctamente';
+$messages['invalidimageformat'] = 'No es un formato de imagen válido';
 
 ?>

@@ -5,7 +5,7 @@
  | program/steps/settings/save_identity.inc                              |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2009, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,24 +15,24 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: save_identity.inc 4830 2011-06-02 12:36:32Z alec $
+ $Id: save_identity.inc 4829 2011-06-02 12:26:59Z alec $
 
 */
 
 define('IDENTITIES_LEVEL', intval($RCMAIL->config->get('identities_level', 0)));
 
 $a_save_cols = array('name', 'email', 'organization', 'reply-to', 'bcc', 'standard', 'signature', 'html_signature');
-$a_html_cols = array('signature');
+$a_html_cols = array('signature', 'name', 'organization');
 $a_boolean_cols = array('standard', 'html_signature');
 $updated = $default_id = false;
 
 // check input
 if (empty($_POST['_name']) || (empty($_POST['_email']) && IDENTITIES_LEVEL != 1 && IDENTITIES_LEVEL != 3))
-  {
+{
   $OUTPUT->show_message('formincomplete', 'warning');
   rcmail_overwrite_action('edit-identity');
   return;
-  }
+}
 
 
 $save_data = array();

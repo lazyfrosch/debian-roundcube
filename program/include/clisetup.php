@@ -5,7 +5,7 @@
  | program/include/clisetup.php                                          |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2010, Roundcube Dev, - Switzerland                      |
+ | Copyright (C) 2010, The Roundcube Dev Team                            |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: clisetup.php 3998 2010-09-29 08:30:56Z thomasb $
+ $Id: clisetup.php 4678 2011-04-20 13:58:21Z alec $
 
 */
 
@@ -23,7 +23,7 @@ if (php_sapi_name() != 'cli') {
   die('Not on the "shell" (php-cli).');
 }
 
-require_once 'iniset.php';
+require_once INSTALL_PATH . 'program/include/iniset.php';
 
 
 /**

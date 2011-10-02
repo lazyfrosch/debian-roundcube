@@ -6,7 +6,7 @@
 | language/bg_BG/labels.inc                                             |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -14,7 +14,7 @@
 |   Nickolay Bunev <just4nick@gmail.com>                                |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4469 2011-01-29 14:55:12Z thomasb $
+@version $Id: labels.inc 4463 2011-01-28 16:03:31Z thomasb $
 
 */
 

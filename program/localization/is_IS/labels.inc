@@ -6,14 +6,14 @@
 | language/is_IS/labels.inc                                             |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2009, Roundcube Dev. - Switzerland                      |
+| Copyright (C) 2009, The Roundcube Dev Team                            |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
 | Author: Hakon Orri Asgeirsson <hakon at opex.is>                      |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
+@version $Id: labels.inc 4410 2011-01-12 18:25:02Z thomasb $
 
 */
 

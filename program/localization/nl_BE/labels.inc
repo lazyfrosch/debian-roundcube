@@ -6,7 +6,7 @@
 | language/nl_BE/labels.inc                                             |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -15,7 +15,7 @@
 |         Simon De Schoenmaeker <sds@simonds.be>                        |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4368 2010-12-27 08:51:22Z yllar $
+@version $Id: labels.inc 4410 2011-01-12 18:25:02Z thomasb $
 
 */
 

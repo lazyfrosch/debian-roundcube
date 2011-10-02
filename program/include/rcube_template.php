@@ -5,7 +5,7 @@
  | program/include/rcube_template.php                                    |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2006-2010, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2006-2011, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_template.php 4763 2011-05-13 17:31:09Z alec $
+ $Id: rcube_template.php 5165 2011-09-05 08:49:04Z thomasb $
 
  */
 
@@ -35,9 +35,11 @@ class rcube_template extends rcube_html_page
     private $pagetitle = '';
     private $message = null;
     private $js_env = array();
+    private $js_labels = array();
     private $js_commands = array();
     private $object_handlers = array();
     private $plugin_skin_path;
+    private $template_name;
 
     public $browser;
     public $framed = false;
@@ -57,7 +59,6 @@ class rcube_template extends rcube_html_page
     /**
      * Constructor
      *
-     * @todo   Use jQuery's $(document).ready() here.
      * @todo   Replace $this->config with the real rcube_config object
      */
     public function __construct($task, $framed = false)
@@ -70,21 +71,18 @@ class rcube_template extends rcube_html_page
 
         //$this->framed = $framed;
         $this->set_env('task', $task);
-        $this->set_env('request_token', $this->app->get_request_token());
 
         // load the correct skin (in case user-defined)
         $this->set_skin($this->config['skin']);
 
         // add common javascripts
-        $javascript = 'var '.JS_OBJECT_NAME.' = new rcube_webmail();';
+        $this->add_script('var '.JS_OBJECT_NAME.' = new rcube_webmail();', 'head_top');
 
         // don't wait for page onload. Call init at the bottom of the page (delayed)
-        $javascript_foot = '$(document).ready(function(){ '.JS_OBJECT_NAME.'.init(); });';
+        $this->add_script(JS_OBJECT_NAME.'.init();', 'docready');
 
-        $this->add_script($javascript, 'head_top');
-        $this->add_script($javascript_foot, 'foot');
         $this->scripts_path = 'program/js/';
-        $this->include_script('jquery-1.4.min.js');
+        $this->include_script('jquery.min.js');
         $this->include_script('common.js');
         $this->include_script('app.js');
 
@@ -233,20 +231,21 @@ class rcube_template extends rcube_html_page
           $args = $args[0];
 
         foreach ($args as $name) {
-            $this->command('add_label', $name, rcube_label($name));
+            $this->js_labels[$name] = rcube_label($name);
         }
     }
 
     /**
      * Invoke display_message command
      *
-     * @param string Message to display
-     * @param string Message type [notice|confirm|error]
-     * @param array Key-value pairs to be replaced in localized text
-     * @param boolean Override last set message
+     * @param string  $message  Message to display
+     * @param string  $type     Message type [notice|confirm|error]
+     * @param array   $vars     Key-value pairs to be replaced in localized text
+     * @param boolean $override Override last set message
+     * @param int     $timeout  Message display time in seconds
      * @uses self::command()
      */
-    public function show_message($message, $type='notice', $vars=null, $override=true)
+    public function show_message($message, $type='notice', $vars=null, $override=true, $timeout=0)
     {
         if ($override || !$this->message) {
             if (rcube_label_exists($message)) {
@@ -276,6 +275,7 @@ class rcube_template extends rcube_html_page
     {
         $this->env = array();
         $this->js_env = array();
+        $this->js_labels = array();
         $this->js_commands = array();
         $this->object_handlers = array();
         parent::reset();
@@ -337,13 +337,17 @@ class rcube_template extends rcube_html_page
     public function write($template = '')
     {
         // unlock interface after iframe load
-        $unlock = preg_replace('/[^a-z0-9]/i', '', $_GET['_unlock']);
+        $unlock = preg_replace('/[^a-z0-9]/i', '', $_REQUEST['_unlock']);
         if ($this->framed) {
             array_unshift($this->js_commands, array('set_busy', false, null, $unlock));
         }
         else if ($unlock) {
             array_unshift($this->js_commands, array('hide_message', $unlock));
         }
+
+        if (!empty($this->script_files))
+          $this->set_env('request_token', $this->app->get_request_token());
+
         // write all env variables to client
         $js = $this->framed ? "if(window.parent) {\n" : '';
         $js .= $this->get_js_commands() . ($this->framed ? ' }' : '');
@@ -352,6 +356,11 @@ class rcube_template extends rcube_html_page
         // make sure all <form> tags have a valid request token
         $template = preg_replace_callback('/<form\s+([^>]+)>/Ui', array($this, 'alter_form_tag'), $template);
         $this->footer = preg_replace_callback('/<form\s+([^>]+)>/Ui', array($this, 'alter_form_tag'), $this->footer);
+        
+        // send clickjacking protection headers
+        $iframe = $this->framed || !empty($_REQUEST['_framed']);
+        if (!headers_sent() && ($xframe = $this->app->config->get('x_frame_options', 'sameorigin')))
+            header('X-Frame-Options: ' . ($iframe && $xframe == 'deny' ? 'sameorigin' : $xframe));
 
         // call super method
         parent::write($template, $this->config['skin_path']);
@@ -372,7 +381,9 @@ class rcube_template extends rcube_html_page
         $plugin    = false;
         $realname  = $name;
         $temp      = explode('.', $name, 2);
+
         $this->plugin_skin_path = null;
+        $this->template_name    = $realname;
 
         if (count($temp) > 1) {
             $plugin    = $temp[0];
@@ -428,11 +439,16 @@ class rcube_template extends rcube_html_page
 
         if ($write) {
             // add debug console
-            if ($this->config['debug_level'] & 8) {
-                $this->add_footer('<div id="console" style="position:absolute;top:5px;left:5px;width:405px;padding:2px;background:white;z-index:9000;">
+            if ($realname != 'error' && ($this->config['debug_level'] & 8)) {
+                $this->add_footer('<div id="console" style="position:absolute;top:5px;left:5px;width:405px;padding:2px;background:white;z-index:9000;display:none">
                     <a href="#toggle" onclick="con=$(\'#dbgconsole\');con[con.is(\':visible\')?\'hide\':\'show\']();return false">console</a>
                     <textarea name="console" id="dbgconsole" rows="20" cols="40" wrap="off" style="display:none;width:400px;border:none;font-size:10px" spellcheck="false"></textarea></div>'
                 );
+                $this->add_script(
+                    "if (!window.console || !window.console.log) {\n".
+                    "  window.console = new rcube_console();\n".
+                    "  $('#console').show();\n".
+                    "}", 'foot');
             }
             $this->write(trim($output));
         }
@@ -455,6 +471,9 @@ class rcube_template extends rcube_html_page
         $out = '';
         if (!$this->framed && !empty($this->js_env)) {
             $out .= JS_OBJECT_NAME . '.set_env('.json_serialize($this->js_env).");\n";
+        }
+        if (!empty($this->js_labels)) {
+            $this->command('add_label', $this->js_labels);
         }
         foreach ($this->js_commands as $i => $args) {
             $method = array_shift($args);
@@ -607,7 +626,8 @@ class rcube_template extends rcube_html_page
                 '/env:([a-z0-9_]+)/i',
                 '/request:([a-z0-9_]+)/i',
                 '/cookie:([a-z0-9_]+)/i',
-                '/browser:([a-z0-9_]+)/i'
+                '/browser:([a-z0-9_]+)/i',
+                '/template:name/i',
             ),
             array(
                 "\$_SESSION['\\1']",
@@ -615,7 +635,8 @@ class rcube_template extends rcube_html_page
                 "\$this->env['\\1']",
                 "get_input_value('\\1', RCUBE_INPUT_GPC)",
                 "\$_COOKIE['\\1']",
-                "\$this->browser->{'\\1'}"
+                "\$this->browser->{'\\1'}",
+                $this->template_name,
             ),
             $expression);
     }
@@ -665,7 +686,10 @@ class rcube_template extends rcube_html_page
             // show a label
             case 'label':
                 if ($attrib['name'] || $attrib['command']) {
-                    return Q(rcube_label($attrib + array('vars' => array('product' => $this->config['product_name']))));
+                    $vars = $attrib + array('product' => $this->config['product_name']);
+                    unset($vars['name'], $vars['command']);
+                    $label = rcube_label($attrib + array('vars' => $vars));
+                    return !$attrbi['noshow'] ? Q($label) : '';
                 }
                 break;
 
@@ -716,6 +740,12 @@ class rcube_template extends rcube_html_page
                 else if (function_exists($handler)) {
                     $content = call_user_func($handler, $attrib);
                 }
+                else if ($object == 'logo') {
+                    $attrib += array('alt' => $this->xml_command(array('', 'object', 'name="productname"')));
+                    if ($this->config['skin_logo'])
+                        $attrib['src'] = $this->config['skin_logo'];
+                    $content = html::img($attrib);
+                }
                 else if ($object == 'productname') {
                     $name = !empty($this->config['product_name']) ? $this->config['product_name'] : 'Roundcube Webmail';
                     $content = Q($name);
@@ -732,7 +762,12 @@ class rcube_template extends rcube_html_page
                   $content = Q($this->get_pagetitle());
                 }
                 else if ($object == 'pagetitle') {
-                    $title = !empty($this->config['product_name']) ? $this->config['product_name'].' :: ' : '';
+                    if (!empty($this->config['devel_mode']) && !empty($_SESSION['username']))
+                      $title = $_SESSION['username'].' :: ';
+                    else if (!empty($this->config['product_name']))
+                      $title = $this->config['product_name'].' :: ';
+                    else
+                      $title = '';
                     $title .= $this->get_pagetitle();
                     $content = Q($title);
                 }
@@ -1001,8 +1036,11 @@ class rcube_template extends rcube_html_page
         $attrib['action'] = './';
 
         // we already have a <form> tag
-        if ($attrib['form'])
+        if ($attrib['form']) {
+            if ($this->framed || !empty($_REQUEST['_framed']))
+                $hidden->add(array('name' => '_framed', 'value' => '1'));
             return $hidden->show() . $content;
+        }
         else
             return $this->form_tag($attrib, $hidden->show() . $content);
     }
@@ -1149,12 +1187,11 @@ class rcube_template extends rcube_html_page
         if (empty($images) || $this->app->task == 'logout')
             return;
 
-        $this->add_script('$(document).ready(function(){
-            var images = ' . json_serialize($images) .';
+        $this->add_script('var images = ' . json_serialize($images) .';
             for (var i=0; i<images.length; i++) {
                 img = new Image();
                 img.src = images[i];
-            }});', 'foot');
+            }', 'docready');
     }
 
 

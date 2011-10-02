@@ -3,7 +3,7 @@
  | Roundcube List Widget                                                 |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2006-2009, Roundcube Dev, - Switzerland                 |
+ | Copyright (C) 2006-2009, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  +-----------------------------------------------------------------------+
@@ -13,7 +13,7 @@
  | Requires: common.js                                                   |
  +-----------------------------------------------------------------------+
 
-  $Id: list.js 4763 2011-05-13 17:31:09Z alec $
+  $Id: list.js 4750 2011-05-12 09:27:17Z alec $
 */
 
 
@@ -58,7 +58,7 @@ function rcube_list_widget(list, p)
   this.row_init = function(){};
 
   // overwrite default paramaters
-  if (p && typeof(p) == 'object')
+  if (p && typeof p === 'object')
     for (var n in p)
       this[n] = p[n];
 };

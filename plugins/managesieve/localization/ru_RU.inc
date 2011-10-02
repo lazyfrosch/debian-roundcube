@@ -5,15 +5,15 @@
 | plugins/managesieve/localization/ru_RU.inc                            |
 |                                                                       |
 | Russian translation for roundcube/managesieve plugin                  |
-| Copyright (C) 2008-2010                                               |
+| Copyright (C) 2008-2011                                               |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
-| Author:                                                               |
+| Author: Sergey Dukachev <iam@dukess.ru>                               |
 | Updates: Sergey Dukachev <iam@dukess.ru>                              |
 +-----------------------------------------------------------------------+
 
-@version 2010-10-11
+@version 2011-05-11
 
 */
 
@@ -76,23 +76,19 @@ $labels['countislessthanequal'] = 'количество меньше или ра
 $labels['countequals'] = 'количество равно';
 $labels['countnotequals'] = 'количество не равно';
 $labels['valueisgreaterthan'] = 'значение больше, чем';
-$labels['countisgreaterthan'] = 'ÐºÐŸÐ»ÐžÑÐµÑÑÐ²ÐŸ Ð±ÐŸÐ»ÑÑÐµ, ÑÐµÐŒ';
-$labels['countisgreaterthanequal'] = 'ÐºÐŸÐ»ÐžÑÐµÑÑÐ²ÐŸ Ð±ÐŸÐ»ÑÑÐµ ÐžÐ»Ðž ÑÐ°Ð²ÐœÐŸ';
-$labels['countislessthan'] = 'ÐºÐŸÐ»ÐžÑÐµÑÑÐ²ÐŸ ÐŒÐµÐœÑÑÐµ, ÑÐµÐŒ';
-$labels['countislessthanequal'] = 'ÐºÐŸÐ»ÐžÑÐµÑÑÐ²ÐŸ ÐŒÐµÐœÑÑÐµ ÐžÐ»Ðž ÑÐ°Ð²ÐœÐŸ';
-$labels['countequals'] = 'ÐºÐŸÐ»ÐžÑÐµÑÑÐ²ÐŸ ÑÐ°Ð²ÐœÐŸ';
-$labels['countnotequals'] = 'ÐºÐŸÐ»ÐžÑÐµÑÑÐ²ÐŸ ÐœÐµ ÑÐ°Ð²ÐœÐŸ';
-$labels['valueisgreaterthan'] = 'Ð·ÐœÐ°ÑÐµÐœÐžÐµ Ð±ÐŸÐ»ÑÑÐµ, ÑÐµÐŒ';
-$labels['valueisgreaterthanequal'] = 'Ð·ÐœÐ°ÑÐµÐœÐžÐµ Ð±ÐŸÐ»ÑÑÐµ ÐžÐ»Ðž ÑÐ°Ð²ÐœÐŸ';
-$labels['valueislessthan'] = 'Ð·ÐœÐ°ÑÐµÐœÐžÐµ ÐŒÐµÐœÑÑÐµ, ÑÐµÐŒ';
-$labels['valueislessthanequal'] = 'Ð·ÐœÐ°ÑÐµÐœÐžÐµ ÐŒÐµÐœÑÑÐµ ÐžÐ»Ðž ÑÐ°Ð²ÐœÐŸ';
-$labels['valueequals'] = 'Ð·ÐœÐ°ÑÐµÐœÐžÐµ ÑÐ°Ð²ÐœÐŸ';
-$labels['valuenotequals'] = 'Ð·ÐœÐ°ÑÐµÐœÐžÐµ ÐœÐµ ÑÐ°Ð²ÐœÐŸ';
 $labels['valueisgreaterthanequal'] = 'значение больше или равно';
 $labels['valueislessthan'] = 'значение меньше, чем';
 $labels['valueislessthanequal'] = 'значение меньше или равно';
 $labels['valueequals'] = 'значение равно';
 $labels['valuenotequals'] = 'значение не равно';
+$labels['setflags'] = 'Установить флаг на сообщение';
+$labels['addflags'] = 'Добавить флаг к сообщению';
+$labels['removeflags'] = 'Убрать флаги из сообщения';
+$labels['flagread'] = 'Прочитано';
+$labels['flagdeleted'] = 'Удалено';
+$labels['flaganswered'] = 'Отвечено';
+$labels['flagflagged'] = 'Помечено';
+$labels['flagdraft'] = 'Черновик';
 
 $messages = array();
 $messages['filterunknownerror'] = 'Неизвестная ошибка сервера';

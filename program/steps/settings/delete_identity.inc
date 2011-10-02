@@ -5,7 +5,7 @@
  | program/steps/settings/delete_identity.inc                            |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2009, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: delete_identity.inc 4025 2010-09-30 13:24:33Z alec $
+ $Id: delete_identity.inc 4668 2011-04-19 20:41:24Z thomasb $
 
 */
 
@@ -34,10 +34,10 @@ if ($iid && preg_match('/^[0-9]+(,[0-9]+)*$/', $iid))
   
   $deleted = !$plugin['abort'] ? $USER->delete_identity($iid) : $plugin['result'];
 
-  if ($deleted)
+  if ($deleted > 0 && $deleted !== false)
     $OUTPUT->show_message('deletedsuccessfully', 'confirmation', null, false);
   else
-    $OUTPUT->show_message($plugin['message'] ? $plugin['message'] : 'nodeletelastidentity', 'error', null, false);
+    $OUTPUT->show_message($plugin['message'] ? $plugin['message'] : ($deleted < 0 ? 'nodeletelastidentity' : 'errorsaving'), 'error', null, false);
 
   // send response
   if ($OUTPUT->ajax_call)

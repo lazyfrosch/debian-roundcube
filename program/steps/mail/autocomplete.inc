@@ -15,12 +15,9 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: autocomplete.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: autocomplete.inc 4963 2011-07-25 10:49:39Z alec $
 
 */
-
-$MAXNUM = 15;
-$book_types = (array) $RCMAIL->config->get('autocomplete_addressbooks', 'sql');
 
 if ($RCMAIL->action == 'group-expand') {
   $abook = $RCMAIL->get_address_book(get_input_value('_source', RCUBE_INPUT_GPC));
@@ -29,13 +26,29 @@ if ($RCMAIL->action == 'group-expand') {
     $abook->set_group($gid);
     $abook->set_pagesize(1000);  // TODO: limit number of group members by config
     $result = $abook->list_records(array('email','name'));
-    while ($result && ($sql_arr = $result->iterate()))
-      $members[] = format_email_recipient($sql_arr['email'], $sql_arr['name']);
+    while ($result && ($sql_arr = $result->iterate())) {
+      foreach ((array)$sql_arr['email'] as $email)
+        $members[] = format_email_recipient($email, $sql_arr['name']);
+    }
 
     $OUTPUT->command('replace_group_recipients', $gid, join(', ', $members));
   }
+
+  $OUTPUT->send();
 }
-else if ($book_types && $search = get_input_value('_search', RCUBE_INPUT_GPC, true)) {
+
+
+$MAXNUM = (int)$RCMAIL->config->get('autocomplete_max', 15);
+$search = get_input_value('_search', RCUBE_INPUT_GPC, true);
+$source = get_input_value('_source', RCUBE_INPUT_GPC);
+$sid    = get_input_value('_id', RCUBE_INPUT_GPC);
+
+if (strlen($source))
+  $book_types = array($source);
+else
+  $book_types = (array) $RCMAIL->config->get('autocomplete_addressbooks', 'sql');
+
+if (!empty($book_types) && strlen($search)) {
   $contacts = array();
   $books_num = count($book_types);
 
@@ -45,12 +58,23 @@ else if ($book_types && $search = get_input_value('_search', RCUBE_INPUT_GPC, tr
 
     if ($result = $abook->search(array('email','name'), $search, false, true, true, 'email')) {
       while ($sql_arr = $result->iterate()) {
-        $contact = format_email_recipient($sql_arr['email'], $sql_arr['name']);
-        // when we've got more than one book, we need to skip duplicates
-        if ($books_num == 1 || !in_array($contact, $contacts)) {
-          $contacts[] = $contact;
-          if (count($contacts) >= $MAXNUM)
-            break 2;
+        // Contact can have more than one e-mail address
+        $email_arr = (array)$abook->get_col_values('email', $sql_arr, true);
+        $email_cnt = count($email_arr);
+        foreach ($email_arr as $email) {
+          if (empty($email))
+            continue;
+          $contact = format_email_recipient($email, $sql_arr['name']);
+          // skip entries that don't match
+          if ($email_cnt > 1 && stripos($contact, $search) === false) {
+            continue;
+          }
+          // when we've got more than one book, we need to skip duplicates
+          if ($books_num == 1 || !in_array($contact, $contacts)) {
+            $contacts[] = $contact;
+            if (count($contacts) >= $MAXNUM)
+              break 2;
+          }
         }
       }
     }
@@ -74,7 +98,7 @@ else if ($book_types && $search = get_input_value('_search', RCUBE_INPUT_GPC, tr
   usort($contacts, 'contact_results_sort');
 }
 
-$OUTPUT->command('ksearch_query_results', $contacts, $search);
+$OUTPUT->command('ksearch_query_results', $contacts, $search, $sid);
 $OUTPUT->send();
 
 

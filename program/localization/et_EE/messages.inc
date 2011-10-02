@@ -6,7 +6,7 @@
 | language/et_EE/messages.inc                                           |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -15,7 +15,7 @@
 |         Elan Ruusamäe <glen@delfi.ee>                                 |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 4370 2010-12-27 14:16:46Z yllar $
+@version $Id: messages.inc 5067 2011-08-14 18:47:58Z thomasb $
 
 */
 
@@ -26,6 +26,7 @@ $messages['sessionerror'] = 'Sinu seanss on aegunud või vigane';
 $messages['imaperror'] = 'Ei õnnestunud IMAP serveriga ühendust luua';
 $messages['servererror'] = 'Serveri tõrge!';
 $messages['servererrormsg'] = 'Serveri tõrge: $msg';
+$messages['databaserror'] = 'Andmebaasi tõrge!';
 $messages['errorreadonly'] = 'Operatsioon nurjus. Kaustale on vaid lugemisõigus';
 $messages['errornoperm'] = 'Operatsioon nurjus. Ligipääsu õigused puuduvad';
 $messages['invalidrequest'] = 'Lubamatu päring! Andmeid ei salvestatud.';
@@ -34,6 +35,7 @@ $messages['loggedout'] = 'Sinu seanss on edukalt lõpetatud. Nägemiseni!';
 $messages['mailboxempty'] = 'Postkast on tühi';
 $messages['loading'] = 'Laadin...';
 $messages['uploading'] = 'Laadin faili üles...';
+$messages['uploadingmany'] = 'Failide üleslaadimine...';
 $messages['loadingdata'] = 'Andmete laadimine...';
 $messages['checkingmail'] = 'Kontrollin uusi kirju...';
 $messages['sendingmessage'] = 'Saadan kirja...';
@@ -110,6 +112,7 @@ $messages['contactremovedfromgroup'] = 'Kontaktide eemaldamine grupist õnnestus
 $messages['importwait'] = 'Impordin, palun oota...';
 $messages['importerror'] = 'Import nurjus! Üleslaaditud fail ei ole vCard formaadis.';
 $messages['importconfirm'] = '<b>Edukalt imporditud $inserted kontakti, $skipped olemasolevat sissekannet vahele jäetud</b>:<p><em>$names</em></p>';
+$messages['importconfirmskipped'] = '<b> $skipped olemasolevat kirjet jäeti vahele</b>';
 $messages['opnotpermitted'] = 'Tegevus pole lubatud!';
 $messages['nofromaddress'] = 'Valitud identiteedil puudub e-posti aadress';
 $messages['editorwarning'] = 'Klaarteksti redaktorile lülitamine kaotab kogu teksti vorminduse. Soovid jätkata?';
@@ -139,5 +142,7 @@ $messages['namecannotbeempty'] = 'Nimi ei saa olla tühi';
 $messages['nametoolong'] = 'Nimi liiga pikk';
 $messages['folderupdated'] = 'Kaust uuendatud edukalt';
 $messages['foldercreated'] = 'Kaust loodud edukalt';
+$messages['invalidimageformat'] = 'Pole õige pildi formaat';
+$messages['mispellingsfound'] = 'Kiri sisaldab õigekirjavigu';
 
 ?>

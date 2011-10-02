@@ -5,7 +5,7 @@
  | program/steps/mail/sendmail.inc                                       |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2010, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: sendmail.inc 4509 2011-02-09 10:51:50Z thomasb $
+ $Id: sendmail.inc 5229 2011-09-16 19:13:27Z thomasb $
 
 */
 
@@ -25,6 +25,9 @@ $OUTPUT->reset();
 $OUTPUT->framed = TRUE;
 
 $savedraft = !empty($_POST['_draft']) ? true : false;
+
+$COMPOSE_ID = get_input_value('_id', RCUBE_INPUT_GPC);
+$_SESSION['compose'] = $_SESSION['compose_data_'.$COMPOSE_ID];
 
 /****** checks ********/
 
@@ -140,7 +143,10 @@ function rcmail_email_input_format($mailto, $count=false, $check=true)
 {
   global $EMAIL_FORMAT_ERROR, $RECIPIENT_COUNT;
 
-  $regexp = array('/[,;]\s*[\r\n]+/', '/[\r\n]+/', '/[,;]\s*$/m', '/;/', '/(\S{1})(<\S+@\S+>)/U');
+  // simplified email regexp, supporting quoted local part
+  $email_regexp = '(\S+|("[^"]+"))@\S+';
+
+  $regexp  = array('/[,;]\s*[\r\n]+/', '/[\r\n]+/', '/[,;]\s*$/m', '/;/', '/(\S{1})(<'.$email_regexp.'>)/U');
   $replace = array(', ', ', ', '', ',', '\\1 \\2');
 
   // replace new lines and strip ending ', ', make address input more valid
@@ -152,15 +158,15 @@ function rcmail_email_input_format($mailto, $count=false, $check=true)
   foreach($items as $item) {
     $item = trim($item);
     // address in brackets without name (do nothing)
-    if (preg_match('/^<\S+@\S+>$/', $item)) {
+    if (preg_match('/^<'.$email_regexp.'>$/', $item)) {
       $item = rcube_idn_to_ascii($item);
       $result[] = $item;
     // address without brackets and without name (add brackets)
-    } else if (preg_match('/^\S+@\S+$/', $item)) {
+    } else if (preg_match('/^'.$email_regexp.'$/', $item)) {
       $item = rcube_idn_to_ascii($item);
       $result[] = '<'.$item.'>';
     // address with name (handle name)
-    } else if (preg_match('/\S+@\S+>*$/', $item, $matches)) {
+    } else if (preg_match('/'.$email_regexp.'>*$/', $item, $matches)) {
       $address = $matches[0];
       $name = str_replace($address, '', $item);
       $name = trim($name);
@@ -169,7 +175,7 @@ function rcmail_email_input_format($mailto, $count=false, $check=true)
             $name = '"'.addcslashes($name, '"').'"';
       }
       $address = rcube_idn_to_ascii($address);
-      if (!preg_match('/^<\S+@\S+>$/', $address))
+      if (!preg_match('/^<'.$email_regexp.'>$/', $address))
         $address = '<'.$address.'>';
 
       $result[] = $name.' '.$address;
@@ -406,6 +412,23 @@ if (!$savedraft) {
       "\r\n<html><body>\r\n" . $message_body;
   }
 
+  // Check spelling before send
+  if ($CONFIG['spellcheck_before_send'] && $CONFIG['enable_spellcheck']
+    && empty($_SESSION['compose']['spell_checked']) && !empty($message_body)
+  ) {
+    $spellchecker = new rcube_spellchecker(get_input_value('_lang', RCUBE_INPUT_GPC));
+    $spell_result = $spellchecker->check($message_body, $isHtml);
+
+    $_SESSION['compose']['spell_checked'] = true;
+
+    if (!$spell_result) {
+      $result = $isHtml ? $spellchecker->get_words() : $spellchecker->get_xml();
+      $OUTPUT->show_message('mispellingsfound', 'error');
+      $OUTPUT->command('spellcheck_resume', $isHtml, $result);
+      $OUTPUT->send('iframe');
+    }
+  }
+
   // generic footer for all messages
   if ($isHtml && !empty($CONFIG['generic_message_footer_html'])) {
       $footer = file_get_contents(realpath($CONFIG['generic_message_footer_html']));
@@ -417,6 +440,7 @@ if (!$savedraft) {
     if ($isHtml)
       $footer = '<pre>'.$footer.'</pre>';
   }
+
   if ($footer)
     $message_body .= "\r\n" . $footer;
   if ($isHtml)
@@ -650,7 +674,7 @@ if ($store_target)
       }
 
     if (PEAR::isError($msg))
-      raise_error(array('code' => 600, 'type' => 'php',
+      raise_error(array('code' => 650, 'type' => 'php',
 	    'file' => __FILE__, 'line' => __LINE__,
             'message' => "Could not create message: ".$msg->getMessage()),
             TRUE, FALSE);
@@ -702,7 +726,7 @@ if ($savedraft)
   
   // remember new draft-uid
   $draftuids = $IMAP->search_once($CONFIG['drafts_mbox'], 'HEADER Message-ID '.$msgid, true);
-  $_SESSION['compose']['param']['_draft_uid'] = $draftuids[0];
+  $_SESSION['compose']['param']['draft_uid'] = $draftuids[0];
 
   // display success
   $OUTPUT->show_message('messagesaved', 'confirmation');
@@ -718,7 +742,7 @@ if ($savedraft)
   }
 else
   {
-  rcmail_compose_cleanup();
+  rcmail_compose_cleanup($COMPOSE_ID);
 
   if ($store_folder && !$saved)
     $OUTPUT->command('sent_successfully', 'error', rcube_label('errorsavingsent'));

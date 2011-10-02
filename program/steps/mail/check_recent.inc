@@ -5,7 +5,7 @@
  | program/steps/mail/check_recent.inc                                   |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2010, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: check_recent.inc 4084 2010-10-13 19:15:51Z alec $
+ $Id: check_recent.inc 4872 2011-06-22 05:52:48Z thomasb $
 
 */
 
@@ -24,7 +24,7 @@ $check_all = !empty($_GET['_refresh']) || (bool)$RCMAIL->config->get('check_all_
 
 // list of folders to check
 if ($check_all) {
-    $a_mailboxes = $IMAP->list_mailboxes();
+    $a_mailboxes = $IMAP->list_mailboxes('', '*', 'mail');
 }
 else {
     $a_mailboxes = (array) $current;
@@ -71,8 +71,6 @@ foreach ($a_mailboxes as $mbox_name) {
         $OUTPUT->set_env('current_page', $all_count ? $IMAP->list_page : 1);
 
         if ($status & 1) {
-            if ($RCMAIL->config->get('focus_on_new_message', true))
-                $OUTPUT->command('new_message_focus');
             // trigger plugin hook
             $RCMAIL->plugins->exec_hook('new_messages', array('mailbox' => $mbox_name));
         }
@@ -92,5 +90,7 @@ foreach ($a_mailboxes as $mbox_name) {
         rcmail_send_unread_count($mbox_name, true);
     }
 }
+
+$RCMAIL->plugins->exec_hook('keep_alive', array());
 
 $OUTPUT->send();

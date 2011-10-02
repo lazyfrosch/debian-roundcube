@@ -5,7 +5,7 @@
  | program/include/rcube_imap_generic.php                                |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2010, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -21,7 +21,7 @@
  | Author: Ryo Chijiiwa <Ryo@IlohaMail.org>                              |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_imap_generic.php 4729 2011-05-04 18:53:11Z alec $
+ $Id: rcube_imap_generic.php 5213 2011-09-13 08:09:50Z alec $
 
 */
 
@@ -56,13 +56,10 @@ class rcube_mail_header
     public $priority;
     public $mdn_to;
     public $mdn_sent = false;
-    public $is_draft = false;
     public $seen = false;
     public $deleted = false;
-    public $recent = false;
     public $answered = false;
     public $forwarded = false;
-    public $junk = false;
     public $flagged = false;
     public $has_children = false;
     public $depth = 0;
@@ -91,7 +88,6 @@ class rcube_imap_generic
     public $flags = array(
         'SEEN'     => '\\Seen',
         'DELETED'  => '\\Deleted',
-        'RECENT'   => '\\Recent',
         'ANSWERED' => '\\Answered',
         'DRAFT'    => '\\Draft',
         'FLAGGED'  => '\\Flagged',
@@ -109,6 +105,7 @@ class rcube_imap_generic
     private $prefs;
     private $cmd_tag;
     private $cmd_num = 0;
+    private $resourceid;
     private $_debug = false;
     private $_debug_handler = false;
 
@@ -175,13 +172,15 @@ class rcube_imap_generic
         if ($endln)
             $string .= "\r\n";
 
+
         $res = 0;
         if ($parts = preg_split('/(\{[0-9]+\}\r\n)/m', $string, -1, PREG_SPLIT_DELIM_CAPTURE)) {
             for ($i=0, $cnt=count($parts); $i<$cnt; $i++) {
-                if (preg_match('/^\{[0-9]+\}\r\n$/', $parts[$i+1])) {
+                if (preg_match('/^\{([0-9]+)\}\r\n$/', $parts[$i+1], $matches)) {
                     // LITERAL+ support
-                    if ($this->prefs['literal+'])
-                        $parts[$i+1] = preg_replace('/([0-9]+)/', '\\1+', $parts[$i+1]);
+                    if ($this->prefs['literal+']) {
+                        $parts[$i+1] = sprintf("{%d+}\r\n", $matches[1]);
+                    }
 
                     $bytes = $this->putLine($parts[$i].$parts[$i+1], false);
                     if ($bytes === false)
@@ -205,7 +204,6 @@ class rcube_imap_generic
                 }
             }
         }
-
         return $res;
     }
 
@@ -737,8 +735,13 @@ class rcube_imap_generic
 
         $line = trim(fgets($this->fp, 8192));
 
-        if ($this->_debug && $line) {
-            $this->debug('S: '. $line);
+        if ($this->_debug) {
+            // set connection identifier for debug output
+            preg_match('/#([0-9]+)/', (string)$this->fp, $m);
+            $this->resourceid = strtoupper(substr(md5($m[1].$this->user.microtime()), 0, 4));
+
+            if ($line)
+                $this->debug('S: '. $line);
         }
 
         // Connected to wrong port or connection error?
@@ -1540,7 +1543,7 @@ class rcube_imap_generic
         if ($bodystr)
             $request .= "BODYSTRUCTURE ";
         $request .= "BODY.PEEK[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE ";
-        $request .= "LIST-POST DISPOSITION-NOTIFICATION-TO".$add.")])";
+        $request .= "CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO".$add.")])";
 
         if (!$this->putLine($request)) {
             $this->setError(self::ERROR_COMMAND, "Unable to send command: $request");
@@ -2183,7 +2186,7 @@ class rcube_imap_generic
             while ($this->tokenizeResponse($response, 1) == '*') {
                 $cmd = strtoupper($this->tokenizeResponse($response, 1));
                 // * LIST (<options>) <delimiter> <mailbox>
-                if (!$lstatus || $cmd == 'LIST' || $cmd == 'LSUB') {
+                if ($cmd == 'LIST' || $cmd == 'LSUB') {
                     list($opts, $delim, $mailbox) = $this->tokenizeResponse($response, 3);
 
                     // Add to result array
@@ -2211,6 +2214,14 @@ class rcube_imap_generic
                         list($name, $value) = $this->tokenizeResponse($status, 2);
                         $folders[$mailbox][$name] = $value;
                     }
+                }
+                // other untagged response line, skip it
+                else {
+                    $response = ltrim($response);
+                    if (($position = strpos($response, "\n")) !== false)
+                        $response = substr($response, $position+1);
+                    else
+                        $response = '';
                 }
             }
 
@@ -2376,8 +2387,6 @@ class rcube_imap_generic
                 } else if ($mode == 2) {
                     $line = rtrim($line, "\t\r\0\x0B");
                     $line = quoted_printable_decode($line);
-                    // Remove NULL characters (#1486189)
-                    $line = str_replace("\x00", '', $line);
                 // UUENCODE
                 } else if ($mode == 3) {
                     $line = rtrim($line, "\t\r\n\0\x0B");
@@ -2802,13 +2811,7 @@ class rcube_imap_generic
         }
 
         foreach ($entries as $name => $value) {
-            if ($value === null) {
-                $value = 'NIL';
-            }
-            else {
-                $value = sprintf("{%d}\r\n%s", strlen($value), $value);
-            }
-            $entries[$name] = $this->escape($name) . ' ' . $value;
+            $entries[$name] = $this->escape($name) . ' ' . $this->escape($value);
         }
 
         $entries = implode(' ', $entries);
@@ -2960,20 +2963,9 @@ class rcube_imap_generic
         }
 
         foreach ($data as $entry) {
-            $name  = $entry[0];
-            $attr  = $entry[1];
-            $value = $entry[2];
-
-            if ($value === null) {
-                $value = 'NIL';
-            }
-            else {
-                $value = sprintf("{%d}\r\n%s", strlen($value), $value);
-            }
-
             // ANNOTATEMORE drafts before version 08 require quoted parameters
-            $entries[] = sprintf('%s (%s %s)',
-                $this->escape($name, true), $this->escape($attr, true), $value);
+            $entries[] = sprintf('%s (%s %s)', $this->escape($entry[0], true),
+                $this->escape($entry[1], true), $this->escape($entry[2], true));
         }
 
         $entries = implode(' ', $entries);
@@ -3249,8 +3241,8 @@ class rcube_imap_generic
                     break;
                 }
 
-                // excluded chars: SP, CTL, (, ), {, ", ], %
-                if (preg_match('/^([\x21\x23\x24\x26\x27\x2A-\x5C\x5E-\x7A\x7C-\x7E]+)/', $str, $m)) {
+                // excluded chars: SP, CTL, )
+                if (preg_match('/^([^\x00-\x20\x29\x7F]+)/', $str, $m)) {
                     $result[] = $m[1] == 'NIL' ? NULL : $m[1];
                     $str = substr($str, strlen($m[1]));
                 }
@@ -3280,23 +3272,21 @@ class rcube_imap_generic
      *
      * @return int Unix timestamp
      */
-    private function strToTime($date)
+    static function strToTime($date)
     {
         // support non-standard "GMTXXXX" literal
         $date = preg_replace('/GMT\s*([+-][0-9]+)/', '\\1', $date);
 
-        // if date parsing fails, we have a date in non-rfc format.
+        // if date parsing fails, we have a date in non-rfc format
         // remove token from the end and try again
         while (($ts = intval(@strtotime($date))) <= 0) {
             $d = explode(' ', $date);
             array_pop($d);
-            if (!$d) {
+            if (empty($d)) {
                 break;
             }
             $date = implode(' ', $d);
         }
-
-        $ts = (int) $ts;
 
         return $ts < 0 ? 0 : $ts;
     }
@@ -3320,34 +3310,35 @@ class rcube_imap_generic
      * Escapes a string when it contains special characters (RFC3501)
      *
      * @param string  $string       IMAP string
-     * @param boolean $force_quotes Forces string quoting
+     * @param boolean $force_quotes Forces string quoting (for atoms)
      *
-     * @return string Escaped string
-     * @todo String literals, lists
+     * @return string String atom, quoted-string or string literal
+     * @todo lists
      */
     static function escape($string, $force_quotes=false)
     {
         if ($string === null) {
             return 'NIL';
         }
-        else if ($string === '') {
+        if ($string === '') {
             return '""';
         }
-        // need quoted-string? find special chars: SP, CTL, (, ), {, %, *, ", \, ]
-        // plus [ character as a workaround for DBMail's bug (#1487766)
-        else if ($force_quotes ||
-            preg_match('/([\x00-\x20\x28-\x29\x7B\x25\x2A\x22\x5B\x5C\x5D\x7F]+)/', $string)
-        ) {
-            return '"' . strtr($string, array('"'=>'\\"', '\\' => '\\\\')) . '"';
+        // atom-string (only safe characters)
+        if (!$force_quotes && !preg_match('/[\x00-\x20\x22\x28-\x2A\x5B-\x5D\x7B\x7D\x80-\xFF]/', $string)) {
+            return $string;
+        }
+        // quoted-string
+        if (!preg_match('/[\r\n\x00\x80-\xFF]/', $string)) {
+            return '"' . addcslashes($string, '\\"') . '"';
         }
 
-        // atom
-        return $string;
+        // literal-string
+        return sprintf("{%d}\r\n%s", strlen($string), $string);
     }
 
     static function unEscape($string)
     {
-        return strtr($string, array('\\"'=>'"', '\\\\' => '\\'));
+        return stripslashes($string);
     }
 
     /**
@@ -3374,6 +3365,10 @@ class rcube_imap_generic
      */
     private function debug($message)
     {
+        if ($this->resourceid) {
+            $message = sprintf('[%s] %s', $this->resourceid, $message);
+        }
+
         if ($this->_debug_handler) {
             call_user_func_array($this->_debug_handler, array(&$this, $message));
         } else {

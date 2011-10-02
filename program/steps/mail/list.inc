@@ -5,7 +5,7 @@
  | program/steps/mail/list.inc                                           |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2007, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2007, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: list.inc 4321 2010-12-08 12:52:04Z alec $
+ $Id: list.inc 4410 2011-01-12 18:25:02Z thomasb $
 
 */
 

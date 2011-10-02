@@ -5,7 +5,7 @@
 | language/sl_SI/labels.inc                                             |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -14,7 +14,7 @@
 |         Barbara Krasovec <barbarak@arnes.si>                          |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4386 2011-01-04 08:35:46Z yllar $
+@version $Id: labels.inc 5067 2011-08-14 18:47:58Z thomasb $
 
 */
 
@@ -32,7 +32,7 @@ $labels['inbox'] = 'Prejeto';
 $labels['drafts'] = 'Osnutki';
 $labels['sent'] = 'Poslano';
 $labels['trash'] = 'Smeti';
-$labels['junk'] = 'Nezaželena  sporočila';
+$labels['junk'] = 'Nezaželena sporočila';
 $labels['subject'] = 'Zadeva';
 $labels['from'] = 'Pošiljatelj';
 $labels['to'] = 'Prejemnik';
@@ -101,18 +101,16 @@ $labels['replytomessage'] = 'Odgovori';
 $labels['replytoallmessage'] = 'Odgovori listi ali vsem prejemnikom';
 $labels['replyall'] = 'Odgovori vsem';
 $labels['replylist'] = 'Odgovori listi';
+$labels['forwardinline'] = 'Posreduj medvrstično';
+$labels['forwardattachment'] = 'Posreduj kot priponko';
 $labels['forwardmessage'] = 'Posreduj';
 $labels['deletemessage'] = 'Izbriši';
 $labels['movemessagetotrash'] = 'Premakni v smeti';
 $labels['printmessage'] = 'Natisni';
 $labels['previousmessage'] = 'Prikaži prejšnje sporočilo';
-$labels['previousmessages'] = 'Prikaži prejšnja sporočila';
 $labels['firstmessage'] = 'Prikaži prvo sporočilo';
-$labels['firstmessages'] = 'Prikaži prva sporočila';
 $labels['nextmessage'] = 'Prikaži naslednje sporočilo';
-$labels['nextmessages'] = 'Prikaži naslednja sporočila';
 $labels['lastmessage'] = 'Prikaži zadnje sporočilo';
-$labels['lastmessages'] = 'Prikaži zadnja sporočila';
 $labels['backtolist'] = 'Nazaj na seznam sporočil';
 $labels['viewsource'] = 'Prikaži izvirno kodo';
 $labels['markmessages'] = 'Označi sporočilo';
@@ -205,16 +203,61 @@ $labels['receiptnote'] = 'Pozor: to je samo potrdilo, da je bilo vaše sporočil
 $labels['name'] = 'Ime za prikaz';
 $labels['firstname'] = 'Ime';
 $labels['surname'] = 'Priimek';
+$labels['middlename'] = 'Drugo ime';
+$labels['nameprefix'] = 'Predpona';
+$labels['namesuffix'] = 'Pripona';
+$labels['nickname'] = 'Vzdevek';
+$labels['jobtitle'] = 'Naziv';
+$labels['department'] = 'Oddelek';
+$labels['gender'] = 'Spol';
+$labels['maidenname'] = 'Dekliški priimek';
 $labels['email'] = 'E-Pošta';
+$labels['phone'] = 'Telefon';
+$labels['address'] = 'Naslov';
+$labels['street'] = 'Ulica';
+$labels['locality'] = 'Mesto';
+$labels['zipcode'] = 'Poštna številka';
+$labels['region'] = 'Regija';
+$labels['country'] = 'Država';
+$labels['birthday'] = 'Rojstni dan';
+$labels['anniversary'] = 'Rojstni dan';
+$labels['website'] = 'Spletna stran';
+$labels['instantmessenger'] = 'IM';
+$labels['notes'] = 'Opombe';
+$labels['male'] = 'moški';
+$labels['female'] = 'ženska';
+$labels['manager'] = 'Vodja';
+$labels['assistant'] = 'Asistent';
+$labels['spouse'] = 'Zakonec';
+$labels['allfields'] = 'Vsa polja';
+$labels['search'] = 'Iskanje';
+$labels['advsearch'] = 'Napredno iskanje';
+$labels['other'] = 'Ostalo';
+$labels['typehome'] = 'Doma';
+$labels['typework'] = 'Služba';
+$labels['typeother'] = 'Ostalo';
+$labels['typemobile'] = 'Mobilni telefon';
+$labels['typemain'] = 'Osnovno';
+$labels['typehomefax'] = 'Domači fax';
+$labels['typeworkfax'] = 'Službeni fax';
+$labels['typecar'] = 'Avto';
+$labels['typepager'] = 'Pozivnik';
+$labels['typevideo'] = 'Video';
+$labels['typeassistant'] = 'Pomoč';
+$labels['typehomepage'] = 'Domača stran';
+$labels['addfield'] = 'Dodaj polje...';
 $labels['addcontact'] = 'Dodaj izbrane stike v imenik';
 $labels['editcontact'] = 'Uredi vizitko';
 $labels['contacts'] = 'Stiki';
 $labels['contactproperties'] = 'Lastnosti stika';
+$labels['personalinfo'] = 'Osebni podatki';
 $labels['edit'] = 'Uredi';
 $labels['cancel'] = 'Prekliči';
 $labels['save'] = 'Shrani';
 $labels['delete'] = 'Izbriši';
 $labels['rename'] = 'Preimenuj';
+$labels['addphoto'] = 'Dodaj';
+$labels['replacephoto'] = 'Zamenjaj';
 $labels['newcontact'] = 'Dodaj vizitko';
 $labels['deletecontact'] = 'Izbriši izbrane vizitke';
 $labels['composeto'] = 'Sestavi sporočilo za';
@@ -224,6 +267,8 @@ $labels['export'] = 'Izvozi';
 $labels['exportvcards'] = 'Izvozi stike v formatu vCard';
 $labels['newcontactgroup'] = 'Ustvari novo skupino stikov';
 $labels['groupactions'] = 'Dejanja za skupine stikov...';
+$labels['grouprename'] = 'Preimenuj skupino';
+$labels['groupdelete'] = 'Izbriši skupino';
 $labels['previouspage'] = 'Prejšnja stran';
 $labels['firstpage'] = 'Prva stran';
 $labels['nextpage'] = 'Naslednja stran';
@@ -234,6 +279,7 @@ $labels['personaladrbook'] = 'Stiki';
 $labels['import'] = 'Uvozi';
 $labels['importcontacts'] = 'Uvozi stike';
 $labels['importfromfile'] = 'Uvozi iz datoteke:';
+$labels['importtarget'] = 'Dodaj nove stike v imenik:';
 $labels['importreplace'] = 'Zamenjaj celoten imenik';
 $labels['importtext'] = 'Stike lahko prenesete iz obstoječega imenika<br/> Trenutno je podprto uvažanje naslovov v  formatu <a href="http://en.wikipedia.org/wiki/VCard">vCard</a>';
 $labels['done'] = 'Dokončano';
@@ -270,8 +316,8 @@ $labels['mailboxview'] = 'Pogled poštnega predala';
 $labels['mdnrequests'] = 'Obvestila pošiljatelja';
 $labels['askuser'] = 'vprašaj uporabnika';
 $labels['autosend'] = 'pošlji povratnico samodejno';
-$labels['autosendknown'] = 'pošlji povratnico samodejno samo mojim stikom';
-$labels['autosendknownignore'] = 'pošlji potrdilo le mojim kontaktom';
+$labels['autosendknown'] = 'samodejno pošlji povratnico samo mojim stikom';
+$labels['autosendknownignore'] = 'pošlji potrdilo le mojim stikom';
 $labels['ignore'] = 'ne upoštevaj';
 $labels['readwhendeleted'] = 'Označi izbrisano sporočilo kot prebrano';
 $labels['flagfordeletion'] = 'Ne izbriši sporočila, le označi kot izbrisano';
@@ -319,6 +365,8 @@ $labels['afternseconds'] = 'po $n sekundah';
 $labels['reqmdn'] = 'Vedno zahtevaj povratnico';
 $labels['reqdsn'] = 'Vedno zahtevaj obvestilo o statusu dostave';
 $labels['replysamefolder'] = 'Shrani odgovore na sporočilo v mapo izvornega sporočila';
+$labels['defaultaddressbook'] = 'Dodaj nove stike v izbran imenik';
+$labels['spellcheckbeforesend'] = 'Preveri črkovanje pred pošiljanjem sporočila';
 $labels['folder'] = 'Mapa';
 $labels['folders'] = 'Mape';
 $labels['foldername'] = 'Ime mape';
@@ -335,6 +383,10 @@ $labels['location'] = 'Lokacija';
 $labels['info'] = 'Podatki';
 $labels['getfoldersize'] = 'Klikni za prikaz velikosti mape';
 $labels['changesubscription'] = 'Klikni za spremembo prijave mape';
+$labels['foldertype'] = 'Tip mape';
+$labels['personalfolder'] = 'Zasebna mapa';
+$labels['otherfolder'] = 'Mapa drugega uporabnika';
+$labels['sharedfolder'] = 'Javna mapa';
 $labels['sortby'] = 'Uredi po';
 $labels['sortasc'] = 'Uredi naraščajoče';
 $labels['sortdesc'] = 'Uredi padajoče';

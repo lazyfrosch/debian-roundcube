@@ -5,7 +5,7 @@
  | program/include/rcube_message.php                                     |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2008-2010, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2008-2010, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_message.php 4643 2011-04-11 12:24:00Z alec $
+ $Id: rcube_message.php 5261 2011-09-21 12:22:40Z alec $
 
 */
 
@@ -286,7 +286,7 @@ class rcube_message
         if ($message_ctype_primary == 'text' && !$recursive) {
             $structure->type = 'content';
             $this->parts[] = &$structure;
-            
+
             // Parse simple (plain text) message body
             if ($message_ctype_secondary == 'plain')
                 foreach ((array)$this->uu_decode($structure) as $uupart) {
@@ -306,7 +306,7 @@ class rcube_message
 
             foreach ($structure->parts as $p => $sub_part) {
                 $sub_mimetype = $sub_part->mimetype;
-        
+
                 // check if sub part is
                 if ($sub_mimetype == 'text/plain')
                     $plain_part = $p;
@@ -323,7 +323,7 @@ class rcube_message
                 $this->parse_alternative = true;
                 $this->parse_structure($structure->parts[$related_part], true);
                 $this->parse_alternative = false;
-        
+
                 // if plain part was found, we should unset it if html is preferred
                 if ($this->opt['prefer_html'] && count($this->parts))
                     $plain_part = null;
@@ -373,6 +373,8 @@ class rcube_message
             $p->ctype_secondary = 'plain';
             $p->body            = rcube_label('encryptedmessage');
             $p->size            = strlen($p->body);
+
+            $this->parts[] = $p;
         }
         // message contains multiple parts
         else if (is_array($structure->parts) && !empty($structure->parts)) {
@@ -432,7 +434,7 @@ class rcube_message
                         $this->attachments[] = $mail_part;
                 }
                 // part message/*
-                else if ($primary_type=='message') {
+                else if ($primary_type == 'message') {
                     $this->parse_structure($mail_part, true);
 
                     // list as attachment as well (mostly .eml)
@@ -496,11 +498,16 @@ class rcube_message
                         $this->attachments[] = $mail_part;
                     }
                 }
+                // attachment part as message/rfc822 (#1488026)
+                else if ($mail_part->mimetype == 'message/rfc822') {
+                    $this->parse_structure($mail_part);
+                }
             }
 
             // if this was a related part try to resolve references
             if ($mimetype == 'multipart/related' && sizeof($this->inline_parts)) {
                 $a_replaces = array();
+                $img_regexp = '/^image\/(gif|jpe?g|png|tiff|bmp|svg)/';
 
                 foreach ($this->inline_parts as $inline_object) {
                     $part_url = $this->get_part_url($inline_object->mime_id);
@@ -509,23 +516,23 @@ class rcube_message
                     if ($inline_object->content_location) {
                         $a_replaces[$inline_object->content_location] = $part_url;
                     }
-                    // MS Outlook sends sometimes non-related attachments as related
-                    // In this case multipart/related message has only one text part
-                    // We'll add all such attachments to the attachments list
-                    if (!isset($got_html_part) && empty($inline_object->content_id)
-                        && !empty($inline_object->filename)
-                    ) {
-                        $this->attachments[] = $inline_object;
-                    }
-                    // MS Outlook sometimes also adds non-image attachments as related
-                    // We'll add all such attachments to the attachments list
-                    // Warning: some browsers support pdf in <img/>
-                    // @TODO: we should fetch HTML body and find attachment's content-id
-                    // to handle also image attachments without reference in the body
-                    if (!empty($inline_object->filename)
-                        && !preg_match('/^image\/(gif|jpe?g|png|tiff|bmp|svg)/', $inline_object->mimetype)
-                    ) {
-                        $this->attachments[] = $inline_object;
+
+                    if (!empty($inline_object->filename)) {
+                        // MS Outlook sends sometimes non-related attachments as related
+                        // In this case multipart/related message has only one text part
+                        // We'll add all such attachments to the attachments list
+                        if (!isset($got_html_part) && empty($inline_object->content_id)) {
+                            $this->attachments[] = $inline_object;
+                        }
+                        // MS Outlook sometimes also adds non-image attachments as related
+                        // We'll add all such attachments to the attachments list
+                        // Warning: some browsers support pdf in <img/>
+                        else if (!preg_match($img_regexp, $inline_object->mimetype)) {
+                            $this->attachments[] = $inline_object;
+                        }
+                        // @TODO: we should fetch HTML body and find attachment's content-id
+                        // to handle also image attachments without reference in the body
+                        // @TODO: should we list all image attachments in text mode?
                     }
                 }
 

@@ -5,7 +5,7 @@
  | program/steps/settings/save_folder.inc                                |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2009, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Aleksander Machniak <alec@alec.pl>                            |
  +-----------------------------------------------------------------------+
 
- $Id: save_folder.inc 4304 2010-12-03 10:58:40Z alec $
+ $Id: save_folder.inc 5102 2011-08-19 16:32:38Z thomasb $
 
 */
 
@@ -34,12 +34,10 @@ $old_imap  = rcube_charset_convert($old, RCMAIL_CHARSET, 'UTF7-IMAP');
 // $path is in UTF7-IMAP already
 
 $delimiter = $IMAP->get_hierarchy_delimiter();
-$special   = (strlen($old_imap) && in_array($old_imap, (array) $RCMAIL->config->get('default_imap_folders')));
-$protected = ($special && $RCMAIL->config->get('protect_default_folders'));
-
+$options = strlen($old_imap) ? rcmail_folder_options($old_imap) : array();
 
 // Folder name checks
-if ($protected) {
+if ($options['protected'] || $options['norename']) {
 }
 else if (!strlen($name)) {
     $error = rcube_label('cannotbeempty');
@@ -61,15 +59,32 @@ if ($error) {
     $OUTPUT->command('display_message', $error, 'error');
 }
 else {
-    if ($protected) {
+    if ($options['protected'] || $options['norename']) {
         $name_imap = $old_imap;
     }
     else if (strlen($path)) {
         $name_imap = $path . $delimiter . $name_imap;
     }
+    else {
+        $name_imap = $RCMAIL->imap->mod_mailbox($name_imap, 'in');
+    }
+}
 
+// Check access rights to the parent folder
+if (!$error && strlen($path) && (!strlen($old_imap) || $old_imap != $name_imap)) {
+    $parent_opts = $RCMAIL->imap->mailbox_info($path);
+    if ($parent_opts['namespace'] != 'personal'
+        && (empty($parent_opts['rights']) || !preg_match('/[ck]/', implode($parent_opts)))
+    ) {
+        $error = rcube_label('parentnotwritable');
+    }
+}
+
+if (!$error) {
     $folder['name']     = $name_imap;
     $folder['oldname']  = $old_imap;
+    $folder['class']    = '';
+    $folder['options']  = $options;
     $folder['settings'] = array(
         // List view mode: 0-list, 1-threads
         'view_mode'   => (int) get_input_value('_viewmode', RCUBE_INPUT_POST),
@@ -81,12 +96,14 @@ else {
 // create a new mailbox
 if (!$error && !strlen($old)) {
 
+    $folder['subscribe'] = true;
+
     $plugin = $RCMAIL->plugins->exec_hook('folder_create', array('record' => $folder));
 
     $folder = $plugin['record'];
 
     if (!$plugin['abort']) {
-        $created = $IMAP->create_mailbox($folder['name'], TRUE);
+        $created = $IMAP->create_mailbox($folder['name'], $folder['subscribe']);
     }
     else {
         $created = $plugin['result'];
@@ -105,8 +122,10 @@ if (!$error && !strlen($old)) {
             $RCMAIL->user->save_prefs(array('message_threading' => $a_threaded));
         }
 
+        rcmail_update_folder_row($folder['name'], null, $folder['subscribe'], $folder['class']);
         $OUTPUT->show_message('foldercreated', 'confirmation');
-        $OUTPUT->command('reload', 250);
+        // reset folder preview frame
+        $OUTPUT->command('subscription_select');
         $OUTPUT->send('iframe');
     }
     else {
@@ -141,7 +160,6 @@ else if (!$error) {
 
             // In case of name change update names of childrens in settings
             if ($rename) {
-                $delimiter  = $RCMAIL->imap->get_hierarchy_delimiter();
                 $oldprefix  = '/^' . preg_quote($folder['oldname'] . $delimiter, '/') . '/';
                 foreach ($a_threaded as $key => $val) {
                     if ($key == $folder['oldname']) {
@@ -163,7 +181,7 @@ else if (!$error) {
 
         $OUTPUT->show_message('folderupdated', 'confirmation');
         if ($rename) {
-            $OUTPUT->command('reload', 250);
+            rcmail_update_folder_row($folder['name'], $folder['oldname'], $folder['subscribe'], $folder['class']);
             $OUTPUT->send('iframe');
         }
     }

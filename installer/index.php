@@ -1,5 +1,33 @@
 <?php
 
+/*
+ +-------------------------------------------------------------------------+
+ | Roundcube Webmail setup tool                                            |
+ | Version 0.6                                                             |
+ |                                                                         |
+ | Copyright (C) 2009-2011, The Roundcube Dev Team                         |
+ |                                                                         |
+ | This program is free software; you can redistribute it and/or modify    |
+ | it under the terms of the GNU General Public License version 2          |
+ | as published by the Free Software Foundation.                           |
+ |                                                                         |
+ | This program is distributed in the hope that it will be useful,         |
+ | but WITHOUT ANY WARRANTY; without even the implied warranty of          |
+ | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           |
+ | GNU General Public License for more details.                            |
+ |                                                                         |
+ | You should have received a copy of the GNU General Public License along |
+ | with this program; if not, write to the Free Software Foundation, Inc., |
+ | 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.             |
+ |                                                                         |
+ +-------------------------------------------------------------------------+
+ | Author: Thomas Bruederli <roundcube@gmail.com>                          |
+ +-------------------------------------------------------------------------+
+
+ $Id$
+
+*/
+
 ini_set('error_reporting', E_ALL&~E_NOTICE);
 ini_set('display_errors', 1);
 
@@ -41,7 +69,7 @@ if ($RCI->configured && ($RCI->getprop('enable_installer') || $_SESSION['allowin
 
   header('Content-type: text/plain');
   header('Content-Disposition: attachment; filename="'.$filename.'"');
-  
+
   $RCI->merge_config();
   echo $RCI->create_config($_GET['_mergeconfig'], true);
   exit;
@@ -68,14 +96,13 @@ if ($RCI->configured && empty($_REQUEST['_step'])) {
 <body>
 
 <div id="banner">
-  <div id="header">
-    <div class="banner-logo"><a href="http://www.roundcube.net"><img src="images/banner_logo.gif" width="200" height="56" border="0" alt="Roundcube Webmal Project" /></a></div>
-    <div class="banner-right"><img src="images/banner_right.gif" width="10" height="56" alt="" /></div>
-  </div>
-  <div id="topnav">
-    <a href="http://trac.roundcube.net/wiki/Howto_Install">How-to Wiki</a>
-  </div>
- </div>
+  <div class="banner-bg"></div>
+  <div class="banner-logo"><a href="http://roundcube.net"><img src="images/rcube_logo.gif" width="210" height="55" border="0" alt="Roundcube - Open source webmail project" /></a></div>
+</div>
+
+<div id="topnav">
+  <a href="http://trac.roundcube.net/wiki/Howto_Install">How-to Wiki</a>
+</div>
 
 <div id="content">
 
@@ -120,7 +147,7 @@ else {
 </div>
 
 <div id="footer">
-  Installer by the Roundcube Dev Team. Copyright &copy; 2008 - Published under the GNU Public License;&nbsp;
+  Installer by the Roundcube Dev Team. Copyright &copy; 2008-2011 - Published under the GNU Public License;&nbsp;
   Icons by <a href="http://famfamfam.com">famfamfam</a>
 </div>
 </body>

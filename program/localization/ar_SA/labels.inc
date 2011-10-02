@@ -6,14 +6,14 @@
 | language/ar_SA/labels.inc                                             |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
 | Author: Ossama Khayat <okhayat@yahoo.com>                             |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4345 2010-12-17 14:28:38Z thomasb $
+@version $Id: labels.inc 5067 2011-08-14 18:47:58Z thomasb $
 
 */
 
@@ -44,9 +44,6 @@ $labels['size'] = 'الحجم';
 $labels['priority'] = 'الأولوية';
 $labels['organization'] = 'المنظمة';
 $labels['readstatus'] = 'حالة القراءة';
-$labels['reply-to'] = 'الرد إلى';
-$labels['mail-reply-to'] = 'Mail-Reply-To';
-$labels['mail-followup-to'] = 'Mail-Followup-To';
 $labels['mailboxlist'] = 'المجلدات';
 $labels['messagesfromto'] = 'الرسالة $from إلى $to من مجموع $count';
 $labels['threadsfromto'] = 'جهات الإتصال $from إلى $to من مجموع $count';
@@ -103,18 +100,16 @@ $labels['replytomessage'] = 'الرد على الرسالة';
 $labels['replytoallmessage'] = 'الرد على المرسل وجميع مستقبلي الرسالة';
 $labels['replyall'] = 'الرد على الجميع';
 $labels['replylist'] = 'الرد على القائمة';
+$labels['forwardinline'] = 'تمرير الرسالة ضمنياً';
+$labels['forwardattachment'] = 'تمرير الرسالة كمرفق';
 $labels['forwardmessage'] = 'تمرير الرسالة';
 $labels['deletemessage'] = 'حذف الرسالة إلى المهملات';
 $labels['movemessagetotrash'] = 'انقل الرسالة إلى سلة المهملات';
 $labels['printmessage'] = 'طباعة هذه الرسالة';
 $labels['previousmessage'] = 'عرض الرسالة السابقة';
-$labels['previousmessages'] = 'عرض المجموعة السابقة من الرسائل';
 $labels['firstmessage'] = 'عرض الرسالة الأولى';
-$labels['firstmessages'] = 'عرض مجموعة الرسائل الأولى';
 $labels['nextmessage'] = 'عرض الرسالة التالية';
-$labels['nextmessages'] = 'عرض المجموعة التالية من الرسائل';
 $labels['lastmessage'] = 'عرض الرسالة الأخيرة';
-$labels['lastmessages'] = 'عرض مجموعة الرسائل الأخيرة';
 $labels['backtolist'] = 'العودة إلى لائحة الرسائل';
 $labels['viewsource'] = 'إظهار المصدر';
 $labels['markmessages'] = 'وسم الرسالة';
@@ -157,7 +152,6 @@ $labels['listmode'] = 'وضع طريقة السرد';
 $labels['folderactions'] = 'إجراءات المجلد...';
 $labels['compact'] = 'ضغط';
 $labels['empty'] = 'تفريغ';
-$labels['purge'] = 'إزالة';
 $labels['quota'] = 'المساحة المستخدمة';
 $labels['unknown'] = 'مجهول';
 $labels['unlimited'] = 'غير محدود';
@@ -182,6 +176,7 @@ $labels['resumeediting'] = 'متابعة التحرير';
 $labels['revertto'] = 'استعادة إلى';
 $labels['attachments'] = 'مرفقات';
 $labels['upload'] = 'تحميل';
+$labels['uploadprogress'] = '$percent ($current من $total)';
 $labels['close'] = 'إغلاق';
 $labels['messageoptions'] = 'خيارات الرسائل...';
 $labels['low'] = 'منخض';
@@ -208,15 +203,61 @@ $labels['receiptnote'] = 'ملاحظة: يُعلمك هذا الإيصال بأ�
 $labels['name'] = 'اسم العرض';
 $labels['firstname'] = 'الإسم الأول';
 $labels['surname'] = 'الإسم الأخير';
+$labels['middlename'] = 'الاسم الثاني';
+$labels['nameprefix'] = 'السابقة';
+$labels['namesuffix'] = 'اللاحقة';
+$labels['nickname'] = 'اللقب';
+$labels['jobtitle'] = 'المسمى الوظيفي';
+$labels['department'] = 'الإدارة';
+$labels['gender'] = 'الجنس';
+$labels['maidenname'] = 'إسم الزواج';
 $labels['email'] = 'البريد الإلكتروني';
+$labels['phone'] = 'الهاتف';
+$labels['address'] = 'العنوان';
+$labels['street'] = 'الشارع';
+$labels['locality'] = 'المدينة';
+$labels['zipcode'] = 'الرمز البريدي';
+$labels['region'] = 'المنطقة';
+$labels['country'] = 'الدولة';
+$labels['birthday'] = 'تاريخ الميلاد';
+$labels['anniversary'] = 'المناسبة السنوية';
+$labels['website'] = 'الموقع';
+$labels['instantmessenger'] = 'IM';
+$labels['notes'] = 'ملاحظات';
+$labels['male'] = 'ذكر';
+$labels['female'] = 'أنثى';
+$labels['manager'] = 'مدير';
+$labels['assistant'] = 'مساعد';
+$labels['spouse'] = 'زوجة';
+$labels['allfields'] = 'جميع الحقول';
+$labels['search'] = 'بحث';
+$labels['advsearch'] = 'بحث متقدم';
+$labels['other'] = 'أخرى';
+$labels['typehome'] = 'المنزل';
+$labels['typework'] = 'العمل';
+$labels['typeother'] = 'آخر';
+$labels['typemobile'] = 'المحمول';
+$labels['typemain'] = 'الرئيسي';
+$labels['typehomefax'] = 'فاكس المنزل';
+$labels['typeworkfax'] = 'فاكس العمل';
+$labels['typecar'] = 'السيارة';
+$labels['typepager'] = 'الرنان';
+$labels['typevideo'] = 'الفيديو';
+$labels['typeassistant'] = 'المساعد';
+$labels['typehomepage'] = 'الرئيسية';
+$labels['addfield'] = 'إضافة حقل...';
 $labels['addcontact'] = 'إضافة المراسل المحدد إلى دفتر عناويني';
 $labels['editcontact'] = 'تحرير بيانات المراسل';
 $labels['contacts'] = 'المراسلين';
 $labels['contactproperties'] = 'خواص جهة الإتصال';
+$labels['personalinfo'] = 'المعلومات الشخصية';
 $labels['edit'] = 'تحرير';
 $labels['cancel'] = 'إلغاء';
 $labels['save'] = 'حفظ';
 $labels['delete'] = 'حذف';
+$labels['rename'] = 'إعادة التسمية';
+$labels['addphoto'] = 'إضافة';
+$labels['replacephoto'] = 'استبدال';
 $labels['newcontact'] = 'إنشاء بطاقة مراسل جديدة';
 $labels['deletecontact'] = 'حذف المراسلين المحددين';
 $labels['composeto'] = 'إنشاء رسالة إليه';
@@ -226,6 +267,8 @@ $labels['export'] = 'تصدير';
 $labels['exportvcards'] = 'صدّر المراسلين بنسق vCard';
 $labels['newcontactgroup'] = 'إنشاء مجموعة مراسلين جديدة';
 $labels['groupactions'] = 'إجراءات مجموعات المراسلين...';
+$labels['grouprename'] = 'تغيير اسم المجموعة';
+$labels['groupdelete'] = 'حذف المجموعة';
 $labels['previouspage'] = 'عرض المجموعة السابقة';
 $labels['firstpage'] = 'عرض المجموعة الأولى';
 $labels['nextpage'] = 'عرض المجموعة التالية';
@@ -236,6 +279,7 @@ $labels['personaladrbook'] = 'العناوين الشخصية';
 $labels['import'] = 'استورد';
 $labels['importcontacts'] = 'استورد المراسلين';
 $labels['importfromfile'] = 'استورد من ملف:';
+$labels['importtarget'] = 'أضف المراسلين الجدد إلى دفتر العناوين:';
 $labels['importreplace'] = 'استبدل دفتر العناوين بأكمله';
 $labels['importtext'] = 'يمكنك رفع قائمة المراسلين من دفتر عناوين موجود.<br/>ندعم حالياً استيراد العناوين من نسق بيانات <a href="http://en.wikipedia.org/wiki/VCard">vCard</a>.';
 $labels['done'] = 'تم';
@@ -321,6 +365,8 @@ $labels['afternseconds'] = 'بعد $n ثواني';
 $labels['reqmdn'] = 'طلب إشعار استلام دائماً';
 $labels['reqdsn'] = 'طلب تنويه لحالة التوصيل دائماً';
 $labels['replysamefolder'] = 'وضع الردود في المجلد الذي يحوي الرسالة المردود عليها';
+$labels['defaultaddressbook'] = 'أضف المراسلين الجديد إلى دفتر العناوين المحدد';
+$labels['spellcheckbeforesend'] = 'تحقق من الإملاء قبل إرسال الرسائل';
 $labels['folder'] = 'مجلد';
 $labels['folders'] = 'مجلدات';
 $labels['foldername'] = 'اسم المجلد';
@@ -337,9 +383,14 @@ $labels['location'] = 'الموضع';
 $labels['info'] = 'معلومات';
 $labels['getfoldersize'] = 'اضغط لمعرفة حجم المجلد';
 $labels['changesubscription'] = 'اضغط لتغيير حالة الإشتراك';
+$labels['foldertype'] = 'نوع المجلد';
+$labels['personalfolder'] = 'مجلد خاص';
+$labels['otherfolder'] = 'مجلد مستخدم آخر';
+$labels['sharedfolder'] = 'مجلد عام';
 $labels['sortby'] = 'ترتيب بحسب';
 $labels['sortasc'] = 'ترتيب تصاعدي';
 $labels['sortdesc'] = 'ترتيب تنازلي';
+$labels['undo'] = 'تراجع';
 $labels['B'] = 'ب';
 $labels['KB'] = 'ك.ب';
 $labels['MB'] = 'م.ب';

@@ -5,7 +5,7 @@
  | program/include/rcube_config.php                                      |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2008-2010, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2008-2010, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_config.php 4509 2011-02-09 10:51:50Z thomasb $
+ $Id: rcube_config.php 5151 2011-08-31 12:49:44Z alec $
 
 */
 
@@ -54,7 +54,7 @@ class rcube_config
         // load database config
         if (!$this->load_from_file(RCMAIL_CONFIG_DIR . '/db.inc.php'))
             $this->errors[] = 'db.inc.php was not found.';
-    
+
         // load host-specific configuration
         $this->load_host_config();
 
@@ -67,7 +67,7 @@ class rcube_config
         // fix paths
         $this->prop['log_dir'] = $this->prop['log_dir'] ? realpath(unslashify($this->prop['log_dir'])) : INSTALL_PATH . 'logs';
         $this->prop['temp_dir'] = $this->prop['temp_dir'] ? realpath(unslashify($this->prop['temp_dir'])) : INSTALL_PATH . 'temp';
-    
+
         // fix default imap folders encoding
         foreach (array('drafts_mbox', 'junk_mbox', 'sent_mbox', 'trash_mbox') as $folder)
             $this->prop[$folder] = rcube_charset_convert($this->prop[$folder], RCMAIL_CHARSET, 'UTF7-IMAP');
@@ -87,12 +87,9 @@ class rcube_config
                 ini_set('error_log', $this->prop['log_dir'].'/errors');
             }
         }
-        if ($this->prop['debug_level'] & 4) {
-            ini_set('display_errors', 1);
-        }
-        else {
-            ini_set('display_errors', 0);
-        }
+
+        // enable display_errors in 'show' level, but not for ajax requests
+        ini_set('display_errors', intval(empty($_REQUEST['_remote']) && ($this->prop['debug_level'] & 4)));
 
         // export config data
         $GLOBALS['CONFIG'] = &$this->prop;
@@ -153,7 +150,17 @@ class rcube_config
      */
     public function get($name, $def = null)
     {
-        return isset($this->prop[$name]) ? $this->prop[$name] : $def;
+        $result = isset($this->prop[$name]) ? $this->prop[$name] : $def;
+        $rcmail = rcmail::get_instance();
+
+        if (is_object($rcmail->plugins)) {
+            $plugin = $rcmail->plugins->exec_hook('config_get', array(
+                'name' => $name, 'default' => $def, 'result' => $result));
+
+            return $plugin['result'];
+        }
+
+        return $result;
     }
 
 
@@ -188,8 +195,18 @@ class rcube_config
      */
     public function set_user_prefs($prefs)
     {
+        // Honor the dont_override setting for any existing user preferences
+        $dont_override = $this->get('dont_override');
+        if (is_array($dont_override) && !empty($dont_override)) {
+            foreach ($prefs as $key => $pref) {
+                if (in_array($key, $dont_override)) {
+                    unset($prefs[$key]);
+                }
+            }
+        }
+
         $this->userprefs = $prefs;
-        $this->prop = array_merge($this->prop, $prefs);
+        $this->prop      = array_merge($this->prop, $prefs);
     }
 
 
@@ -203,6 +220,19 @@ class rcube_config
         return $this->prop;
     }
 
+    /**
+     * Special getter for user's timezone
+     */
+    public function get_timezone()
+    {
+      $tz = $this->get('timezone');
+      if ($tz == 'auto')
+        $tz = isset($_SESSION['timezone']) ? $_SESSION['timezone'] : date('Z') / 3600;
+      else
+        $tz = intval($tz) + intval($this->get('dst_active'));
+
+      return $tz;
+    }
 
     /**
      * Return requested DES crypto key.

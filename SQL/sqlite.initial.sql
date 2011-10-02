@@ -31,7 +31,8 @@ CREATE TABLE contacts (
   email varchar(255) NOT NULL default '',
   firstname varchar(128) NOT NULL default '',
   surname varchar(128) NOT NULL default '',
-  vcard text NOT NULL default ''
+  vcard text NOT NULL default '',
+  words text NOT NULL default ''
 );
 
 CREATE INDEX ix_contacts_user_id ON contacts(user_id, email);
@@ -54,6 +55,8 @@ CREATE TABLE contactgroupmembers (
   created datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY (contactgroup_id, contact_id)
 );
+
+CREATE INDEX ix_contactgroupmembers_contact_id ON contactgroupmembers (contact_id);
 
 
 -- --------------------------------------------------------

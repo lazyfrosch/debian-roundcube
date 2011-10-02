@@ -5,7 +5,7 @@
  | program/include/rcube_contacts.php                                    |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2006-2010, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2006-2011, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_contacts.php 4145 2010-10-27 07:23:57Z alec $
+ $Id: rcube_contacts.php 5011 2011-08-03 09:32:45Z alec $
 
 */
 
@@ -41,19 +41,26 @@ class rcube_contacts extends rcube_addressbook
     private $user_id = 0;
     private $filter = null;
     private $result = null;
-    private $search_fields;
-    private $search_string;
+    private $name;
     private $cache;
-    private $table_cols = array('name', 'email', 'firstname', 'surname', 'vcard');
+    private $table_cols = array('name', 'email', 'firstname', 'surname');
+    private $fulltext_cols = array('name', 'firstname', 'surname', 'middlename', 'nickname',
+      'jobtitle', 'organization', 'department', 'maidenname', 'email', 'phone',
+      'address', 'street', 'locality', 'zipcode', 'region', 'country', 'website', 'im', 'notes');
 
     // public properties
-    var $primary_key = 'contact_id';
-    var $readonly = false;
-    var $groups = true;
-    var $list_page = 1;
-    var $page_size = 10;
-    var $group_id = 0;
-    var $ready = false;
+    public $primary_key = 'contact_id';
+    public $readonly = false;
+    public $groups = true;
+    public $undelete = true;
+    public $list_page = 1;
+    public $page_size = 10;
+    public $group_id = 0;
+    public $ready = false;
+    public $coltypes = array('name', 'firstname', 'surname', 'middlename', 'prefix', 'suffix', 'nickname',
+      'jobtitle', 'organization', 'department', 'assistant', 'manager',
+      'gender', 'maidenname', 'spouse', 'email', 'phone', 'address',
+      'birthday', 'anniversary', 'website', 'im', 'notes', 'photo');
 
 
     /**
@@ -71,9 +78,18 @@ class rcube_contacts extends rcube_addressbook
 
 
     /**
+     * Returns addressbook name
+     */
+     function get_name()
+     {
+        return $this->name;
+     }
+
+
+    /**
      * Save a search string for future listings
      *
-     * @param  string SQL params to use in listing method
+     * @param string SQL params to use in listing method
      */
     function set_search_set($filter)
     {
@@ -111,8 +127,6 @@ class rcube_contacts extends rcube_addressbook
     {
         $this->result = null;
         $this->filter = null;
-        $this->search_fields = null;
-        $this->search_string = null;
         $this->cache = null;
     }
 
@@ -152,7 +166,7 @@ class rcube_contacts extends rcube_addressbook
     /**
      * List the current set of contact records
      *
-     * @param  array   List of cols to show
+     * @param  array   List of cols to show, Null means all
      * @param  int     Only return this number of records, use negative values for tail
      * @param  boolean True to skip the count query (select only)
      * @return array  Indexed list of contact records, each a hash array
@@ -181,17 +195,30 @@ class rcube_contacts extends rcube_addressbook
                 " AND c.user_id=?" .
                 ($this->group_id ? " AND m.contactgroup_id=?" : "").
                 ($this->filter ? " AND (".$this->filter.")" : "") .
-            " ORDER BY c.name",
+            " ORDER BY ". $this->db->concat('c.name', 'c.email'),
             $start_row,
             $length,
             $this->user_id,
             $this->group_id);
 
+        // determine whether we have to parse the vcard or if only db cols are requested
+        $read_vcard = !$cols || count(array_intersect($cols, $this->table_cols)) < count($cols);
+
         while ($sql_result && ($sql_arr = $this->db->fetch_assoc($sql_result))) {
             $sql_arr['ID'] = $sql_arr[$this->primary_key];
+
+            if ($read_vcard)
+                $sql_arr = $this->convert_db_data($sql_arr);
+            else
+                $sql_arr['email'] = preg_split('/,\s*/', $sql_arr['email']);
+
             // make sure we have a name to display
-            if (empty($sql_arr['name']))
-                $sql_arr['name'] = $sql_arr['email'];
+            if (empty($sql_arr['name'])) {
+                if (empty($sql_arr['email']))
+                  $sql_arr['email'] = $this->get_col_values('email', $sql_arr, true);
+                $sql_arr['name'] = $sql_arr['email'][0];
+            }
+
             $this->result->add($sql_arr);
         }
 
@@ -216,13 +243,14 @@ class rcube_contacts extends rcube_addressbook
     /**
      * Search contacts
      *
-     * @param array   List of fields to search in
-     * @param string  Search value
-     * @param boolean True for strict (=), False for partial (LIKE) matching
-     * @param boolean True if results are requested, False if count only
-     * @param boolean True to skip the count query (select only)
-     * @param array   List of fields that cannot be empty
-     * @return Indexed list of contact records and 'count' value
+     * @param mixed   $fields   The field name of array of field names to search in
+     * @param mixed   $value    Search value (or array of values when $fields is array)
+     * @param boolean $strict   True for strict (=), False for partial (LIKE) matching
+     * @param boolean $select   True if results are requested, False if count only
+     * @param boolean $nocount  True to skip the count query (select only)
+     * @param array   $required List of fields that cannot be empty
+     *
+     * @return object rcube_result_set Contact records and 'count' value
      */
     function search($fields, $value, $strict=false, $select=true, $nocount=false, $required=array())
     {
@@ -233,27 +261,113 @@ class rcube_contacts extends rcube_addressbook
 
         $where = $and_where = array();
 
-        foreach ($fields as $col) {
+        foreach ($fields as $idx => $col) {
+            // direct ID search
             if ($col == 'ID' || $col == $this->primary_key) {
                 $ids     = !is_array($value) ? explode(',', $value) : $value;
                 $ids     = $this->db->array2list($ids, 'integer');
                 $where[] = 'c.' . $this->primary_key.' IN ('.$ids.')';
+                continue;
             }
-            else if ($strict)
-                $where[] = $this->db->quoteIdentifier($col).' = '.$this->db->quote($value);
-            else
-                $where[] = $this->db->ilike($col, '%'.$value.'%');
+            // fulltext search in all fields
+            else if ($col == '*') {
+                $words = array();
+                foreach (explode(" ", self::normalize_string($value)) as $word)
+                    $words[] = $this->db->ilike('words', '%'.$word.'%');
+                $where[] = '(' . join(' AND ', $words) . ')';
+            }
+            else {
+                $val = is_array($value) ? $value[$idx] : $value;
+                // table column
+                if (in_array($col, $this->table_cols)) {
+                    if ($strict) {
+                        $where[] = $this->db->quoteIdentifier($col).' = '.$this->db->quote($val);
+                    }
+                    else {
+                        $where[] = $this->db->ilike($col, '%'.$val.'%');
+                    }
+                }
+                // vCard field
+                else {
+                    if (in_array($col, $this->fulltext_cols)) {
+                        foreach (explode(" ", self::normalize_string($val)) as $word)
+                            $words[] = $this->db->ilike('words', '%'.$word.'%');
+                        $where[] = '(' . join(' AND ', $words) . ')';
+                    }
+                    if (is_array($value))
+                        $post_search[$col] = mb_strtolower($val);
+                }
+            }
         }
 
-        foreach ($required as $col) {
+        foreach (array_intersect($required, $this->table_cols) as $col) {
             $and_where[] = $this->db->quoteIdentifier($col).' <> '.$this->db->quote('');
         }
 
-        if (!empty($where))
-            $where = join(' OR ', $where);
+        if (!empty($where)) {
+            // use AND operator for advanced searches
+            $where = join(is_array($value) ? ' AND ' : ' OR ', $where);
+        }
 
         if (!empty($and_where))
             $where = ($where ? "($where) AND " : '') . join(' AND ', $and_where);
+
+        // Post-searching in vCard data fields
+        // we will search in all records and then build a where clause for their IDs
+        if (!empty($post_search)) {
+            $ids = array(0);
+            // build key name regexp
+            $regexp = '/^(' . implode(array_keys($post_search), '|') . ')(?:.*)$/';
+            // use initial WHERE clause, to limit records number if possible
+            if (!empty($where))
+                $this->set_search_set($where);
+
+            // count result pages
+            $cnt   = $this->count();
+            $pages = ceil($cnt / $this->page_size);
+            $scnt  = count($post_search);
+
+            // get (paged) result
+            for ($i=0; $i<$pages; $i++) {
+                $this->list_records(null, $i, true);
+                while ($row = $this->result->next()) {
+                    $id = $row[$this->primary_key];
+                    $found = array();
+                    foreach (preg_grep($regexp, array_keys($row)) as $col) {
+                        $pos     = strpos($col, ':');
+                        $colname = $pos ? substr($col, 0, $pos) : $col;
+                        $search  = $post_search[$colname];
+                        foreach ((array)$row[$col] as $value) {
+                            // composite field, e.g. address
+                            if (is_array($value)) {
+                                $value = implode($value);
+                            }
+                            $value = mb_strtolower($value);
+                            if (($strict && $value == $search) || (!$strict && strpos($value, $search) !== false)) {
+                                $found[$colname] = true;
+                                break;
+                            }
+                        }
+                    }
+                    // all fields match
+                    if (count($found) >= $scnt) {
+                        $ids[] = $id;
+                    }
+                }
+            }
+
+            // build WHERE clause
+            $ids = $this->db->array2list($ids, 'integer');
+            $where = 'c.' . $this->primary_key.' IN ('.$ids.')';
+            // reset counter
+            unset($this->cache['count']);
+
+            // when we know we have an empty result
+            if ($ids == '0') {
+                $this->set_search_set($where);
+                return ($this->result = new rcube_result_set(0, 0));
+            }
+        }
 
         if (!empty($where)) {
             $this->set_search_set($where);
@@ -263,7 +377,7 @@ class rcube_contacts extends rcube_addressbook
                 $this->result = $this->count();
         }
 
-        return $this->result; 
+        return $this->result;
     }
 
 
@@ -345,12 +459,12 @@ class rcube_contacts extends rcube_addressbook
         );
 
         if ($sql_arr = $this->db->fetch_assoc()) {
-            $sql_arr['ID'] = $sql_arr[$this->primary_key];
+            $record = $this->convert_db_data($sql_arr);
             $this->result = new rcube_result_set(1);
-            $this->result->add($sql_arr);
+            $this->result->add($record);
         }
 
-        return $assoc && $sql_arr ? $sql_arr : $this->result;
+        return $assoc && $record ? $record : $this->result;
     }
 
 
@@ -382,6 +496,28 @@ class rcube_contacts extends rcube_addressbook
 
 
     /**
+     * Check the given data before saving.
+     * If input not valid, the message to display can be fetched using get_error()
+     *
+     * @param array Assoziative array with data to save
+     * @return boolean True if input is valid, False if not.
+     */
+    public function validate($save_data)
+    {
+        // validate e-mail addresses
+        $valid = parent::validate($save_data);
+
+        // require at least one e-mail address (syntax check is already done)
+        if ($valid && !array_filter($this->get_col_values('email', $save_data, true))) {
+            $this->set_error('warning', 'noemailwarning');
+            $valid = false;
+        }
+
+        return $valid;
+    }
+
+
+    /**
      * Create a new contact record
      *
      * @param array Associative array with save data
@@ -389,21 +525,29 @@ class rcube_contacts extends rcube_addressbook
      */
     function insert($save_data, $check=false)
     {
-        if (is_object($save_data) && is_a($save_data, rcube_result_set))
-            return $this->insert_recset($save_data, $check);
+        if (!is_array($save_data))
+            return false;
 
         $insert_id = $existing = false;
 
-        if ($check)
-            $existing = $this->search('email', $save_data['email'], true, false);
+        if ($check) {
+            foreach ($save_data as $col => $values) {
+                if (strpos($col, 'email') === 0) {
+                    foreach ((array)$values as $email) {
+                        if ($existing = $this->search('email', $email, false, false))
+                            break 2;
+                    }
+                }
+            }
+        }
 
+        $save_data = $this->convert_save_data($save_data);
         $a_insert_cols = $a_insert_values = array();
 
-        foreach ($this->table_cols as $col)
-            if (isset($save_data[$col])) {
-                $a_insert_cols[]   = $this->db->quoteIdentifier($col);
-                $a_insert_values[] = $this->db->quote($save_data[$col]);
-            }
+        foreach ($save_data as $col => $value) {
+            $a_insert_cols[]   = $this->db->quoteIdentifier($col);
+            $a_insert_values[] = $this->db->quote($value);
+        }
 
         if (!$existing->count && !empty($a_insert_cols)) {
             $this->db->query(
@@ -426,20 +570,6 @@ class rcube_contacts extends rcube_addressbook
 
 
     /**
-     * Insert new contacts for each row in set
-     */
-    function insert_recset($result, $check=false)
-    {
-        $ids = array();
-        while ($row = $result->next()) {
-            if ($insert = $this->insert($row, $check))
-                $ids[] = $insert;
-        }
-        return $ids;
-    }
-
-
-    /**
      * Update a specific contact record
      *
      * @param mixed Record identifier
@@ -450,11 +580,12 @@ class rcube_contacts extends rcube_addressbook
     {
         $updated = false;
         $write_sql = array();
+        $record = $this->get_record($id, true);
+        $save_cols = $this->convert_save_data($save_cols, $record);
 
-        foreach ($this->table_cols as $col)
-            if (isset($save_cols[$col]))
-                $write_sql[] = sprintf("%s=%s", $this->db->quoteIdentifier($col),
-                    $this->db->quote($save_cols[$col]));
+        foreach ($save_cols as $col => $value) {
+            $write_sql[] = sprintf("%s=%s", $this->db->quoteIdentifier($col), $this->db->quote($value));
+        }
 
         if (!empty($write_sql)) {
             $this->db->query(
@@ -468,28 +599,116 @@ class rcube_contacts extends rcube_addressbook
             );
 
             $updated = $this->db->affected_rows();
+            $this->result = null;  // clear current result (from get_record())
         }
 
         return $updated;
     }
 
 
+    private function convert_db_data($sql_arr)
+    {
+        $record = array();
+        $record['ID'] = $sql_arr[$this->primary_key];
+
+        if ($sql_arr['vcard']) {
+            unset($sql_arr['email']);
+            $vcard = new rcube_vcard($sql_arr['vcard']);
+            $record += $vcard->get_assoc() + $sql_arr;
+        }
+        else {
+            $record += $sql_arr;
+            $record['email'] = preg_split('/,\s*/', $record['email']);
+        }
+
+        return $record;
+    }
+
+
+    private function convert_save_data($save_data, $record = array())
+    {
+        $out = array();
+        $words = '';
+
+        // copy values into vcard object
+        $vcard = new rcube_vcard($record['vcard'] ? $record['vcard'] : $save_data['vcard']);
+        $vcard->reset();
+        foreach ($save_data as $key => $values) {
+            list($field, $section) = explode(':', $key);
+            $fulltext = in_array($field, $this->fulltext_cols);
+            foreach ((array)$values as $value) {
+                if (isset($value))
+                    $vcard->set($field, $value, $section);
+                if ($fulltext && is_array($value))
+                    $words .= ' ' . self::normalize_string(join(" ", $value));
+                else if ($fulltext && strlen($value) >= 3)
+                    $words .= ' ' . self::normalize_string($value);
+            }
+        }
+        $out['vcard'] = $vcard->export(false);
+
+        foreach ($this->table_cols as $col) {
+            $key = $col;
+            if (!isset($save_data[$key]))
+                $key .= ':home';
+            if (isset($save_data[$key]))
+                $out[$col] = is_array($save_data[$key]) ? join(',', $save_data[$key]) : $save_data[$key];
+        }
+
+        // save all e-mails in database column
+        $out['email'] = join(", ", $vcard->email);
+
+        // join words for fulltext search
+        $out['words'] = join(" ", array_unique(explode(" ", $words)));
+
+        return $out;
+    }
+
+
     /**
      * Mark one or more contact records as deleted
      *
-     * @param array  Record identifiers
+     * @param array   Record identifiers
+     * @param boolean Remove record(s) irreversible (unsupported)
      */
-    function delete($ids)
+    function delete($ids, $force=true)
     {
         if (!is_array($ids))
             $ids = explode(',', $ids);
 
         $ids = $this->db->array2list($ids, 'integer');
 
-        // flag record as deleted
+        // flag record as deleted (always)
         $this->db->query(
             "UPDATE ".get_table_name($this->db_name).
             " SET del=1, changed=".$this->db->now().
+            " WHERE user_id=?".
+                " AND contact_id IN ($ids)",
+            $this->user_id
+        );
+
+        $this->cache = null;
+
+        return $this->db->affected_rows();
+    }
+
+
+    /**
+     * Undelete one or more contact records
+     *
+     * @param array  Record identifiers
+     */
+    function undelete($ids)
+    {
+        if (!is_array($ids))
+            $ids = explode(',', $ids);
+
+        $ids = $this->db->array2list($ids, 'integer');
+
+        // clear deleted flag
+        $this->db->query(
+            "UPDATE ".get_table_name($this->db_name).
+            " SET del=0, changed=".$this->db->now().
             " WHERE user_id=?".
                 " AND contact_id IN ($ids)",
             $this->user_id
@@ -506,8 +725,12 @@ class rcube_contacts extends rcube_addressbook
      */
     function delete_all()
     {
-        $this->db->query("DELETE FROM ".get_table_name($this->db_name)." WHERE user_id = ?", $this->user_id);
         $this->cache = null;
+
+        $this->db->query("UPDATE ".get_table_name($this->db_name).
+            " SET del=1, changed=".$this->db->now().
+            " WHERE user_id = ?", $this->user_id);
+
         return $this->db->affected_rows();
     }
 

@@ -5,7 +5,7 @@
  | program/include/rcube_result_set.php                                  |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2006-2010, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2006-2010, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_result_set.php 3989 2010-09-25 13:03:53Z alec $
+ $Id: rcube_result_set.php 4834 2011-06-03 11:03:13Z alec $
 
 */
 
@@ -44,27 +44,27 @@ class rcube_result_set
     {
         $this->records[] = $rec;
     }
-  
+
     function iterate()
     {
         return $this->records[$this->current++];
     }
-  
+
     function first()
     {
         $this->current = 0;
         return $this->records[$this->current++];
     }
-  
+
     // alias for iterate()
     function next()
     {
         return $this->iterate();
     }
-  
+
     function seek($i)
     {
         $this->current = $i;
     }
-  
+
 }

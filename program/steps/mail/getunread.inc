@@ -5,7 +5,7 @@
  | program/steps/mail/getunread.inc                                      |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2009, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,11 +15,11 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: getunread.inc 4294 2010-12-01 09:52:23Z alec $
+ $Id: getunread.inc 4735 2011-05-06 08:14:48Z alec $
 
 */
 
-$a_folders = $IMAP->list_mailboxes();
+$a_folders = $IMAP->list_mailboxes('', '*', 'mail');
 
 if (!empty($a_folders))
 {

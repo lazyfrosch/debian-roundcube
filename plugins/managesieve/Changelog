@@ -1,8 +1,34 @@
+- Fixed import from Horde-INGO (#1488064)
+
+* version 4.3 [2011-07-28]
+-----------------------------------------------------------
+- Fixed handling of error in Net_Sieve::listScripts()
+- Fixed handling of REFERRAL responses (http://pear.php.net/bugs/bug.php?id=17107)
+- Fixed bug where wrong folders hierarchy was displayed on folders listing
+
+* version 4.2 [2011-05-24]
+-----------------------------------------------------------
+- Moved elsif replacement code to handle only imports from other formats
+- Fixed mod_mailbox() usage for newer Roundcube versions
+- Fixed regex extension (error: regex require missing)
+
+* version 4.1 [2011-03-07]
+-----------------------------------------------------------
+- Fix fileinto target is always INBOX (#1487776)
 - Fix escaping of backslash character in quoted strings (#1487780)
-- Fix STARTTLS for timsieved < 2.3.10
 - Fix handling of non-safe characters (double-quote, backslash)
   or UTF-8 characters (dovecot's implementation bug workaround)
   in script names
+- Fix saving of a script using flags extension on servers with imap4flags support (#1487825)
+
+* version 4.0 [2011-02-10]
+-----------------------------------------------------------
+- Fix STARTTLS for timsieved < 2.3.10
+- Added :regex and :matches support (#1487746)
+- Added setflag/addflag/removeflag support (#1487449)
+- Added support for vacation :subject field (#1487120)
+- rcube_sieve_script class moved to separate file
+- Moved javascript code from skin templates into managesieve.js file
 
 * version 3.0 [2011-02-01]
 -----------------------------------------------------------

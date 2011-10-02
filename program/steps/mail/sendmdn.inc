@@ -5,7 +5,7 @@
  | program/steps/mail/sendmdn.inc                                        |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2008-2009, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2008-2009, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: sendmdn.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: sendmdn.inc 4410 2011-01-12 18:25:02Z thomasb $
 
 */
 
