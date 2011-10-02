@@ -44,6 +44,8 @@ binary-install/roundcube-core::
 	# Remove jquery as well
 	rm $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/js/jquery.min.js
 	dh_link -proundcube-core usr/share/javascript/jquery/jquery.min.js usr/share/roundcube/program/js/jquery-1.4.min.js
+	# Remove GnuPG PEAR module
+	rm -rf $(CURDIR)/debian/roundcube-plugins/usr/share/roundcube/plugins/enigma/lib/Crypt
 
 binary-install/roundcube-plugins::
 	# Plugins are in usr/share/roundcube/plugins, for each plugin

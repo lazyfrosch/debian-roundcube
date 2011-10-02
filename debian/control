@@ -20,7 +20,7 @@ Depends: dbconfig-common, debconf | debconf-2.0, ucf,
  libmagic1,
  roundcube-sqlite (= ${source:Version}) | roundcube-mysql (= ${source:Version}) | roundcube-pgsql (= ${source:Version}),
  ${misc:Depends}
-Suggests: php-auth-sasl (>= 1.0.3), roundcube-plugins
+Suggests: php-auth-sasl (>= 1.0.3), php-crypt-gpg, roundcube-plugins
 Replaces: roundcube
 Breaks: roundcube (<< 0.1~rc2-2)
 Description: skinnable AJAX based webmail solution for IMAP servers
