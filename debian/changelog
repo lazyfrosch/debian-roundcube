@@ -1,3 +1,12 @@
+roundcube (0.6+dfsg-1) unstable; urgency=low
+
+  * New upstream version. Closes: #643707.
+      + Repack to remove SWF file without source from TinyMCE.      
+      + Add SQL upgrade procedures.
+      + Add new plugins: acl, enigma and newmail_notifier.
+
+ -- Vincent Bernat <bernat@debian.org>  Sun, 02 Oct 2011 15:20:57 +0200
+
 roundcube (0.5.4+dfsg-1) unstable; urgency=high
 
   [ Vincent Bernat ]
