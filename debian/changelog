@@ -1,3 +1,10 @@
+roundcube (0.7-1) unstable; urgency=low
+
+  * New upstream version. Closes: #652564.
+      + Does not ship SWF with TinyMCE anymore.
+
+ -- Vincent Bernat <bernat@debian.org>  Fri, 23 Dec 2011 22:04:39 +0100
+
 roundcube (0.6+dfsg-1) unstable; urgency=low
 
   * New upstream version. Closes: #643707.
