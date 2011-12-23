@@ -3,7 +3,7 @@
 /**
  * Folders Access Control Lists Management (RFC4314, RFC2086)
  *
- * @version 0.6.1
+ * @version @package_version@
  * @author Aleksander Machniak <alec@alec.pl>
  *
  *
@@ -87,11 +87,15 @@ class acl extends rcube_plugin
         $this->load_config();
 
         $search = get_input_value('_search', RCUBE_INPUT_GPC, true);
+        $sid    = get_input_value('_id', RCUBE_INPUT_GPC);
         $users  = array();
 
         if ($this->init_ldap()) {
-            $this->ldap->set_pagesize(15);
-            $result = $this->ldap->search('*', $search);
+            $max  = (int) $this->rc->config->get('autocomplete_max', 15);
+            $mode = (int) $this->rc->config->get('addressbook_search_mode');
+
+            $this->ldap->set_pagesize($max);
+            $result = $this->ldap->search('*', $search, $mode);
 
             foreach ($result->records as $record) {
                 $user = $record['uid'];
@@ -112,7 +116,7 @@ class acl extends rcube_plugin
 
         sort($users, SORT_LOCALE_STRING);
 
-        $this->rc->output->command('ksearch_query_results', $users, $search);
+        $this->rc->output->command('ksearch_query_results', $users, $search, $sid);
         $this->rc->output->send();
     }
 
@@ -185,6 +189,10 @@ class acl extends rcube_plugin
             'acluser'   => array($this, 'templ_user'),
             'aclrights' => array($this, 'templ_rights'),
         ));
+
+        $this->rc->output->set_env('autocomplete_max', (int)$this->rc->config->get('autocomplete_max', 15));
+        $this->rc->output->set_env('autocomplete_min_length', $this->rc->config->get('autocomplete_min_length'));
+        $this->rc->output->add_label('autocompletechars', 'autocompletemore');
 
         $args['form']['sharing'] = array(
             'name'    => Q($this->gettext('sharing')),
@@ -619,7 +627,6 @@ class acl extends rcube_plugin
             $acl = $this->rc->imap->get_acl('INBOX');
             if (is_array($acl)) {
                 $regexp = '/^' . preg_quote($_SESSION['username'], '/') . '@(.*)$/';
-                $regexp = '/^' . preg_quote('aleksander.machniak', '/') . '@(.*)$/';
                 foreach (array_keys($acl) as $name) {
                     if (preg_match($regexp, $name, $matches)) {
                         $domain = $matches[1];

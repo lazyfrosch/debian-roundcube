@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_addressbook.php 4965 2011-07-25 11:48:50Z alec $
+ $Id: rcube_addressbook.php 5415 2011-11-11 15:04:45Z alec $
 
 */
 
@@ -30,7 +30,7 @@ abstract class rcube_addressbook
     /** constants for error reporting **/
     const ERROR_READ_ONLY = 1;
     const ERROR_NO_CONNECTION = 2;
-    const ERROR_INCOMPLETE = 3;
+    const ERROR_VALIDATE = 3;
     const ERROR_SAVING = 4;
     const ERROR_SEARCH = 5;
 
@@ -38,6 +38,7 @@ abstract class rcube_addressbook
     public $primary_key;
     public $groups = false;
     public $readonly = true;
+    public $searchonly = false;
     public $undelete = false;
     public $ready = false;
     public $group_id = null;
@@ -95,12 +96,16 @@ abstract class rcube_addressbook
      *
      * @param array   List of fields to search in
      * @param string  Search value
+     * @param int     Matching mode:
+     *                0 - partial (*abc*),
+     *                1 - strict (=),
+     *                2 - prefix (abc*)
      * @param boolean True if results are requested, False if count only
      * @param boolean True to skip the count query (select only)
      * @param array   List of fields that cannot be empty
      * @return object rcube_result_set List of contact records and 'count' value
      */
-    abstract function search($fields, $value, $strict=false, $select=true, $nocount=false, $required=array());
+    abstract function search($fields, $value, $mode=0, $select=true, $nocount=false, $required=array());
 
     /**
      * Count number of available contacts in database
@@ -181,15 +186,16 @@ abstract class rcube_addressbook
      * If input isn't valid, the message to display can be fetched using get_error()
      *
      * @param array Assoziative array with data to save
+     * @param boolean Attempt to fix/complete record automatically
      * @return boolean True if input is valid, False if not.
      */
-    public function validate($save_data)
+    public function validate(&$save_data, $autofix = false)
     {
         // check validity of email addresses
         foreach ($this->get_col_values('email', $save_data, true) as $email) {
             if (strlen($email)) {
                 if (!check_email(rcube_idn_to_ascii($email))) {
-                    $this->set_error('warning', rcube_label(array('name' => 'emailformaterror', 'vars' => array('email' => $email))));
+                    $this->set_error(self::ERROR_VALIDATE, rcube_label(array('name' => 'emailformaterror', 'vars' => array('email' => $email))));
                     return false;
                 }
             }
@@ -294,6 +300,18 @@ abstract class rcube_addressbook
     }
 
     /**
+     * Get group properties such as name and email address(es)
+     *
+     * @param string Group identifier
+     * @return array Group properties as hash array
+     */
+    function get_group($group_id)
+    {
+        /* empty for address books don't supporting groups */
+        return null;
+    }
+
+    /**
      * Create a contact group with the given name
      *
      * @param string The group name
@@ -385,7 +403,7 @@ abstract class rcube_addressbook
     {
         $out = array();
         foreach ($data as $c => $values) {
-            if (strpos($c, $col) === 0) {
+            if ($c === $col || strpos($c, $col.':') === 0) {
                 if ($flat) {
                     $out = array_merge($out, (array)$values);
                 }

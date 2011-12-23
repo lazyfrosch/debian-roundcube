@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: func.inc 4875 2011-06-23 17:43:44Z alec $
+ $Id: func.inc 5481 2011-11-24 07:53:00Z alec $
 
 */
 
@@ -178,7 +178,7 @@ function rcmail_user_prefs($current=null)
     // show page size selection
     if (!isset($no_override['timezone'])) {
       $field_id = 'rcmfd_timezone';
-      $select_timezone = new html_select(array('name' => '_timezone', 'id' => $field_id, 'onchange' => "document.getElementById('rcmfd_dst').disabled=this.selectedIndex==0"));
+      $select_timezone = new html_select(array('name' => '_timezone', 'id' => $field_id, 'onchange' => "$('#rcmfd_dst').attr('disabled', this.selectedIndex==0)"));
       $select_timezone->add(rcube_label('autodetect'), 'auto');
       $select_timezone->add('(GMT -11:00) Midway Island, Samoa', '-11');
       $select_timezone->add('(GMT -10:00) Hawaii', '-10');
@@ -234,6 +234,33 @@ function rcmail_user_prefs($current=null)
       $blocks['main']['options']['dstactive'] = array(
         'title' => html::label($field_id, Q(rcube_label('dstactive'))),
         'content' => $input_dst->show($config['dst_active']),
+      );
+    }
+
+    // date/time formatting
+    if (!isset($no_override['time_format'])) {
+      $reftime = mktime(7,30,0);
+      $field_id = 'rcmfd_time_format';
+      $select_time = new html_select(array('name' => '_time_format', 'id' => $field_id));
+      foreach ((array)$RCMAIL->config->get('time_formats', array('G:i', 'H:i', 'g:i a', 'h:i A')) as $choice)
+        $select_time->add(date($choice, $reftime), $choice);
+
+      $blocks['main']['options']['time_format'] = array(
+        'title' => html::label($field_id, Q(rcube_label('timeformat'))),
+        'content' => $select_time->show($RCMAIL->config->get('time_format')),
+      );
+    }
+
+    if (!isset($no_override['date_format'])) {
+      $refdate = mktime(12,30,0,7,24);
+      $field_id = 'rcmfd_date_format';
+      $select_date = new html_select(array('name' => '_date_format', 'id' => $field_id));
+      foreach ((array)$RCMAIL->config->get('date_formats', array('Y-m-d','d-m-Y','Y/m/d','m/d/Y','d/m/Y','d.m.Y','j.n.Y')) as $choice)
+        $select_date->add(date($choice, $refdate), $choice);
+
+      $blocks['main']['options']['date_format'] = array(
+        'title' => html::label($field_id, Q(rcube_label('dateformat'))),
+        'content' => $select_date->show($config['date_format']),
       );
     }
 
@@ -410,14 +437,15 @@ function rcmail_user_prefs($current=null)
 
     if (!isset($no_override['show_images'])) {
       $field_id = 'rcmfd_show_images';
-      $input_show_images = new html_select(array('name' => '_show_images', 'id' => $field_id));
+      $input_show_images = new html_select(array('name' => '_show_images', 'id' => $field_id,
+        'disabled' => !$config['prefer_html']));
       $input_show_images->add(rcube_label('never'), 0);
       $input_show_images->add(rcube_label('fromknownsenders'), 1);
       $input_show_images->add(rcube_label('always'), 2);
 
       $blocks['main']['options']['show_images'] = array(
         'title' => html::label($field_id, Q(rcube_label('showremoteimages'))),
-        'content' => $input_show_images->show($config['show_images']),
+        'content' => $input_show_images->show($config['prefer_html'] ? $config['show_images'] : 0),
       );
     }
 
@@ -448,8 +476,9 @@ function rcmail_user_prefs($current=null)
     case 'compose':
 
     $blocks = array(
-      'main' => array('name' => Q(rcube_label('mainoptions'))),
-      'sig' => array('name' => Q(rcube_label('signatureoptions'))),
+      'main'       => array('name' => Q(rcube_label('mainoptions'))),
+      'spellcheck' => array('name' => Q(rcube_label('spellcheckoptions'))),
+      'sig'        => array('name' => Q(rcube_label('signatureoptions'))),
     );
 
     // Show checkbox for HTML Editor
@@ -549,10 +578,24 @@ function rcmail_user_prefs($current=null)
       $field_id = 'rcmfd_spellcheck_before_send';
       $input_spellcheck = new html_checkbox(array('name' => '_spellcheck_before_send', 'id' => $field_id, 'value' => 1));
 
-      $blocks['main']['options']['spellcheck_before_send'] = array(
+      $blocks['spellcheck']['options']['spellcheck_before_send'] = array(
         'title' => html::label($field_id, Q(rcube_label('spellcheckbeforesend'))),
         'content' => $input_spellcheck->show($config['spellcheck_before_send']?1:0),
       );
+    }
+
+    if ($config['enable_spellcheck']) {
+      foreach (array('syms', 'nums', 'caps') as $key) {
+        $key = 'spellcheck_ignore_'.$key;
+        if (!isset($no_override[$key])) {
+          $input_spellcheck = new html_checkbox(array('name' => '_'.$key, 'id' => 'rcmfd_'.$key, 'value' => 1));
+
+          $blocks['spellcheck']['options'][$key] = array(
+            'title' => html::label($field_id, Q(rcube_label(str_replace('_', '', $key)))),
+            'content' => $input_spellcheck->show($config[$key]?1:0),
+          );
+        }
+      }
     }
 
     if (!isset($no_override['show_sig'])) {
@@ -617,6 +660,16 @@ function rcmail_user_prefs($current=null)
       );
     }
 
+    if (!isset($no_override['autocomplete_single'])) {
+      $field_id = 'rcmfd_autocomplete_single';
+      $checkbox = new html_checkbox(array('name' => '_autocomplete_single', 'id' => $field_id, 'value' => 1));
+
+      $blocks['main']['options']['autocomplete_single'] = array(
+        'title' => html::label($field_id, Q(rcube_label('autocompletesingle'))),
+        'content' => $checkbox->show($config['autocomplete_single']?1:0),
+      );
+    }
+
     break;
 
     // Special IMAP folders
@@ -634,7 +687,7 @@ function rcmail_user_prefs($current=null)
       // load folders list only when needed
       if ($current) {
         $select = rcmail_mailbox_select(array('noselection' => '---', 'realnames' => true,
-          'maxlength' => 30, 'exceptions' => array('INBOX')));
+          'maxlength' => 30, 'exceptions' => array('INBOX'), 'folder_filter' => 'mail', 'folder_rights' => 'w'));
       }
       else // dummy select
         $select = new html_select();

@@ -15,7 +15,7 @@
  | Author: Aleksander Machniak <alec@alec.pl>                            |
  +-----------------------------------------------------------------------+
 
- $Id: edit_folder.inc 5022 2011-08-04 09:01:36Z alec $
+ $Id: edit_folder.inc 5402 2011-11-09 10:03:54Z alec $
 
 */
 
@@ -119,7 +119,8 @@ function rcmail_folder_form($attrib)
             'realnames'   => false,
             'maxlength'   => 150,
             'unsubscribed' => true,
-            'exceptions' => array($mbox_imap),
+            'skip_noinferiors' => true,
+            'exceptions'  => array($mbox_imap),
         ));
 
         $form['props']['fieldsets']['location']['content']['path'] = array(
@@ -134,7 +135,7 @@ function rcmail_folder_form($attrib)
     );
 
     // Settings: threading
-    if ($threading_supported && !$options['noselect'] && !$options['is_root']) {
+    if ($threading_supported && ($mbox_imap == 'INBOX' || (!$options['noselect'] && !$options['is_root']))) {
         $select = new html_select(array('name' => '_viewmode', 'id' => '_listmode'));
         $select->add(rcube_label('list'), 0);
         $select->add(rcube_label('threads'), 1);
@@ -191,7 +192,7 @@ function rcmail_folder_form($attrib)
             'content' => array()
         );
 
-        if (!$options['noselect'] && !$options['is_root']) {
+        if ((!$options['noselect'] && !$options['is_root']) || $mbox_imap == 'INBOX') {
             $msgcount = $RCMAIL->imap->messagecount($mbox_imap, 'ALL', true, false);
 
             // Size

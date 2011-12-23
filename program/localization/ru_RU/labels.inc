@@ -15,7 +15,7 @@
 | Support: www.roundcube.ru                                             |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 5291 2011-09-28 17:10:45Z thomasb $
+@version $Id: labels.inc 5290 2011-09-28 17:09:50Z thomasb $
 
 */
 

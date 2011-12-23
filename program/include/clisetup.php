@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: clisetup.php 4678 2011-04-20 13:58:21Z alec $
+ $Id: clisetup.php 5299 2011-10-03 09:25:33Z alec $
 
 */
 
@@ -25,6 +25,8 @@ if (php_sapi_name() != 'cli') {
 
 require_once INSTALL_PATH . 'program/include/iniset.php';
 
+// Unset max. execution time limit, set to 120 seconds in iniset.php
+@set_time_limit(0);
 
 /**
  * Parse commandline arguments into a hash array

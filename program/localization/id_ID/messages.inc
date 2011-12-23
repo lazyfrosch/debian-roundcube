@@ -13,7 +13,7 @@
 | Author: Putu Arya Sabda Wijaya <ptaryasw@isi-dps.ac.id>                    |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 4748 2011-05-11 13:17:43Z yllar $
+@version $Id: messages.inc 5139 2011-08-28 09:47:15Z alec $
 
 */
 
@@ -24,7 +24,7 @@ $messages['sessionerror'] = 'Session Anda invalid atau kadaluwarsa';
 $messages['imaperror'] = 'Koneksi ke IMAP server gagal';
 $messages['servererror'] = 'Server Error!';
 $messages['servererrormsg'] = 'Server Error: $msg';
-$messages['databaserror'] = 'Basis data Error!';
+$messages['dberror'] = 'Basis data Error!';
 $messages['errorreadonly'] = 'Tidak bisa melakukan operasi. Folder hanya bisa dibaca';
 $messages['errornoperm'] = 'Tidak bisa melakukan operasi. Ijin ditolak';
 $messages['invalidrequest'] = 'Permintaan tidak valid! Tidak ada data yang tersimpan.';

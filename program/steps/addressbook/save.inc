@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: save.inc 5130 2011-08-25 08:30:01Z alec $
+ $Id: save.inc 5541 2011-12-04 17:05:42Z thomasb $
 
 */
 
@@ -50,10 +50,12 @@ foreach ($GLOBALS['CONTACT_COLTYPES'] as $col => $colprop) {
       foreach ((array)$vals as $i => $val)
         $values[$i][$childcol] = $val;
     }
-    $subtypes = get_input_value('_subtype_' . $col, RCUBE_INPUT_POST);
-    foreach ($subtypes as $i => $subtype)
+    $subtypes = isset($_REQUEST['_subtype_' . $col]) ? (array)get_input_value('_subtype_' . $col, RCUBE_INPUT_POST) : array('');
+    foreach ($subtypes as $i => $subtype) {
+      $suffix = $subtype ? ':'.$subtype : '';
       if ($values[$i])
-        $a_record[$col.':'.$subtype][] = $values[$i];
+        $a_record[$col.$suffix][] = $values[$i];
+     }
   }
   // assign values and subtypes
   else if (is_array($_POST[$fname])) {
@@ -162,7 +164,7 @@ else {
   // show notice if existing contacts with same e-mail are found
   $existing = false;
   foreach ($CONTACTS->get_col_values('email', $a_record, true) as $email) {
-      if ($email && ($res = $CONTACTS->search('email', $email, false, false, true)) && $res->count) {
+      if ($email && ($res = $CONTACTS->search('email', $email, 1, false, true)) && $res->count) {
           $OUTPUT->show_message('contactexists', 'notice', null, false);
           break;
       }

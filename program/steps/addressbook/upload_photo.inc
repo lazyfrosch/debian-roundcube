@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: upload_photo.inc 5130 2011-08-25 08:30:01Z alec $
+ $Id: upload_photo.inc 5110 2011-08-22 14:33:02Z alec $
 
 */
 

@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_plugin_api.php 5151 2011-08-31 12:49:44Z alec $
+ $Id: rcube_plugin_api.php 5207 2011-09-12 12:52:01Z alec $
 
 */
 
@@ -418,6 +418,17 @@ class rcube_plugin_api
   public function add_content($html, $container)
   {
     $this->template_contents[$container] .= $html . "\n";
+  }
+
+
+  /**
+   * Returns list of loaded plugins names
+   *
+   * @return array List of plugin names
+   */
+  public function loaded_plugins()
+  {
+    return array_keys($this->plugins);
   }
 
 

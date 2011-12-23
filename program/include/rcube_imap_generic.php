@@ -6,6 +6,7 @@
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2005-2010, The Roundcube Dev Team                       |
+ | Copyright (C) 2011, Kolab Systems AG                                  |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -21,7 +22,7 @@
  | Author: Ryo Chijiiwa <Ryo@IlohaMail.org>                              |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_imap_generic.php 5213 2011-09-13 08:09:50Z alec $
+ $Id: rcube_imap_generic.php 5402 2011-11-09 10:03:54Z alec $
 
 */
 
@@ -48,23 +49,14 @@ class rcube_mail_header
     public $encoding;
     public $charset;
     public $ctype;
-    public $flags;
     public $timestamp;
-    public $body_structure;
+    public $bodystructure;
     public $internaldate;
     public $references;
     public $priority;
     public $mdn_to;
-    public $mdn_sent = false;
-    public $seen = false;
-    public $deleted = false;
-    public $answered = false;
-    public $forwarded = false;
-    public $flagged = false;
-    public $has_children = false;
-    public $depth = 0;
-    public $unread_children = 0;
     public $others = array();
+    public $flags = array();
 }
 
 // For backward compatibility with cached messages (#1486602)
@@ -84,6 +76,7 @@ class rcube_imap_generic
     public $errornum;
     public $result;
     public $resultcode;
+    public $selected;
     public $data = array();
     public $flags = array(
         'SEEN'     => '\\Seen',
@@ -96,7 +89,6 @@ class rcube_imap_generic
         '*'        => '\\*',
     );
 
-    private $selected;
     private $fp;
     private $host;
     private $logged = false;
@@ -235,14 +227,14 @@ class rcube_imap_generic
         return $line;
     }
 
-    function multLine($line, $escape=false)
+    function multLine($line, $escape = false)
     {
         $line = rtrim($line);
-        if (preg_match('/\{[0-9]+\}$/', $line)) {
-            $out = '';
+        if (preg_match('/\{([0-9]+)\}$/', $line, $m)) {
+            $out   = '';
+            $str   = substr($line, 0, -strlen($m[0]));
+            $bytes = $m[1];
 
-            preg_match_all('/(.*)\{([0-9]+)\}$/', $line, $a);
-            $bytes = $a[2][0];
             while (strlen($out) < $bytes) {
                 $line = $this->readBytes($bytes);
                 if ($line === NULL)
@@ -250,7 +242,7 @@ class rcube_imap_generic
                 $out .= $line;
             }
 
-            $line = $a[1][0] . ($escape ? $this->escape($out) : $out);
+            $line = $str . ($escape ? $this->escape($out) : $out);
         }
 
         return $line;
@@ -318,6 +310,10 @@ class rcube_imap_generic
                 }
                 else {
                     $this->resultcode = null;
+                    // parse response for [APPENDUID 1204196876 3456]
+                    if (preg_match("/^\[APPENDUID [0-9]+ ([0-9,:*]+)\]/i", $str, $m)) {
+                        $this->data['APPENDUID'] = $m[1];
+                    }
                 }
                 $this->result = $str;
 
@@ -680,8 +676,8 @@ class rcube_imap_generic
             $this->prefs = $options;
         }
         // set auth method
-        if (!empty($this->prefs['auth_method'])) {
-            $auth_method = strtoupper($this->prefs['auth_method']);
+        if (!empty($this->prefs['auth_type'])) {
+            $auth_method = strtoupper($this->prefs['auth_type']);
         } else {
             $auth_method = 'CHECK';
         }
@@ -691,7 +687,7 @@ class rcube_imap_generic
         // initialize connection
         $this->error    = '';
         $this->errornum = self::ERROR_OK;
-        $this->selected = '';
+        $this->selected = null;
         $this->user     = $user;
         $this->host     = $host;
         $this->logged   = false;
@@ -877,18 +873,18 @@ class rcube_imap_generic
     /**
      * Executes SELECT command (if mailbox is already not in selected state)
      *
-     * @param string $mailbox Mailbox name
+     * @param string $mailbox      Mailbox name
+     * @param array  $qresync_data QRESYNC data (RFC5162)
      *
      * @return boolean True on success, false on error
-     * @access public
      */
-    function select($mailbox)
+    function select($mailbox, $qresync_data = null)
     {
         if (!strlen($mailbox)) {
             return false;
         }
 
-        if ($this->selected == $mailbox) {
+        if ($this->selected === $mailbox) {
             return true;
         }
 /*
@@ -901,7 +897,21 @@ class rcube_imap_generic
             }
         }
 */
-        list($code, $response) = $this->execute('SELECT', array($this->escape($mailbox)));
+        $params = array($this->escape($mailbox));
+
+        // QRESYNC data items
+        //    0. the last known UIDVALIDITY,
+        //    1. the last known modification sequence,
+        //    2. the optional set of known UIDs, and
+        //    3. an optional parenthesized list of known sequence ranges and their
+        //       corresponding UIDs.
+        if (!empty($qresync_data)) {
+            if (!empty($qresync_data[2]))
+                $qresync_data[2] = self::compressMessageSet($qresync_data[2]);
+            $params[] = array('QRESYNC', $qresync_data);
+        }
+
+        list($code, $response) = $this->execute('SELECT', $params);
 
         if ($code == self::ERROR_OK) {
             $response = explode("\r\n", $response);
@@ -909,11 +919,39 @@ class rcube_imap_generic
                 if (preg_match('/^\* ([0-9]+) (EXISTS|RECENT)$/i', $line, $m)) {
                     $this->data[strtoupper($m[2])] = (int) $m[1];
                 }
-                else if (preg_match('/^\* OK \[(UIDNEXT|UIDVALIDITY|UNSEEN) ([0-9]+)\]/i', $line, $match)) {
-                    $this->data[strtoupper($match[1])] = (int) $match[2];
+                else if (preg_match('/^\* OK \[/i', $line, $match)) {
+                    $line = substr($line, 6);
+                    if (preg_match('/^(UIDNEXT|UIDVALIDITY|UNSEEN) ([0-9]+)/i', $line, $match)) {
+                        $this->data[strtoupper($match[1])] = (int) $match[2];
+                    }
+                    else if (preg_match('/^(HIGHESTMODSEQ) ([0-9]+)/i', $line, $match)) {
+                        $this->data[strtoupper($match[1])] = (string) $match[2];
+                    }
+                    else if (preg_match('/^(NOMODSEQ)/i', $line, $match)) {
+                        $this->data[strtoupper($match[1])] = true;
+                    }
+                    else if (preg_match('/^PERMANENTFLAGS \(([^\)]+)\)/iU', $line, $match)) {
+                        $this->data['PERMANENTFLAGS'] = explode(' ', $match[1]);
+                    }
                 }
-                else if (preg_match('/^\* OK \[PERMANENTFLAGS \(([^\)]+)\)\]/iU', $line, $match)) {
-                    $this->data['PERMANENTFLAGS'] = explode(' ', $match[1]);
+                // QRESYNC FETCH response (RFC5162)
+                else if (preg_match('/^\* ([0-9+]) FETCH/i', $line, $match)) {
+                    $line       = substr($line, strlen($match[0]));
+                    $fetch_data = $this->tokenizeResponse($line, 1);
+                    $data       = array('id' => $match[1]);
+
+                    for ($i=0, $size=count($fetch_data); $i<$size; $i+=2) {
+                        $data[strtolower($fetch_data[$i])] = $fetch_data[$i+1];
+                    }
+
+                    $this->data['QRESYNC'][$data['uid']] = $data;
+                }
+                // QRESYNC VANISHED response (RFC5162)
+                else if (preg_match('/^\* VANISHED [()EARLIER]*/i', $line, $match)) {
+                    $line   = substr($line, strlen($match[0]));
+                    $v_data = $this->tokenizeResponse($line, 1);
+
+                    $this->data['VANISHED'] = $v_data;
                 }
             }
 
@@ -935,7 +973,6 @@ class rcube_imap_generic
      *                        in RFC3501: UIDNEXT, UIDVALIDITY, RECENT
      *
      * @return array Status item-value hash
-     * @access public
      * @since 0.5-beta
      */
     function status($mailbox, $items=array())
@@ -971,7 +1008,7 @@ class rcube_imap_generic
             }
 
             for ($i=0, $len=count($items); $i<$len; $i += 2) {
-                $result[$items[$i]] = (int) $items[$i+1];
+                $result[$items[$i]] = $items[$i+1];
             }
 
             $this->data['STATUS:'.$mailbox] = $result;
@@ -989,7 +1026,6 @@ class rcube_imap_generic
      * @param string $messages Message UIDs to expunge
      *
      * @return boolean True on success, False on error
-     * @access public
      */
     function expunge($mailbox, $messages=NULL)
     {
@@ -1011,7 +1047,7 @@ class rcube_imap_generic
             $result = $this->execute('EXPUNGE', null, self::COMMAND_NORESPONSE);
 
         if ($result == self::ERROR_OK) {
-            $this->selected = ''; // state has changed, need to reselect
+            $this->selected = null; // state has changed, need to reselect
             return true;
         }
 
@@ -1022,7 +1058,6 @@ class rcube_imap_generic
      * Executes CLOSE command
      *
      * @return boolean True on success, False on error
-     * @access public
      * @since 0.5
      */
     function close()
@@ -1030,7 +1065,7 @@ class rcube_imap_generic
         $result = $this->execute('CLOSE', NULL, self::COMMAND_NORESPONSE);
 
         if ($result == self::ERROR_OK) {
-            $this->selected = '';
+            $this->selected = null;
             return true;
         }
 
@@ -1043,7 +1078,6 @@ class rcube_imap_generic
      * @param string $mailbox Mailbox name
      *
      * @return boolean True on success, False on error
-     * @access public
      */
     function subscribe($mailbox)
     {
@@ -1059,7 +1093,6 @@ class rcube_imap_generic
      * @param string $mailbox Mailbox name
      *
      * @return boolean True on success, False on error
-     * @access public
      */
     function unsubscribe($mailbox)
     {
@@ -1075,7 +1108,6 @@ class rcube_imap_generic
      * @param string $mailbox Mailbox name
      *
      * @return boolean True on success, False on error
-     * @access public
      */
     function deleteFolder($mailbox)
     {
@@ -1091,7 +1123,6 @@ class rcube_imap_generic
      * @param string $mailbox Mailbox name
      *
      * @return boolean True on success, False on error
-     * @access public
      */
     function clearFolder($mailbox)
     {
@@ -1101,7 +1132,7 @@ class rcube_imap_generic
         }
 
         if ($res) {
-            if ($this->selected == $mailbox)
+            if ($this->selected === $mailbox)
                 $res = $this->close();
             else
                 $res = $this->expunge($mailbox);
@@ -1116,15 +1147,14 @@ class rcube_imap_generic
      * @param string $mailbox Mailbox name
      *
      * @return int Number of messages, False on error
-     * @access public
      */
     function countMessages($mailbox, $refresh = false)
     {
         if ($refresh) {
-            $this->selected = '';
+            $this->selected = null;
         }
 
-        if ($this->selected == $mailbox) {
+        if ($this->selected === $mailbox) {
             return $this->data['EXISTS'];
         }
 
@@ -1149,7 +1179,6 @@ class rcube_imap_generic
      * @param string $mailbox Mailbox name
      *
      * @return int Number of messages, False on error
-     * @access public
      */
     function countRecent($mailbox)
     {
@@ -1159,7 +1188,7 @@ class rcube_imap_generic
 
         $this->select($mailbox);
 
-        if ($this->selected == $mailbox) {
+        if ($this->selected === $mailbox) {
             return $this->data['RECENT'];
         }
 
@@ -1172,7 +1201,6 @@ class rcube_imap_generic
      * @param string $mailbox Mailbox name
      *
      * @return int Number of messages, False on error
-     * @access public
      */
     function countUnseen($mailbox)
     {
@@ -1203,7 +1231,6 @@ class rcube_imap_generic
      * @param array $items Client identification information key/value hash
      *
      * @return array Server identification information key/value hash
-     * @access public
      * @since 0.6
      */
     function id($items=array())
@@ -1228,6 +1255,37 @@ class rcube_imap_generic
             for ($i=0, $len=count($items); $i<$len; $i += 2) {
                 $result[$items[$i]] = $items[$i+1];
             }
+
+            return $result;
+        }
+
+        return false;
+    }
+
+    /**
+     * Executes ENABLE command (RFC5161)
+     *
+     * @param mixed $extension Extension name to enable (or array of names)
+     *
+     * @return array|bool List of enabled extensions, False on error
+     * @since 0.6
+     */
+    function enable($extension)
+    {
+        if (empty($extension))
+            return false;
+
+        if (!$this->hasCapability('ENABLE'))
+            return false;
+
+        if (!is_array($extension))
+            $extension = array($extension);
+
+        list($code, $response) = $this->execute('ENABLE', $extension);
+
+        if ($code == self::ERROR_OK && preg_match('/\* ENABLED /i', $response)) {
+            $response = substr($response, 10); // remove prefix "* ENABLED "
+            $result   = (array) $this->tokenizeResponse($response);
 
             return $result;
         }
@@ -1472,7 +1530,6 @@ class rcube_imap_generic
      * @param int    $uid     Message unique identifier (UID)
      *
      * @return int Message sequence identifier
-     * @access public
      */
     function UID2ID($mailbox, $uid)
     {
@@ -1492,12 +1549,11 @@ class rcube_imap_generic
      * @param int    $uid     Message sequence identifier
      *
      * @return int Message unique identifier
-     * @access public
      */
     function ID2UID($mailbox, $id)
     {
         if (empty($id) || $id < 0) {
-            return 	null;
+            return null;
         }
 
         if (!$this->select($mailbox)) {
@@ -1515,46 +1571,58 @@ class rcube_imap_generic
 
     function fetchUIDs($mailbox, $message_set=null)
     {
-        if (is_array($message_set))
-            $message_set = join(',', $message_set);
-        else if (empty($message_set))
+        if (empty($message_set))
             $message_set = '1:*';
 
         return $this->fetchHeaderIndex($mailbox, $message_set, 'UID', false);
     }
 
-    function fetchHeaders($mailbox, $message_set, $uidfetch=false, $bodystr=false, $add='')
+    /**
+     * FETCH command (RFC3501)
+     *
+     * @param string $mailbox     Mailbox name
+     * @param mixed  $message_set Message(s) sequence identifier(s) or UID(s)
+     * @param bool   $is_uid      True if $message_set contains UIDs
+     * @param array  $query_items FETCH command data items
+     * @param string $mod_seq     Modification sequence for CHANGEDSINCE (RFC4551) query
+     * @param bool   $vanished    Enables VANISHED parameter (RFC5162) for CHANGEDSINCE query
+     *
+     * @return array List of rcube_mail_header elements, False on error
+     * @since 0.6
+     */
+    function fetch($mailbox, $message_set, $is_uid = false, $query_items = array(),
+        $mod_seq = null, $vanished = false)
     {
-        $result = array();
-
         if (!$this->select($mailbox)) {
             return false;
         }
 
         $message_set = $this->compressMessageSet($message_set);
+        $result      = array();
 
-        if ($add)
-            $add = ' '.trim($add);
-
-        /* FETCH uid, size, flags and headers */
         $key      = $this->nextTag();
-        $request  = $key . ($uidfetch ? ' UID' : '') . " FETCH $message_set ";
-        $request .= "(UID RFC822.SIZE FLAGS INTERNALDATE ";
-        if ($bodystr)
-            $request .= "BODYSTRUCTURE ";
-        $request .= "BODY.PEEK[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE ";
-        $request .= "CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO".$add.")])";
+        $request  = $key . ($is_uid ? ' UID' : '') . " FETCH $message_set ";
+        $request .= "(" . implode(' ', $query_items) . ")";
+
+        if ($mod_seq !== null && $this->hasCapability('CONDSTORE')) {
+            $request .= " (CHANGEDSINCE $mod_seq" . ($vanished ? " VANISHED" : '') .")";
+        }
 
         if (!$this->putLine($request)) {
             $this->setError(self::ERROR_COMMAND, "Unable to send command: $request");
             return false;
         }
+
         do {
             $line = $this->readLine(4096);
-            $line = $this->multLine($line);
 
             if (!$line)
                 break;
+
+            // Sample reply line:
+            // * 321 FETCH (UID 2417 RFC822.SIZE 2730 FLAGS (\Seen)
+            // INTERNALDATE "16-Nov-2008 21:08:46 +0100" BODYSTRUCTURE (...)
+            // BODY[HEADER.FIELDS ...
 
             if (preg_match('/^\* ([0-9]+) FETCH/', $line, $m)) {
                 $id = intval($m[1]);
@@ -1565,101 +1633,91 @@ class rcube_imap_generic
                 $result[$id]->messageID = 'mid:' . $id;
 
                 $lines = array();
-                $ln = 0;
+                $line  = substr($line, strlen($m[0]) + 2);
+                $ln    = 0;
 
-                // Sample reply line:
-                // * 321 FETCH (UID 2417 RFC822.SIZE 2730 FLAGS (\Seen)
-                // INTERNALDATE "16-Nov-2008 21:08:46 +0100" BODYSTRUCTURE (...)
-                // BODY[HEADER.FIELDS ...
+                // get complete entry
+                while (preg_match('/\{([0-9]+)\}\r\n$/', $line, $m)) {
+                    $bytes = $m[1];
+                    $out   = '';
 
-                if (preg_match('/^\* [0-9]+ FETCH \((.*) BODY/sU', $line, $matches)) {
-                    $str = $matches[1];
-
-                    while (list($name, $value) = $this->tokenizeResponse($str, 2)) {
-                        if ($name == 'UID') {
-                            $result[$id]->uid = intval($value);
-                        }
-                        else if ($name == 'RFC822.SIZE') {
-                            $result[$id]->size = intval($value);
-                        }
-                        else if ($name == 'INTERNALDATE') {
-                            $result[$id]->internaldate = $value;
-                            $result[$id]->date         = $value;
-                            $result[$id]->timestamp    = $this->StrToTime($value);
-                        }
-                        else if ($name == 'FLAGS') {
-                            $flags_a = $value;
-                        }
+                    while (strlen($out) < $bytes) {
+                        $out = $this->readBytes($bytes);
+                        if ($out === NULL)
+                            break;
+                        $line .= $out;
                     }
 
-                    // BODYSTRUCTURE
-                    if ($bodystr) {
-                        while (!preg_match('/ BODYSTRUCTURE (.*) BODY\[HEADER.FIELDS/sU', $line, $m)) {
-                            $line2 = $this->readLine(1024);
-                            $line .= $this->multLine($line2, true);
-                        }
-                        $result[$id]->body_structure = $m[1];
-                    }
+                    $str = $this->readLine(4096);
+                    if ($str === false)
+                        break;
 
-                    // the rest of the result
-                    if (preg_match('/ BODY\[HEADER.FIELDS \(.*?\)\]\s*(.*)$/s', $line, $m)) {
-                        $reslines = explode("\n", trim($m[1], '"'));
-                        // re-parse (see below)
-                        foreach ($reslines as $resln) {
-                            if (ord($resln[0])<=32) {
-                                $lines[$ln] .= (empty($lines[$ln])?'':"\n").trim($resln);
-                            } else {
-                                $lines[++$ln] = trim($resln);
+                    $line .= $str;
+                }
+
+                // Tokenize response and assign to object properties
+                while (list($name, $value) = $this->tokenizeResponse($line, 2)) {
+                    if ($name == 'UID') {
+                        $result[$id]->uid = intval($value);
+                    }
+                    else if ($name == 'RFC822.SIZE') {
+                        $result[$id]->size = intval($value);
+                    }
+                    else if ($name == 'RFC822.TEXT') {
+                        $result[$id]->body = $value;
+                    }
+                    else if ($name == 'INTERNALDATE') {
+                        $result[$id]->internaldate = $value;
+                        $result[$id]->date         = $value;
+                        $result[$id]->timestamp    = $this->StrToTime($value);
+                    }
+                    else if ($name == 'FLAGS') {
+                        if (!empty($value)) {
+                            foreach ((array)$value as $flag) {
+                                $flag = str_replace(array('$', '\\'), '', $flag);
+                                $flag = strtoupper($flag);
+
+                                $result[$id]->flags[$flag] = true;
                             }
                         }
                     }
+                    else if ($name == 'MODSEQ') {
+                        $result[$id]->modseq = $value[0];
+                    }
+                    else if ($name == 'ENVELOPE') {
+                        $result[$id]->envelope = $value;
+                    }
+                    else if ($name == 'BODYSTRUCTURE' || ($name == 'BODY' && count($value) > 2)) {
+                        if (!is_array($value[0]) && (strtolower($value[0]) == 'message' && strtolower($value[1]) == 'rfc822')) {
+                            $value = array($value);
+                        }
+                        $result[$id]->bodystructure = $value;
+                    }
+                    else if ($name == 'RFC822') {
+                        $result[$id]->body = $value;
+                    }
+                    else if ($name == 'BODY') {
+                        $body = $this->tokenizeResponse($line, 1);
+                        if ($value[0] == 'HEADER.FIELDS')
+                            $headers = $body;
+                        else if (!empty($value))
+                            $result[$id]->bodypart[$value[0]] = $body;
+                        else
+                            $result[$id]->body = $body;
+                    }
                 }
 
-                // Start parsing headers.  The problem is, some header "lines" take up multiple lines.
-                // So, we'll read ahead, and if the one we're reading now is a valid header, we'll
-                // process the previous line.  Otherwise, we'll keep adding the strings until we come
-                // to the next valid header line.
-
-                do {
-                    $line = rtrim($this->readLine(300), "\r\n");
-
-                    // The preg_match below works around communigate imap, which outputs " UID <number>)".
-                    // Without this, the while statement continues on and gets the "FH0 OK completed" message.
-                    // If this loop gets the ending message, then the outer loop does not receive it from radline on line 1249.
-                    // This in causes the if statement on line 1278 to never be true, which causes the headers to end up missing
-                    // If the if statement was changed to pick up the fh0 from this loop, then it causes the outer loop to spin
-                    // An alternative might be:
-                    // if (!preg_match("/:/",$line) && preg_match("/\)$/",$line)) break;
-                    // however, unsure how well this would work with all imap clients.
-                    if (preg_match("/^\s*UID [0-9]+\)$/", $line)) {
-                        break;
-                    }
-
-                    // handle FLAGS reply after headers (AOL, Zimbra?)
-                    if (preg_match('/\s+FLAGS \((.*)\)\)$/', $line, $matches)) {
-                        $flags_a = $this->tokenizeResponse($matches[1]);
-                        break;
-                    }
-
-                    if (ord($line[0])<=32) {
-                        $lines[$ln] .= (empty($lines[$ln])?'':"\n").trim($line);
-                    } else {
-                        $lines[++$ln] = trim($line);
-                    }
-                // patch from "Maksim Rubis" <siburny@hotmail.com>
-                } while ($line[0] != ')' && !$this->startsWith($line, $key, true));
-
-                if (strncmp($line, $key, strlen($key))) {
-                    // process header, fill rcube_mail_header obj.
-                    // initialize
-                    if (is_array($headers)) {
-                        reset($headers);
-                        while (list($k, $bar) = each($headers)) {
-                            $headers[$k] = '';
+                // create array with header field:data
+                if (!empty($headers)) {
+                    $headers = explode("\n", trim($headers));
+                    foreach ($headers as $hid => $resln) {
+                        if (ord($resln[0]) <= 32) {
+                            $lines[$ln] .= (empty($lines[$ln]) ? '' : "\n") . trim($resln);
+                        } else {
+                            $lines[++$ln] = trim($resln);
                         }
                     }
 
-                    // create array with header field:data
                     while (list($lines_key, $str) = each($lines)) {
                         list($field, $string) = explode(':', $str, 2);
 
@@ -1723,47 +1781,44 @@ class rcube_imap_generic
                                 $result[$id]->others[$field] = $string;
                             }
                             break;
-                        } // end switch ()
-                    } // end while ()
-                }
-
-                // process flags
-                if (!empty($flags_a)) {
-                    foreach ($flags_a as $flag) {
-                        $flag = str_replace('\\', '', $flag);
-                        $result[$id]->flags[] = $flag;
-
-                        switch (strtoupper($flag)) {
-                        case 'SEEN':
-                            $result[$id]->seen = true;
-                            break;
-                        case 'DELETED':
-                            $result[$id]->deleted = true;
-                            break;
-                        case 'ANSWERED':
-                            $result[$id]->answered = true;
-                            break;
-                        case '$FORWARDED':
-                            $result[$id]->forwarded = true;
-                            break;
-                        case '$MDNSENT':
-                            $result[$id]->mdn_sent = true;
-                            break;
-                        case 'FLAGGED':
-                            $result[$id]->flagged = true;
-                            break;
                         }
                     }
                 }
             }
+
+            // VANISHED response (QRESYNC RFC5162)
+            // Sample: * VANISHED (EARLIER) 300:310,405,411
+
+            else if (preg_match('/^\* VANISHED [()EARLIER]*/i', $line, $match)) {
+                $line   = substr($line, strlen($match[0]));
+                $v_data = $this->tokenizeResponse($line, 1);
+
+                $this->data['VANISHED'] = $v_data;
+            }
+
         } while (!$this->startsWith($line, $key, true));
+
+        return $result;
+    }
+
+    function fetchHeaders($mailbox, $message_set, $is_uid = false, $bodystr = false, $add = '')
+    {
+        $query_items = array('UID', 'RFC822.SIZE', 'FLAGS', 'INTERNALDATE');
+        if ($bodystr)
+            $query_items[] = 'BODYSTRUCTURE';
+        $query_items[] = 'BODY.PEEK[HEADER.FIELDS ('
+            . 'DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO X-PRIORITY'
+            . ($add ? ' ' . trim($add) : '')
+            . ')]';
+
+        $result = $this->fetch($mailbox, $message_set, $is_uid, $query_items);
 
         return $result;
     }
 
     function fetchHeader($mailbox, $id, $uidfetch=false, $bodystr=false, $add='')
     {
-        $a  = $this->fetchHeaders($mailbox, $id, $uidfetch, $bodystr, $add);
+        $a = $this->fetchHeaders($mailbox, $id, $uidfetch, $bodystr, $add);
         if (is_array($a)) {
             return array_shift($a);
         }
@@ -2043,6 +2098,7 @@ class rcube_imap_generic
             $params .= 'RETURN (' . implode(' ', $items) . ')';
         }
         if (!empty($criteria)) {
+            $modseq = stripos($criteria, 'MODSEQ') !== false;
             $params .= ($params ? ' ' : '') . $criteria;
         }
         else {
@@ -2054,11 +2110,18 @@ class rcube_imap_generic
 
         if ($code == self::ERROR_OK) {
             // remove prefix...
-            $response = substr($response, stripos($response, 
+            $response = substr($response, stripos($response,
                 $esearch ? '* ESEARCH' : '* SEARCH') + ($esearch ? 10 : 9));
             // ...and unilateral untagged server responses
             if ($pos = strpos($response, '*')) {
                 $response = rtrim(substr($response, 0, $pos));
+            }
+
+            // remove MODSEQ response
+            if ($modseq) {
+                if (preg_match('/\(MODSEQ ([0-9]+)\)$/', $response, $m)) {
+                    $response = substr($response, 0, -strlen($m[0]));
+                }
             }
 
             if ($esearch) {
@@ -2067,7 +2130,7 @@ class rcube_imap_generic
 
                 $result = array();
                 for ($i=0; $i<count($items); $i++) {
-                    // If the SEARCH results in no matches, the server MUST NOT
+                    // If the SEARCH returns no matches, the server MUST NOT
                     // include the item result option in the ESEARCH response
                     if ($ret = $this->tokenizeResponse($response, 2)) {
                         list ($name, $value) = $ret;
@@ -2116,7 +2179,6 @@ class rcube_imap_generic
      *
      * @return array List of mailboxes or hash of options if $status_opts argument
      *               is non-empty.
-     * @access public
      */
     function listMailboxes($ref, $mailbox, $status_opts=array(), $select_opts=array())
     {
@@ -2132,7 +2194,6 @@ class rcube_imap_generic
      *
      * @return array List of mailboxes or hash of options if $status_opts argument
      *               is non-empty.
-     * @access public
      */
     function listSubscribed($ref, $mailbox, $status_opts=array())
     {
@@ -2152,7 +2213,6 @@ class rcube_imap_generic
      *
      * @return array List of mailboxes or hash of options if $status_ops argument
      *               is non-empty.
-     * @access private
      */
     private function _listMailboxes($ref, $mailbox, $subscribed=false,
         $status_opts=array(), $select_opts=array())
@@ -2182,12 +2242,29 @@ class rcube_imap_generic
         list($code, $response) = $this->execute($subscribed ? 'LSUB' : 'LIST', $args);
 
         if ($code == self::ERROR_OK) {
-            $folders = array();
-            while ($this->tokenizeResponse($response, 1) == '*') {
-                $cmd = strtoupper($this->tokenizeResponse($response, 1));
+            $folders  = array();
+            $last     = 0;
+            $pos      = 0;
+            $response .= "\r\n";
+
+            while ($pos = strpos($response, "\r\n", $pos+1)) {
+                // literal string, not real end-of-command-line
+                if ($response[$pos-1] == '}') {
+                    continue;
+                }
+
+                $line = substr($response, $last, $pos - $last);
+                $last = $pos + 2;
+
+                if (!preg_match('/^\* (LIST|LSUB|STATUS) /i', $line, $m)) {
+                    continue;
+                }
+                $cmd  = strtoupper($m[1]);
+                $line = substr($line, strlen($m[0]));
+
                 // * LIST (<options>) <delimiter> <mailbox>
                 if ($cmd == 'LIST' || $cmd == 'LSUB') {
-                    list($opts, $delim, $mailbox) = $this->tokenizeResponse($response, 3);
+                    list($opts, $delim, $mailbox) = $this->tokenizeResponse($line, 3);
 
                     // Add to result array
                     if (!$lstatus) {
@@ -2198,30 +2275,20 @@ class rcube_imap_generic
                     }
 
                     // Add to options array
-                    if (!empty($opts)) {
-                        if (empty($this->data['LIST'][$mailbox]))
-                            $this->data['LIST'][$mailbox] = $opts;
-                        else
-                            $this->data['LIST'][$mailbox] = array_unique(array_merge(
-                                $this->data['LIST'][$mailbox], $opts));
-                    }
+                    if (empty($this->data['LIST'][$mailbox]))
+                        $this->data['LIST'][$mailbox] = $opts;
+                    else if (!empty($opts))
+                        $this->data['LIST'][$mailbox] = array_unique(array_merge(
+                            $this->data['LIST'][$mailbox], $opts));
                 }
                 // * STATUS <mailbox> (<result>)
                 else if ($cmd == 'STATUS') {
-                    list($mailbox, $status) = $this->tokenizeResponse($response, 2);
+                    list($mailbox, $status) = $this->tokenizeResponse($line, 2);
 
                     for ($i=0, $len=count($status); $i<$len; $i += 2) {
                         list($name, $value) = $this->tokenizeResponse($status, 2);
                         $folders[$mailbox][$name] = $value;
                     }
-                }
-                // other untagged response line, skip it
-                else {
-                    $response = ltrim($response);
-                    if (($position = strpos($response, "\n")) !== false)
-                        $response = substr($response, $position+1);
-                    else
-                        $response = '';
                 }
             }
 
@@ -2231,7 +2298,7 @@ class rcube_imap_generic
         return false;
     }
 
-    function fetchMIMEHeaders($mailbox, $id, $parts, $mime=true)
+    function fetchMIMEHeaders($mailbox, $uid, $parts, $mime=true)
     {
         if (!$this->select($mailbox)) {
             return false;
@@ -2240,16 +2307,15 @@ class rcube_imap_generic
         $result = false;
         $parts  = (array) $parts;
         $key    = $this->nextTag();
-        $peeks  = '';
-        $idx    = 0;
+        $peeks  = array();
         $type   = $mime ? 'MIME' : 'HEADER';
 
         // format request
-        foreach($parts as $part) {
+        foreach ($parts as $part) {
             $peeks[] = "BODY.PEEK[$part.$type]";
         }
 
-        $request = "$key FETCH $id (" . implode(' ', $peeks) . ')';
+        $request = "$key UID FETCH $uid (" . implode(' ', $peeks) . ')';
 
         // send request
         if (!$this->putLine($request)) {
@@ -2259,13 +2325,25 @@ class rcube_imap_generic
 
         do {
             $line = $this->readLine(1024);
-            $line = $this->multLine($line);
 
-            if (preg_match('/BODY\[([0-9\.]+)\.'.$type.'\]/', $line, $matches)) {
-                $idx = $matches[1];
-                $result[$idx] = preg_replace('/^(\* '.$id.' FETCH \()?\s*BODY\['.$idx.'\.'.$type.'\]\s+/', '', $line);
-                $result[$idx] = trim($result[$idx], '"');
-                $result[$idx] = rtrim($result[$idx], "\t\r\n\0\x0B");
+            if (preg_match('/^\* [0-9]+ FETCH [0-9UID( ]+BODY\[([0-9\.]+)\.'.$type.'\]/', $line, $matches)) {
+                $idx     = $matches[1];
+                $headers = '';
+
+                // get complete entry
+                if (preg_match('/\{([0-9]+)\}\r\n$/', $line, $m)) {
+                    $bytes = $m[1];
+                    $out   = '';
+
+                    while (strlen($out) < $bytes) {
+                        $out = $this->readBytes($bytes);
+                        if ($out === null)
+                            break;
+                        $headers .= $out;
+                    }
+                }
+
+                $result[$idx] = trim($headers);
             }
         } while (!$this->startsWith($line, $key, true));
 
@@ -2322,8 +2400,10 @@ class rcube_imap_generic
         $len    = strlen($line);
         $result = false;
 
+        if ($a[2] != 'FETCH') {
+        }
         // handle empty "* X FETCH ()" response
-        if ($line[$len-1] == ')' && $line[$len-2] != '(') {
+        else if ($line[$len-1] == ')' && $line[$len-2] != '(') {
             // one line response, get everything between first and last quotes
             if (substr($line, -4, 3) == 'NIL') {
                 // NIL response
@@ -2442,8 +2522,18 @@ class rcube_imap_generic
         return ($result == self::ERROR_OK);
     }
 
+    /**
+     * Handler for IMAP APPEND command
+     *
+     * @param string $mailbox Mailbox name
+     * @param string $message Message content
+     *
+     * @return string|bool On success APPENDUID response (if available) or True, False on failure
+     */
     function append($mailbox, &$message)
     {
+        unset($this->data['APPENDUID']);
+
         if (!$mailbox) {
             return false;
         }
@@ -2482,7 +2572,12 @@ class rcube_imap_generic
             // Clear internal status cache
             unset($this->data['STATUS:'.$mailbox]);
 
-            return ($this->parseResult($line, 'APPEND: ') == self::ERROR_OK);
+            if ($this->parseResult($line, 'APPEND: ') != self::ERROR_OK)
+                return false;
+            else if (!empty($this->data['APPENDUID']))
+                return $this->data['APPENDUID'];
+            else
+                return true;
         }
         else {
             $this->setError(self::ERROR_COMMAND, "Unable to send command: $request");
@@ -2491,8 +2586,19 @@ class rcube_imap_generic
         return false;
     }
 
+    /**
+     * Handler for IMAP APPEND command.
+     *
+     * @param string $mailbox Mailbox name
+     * @param string $path    Path to the file with message body
+     * @param string $headers Message headers
+     *
+     * @return string|bool On success APPENDUID response (if available) or True, False on failure
+     */
     function appendFromFile($mailbox, $path, $headers=null)
     {
+        unset($this->data['APPENDUID']);
+
         if (!$mailbox) {
             return false;
         }
@@ -2559,40 +2665,18 @@ class rcube_imap_generic
             // Clear internal status cache
             unset($this->data['STATUS:'.$mailbox]);
 
-            return ($this->parseResult($line, 'APPEND: ') == self::ERROR_OK);
+            if ($this->parseResult($line, 'APPEND: ') != self::ERROR_OK)
+                return false;
+            else if (!empty($this->data['APPENDUID']))
+                return $this->data['APPENDUID'];
+            else
+                return true;
         }
         else {
             $this->setError(self::ERROR_COMMAND, "Unable to send command: $request");
         }
 
         return false;
-    }
-
-    function fetchStructureString($mailbox, $id, $is_uid=false)
-    {
-        if (!$this->select($mailbox)) {
-            return false;
-        }
-
-        $key = $this->nextTag();
-        $result = false;
-        $command = $key . ($is_uid ? ' UID' : '') ." FETCH $id (BODYSTRUCTURE)";
-
-        if ($this->putLine($command)) {
-            do {
-                $line = $this->readLine(5000);
-                $line = $this->multLine($line, true);
-                if (!preg_match("/^$key /", $line))
-                    $result .= $line;
-            } while (!$this->startsWith($line, $key, true, true));
-
-            $result = trim(substr($result, strpos($result, 'BODYSTRUCTURE')+13, -1));
-        }
-        else {
-            $this->setError(self::ERROR_COMMAND, "Unable to send command: $command");
-        }
-
-        return $result;
     }
 
     function getQuota()
@@ -2658,7 +2742,6 @@ class rcube_imap_generic
      *
      * @return boolean True on success, False on failure
      *
-     * @access public
      * @since 0.5-beta
      */
     function setACL($mailbox, $user, $acl)
@@ -2682,7 +2765,6 @@ class rcube_imap_generic
      *
      * @return boolean True on success, False on failure
      *
-     * @access public
      * @since 0.5-beta
      */
     function deleteACL($mailbox, $user)
@@ -2700,7 +2782,6 @@ class rcube_imap_generic
      * @param string $mailbox Mailbox name
      *
      * @return array User-rights array on success, NULL on error
-     * @access public
      * @since 0.5-beta
      */
     function getACL($mailbox)
@@ -2741,7 +2822,6 @@ class rcube_imap_generic
      * @param string $user    User name
      *
      * @return array List of user rights
-     * @access public
      * @since 0.5-beta
      */
     function listRights($mailbox, $user)
@@ -2773,7 +2853,6 @@ class rcube_imap_generic
      * @param string $mailbox Mailbox name
      *
      * @return array MYRIGHTS response on success, NULL on error
-     * @access public
      * @since 0.5-beta
      */
     function myRights($mailbox)
@@ -2800,7 +2879,6 @@ class rcube_imap_generic
      * @param array  $entries Entry-value array (use NULL value as NIL)
      *
      * @return boolean True on success, False on failure
-     * @access public
      * @since 0.5-beta
      */
     function setMetadata($mailbox, $entries)
@@ -2830,7 +2908,6 @@ class rcube_imap_generic
      *
      * @return boolean True on success, False on failure
      *
-     * @access public
      * @since 0.5-beta
      */
     function deleteMetadata($mailbox, $entries)
@@ -2860,7 +2937,6 @@ class rcube_imap_generic
      *
      * @return array GETMETADATA result on success, NULL on error
      *
-     * @access public
      * @since 0.5-beta
      */
     function getMetadata($mailbox, $entries, $options=array())
@@ -2952,7 +3028,6 @@ class rcube_imap_generic
      *                        three elements: entry name, attribute name, value
      *
      * @return boolean True on success, False on failure
-     * @access public
      * @since 0.5-beta
      */
     function setAnnotation($mailbox, $data)
@@ -2984,7 +3059,6 @@ class rcube_imap_generic
      *
      * @return boolean True on success, False on failure
      *
-     * @access public
      * @since 0.5-beta
      */
     function deleteAnnotation($mailbox, $data)
@@ -3006,7 +3080,6 @@ class rcube_imap_generic
      *
      * @return array Annotations result on success, NULL on error
      *
-     * @access public
      * @since 0.5-beta
      */
     function getAnnotation($mailbox, $entries, $attribs)
@@ -3091,10 +3164,103 @@ class rcube_imap_generic
     }
 
     /**
+     * Returns BODYSTRUCTURE for the specified message.
+     *
+     * @param string $mailbox Folder name
+     * @param int    $id      Message sequence number or UID
+     * @param bool   $is_uid  True if $id is an UID
+     *
+     * @return array/bool Body structure array or False on error.
+     * @since 0.6
+     */
+    function getStructure($mailbox, $id, $is_uid = false)
+    {
+        $result = $this->fetch($mailbox, $id, $is_uid, array('BODYSTRUCTURE'));
+        if (is_array($result)) {
+            $result = array_shift($result);
+            return $result->bodystructure;
+        }
+        return false;
+    }
+
+    /**
+     * Returns data of a message part according to specified structure.
+     *
+     * @param array  $structure Message structure (getStructure() result)
+     * @param string $part      Message part identifier
+     *
+     * @return array Part data as hash array (type, encoding, charset, size)
+     */
+    static function getStructurePartData($structure, $part)
+    {
+	    $part_a = self::getStructurePartArray($structure, $part);
+	    $data   = array();
+
+	    if (empty($part_a)) {
+            return $data;
+        }
+
+        // content-type
+        if (is_array($part_a[0])) {
+            $data['type'] = 'multipart';
+        }
+        else {
+            $data['type'] = strtolower($part_a[0]);
+
+            // encoding
+            $data['encoding'] = strtolower($part_a[5]);
+
+            // charset
+            if (is_array($part_a[2])) {
+               while (list($key, $val) = each($part_a[2])) {
+                    if (strcasecmp($val, 'charset') == 0) {
+                        $data['charset'] = $part_a[2][$key+1];
+                        break;
+                    }
+                }
+            }
+        }
+
+        // size
+        $data['size'] = intval($part_a[6]);
+
+        return $data;
+    }
+
+    static function getStructurePartArray($a, $part)
+    {
+	    if (!is_array($a)) {
+            return false;
+        }
+	    if (strpos($part, '.') > 0) {
+		    $original_part = $part;
+		    $pos = strpos($part, '.');
+		    $rest = substr($original_part, $pos+1);
+		    $part = substr($original_part, 0, $pos);
+		    if ((strcasecmp($a[0], 'message') == 0) && (strcasecmp($a[1], 'rfc822') == 0)) {
+			    $a = $a[8];
+		    }
+		    return self::getStructurePartArray($a[$part-1], $rest);
+	    }
+        else if ($part>0) {
+		    if (!is_array($a[0]) && (strcasecmp($a[0], 'message') == 0)
+                && (strcasecmp($a[1], 'rfc822') == 0)) {
+			    $a = $a[8];
+		    }
+		    if (is_array($a[$part-1]))
+                return $a[$part-1];
+		    else
+                return $a;
+	    }
+        else if (($part == 0) || (empty($part))) {
+		    return $a;
+	    }
+    }
+
+    /**
      * Creates next command identifier (tag)
      *
      * @return string Command identifier
-     * @access public
      * @since 0.5-beta
      */
     function nextTag()
@@ -3113,7 +3279,6 @@ class rcube_imap_generic
      * @param int    $options   Execution options
      *
      * @return mixed Response code or list of response code and data
-     * @access public
      * @since 0.5-beta
      */
     function execute($command, $arguments=array(), $options=0)
@@ -3124,7 +3289,9 @@ class rcube_imap_generic
         $response = $noresp ? null : '';
 
         if (!empty($arguments)) {
-            $query .= ' ' . implode(' ', $arguments);
+            foreach ($arguments as $arg) {
+                $query .= ' ' . self::r_implode($arg);
+            }
         }
 
         // Send command
@@ -3171,7 +3338,6 @@ class rcube_imap_generic
      * @param int    $num  Number of tokens to return
      *
      * @return mixed Tokens array or string if $num=1
-     * @access public
      * @since 0.5-beta
      */
     static function tokenizeResponse(&$str, $num=0)
@@ -3192,7 +3358,7 @@ class rcube_imap_generic
                 if (!is_numeric(($bytes = substr($str, 1, $epos - 1)))) {
                     // error
                 }
-                $result[] = substr($str, $epos + 3, $bytes);
+                $result[] = $bytes ? substr($str, $epos + 3, $bytes) : '';
                 // Advance the string
                 $str = substr($str, $epos + 3 + $bytes);
                 break;
@@ -3221,28 +3387,25 @@ class rcube_imap_generic
 
             // Parenthesized list
             case '(':
+            case '[':
                 $str = substr($str, 1);
                 $result[] = self::tokenizeResponse($str);
                 break;
             case ')':
+            case ']':
                 $str = substr($str, 1);
                 return $result;
                 break;
 
             // String atom, number, NIL, *, %
             default:
-                // empty or one character
-                if ($str === '') {
+                // empty string
+                if ($str === '' || $str === null) {
                     break 2;
                 }
-                if (strlen($str) < 2) {
-                    $result[] = $str;
-                    $str = '';
-                    break;
-                }
 
-                // excluded chars: SP, CTL, )
-                if (preg_match('/^([^\x00-\x20\x29\x7F]+)/', $str, $m)) {
+                // excluded chars: SP, CTL, ), [, ]
+                if (preg_match('/^([^\x00-\x20\x29\x5B\x5D\x7F]+)/', $str, $m)) {
                     $result[] = $m[1] == 'NIL' ? NULL : $m[1];
                     $str = substr($str, strlen($m[1]));
                 }
@@ -3251,6 +3414,23 @@ class rcube_imap_generic
         }
 
         return $num == 1 ? $result[0] : $result;
+    }
+
+    static function r_implode($element)
+    {
+        $string = '';
+
+        if (is_array($element)) {
+            reset($element);
+            while (list($key, $value) = each($element)) {
+                $string .= ' ' . self::r_implode($value);
+            }
+        }
+        else {
+            return $element;
+        }
+
+        return '(' . trim($string) . ')';
     }
 
     private function _xor($string, $string2)
@@ -3346,7 +3526,6 @@ class rcube_imap_generic
      *
      * @param   boolean $debug      New value for the debugging flag.
      *
-     * @access  public
      * @since   0.5-stable
      */
     function setDebug($debug, $handler = null)
@@ -3360,7 +3539,6 @@ class rcube_imap_generic
      *
      * @param   string  $message    Debug mesage text.
      *
-     * @access  private
      * @since   0.5-stable
      */
     private function debug($message)

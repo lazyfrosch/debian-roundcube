@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_user.php 5165 2011-09-05 08:49:04Z thomasb $
+ $Id: rcube_user.php 5183 2011-09-06 17:18:12Z alec $
 
 */
 
@@ -47,6 +47,8 @@ class rcube_user
      */
     private $rc;
 
+    const SEARCH_ADDRESSBOOK = 1;
+    const SEARCH_MAIL = 2;
 
     /**
      * Object constructor
@@ -397,11 +399,8 @@ class rcube_user
     {
         $dbh = rcmail::get_instance()->get_dbh();
 
-        // use BINARY (case-sensitive) comparison on MySQL, other engines are case-sensitive
-        $mod = preg_match('/^mysql/', $dbh->db_provider) ? 'BINARY' : '';
-
         // query for matching user name
-        $query = "SELECT * FROM ".get_table_name('users')." WHERE mail_host = ? AND %s = $mod ?";
+        $query = "SELECT * FROM ".get_table_name('users')." WHERE mail_host = ? AND %s = ?";
         $sql_result = $dbh->query(sprintf($query, 'username'), $host, $user);
 
         // query for matching alias
@@ -549,6 +548,131 @@ class rcube_user
                 'first' => $first, 'extended' => $extended));
 
         return empty($plugin['email']) ? NULL : $plugin['email'];
+    }
+
+
+    /**
+     * Return a list of saved searches linked with this user
+     *
+     * @param int  $type  Search type
+     *
+     * @return array List of saved searches indexed by search ID
+     */
+    function list_searches($type)
+    {
+        $plugin = $this->rc->plugins->exec_hook('saved_search_list', array('type' => $type));
+
+        if ($plugin['abort']) {
+            return (array) $plugin['result'];
+        }
+
+        $result = array();
+
+        $sql_result = $this->db->query(
+            "SELECT search_id AS id, ".$this->db->quoteIdentifier('name')
+            ." FROM ".get_table_name('searches')
+            ." WHERE user_id = ?"
+                ." AND ".$this->db->quoteIdentifier('type')." = ?"
+            ." ORDER BY ".$this->db->quoteIdentifier('name'),
+            (int) $this->ID, (int) $type);
+
+        while ($sql_arr = $this->db->fetch_assoc($sql_result)) {
+            $sql_arr['data'] = unserialize($sql_arr['data']);
+            $result[$sql_arr['id']] = $sql_arr;
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * Return saved search data.
+     *
+     * @param int  $id  Row identifier
+     *
+     * @return array Data
+     */
+    function get_search($id)
+    {
+        $plugin = $this->rc->plugins->exec_hook('saved_search_get', array('id' => $id));
+
+        if ($plugin['abort']) {
+            return $plugin['result'];
+        }
+
+        $sql_result = $this->db->query(
+            "SELECT ".$this->db->quoteIdentifier('name')
+                .", ".$this->db->quoteIdentifier('data')
+                .", ".$this->db->quoteIdentifier('type')
+            ." FROM ".get_table_name('searches')
+            ." WHERE user_id = ?"
+                ." AND search_id = ?",
+            (int) $this->ID, (int) $id);
+
+        while ($sql_arr = $this->db->fetch_assoc($sql_result)) {
+            return array(
+                'id'   => $id,
+                'name' => $sql_arr['name'],
+                'type' => $sql_arr['type'],
+                'data' => unserialize($sql_arr['data']),
+            );
+        }
+
+        return null;
+    }
+
+
+    /**
+     * Deletes given saved search record
+     *
+     * @param  int  $sid  Search ID
+     *
+     * @return boolean True if deleted successfully, false if nothing changed
+     */
+    function delete_search($sid)
+    {
+        if (!$this->ID)
+            return false;
+
+        $this->db->query(
+            "DELETE FROM ".get_table_name('searches')
+            ." WHERE user_id = ?"
+                ." AND search_id = ?",
+            (int) $this->ID, $sid);
+
+        return $this->db->affected_rows();
+    }
+
+
+    /**
+     * Create a new saved search record linked with this user
+     *
+     * @param array $data Hash array with col->value pairs to save
+     *
+     * @return int  The inserted search ID or false on error
+     */
+    function insert_search($data)
+    {
+        if (!$this->ID)
+            return false;
+
+        $insert_cols[]   = 'user_id';
+        $insert_values[] = (int) $this->ID;
+        $insert_cols[]   = $this->db->quoteIdentifier('type');
+        $insert_values[] = (int) $data['type'];
+        $insert_cols[]   = $this->db->quoteIdentifier('name');
+        $insert_values[] = $data['name'];
+        $insert_cols[]   = $this->db->quoteIdentifier('data');
+        $insert_values[] = serialize($data['data']);
+
+        $sql = "INSERT INTO ".get_table_name('searches')
+            ." (".join(', ', $insert_cols).")"
+            ." VALUES (".join(', ', array_pad(array(), sizeof($insert_values), '?')).")";
+
+        call_user_func_array(array($this->db, 'query'),
+            array_merge(array($sql), $insert_values));
+
+        return $this->db->insert_id('searches');
     }
 
 }

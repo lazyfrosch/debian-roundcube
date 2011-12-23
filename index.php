@@ -2,7 +2,7 @@
 /*
  +-------------------------------------------------------------------------+
  | Roundcube Webmail IMAP Client                                           |
- | Version 0.6                                                             |
+ | Version 0.7                                                             |
  |                                                                         |
  | Copyright (C) 2005-2011, The Roundcube Dev Team                         |
  |                                                                         |
@@ -23,7 +23,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                          |
  +-------------------------------------------------------------------------+
 
- $Id: index.php 5292 2011-09-28 19:16:41Z thomasb $
+ $Id: index.php 5582 2011-12-09 08:55:40Z thomasb $
 
 */
 
@@ -32,6 +32,9 @@ require_once 'program/include/iniset.php';
 
 // init application, start session, init output class, etc.
 $RCMAIL = rcmail::get_instance();
+
+// Make the whole PHP output non-cacheable (#1487797)
+send_nocacheing_headers();
 
 // turn on output buffering
 ob_start();
@@ -177,7 +180,7 @@ if (empty($RCMAIL->user->ID)) {
       )
     );
   }
-  
+
   if ($session_error || $_REQUEST['_err'] == 'session')
     $OUTPUT->show_message('sessionerror', 'error', null, true, -1);
 
@@ -192,7 +195,7 @@ else {
   // check client X-header to verify request origin
   if ($OUTPUT->ajax_call) {
     if (rc_request_header('X-Roundcube-Request') != $RCMAIL->get_request_token() && !$RCMAIL->config->get('devel_mode')) {
-      header('HTTP/1.1 404 Not Found');
+      header('HTTP/1.1 403 Forbidden');
       die("Invalid Request");
     }
   }
@@ -210,6 +213,12 @@ else {
       'message' => "Referer check failed"), true, true);
   }
 }
+
+// we're ready, user is authenticated and the request is safe
+$plugin = $RCMAIL->plugins->exec_hook('ready', array('task' => $RCMAIL->task, 'action' => $RCMAIL->action));
+$RCMAIL->set_task($plugin['task']);
+$RCMAIL->action = $plugin['action'];
+
 
 // handle special actions
 if ($RCMAIL->action == 'keep-alive') {

@@ -11,9 +11,10 @@
 |                                                                       |
 +-----------------------------------------------------------------------+
 | Author: Weiran Zhang (weiran@weiran.co.uk)                            |
+|         Phil Weir                                                     |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 5175 2011-09-05 18:42:24Z thomasb $
+@version $Id: labels.inc 5184 2011-09-07 06:33:15Z alec $
 
 */
 
@@ -33,8 +34,8 @@ $labels['sent'] = 'Sent';
 $labels['trash'] = 'Deleted Items';
 $labels['junk'] = 'Junk';
 $labels['subject'] = 'Subject';
-$labels['from'] = 'Sender';
-$labels['to'] = 'Recipient';
+$labels['from'] = 'From';
+$labels['to'] = 'To';
 $labels['cc'] = 'Copy';
 $labels['bcc'] = 'Bcc';
 $labels['replyto'] = 'Reply-To';
@@ -137,7 +138,7 @@ $labels['threaded'] = 'Threaded';
 $labels['autoexpand_threads'] = 'Expand message threads';
 $labels['do_expand'] = 'all threads';
 $labels['expand_only_unread'] = 'only with unread messages';
-$labels['fromto'] = 'Sender/Recipient';
+$labels['fromto'] = 'From/To';
 $labels['flag'] = 'Flag';
 $labels['attachment'] = 'Attachment';
 $labels['nonesort'] = 'None';

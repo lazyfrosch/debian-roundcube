@@ -5,7 +5,7 @@
  *
  * Driver for passwords stored in SQL database
  *
- * @version 1.3
+ * @version 1.4
  * @author Aleksander 'A.L.E.C' Machniak <alec@alec.pl>
  *
  */
@@ -37,16 +37,21 @@ function password_save($curpass, $passwd)
     // crypted password
     if (strpos($sql, '%c') !== FALSE) {
         $salt = '';
-        if (CRYPT_MD5) { 
-    	    $len = rand(3, CRYPT_SALT_LENGTH);
+        if (CRYPT_MD5) {
+            // Always use eight salt characters for MD5 (#1488136)
+    	    $len = 8;
         } else if (CRYPT_STD_DES) {
     	    $len = 2;
         } else {
     	    return PASSWORD_CRYPT_ERROR;
         }
+
+        //Restrict the character set used as salt (#1488136)
+        $seedchars = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
         for ($i = 0; $i < $len ; $i++) {
-    	    $salt .= chr(rand(ord('.'), ord('z')));
+    	    $salt .= $seedchars[rand(0, 63)];
         }
+
         $sql = str_replace('%c',  $db->quote(crypt($passwd, CRYPT_MD5 ? '$1$'.$salt.'$' : $salt)), $sql);
     }
 
@@ -61,7 +66,7 @@ function password_save($curpass, $passwd)
         $tmp_dir = $rcmail->config->get('temp_dir');
         $tmpfile = tempnam($tmp_dir, 'roundcube-');
 
-        $pipe = popen("'$dovecotpw' -s '$method' > '$tmpfile'", "w");
+        $pipe = popen("$dovecotpw -s '$method' > '$tmpfile'", "w");
         if (!$pipe) {
             unlink($tmpfile);
             return PASSWORD_CRYPT_ERROR;
@@ -97,15 +102,15 @@ function password_save($curpass, $passwd)
 
 	    if (!($hash_algo = strtolower($rcmail->config->get('password_hash_algorithm'))))
             $hash_algo = 'sha1';
-        
+
 	    $hash_passwd = hash($hash_algo, $passwd);
         $hash_curpass = hash($hash_algo, $curpass);
-        
+
 	    if ($rcmail->config->get('password_hash_base64')) {
             $hash_passwd = base64_encode(pack('H*', $hash_passwd));
             $hash_curpass = base64_encode(pack('H*', $hash_curpass));
         }
-	
+
 	    $sql = str_replace('%n', $db->quote($hash_passwd, 'text'), $sql);
 	    $sql = str_replace('%q', $db->quote($hash_curpass, 'text'), $sql);
     }
@@ -125,11 +130,28 @@ function password_save($curpass, $passwd)
         }
     }
 
+    $local_part  = $rcmail->user->get_username('local');
+    $domain_part = $rcmail->user->get_username('domain');
+    $username    = $_SESSION['username'];
+    $host        = $_SESSION['imap_host'];
+
+    // convert domains to/from punnycode
+    if ($rcmail->config->get('password_idn_ascii')) {
+        $domain_part = rcube_idn_to_ascii($domain_part);
+        $username    = rcube_idn_to_ascii($username);
+        $host        = rcube_idn_to_ascii($host);
+    }
+    else {
+        $domain_part = rcube_idn_to_utf8($domain_part);
+        $username    = rcube_idn_to_utf8($username);
+        $host        = rcube_idn_to_utf8($host);
+    }
+
     // at least we should always have the local part
-    $sql = str_replace('%l', $db->quote($rcmail->user->get_username('local'), 'text'), $sql);
-    $sql = str_replace('%d', $db->quote($rcmail->user->get_username('domain'), 'text'), $sql);
-    $sql = str_replace('%u', $db->quote($_SESSION['username'],'text'), $sql);
-    $sql = str_replace('%h', $db->quote($_SESSION['imap_host'],'text'), $sql);
+    $sql = str_replace('%l', $db->quote($local_part, 'text'), $sql);
+    $sql = str_replace('%d', $db->quote($domain_part, 'text'), $sql);
+    $sql = str_replace('%u', $db->quote($username, 'text'), $sql);
+    $sql = str_replace('%h', $db->quote($host, 'text'), $sql);
 
     $res = $db->query($sql, $sql_vars);
 

@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: save_prefs.inc 5151 2011-08-31 12:49:44Z alec $
+ $Id: save_prefs.inc 5543 2011-12-05 07:24:36Z alec $
 
 */
 
@@ -32,9 +32,17 @@ switch ($CURR_SECTION)
       'timezone'     => isset($_POST['_timezone']) ? (is_numeric($_POST['_timezone']) ? floatval($_POST['_timezone']) : get_input_value('_timezone', RCUBE_INPUT_POST)) : $CONFIG['timezone'],
       'dst_active'   => isset($_POST['_dst_active']) ? TRUE : FALSE,
       'pagesize'     => is_numeric($_POST['_pagesize']) ? max(2, intval($_POST['_pagesize'])) : $CONFIG['pagesize'],
+      'date_format'  => isset($_POST['_date_format']) ? get_input_value('_date_format', RCUBE_INPUT_POST) : $CONFIG['date_format'],
+      'time_format'  => isset($_POST['_time_format']) ? get_input_value('_time_format', RCUBE_INPUT_POST) : ($CONFIG['time_format'] ? $CONFIG['time_format'] : 'H:i'),
       'prettydate'   => isset($_POST['_pretty_date']) ? TRUE : FALSE,
       'skin' 	     => isset($_POST['_skin']) ? get_input_value('_skin', RCUBE_INPUT_POST) : $CONFIG['skin'],
     );
+    
+    // compose derived date/time format strings
+    if ((isset($_POST['_date_format']) || isset($_POST['_time_format'])) && $a_user_prefs['date_format'] && $a_user_prefs['time_format']) {
+      $a_user_prefs['date_short'] = 'D ' . $a_user_prefs['time_format'];
+      $a_user_prefs['date_long'] = $a_user_prefs['date_format'] . ' ' . $a_user_prefs['time_format'];
+    }
 
   break;
 
@@ -71,6 +79,9 @@ switch ($CURR_SECTION)
       'dsn_default'        => isset($_POST['_dsn_default']) ? TRUE : FALSE,
       'reply_same_folder'  => isset($_POST['_reply_same_folder']) ? TRUE : FALSE,
       'spellcheck_before_send' => isset($_POST['_spellcheck_before_send']) ? TRUE : FALSE,
+      'spellcheck_ignore_syms' => isset($_POST['_spellcheck_ignore_syms']) ? TRUE : FALSE,
+      'spellcheck_ignore_nums' => isset($_POST['_spellcheck_ignore_nums']) ? TRUE : FALSE,
+      'spellcheck_ignore_caps' => isset($_POST['_spellcheck_ignore_caps']) ? TRUE : FALSE,
       'show_sig'           => isset($_POST['_show_sig']) ? intval($_POST['_show_sig']) : 1,
       'top_posting'        => !empty($_POST['_top_posting']),
       'strip_existing_sig' => isset($_POST['_strip_existing_sig']),
@@ -82,6 +93,7 @@ switch ($CURR_SECTION)
   case 'addressbook':
     $a_user_prefs = array(
       'default_addressbook' => get_input_value('_default_addressbook', RCUBE_INPUT_POST, true),
+      'autocomplete_single' => isset($_POST['_autocomplete_single']) ? TRUE : FALSE,
     );
 
   break;
@@ -133,6 +145,8 @@ switch ($CURR_SECTION)
     // switch skin (if valid, otherwise unset the pref and fall back to default)
     if (!$OUTPUT->set_skin($a_user_prefs['skin']))
       unset($a_user_prefs['skin']);
+    else if ($RCMAIL->config->get('skin') != $a_user_prefs['skin'])
+      $OUTPUT->command('reload', 500);
 
     // force min size
     if ($a_user_prefs['pagesize'] < 1)
@@ -167,7 +181,7 @@ switch ($CURR_SECTION)
           $a_user_prefs['default_imap_folders'][] = $a_user_prefs[$p];
       }
     }
-  
+
   break;
 }
 

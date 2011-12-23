@@ -17,7 +17,7 @@
 |         Martin Lacina	<martin@whistler.sk>                            |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 5067 2011-08-14 18:47:58Z thomasb $
+@version $Id: messages.inc 5139 2011-08-28 09:47:15Z alec $
 
 */
 
@@ -28,7 +28,7 @@ $messages['sessionerror'] = 'Vaše prihlásenie je neplatné alebo vypršala jeh
 $messages['imaperror'] = 'Nepodarilo sa spojiť s IMAP serverom';
 $messages['servererror'] = 'Chyba servera!';
 $messages['servererrormsg'] = 'Chyba servera: $msg';
-$messages['databaserror'] = 'Databázová chyba!';
+$messages['dberror'] = 'Databázová chyba!';
 $messages['errorreadonly'] = 'Nemožno vykonať operáciu. Adresár je len na čítanie';
 $messages['errornoperm'] = 'Nemožno vykonať operáciu. Prístup odmietnutý';
 $messages['invalidrequest'] = 'Chybný požiadavek. Žiadne údaje neboli uložené.';

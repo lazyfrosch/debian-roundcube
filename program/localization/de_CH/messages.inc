@@ -13,7 +13,7 @@
 | Author: Thomas Bruederli <roundcube@gmail.com>                        |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 5079 2011-08-16 19:57:45Z thomasb $
+@version $Id: messages.inc 5258 2011-09-21 11:17:46Z thomasb $
 
 */
 
@@ -24,7 +24,7 @@ $messages['sessionerror'] = 'Ihre Session ist ungültig oder abgelaufen';
 $messages['imaperror'] = 'Keine Verbindung zum IMAP Server';
 $messages['servererror'] = 'Serverfehler!';
 $messages['servererrormsg'] = 'Serverfehler: $msg';
-$messages['databaserror'] = 'Datenbankfehler!';
+$messages['dberror'] = 'Datenbankfehler!';
 $messages['errorreadonly'] = 'Die Aktion kann nicht ausgeführt werden. Der Ordner ist schreibgeschützt.';
 $messages['errornoperm'] = 'Die Aktion kann nicht ausgeführt werden. Zugriff verweigert.';
 $messages['invalidrequest'] = 'Ungültige Anfrage! Es wurden keine Daten gespeichert.';
@@ -48,6 +48,7 @@ $messages['blockedimages'] = 'Um Ihre Privatsphäre zur schützen, wurden extern
 $messages['encryptedmessage'] = 'Dies ist eine verschlüsselte Nachricht und kann leider nicht angezeigt werden.';
 $messages['nocontactsfound'] = 'Keine Kontakte gefunden';
 $messages['contactnotfound'] = 'Die gewählte Adresse wurde nicht gefunden';
+$messages['contactsearchonly'] = 'Geben Sie einen Suchbegriff ein, um Kontakte zu finden';
 $messages['sendingfailed'] = 'Versand der Nachricht fehlgeschlagen';
 $messages['senttooquickly'] = 'Bitte warten Sie $sec Sekunde(n) vor dem Senden dieser Nachricht';
 $messages['errorsavingsent'] = 'Ein Fehler ist beim Speichern der gesendeten Nachricht aufgetreten';

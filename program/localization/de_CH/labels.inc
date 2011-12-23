@@ -13,7 +13,7 @@
 | Author:      Thomas Bruederli <roundcube@gmail.com>                   |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 5067 2011-08-14 18:47:58Z thomasb $
+@version $Id: labels.inc 5569 2011-12-07 14:47:32Z thomasb $
 
 */
 
@@ -285,6 +285,7 @@ $labels['importreplace'] = 'Bestehendes Adressbuch komplett ersetzen';
 $labels['importtext'] = 'Sie können Kontakte aus einem bestehenden Adressbuch hochladen.<br/>Es können Adressbücher im <a href="http://de.wikipedia.org/wiki/VCard">vCard-Format</a> importiert werden.';
 $labels['done'] = 'Fertig';
 $labels['settingsfor'] = 'Einstellungen für';
+$labels['about'] = 'Über';
 $labels['preferences'] = 'Einstellungen';
 $labels['userpreferences'] = 'Benutzereinstellungen';
 $labels['editpreferences'] = 'Einstellungen bearbeiten';
@@ -296,6 +297,8 @@ $labels['edititem'] = 'Eintrag bearbeiten';
 $labels['preferhtml'] = 'HTML bevorzugen';
 $labels['defaultcharset'] = 'Standard-Zeichensatz';
 $labels['htmlmessage'] = 'HTML Nachricht';
+$labels['dateformat'] = 'Datumsformat';
+$labels['timeformat'] = 'Zeitformat';
 $labels['prettydate'] = 'Kurze Datumsanzeige';
 $labels['setdefault'] = 'Als Standard';
 $labels['autodetect'] = 'Automatisch';
@@ -392,6 +395,11 @@ $labels['sortby'] = 'Sortieren nach';
 $labels['sortasc'] = 'aufsteigend sortieren';
 $labels['sortdesc'] = 'absteigend sortieren';
 $labels['undo'] = 'Rückgängig';
+$labels['plugin'] = 'Plugin';
+$labels['version'] = 'Version';
+$labels['source'] = 'Quellcode';
+$labels['license'] = 'Lizenz';
+$labels['support'] = 'Support';
 $labels['B'] = 'B';
 $labels['KB'] = 'KB';
 $labels['MB'] = 'MB';

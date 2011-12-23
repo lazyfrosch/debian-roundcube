@@ -13,7 +13,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- @version $Id: messages.inc 5022 2011-08-04 09:01:36Z alec $
+ @version $Id: messages.inc 5569 2011-12-07 14:47:32Z thomasb $
 
 */
 
@@ -24,7 +24,7 @@ $messages['sessionerror'] = 'Your session is invalid or expired.';
 $messages['imaperror'] = 'Connection to IMAP server failed.';
 $messages['servererror'] = 'Server Error!';
 $messages['servererrormsg'] = 'Server Error: $msg';
-$messages['databaserror'] = 'Database Error!';
+$messages['dberror'] = 'Database Error!';
 $messages['errorreadonly'] = 'Unable to perform operation. Folder is read-only.';
 $messages['errornoperm'] = 'Unable to perform operation. Permission denied.';
 $messages['invalidrequest'] = 'Invalid request! No data was saved.';
@@ -48,6 +48,7 @@ $messages['blockedimages'] = 'To protect your privacy, remote images are blocked
 $messages['encryptedmessage'] = 'This is an encrypted message and can not be displayed. Sorry!';
 $messages['nocontactsfound'] = 'No contacts found.';
 $messages['contactnotfound'] = 'The requested contact was not found.';
+$messages['contactsearchonly'] = 'Enter some search terms to find contacts';
 $messages['sendingfailed'] = 'Failed to send message.';
 $messages['senttooquickly'] = 'Please wait $sec sec(s). before sending this message.';
 $messages['errorsavingsent'] = 'An error occured while saving sent message.';
@@ -61,6 +62,7 @@ $messages['deletegroupconfirm']  = 'Do you really want to delete selected group?
 $messages['deletemessagesconfirm'] = 'Do you really want to delete selected message(s)?';
 $messages['deletefolderconfirm']  = 'Do you really want to delete this folder?';
 $messages['purgefolderconfirm']  = 'Do you really want to delete all messages in this folder?';
+$messages['contactdeleting'] = 'Deleting contact(s)...';
 $messages['groupdeleting'] = 'Deleting group...';
 $messages['folderdeleting'] = 'Deleting folder...';
 $messages['foldermoving'] = 'Moving folder...';
@@ -76,10 +78,10 @@ $messages['nosubjectwarning']  = 'The "Subject" field is empty. Would you like t
 $messages['nobodywarning'] = 'Send this message without text?';
 $messages['notsentwarning'] = 'Message has not been sent. Do you want to discard your message?';
 $messages['noldapserver'] = 'Please select an ldap server to search.';
-$messages['nocontactsreturned'] = 'No contacts were found.';
 $messages['nosearchname'] = 'Please enter a contact name or email address.';
 $messages['notuploadedwarning'] = 'Not all attachments have been uploaded yet. Please wait or cancel the upload.';
 $messages['searchsuccessful'] = '$nr messages found.';
+$messages['contactsearchsuccessful'] = '$nr contacts found.';
 $messages['searchnomatch'] = 'Search returned no matches.';
 $messages['searching'] = 'Searching...';
 $messages['checking'] = 'Checking...';
@@ -126,7 +128,6 @@ $messages['smtpautherror'] = 'SMTP Error ($code): Authentication failed.';
 $messages['smtpfromerror'] = 'SMTP Error ($code): Failed to set sender "$from" ($msg).';
 $messages['smtptoerror'] = 'SMTP Error ($code): Failed to add recipient "$to" ($msg).';
 $messages['smtprecipientserror'] = 'SMTP Error: Unable to parse recipients list.';
-$messages['smtpdsnerror'] = 'SMTP Error: No support for Delivery Status Notifications.';
 $messages['smtperror'] = 'SMTP Error: $msg';
 $messages['emailformaterror'] = 'Invalid e-mail address: $email';
 $messages['toomanyrecipients'] = 'Too many recipients. Reduce the number of recipients to $max.';
@@ -139,11 +140,16 @@ $messages['contactrestored'] = 'Contact(s) restored successfully.';
 $messages['groupdeleted'] = 'Group deleted successfully.';
 $messages['grouprenamed'] = 'Group renamed successfully.';
 $messages['groupcreated'] = 'Group created successfully.';
+$messages['savedsearchdeleted'] = 'Saved search deleted successfully.';
+$messages['savedsearchdeleteerror'] = 'Could not delete saved search.';
+$messages['savedsearchcreated'] = 'Saved search created successfully.';
+$messages['savedsearchcreateerror'] = 'Could not create saved search.';
 $messages['messagedeleted'] = 'Message(s) deleted successfully.';
 $messages['messagemoved'] = 'Message(s) moved successfully.';
 $messages['messagecopied'] = 'Message(s) copied successfully.';
 $messages['messagemarked'] = 'Message(s) marked successfully.';
 $messages['autocompletechars'] = 'Enter at least $min characters for autocompletion.';
+$messages['autocompletemore'] = 'More matching entries found. Please type more characters.';
 $messages['namecannotbeempty'] = 'Name cannot be empty.';
 $messages['nametoolong'] = 'Name is too long.';
 $messages['folderupdated'] = 'Folder updated successfully.';
@@ -151,5 +157,6 @@ $messages['foldercreated'] = 'Folder created successfully.';
 $messages['invalidimageformat'] = 'Not a valid image format.';
 $messages['mispellingsfound'] = 'Spelling errors detected in the message.';
 $messages['parentnotwritable'] = 'Unable to create/move folder into selected parent folder. No access rights.';
+$messages['messagetoobig'] = 'The message part is too big to process it.';
 
 ?>

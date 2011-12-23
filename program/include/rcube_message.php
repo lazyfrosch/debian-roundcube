@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_message.php 5261 2011-09-21 12:22:40Z alec $
+ $Id: rcube_message.php 5514 2011-11-30 11:35:43Z alec $
 
 */
 
@@ -48,7 +48,6 @@ class rcube_message
 
     public $uid = null;
     public $headers;
-    public $structure;
     public $parts = array();
     public $mime_parts = array();
     public $attachments = array();
@@ -77,7 +76,7 @@ class rcube_message
         $this->imap->get_all_headers = true;
 
         $this->uid = $uid;
-        $this->headers = $this->imap->get_headers($uid, NULL, true, true);
+        $this->headers = $this->imap->get_message($uid);
 
         if (!$this->headers)
             return;
@@ -94,9 +93,9 @@ class rcube_message
                 '_mbox' => $this->imap->get_mailbox_name(), '_uid' => $uid))
         );
 
-        if ($this->structure = $this->imap->get_structure($uid, $this->headers->body_structure)) {
-            $this->get_mime_numbers($this->structure);
-            $this->parse_structure($this->structure);
+        if (!empty($this->headers->structure)) {
+            $this->get_mime_numbers($this->headers->structure);
+            $this->parse_structure($this->headers->structure);
         }
         else {
             $this->body = $this->imap->get_body($uid);
@@ -143,10 +142,10 @@ class rcube_message
      * @param string $mime_id Part MIME-ID
      * @return string URL or false if part does not exist
      */
-    public function get_part_url($mime_id)
+    public function get_part_url($mime_id, $embed = false)
     {
         if ($this->mime_parts[$mime_id])
-            return $this->opt['get_url'] . '&_part=' . $mime_id;
+            return $this->opt['get_url'] . '&_part=' . $mime_id . ($embed ? '&_embed=1' : '');
         else
             return false;
     }
@@ -299,8 +298,10 @@ class rcube_message
             $structure->type = 'content';
             $this->parts[] = &$structure;
         }
-        // message contains alternative parts
-        else if ($mimetype == 'multipart/alternative' && is_array($structure->parts)) {
+        // message contains (more than one!) alternative parts
+        else if ($mimetype == 'multipart/alternative'
+            && is_array($structure->parts) && count($structure->parts) > 1
+        ) {
             // get html/plaintext parts
             $plain_part = $html_part = $print_part = $related_part = null;
 
@@ -510,7 +511,7 @@ class rcube_message
                 $img_regexp = '/^image\/(gif|jpe?g|png|tiff|bmp|svg)/';
 
                 foreach ($this->inline_parts as $inline_object) {
-                    $part_url = $this->get_part_url($inline_object->mime_id);
+                    $part_url = $this->get_part_url($inline_object->mime_id, true);
                     if ($inline_object->content_id)
                         $a_replaces['cid:'.$inline_object->content_id] = $part_url;
                     if ($inline_object->content_location) {

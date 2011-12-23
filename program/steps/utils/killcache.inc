@@ -9,13 +9,13 @@
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
- |   Delete rows from cache and messages tables                          |
+ |   Delete rows from cache tables                                       |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Dennis P. Nikolaenko <dennis@nikolaenko.ru>                   |
  +-----------------------------------------------------------------------+
 
- $Id: killcache.inc 4410 2011-01-12 18:25:02Z thomasb $
+ $Id: killcache.inc 5578 2011-12-09 07:23:04Z alec $
 
 */
 
@@ -41,12 +41,20 @@ if (PEAR::isError($res)) {
     exit($res->getMessage());
 }
 
-$res = $RCMAIL->db->query("DELETE FROM messages");
+$res = $RCMAIL->db->query("DELETE FROM cache_messages");
+if (PEAR::isError($res)) {
+    exit($res->getMessage());
+}
+
+$res = $RCMAIL->db->query("DELETE FROM cache_index");
+if (PEAR::isError($res)) {
+    exit($res->getMessage());
+}
+
+$res = $RCMAIL->db->query("DELETE FROM cache_thread");
 if (PEAR::isError($res)) {
     exit($res->getMessage());
 }
 
 echo "Cache cleared\n";
 exit;
-
-

@@ -15,7 +15,7 @@
  | Author: Aleksander Machniak <alec@alec.pl>                            |
  +-----------------------------------------------------------------------+
 
- $Id: spell_html.inc 4815 2011-05-30 15:08:26Z alec $
+ $Id: spell_html.inc 5181 2011-09-06 13:39:45Z alec $
 
 */
 
@@ -39,6 +39,10 @@ if ($request['method'] == 'checkWords') {
 }
 else if ($request['method'] == 'getSuggestions') {
     $result['result'] = $spellchecker->get_suggestions($data);
+}
+else if ($request['method'] == 'learnWord') {
+    $spellchecker->add_word($data);
+    $result['result'] = true;
 }
 
 if ($error = $spellchecker->error()) {

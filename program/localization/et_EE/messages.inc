@@ -15,7 +15,7 @@
 |         Elan Ruusamäe <glen@delfi.ee>                                 |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 5067 2011-08-14 18:47:58Z thomasb $
+@version $Id: messages.inc 5139 2011-08-28 09:47:15Z alec $
 
 */
 
@@ -26,7 +26,7 @@ $messages['sessionerror'] = 'Sinu seanss on aegunud või vigane';
 $messages['imaperror'] = 'Ei õnnestunud IMAP serveriga ühendust luua';
 $messages['servererror'] = 'Serveri tõrge!';
 $messages['servererrormsg'] = 'Serveri tõrge: $msg';
-$messages['databaserror'] = 'Andmebaasi tõrge!';
+$messages['dberror'] = 'Andmebaasi tõrge!';
 $messages['errorreadonly'] = 'Operatsioon nurjus. Kaustale on vaid lugemisõigus';
 $messages['errornoperm'] = 'Operatsioon nurjus. Ligipääsu õigused puuduvad';
 $messages['invalidrequest'] = 'Lubamatu päring! Andmeid ei salvestatud.';

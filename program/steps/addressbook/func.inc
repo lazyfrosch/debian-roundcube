@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: func.inc 5165 2011-09-05 08:49:04Z thomasb $
+ $Id: func.inc 5499 2011-11-28 09:03:27Z alec $
 
 */
 
@@ -227,7 +227,32 @@ function rcmail_directory_list($attrib)
         $out = $groupdata['out'];
     }
 
-    $OUTPUT->set_env('contactgroups', $jsdata); 
+    $line_templ = html::tag('li', array(
+        'id' => 'rcmliS%s', 'class' => '%s'),
+        html::a(array('href' => '#', 'rel' => 'S%s',
+            'onclick' => "return ".JS_OBJECT_NAME.".command('listsearch', '%s', this)"), '%s'));
+
+    // Saved searches
+    $sources = $RCMAIL->user->list_searches(rcube_user::SEARCH_ADDRESSBOOK);
+    foreach ($sources as $j => $source) {
+        $id = $source['id'];
+        $js_id = JQ($id);
+
+        // set class name(s)
+        $class_name = 'contactsearch';
+        if ($current === $id)
+            $class_name .= ' selected';
+        if ($source['class_name'])
+            $class_name .= ' ' . $source['class_name'];
+
+        $out .= sprintf($line_templ,
+            html_identifier($id),
+            $class_name,
+            $id,
+            $js_id, (!empty($source['name']) ? Q($source['name']) : Q($id)));
+    }
+
+    $OUTPUT->set_env('contactgroups', $jsdata);
     $OUTPUT->add_gui_object('folderlist', $attrib['id']);
     // add some labels to client
     $OUTPUT->add_label('deletegroupconfirm', 'groupdeleting', 'addingmember', 'removingmember');
@@ -287,7 +312,7 @@ function rcmail_contacts_list($attrib)
     $OUTPUT->include_script('list.js');
 
     // add some labels to client
-    $OUTPUT->add_label('deletecontactconfirm', 'copyingcontact');
+    $OUTPUT->add_label('deletecontactconfirm', 'copyingcontact', 'contactdeleting');
 
     return $out;
 }
@@ -383,12 +408,12 @@ function rcmail_get_rowcount_text($result=null)
 function rcmail_get_type_label($type)
 {
     $label = 'type'.$type;
-    if (rcube_label_exists($label))
-        return rcube_label($label);
+    if (rcube_label_exists($label, '*', $domain))
+        return rcube_label($label, $domain);
     else if (preg_match('/\w+(\d+)$/', $label, $m)
             && ($label = preg_replace('/(\d+)$/', '', $label))
-            && rcube_label_exists($label))
-        return rcube_label($label) . ' ' . $m[1];
+            && rcube_label_exists($label, '*', $domain))
+        return rcube_label($label, $domain) . ' ' . $m[1];
 
     return ucfirst($type);
 }
@@ -397,6 +422,7 @@ function rcmail_get_type_label($type)
 function rcmail_contact_form($form, $record, $attrib = null)
 {
     global $RCMAIL, $CONFIG;
+    static $jqueryui_loaded = 0;
 
     // Allow plugins to modify contact form content
     $plugin = $RCMAIL->plugins->exec_hook('contact_form', array(
@@ -583,6 +609,19 @@ function rcmail_contact_form($form, $record, $attrib = null)
                         if ($colprop['subtypes'] || $colprop['limit'] != 1)
                             $colprop['array'] = true;
 
+                        // load jquery UI datepickert for date fields
+                        if ($colprop['type'] == 'date') {
+                            if (!$jqueryui_loaded++) {
+                                $RCMAIL->plugins->load_plugin('jqueryui');
+                                $RCMAIL->output->set_env('date_format', strtr($RCMAIL->config->get('date_format', 'Y-m-d'), array('y'=>'y', 'Y'=>'yy', 'm'=>'mm', 'n'=>'m', 'd'=>'dd', 'j'=>'d')));
+                                foreach (array('jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec') as $month)
+                                    $month_names[] = rcube_label($month);
+                                $RCMAIL->output->set_env('month_names', $month_names);
+                            }
+                            $colprop['class'] .= ($colprop['class'] ? ' ' : '') . 'datepicker';
+                            $val = format_date($val, $RCMAIL->config->get('date_format', 'Y-m-d'), false);
+                        }
+
                         $val = rcmail_get_edit_field($col, $val, $colprop, $colprop['type']);
                         $coltypes[$field]['count']++;
                     }
@@ -618,10 +657,15 @@ function rcmail_contact_form($form, $record, $attrib = null)
                 }
 
                 // wrap rows in fieldgroup container
-                $content .= html::tag('fieldset', array('class' => 'contactfieldgroup ' . ($colprop['subtypes'] ? 'contactfieldgroupmulti ' : '') . 'contactcontroller' . $col, 'style' => ($rows ? null : 'display:none')),
-                  ($colprop['subtypes'] ? html::tag('legend', null, Q($colprop['label'])) : ' ') .
-                  $rows);
+                if ($rows) {
+                    $content .= html::tag('fieldset', array('class' => 'contactfieldgroup ' . ($colprop['subtypes'] ? 'contactfieldgroupmulti ' : '') . 'contactcontroller' . $col, 'style' => ($rows ? null : 'display:none')),
+                      ($colprop['subtypes'] ? html::tag('legend', null, Q($colprop['label'])) : ' ') .
+                      $rows);
+                }
             }
+
+            if (!$content)
+                continue;
 
             // also render add-field selector
             if ($edit_mode)
@@ -633,7 +677,8 @@ function rcmail_contact_form($form, $record, $attrib = null)
             $content = $fieldset['content'];
         }
 
-        $out .= html::tag('fieldset', null, html::tag('legend', null, Q($fieldset['name'])) . $content) ."\n";
+        if ($content)
+            $out .= html::tag('fieldset', null, html::tag('legend', null, Q($fieldset['name'])) . $content) ."\n";
     }
 
     if ($edit_mode) {
@@ -660,7 +705,7 @@ function rcmail_contact_photo($attrib)
     $RCMAIL->output->set_env('photo_placeholder', $photo_img);
     unset($attrib['placeholder']);
 
-    if (strpos($record['photo'], 'http:') === 0)
+    if (preg_match('!^https?://!i', $record['photo']))
         $photo_img = $record['photo'];
     else if ($record['photo'])
         $photo_img = $RCMAIL->url(array('_action' => 'photo', '_cid' => $record['ID'], '_source' => $SOURCE_ID));
@@ -683,7 +728,7 @@ function rcmail_contact_photo($attrib)
 function rcmail_format_date_col($val)
 {
     global $RCMAIL;
-    return format_date($val, $RCMAIL->config->get('date_format', 'Y-m-d'));
+    return format_date($val, $RCMAIL->config->get('date_format', 'Y-m-d'), false);
 }
 
 
@@ -713,9 +758,12 @@ function rcmail_get_cids()
     foreach ($cid as $id) {
         // if _source is not specified we'll find it from decoded ID
         if (!$got_source) {
-            list ($c, $s) = explode('-', $id, 2);
-            if (strlen($s)) {
-                $result[(string)$s][] = $c;
+            if ($sep = strrpos($id, '-')) {
+                $contact_id = substr($id, 0, $sep);
+                $source_id  = substr($id, $sep+1);
+                if (strlen($source_id)) {
+                    $result[(string)$source_id][] = $contact_id;
+                }
             }
         }
         else {
@@ -745,4 +793,6 @@ $RCMAIL->register_action_map(array(
     'group-delete' => 'groups.inc',
     'group-addmembers' => 'groups.inc',
     'group-delmembers' => 'groups.inc',
+    'search-create' => 'search.inc',
+    'search-delete' => 'search.inc',
 ));

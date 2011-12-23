@@ -17,7 +17,7 @@
  | Author: Aleksander Machniak <alec@alec.pl>                            |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_cache.php 4909 2011-07-05 17:09:25Z alec $
+ $Id: rcube_cache.php 5305 2011-10-03 18:04:14Z alec $
 
 */
 
@@ -28,7 +28,7 @@
  * @package    Cache
  * @author     Thomas Bruederli <roundcube@gmail.com>
  * @author     Aleksander Machniak <alec@alec.pl>
- * @version    1.0
+ * @version    1.1
  */
 class rcube_cache
 {
@@ -188,6 +188,24 @@ class rcube_cache
 
 
     /**
+     * Remove cache records older than ttl
+     */
+    function expunge()
+    {
+        if ($this->type == 'db' && $this->db) {
+            $this->db->query(
+                "DELETE FROM ".get_table_name('cache').
+                " WHERE user_id = ?".
+                " AND cache_key LIKE ?".
+                " AND " . $this->db->unixtimestamp('created')." < ?",
+                $this->userid,
+                $this->prefix.'.%',
+                time() - $this->ttl);
+        }
+    }
+
+
+    /**
      * Writes the cache back to the DB.
      */
     function close()
@@ -227,26 +245,30 @@ class rcube_cache
             return null;
         }
 
-        if ($this->type == 'memcache') {
-            $data = $this->db->get($this->ckey($key));
-        }
-        else if ($this->type == 'apc') {
-            $data = apc_fetch($this->ckey($key));
-	    }
-
-        if ($data) {
-            $md5sum = md5($data);
-            $data   = $this->packed ? unserialize($data) : $data;
-
-            if ($nostore) {
-                return $data;
+        if ($this->type != 'db') {
+            if ($this->type == 'memcache') {
+                $data = $this->db->get($this->ckey($key));
             }
+            else if ($this->type == 'apc') {
+                $data = apc_fetch($this->ckey($key));
+	        }
 
-            $this->cache_sums[$key] = $md5sum;
-            $this->cache[$key]      = $data;
+            if ($data) {
+                $md5sum = md5($data);
+                $data   = $this->packed ? unserialize($data) : $data;
+
+                if ($nostore) {
+                    return $data;
+                }
+
+                $this->cache_sums[$key] = $md5sum;
+                $this->cache[$key]      = $data;
+            }
+            else {
+                $this->cache[$key] = null;
+            }
         }
-
-        if ($this->type == 'db') {
+        else {
             $sql_result = $this->db->limitquery(
                 "SELECT cache_id, data, cache_key".
                 " FROM ".get_table_name('cache').
@@ -271,6 +293,9 @@ class rcube_cache
                 $this->cache[$key]      = $data;
 	            $this->cache_sums[$key] = $md5sum;
                 $this->cache_keys[$key] = $sql_arr['cache_id'];
+            }
+            else {
+                $this->cache[$key] = null;
             }
         }
 

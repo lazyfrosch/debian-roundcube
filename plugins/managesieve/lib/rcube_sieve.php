@@ -1,13 +1,27 @@
 <?php
 
 /**
-  Classes for managesieve operations (using PEAR::Net_Sieve)
-
-  Author: Aleksander Machniak <alec@alec.pl>
-
-  $Id: rcube_sieve.php 5203 2011-09-12 06:44:56Z alec $
-
-*/
+ *  Classes for managesieve operations (using PEAR::Net_Sieve)
+ *
+ * Copyright (C) 2008-2011, The Roundcube Dev Team
+ * Copyright (C) 2011, Kolab Systems AG
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * $Id: rcube_sieve.php 5452 2011-11-18 14:44:48Z alec $
+ *
+ */
 
 // Managesieve Protocol: RFC5804
 
@@ -30,7 +44,6 @@ class rcube_sieve
 
     public $script;                 // rcube_sieve_script object
     public $current;                // name of currently loaded script
-    private $disabled;              // array of disabled extensions
     private $exts;                  // array of supported extensions
 
 
@@ -75,7 +88,17 @@ class rcube_sieve
         }
 
         $this->exts     = $this->get_extensions();
-        $this->disabled = $disabled;
+
+        // disable features by config
+        if (!empty($disabled)) {
+            // we're working on lower-cased names
+            $disabled = array_map('strtolower', (array) $disabled);
+            foreach ($disabled as $ext) {
+                if (($idx = array_search($ext, $this->exts)) !== false) {
+                    unset($this->exts[$idx]);
+                }
+            }
+        }
     }
 
     public function __destruct() {
@@ -195,7 +218,7 @@ class rcube_sieve
     {
         if ($this->exts)
             return $this->exts;
-    
+
         if (!$this->sieve)
             return $this->_set_error(SIEVE_ERROR_INTERNAL);
 
@@ -286,23 +309,28 @@ class rcube_sieve
      */
     private function _parse($txt)
     {
-        // try to parse from Roundcube format
-        $script = new rcube_sieve_script($txt, $this->disabled, $this->exts);
+        // parse
+        $script = new rcube_sieve_script($txt, $this->exts);
 
-        // ... else try to import from different formats
-        if (empty($script->content)) {
-            $script = $this->_import_rules($txt);
-            $script = new rcube_sieve_script($script, $this->disabled, $this->exts);
-
+        // fix/convert to Roundcube format
+        if (!empty($script->content)) {
             // replace all elsif with if+stop, we support only ifs
             foreach ($script->content as $idx => $rule) {
+                if (empty($rule['type']) || !preg_match('/^(if|elsif|else)$/', $rule['type'])) {
+                    continue;
+                }
+
+                $script->content[$idx]['type'] = 'if';
+
                 // 'stop' not found?
                 foreach ($rule['actions'] as $action) {
                     if (preg_match('/^(stop|vacation)$/', $action['type'])) {
                         continue 2;
                     }
                 }
-                $script->content[$idx]['actions'][] = array('type' => 'stop');
+                if (empty($script->content[$idx+1]) || $script->content[$idx+1]['type'] != 'if') {
+                    $script->content[$idx]['actions'][] = array('type' => 'stop');
+                }
             }
         }
 
@@ -341,48 +369,6 @@ class rcube_sieve
         }
 
         return $this->save_script($name, $content);
-    }
-
-    private function _import_rules($script)
-    {
-        $i = 0;
-        $name = array();
-
-        // Squirrelmail (Avelsieve)
-        if (preg_match('/(#START_SIEVE_RULE.*END_SIEVE_RULE)\r?\n/', $script)) {
-            $tokens = preg_split('/(#START_SIEVE_RULE.*END_SIEVE_RULE)\r?\n/', $script, -1, PREG_SPLIT_DELIM_CAPTURE);
-            foreach ($tokens as $token) {
-                if (preg_match('/^#START_SIEVE_RULE.*/', $token, $matches)) {
-                    $name[$i] = "unnamed rule ".($i+1);
-                    $content .= "# rule:[".$name[$i]."]\n";
-                }
-                elseif (isset($name[$i])) {
-                    // This preg_replace is added because I've found some Avelsieve scripts
-                    // with rules containing "if" here. I'm not sure it was working
-                    // before without this or not.
-                    $token = preg_replace('/^if\s+/', '', trim($token));
-                    $content .= "if $token\n";
-                    $i++;
-                }
-            }
-        }
-        // Horde (INGO)
-        else if (preg_match('/(# .+)\r?\n/', $script)) {
-            $tokens = preg_split('/(# .+)\r?\n/', $script, -1, PREG_SPLIT_DELIM_CAPTURE);
-            foreach($tokens as $token) {
-                if (preg_match('/^# (.+)/', $token, $matches)) {
-                    $name[$i] = $matches[1];
-                    $content .= "# rule:[" . $name[$i] . "]\n";
-                }
-                elseif (isset($name[$i])) {
-                    $token = str_replace(":comparator \"i;ascii-casemap\" ", "", $token);
-                    $content .= $token . "\n";
-                    $i++;
-                }
-            }
-        }
-
-        return $content;
     }
 
     private function _set_error($error)

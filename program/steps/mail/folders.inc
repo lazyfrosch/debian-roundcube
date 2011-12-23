@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: folders.inc 4410 2011-01-12 18:25:02Z thomasb $
+ $Id: folders.inc 5266 2011-09-22 07:49:33Z alec $
 */
 
 // only process ajax requests
@@ -65,7 +65,7 @@ else if ($RCMAIL->action == 'purge')
                 $OUTPUT->set_env('messagecount', 0);
                 $OUTPUT->set_env('pagecount', 0);
                 $OUTPUT->command('message_list.clear');
-                $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text());
+                $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text(), $mbox);
                 $OUTPUT->command('set_unread_count', $mbox, 0);
                 $OUTPUT->command('set_quota', rcmail_quota_content());
                 rcmail_set_unseen_count($mbox, 0);

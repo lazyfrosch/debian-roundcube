@@ -14,7 +14,7 @@
 |       Tanja Dobričić <tanja.dobricic@everymail.info>                  |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 5067 2011-08-14 18:47:58Z thomasb $
+@version $Id: messages.inc 5139 2011-08-28 09:47:15Z alec $
 
 */
 
@@ -25,7 +25,7 @@ $messages['sessionerror'] = 'Morate se ponovno ulogirati';
 $messages['imaperror'] = 'Neuspješna veza na IMAP server';
 $messages['servererror'] = 'Greška poslužitelja';
 $messages['servererrormsg'] = 'Greška na serveru: $msg';
-$messages['databaserror'] = 'Greška baze podataka!';
+$messages['dberror'] = 'Greška baze podataka!';
 $messages['errorreadonly'] = 'Nemoguća izvedba operacije. Mapa je samo za čitanje.';
 $messages['errornoperm'] = 'Nemoguća izvedba operacije. Dozvola odbijena.';
 $messages['invalidrequest'] = 'Nepravilan zahtijev! Podaci nisu spremljeni.';

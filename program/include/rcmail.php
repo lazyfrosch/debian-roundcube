@@ -6,6 +6,7 @@
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2008-2011, The Roundcube Dev Team                       |
+ | Copyright (C) 2011, Kolab Systems AG                                  |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcmail.php 5235 2011-09-19 06:43:57Z alec $
+ $Id: rcmail.php 5527 2011-12-02 09:58:03Z alec $
 
 */
 
@@ -452,8 +453,7 @@ class rcmail
     }
 
     // add to the 'books' array for shutdown function
-    if (!isset($this->address_books[$id]))
-      $this->address_books[$id] = $contacts;
+    $this->address_books[$id] = $contacts;
 
     return $contacts;
   }
@@ -482,7 +482,8 @@ class rcmail
         'name'     => rcube_label('personaladrbook'),
         'groups'   => $this->address_books['0']->groups,
         'readonly' => $this->address_books['0']->readonly,
-        'autocomplete' => in_array('sql', $autocomplete)
+        'autocomplete' => in_array('sql', $autocomplete),
+        'undelete' => $this->address_books['0']->undelete && $this->config->get('undo_timeout'),
       );
     }
 
@@ -592,7 +593,6 @@ class rcmail
       return;
 
     $this->imap = new rcube_imap();
-    $this->imap->debug_level = $this->config->get('debug_level');
     $this->imap->skip_deleted = $this->config->get('skip_deleted');
 
     // enable caching of imap data
@@ -614,7 +614,7 @@ class rcmail
     // Setting root and delimiter before establishing the connection
     // can save time detecting them using NAMESPACE and LIST
     $options = array(
-      'auth_method' => $this->config->get('imap_auth_type', 'check'),
+      'auth_type'   => $this->config->get('imap_auth_type', 'check'),
       'auth_cid'    => $this->config->get('imap_auth_cid'),
       'auth_pw'     => $this->config->get('imap_auth_pw'),
       'debug'       => (bool) $this->config->get('imap_debug', 0),
@@ -677,18 +677,21 @@ class rcmail
     if (session_id())
       return;
 
+    $sess_name   = $this->config->get('session_name');
+    $sess_domain = $this->config->get('session_domain');
+    $lifetime    = $this->config->get('session_lifetime', 0) * 60;
+
     // set session domain
-    if ($domain = $this->config->get('session_domain')) {
-      ini_set('session.cookie_domain', $domain);
+    if ($sess_domain) {
+      ini_set('session.cookie_domain', $sess_domain);
     }
     // set session garbage collecting time according to session_lifetime
-    $lifetime = $this->config->get('session_lifetime', 0) * 60;
     if ($lifetime) {
       ini_set('session.gc_maxlifetime', $lifetime * 2);
     }
 
     ini_set('session.cookie_secure', rcube_https_check());
-    ini_set('session.name', 'roundcube_sessid');
+    ini_set('session.name', $sess_name ? $sess_name : 'roundcube_sessid');
     ini_set('session.use_cookies', 1);
     ini_set('session.use_only_cookies', 1);
     ini_set('session.serialize_handler', 'php');
@@ -728,7 +731,7 @@ class rcmail
       $keep_alive = max(60, $keep_alive);
       $this->session->set_keep_alive($keep_alive);
     }
-    
+
     $this->session->set_secret($this->config->get('des_key') . $_SERVER['HTTP_USER_AGENT']);
     $this->session->set_ip_check($this->config->get('ip_check'));
   }
@@ -838,16 +841,8 @@ class rcmail
     if (!$imap_login)
       return false;
 
-    $this->set_imap_prop();
-
     // user already registered -> update user's record
     if (is_object($user)) {
-      // fix some old settings according to namespace prefix
-      $this->fix_namespace_settings($user);
-
-      // create default folders on first login
-      if (!$user->data['last_login'] && $config['create_default_folders'])
-        $this->imap->create_default_folders();
       // update last login timestamp
       $user->touch();
     }
@@ -855,13 +850,6 @@ class rcmail
     else if ($config['auto_create_user']) {
       if ($created = rcube_user::create($username, $host)) {
         $user = $created;
-
-        // fix default settings according to namespace prefix
-        $this->fix_namespace_settings($user);
-
-        // create default folders on first login
-        if ($config['create_default_folders'])
-          $this->imap->create_default_folders();
       }
       else {
         raise_error(array(
@@ -881,8 +869,18 @@ class rcmail
 
     // login succeeded
     if (is_object($user) && $user->ID) {
+      // Configure environment
       $this->set_user($user);
+      $this->set_imap_prop();
       $this->session_configure();
+
+      // fix some old settings according to namespace prefix
+      $this->fix_namespace_settings($user);
+
+      // create default folders on first login
+      if ($config['create_default_folders'] && (!empty($created) || empty($user->data['last_login']))) {
+        $this->imap->create_default_folders();
+      }
 
       // set session vars
       $_SESSION['user_id']   = $user->ID;
@@ -892,9 +890,11 @@ class rcmail
       $_SESSION['imap_ssl']  = $imap_ssl;
       $_SESSION['password']  = $this->encrypt($pass);
       $_SESSION['login_time'] = mktime();
-      
+
       if (isset($_REQUEST['_timezone']) && $_REQUEST['_timezone'] != '_default_')
         $_SESSION['timezone'] = floatval($_REQUEST['_timezone']);
+      if (isset($_REQUEST['_dstactive']) && $_REQUEST['_dstactive'] != '_default_')
+        $_SESSION['dst_active'] = intval($_REQUEST['_dstactive']);
 
       // force reloading complete list of subscribed mailboxes
       $this->imap->clear_cache('mailboxes', true);
@@ -973,7 +973,9 @@ class rcmail
   /**
    * Get localized text in the desired language
    *
-   * @param mixed Named parameters array or label name
+   * @param mixed   $attrib  Named parameters array or label name
+   * @param string  $domain  Label domain (plugin) name
+   *
    * @return string Localized text
    */
   public function gettext($attrib, $domain=null)
@@ -988,7 +990,7 @@ class rcmail
 
     $nr = is_numeric($attrib['nr']) ? $attrib['nr'] : 1;
     $name = $attrib['name'] ? $attrib['name'] : '';
-    
+
     // attrib contain text values: use them from now
     if (($setval = $attrib[strtolower($_SESSION['language'])]) || ($setval = $attrib['en_us']))
         $this->texts[$name] = $setval;
@@ -1044,19 +1046,40 @@ class rcmail
 
 
   /**
-   * Check if the given text lable exists
+   * Check if the given text label exists
    *
-   * @param string Label name
+   * @param string  $name       Label name
+   * @param string  $domain     Label domain (plugin) name or '*' for all domains
+   * @param string  $ref_domain Sets domain name if label is found
+   *
    * @return boolean True if text exists (either in the current language or in en_US)
    */
-  public function text_exists($name, $domain=null)
+  public function text_exists($name, $domain = null, &$ref_domain = null)
   {
     // load localization files if not done yet
     if (empty($this->texts))
       $this->load_language();
 
-    // check for text with domain first
-    return ($domain && isset($this->texts[$domain.'.'.$name])) || isset($this->texts[$name]);
+    if (isset($this->texts[$name])) {
+        $ref_domain = '';
+        return true;
+    }
+
+    // any of loaded domains (plugins)
+    if ($domain == '*') {
+      foreach ($this->plugins->loaded_plugins() as $domain)
+        if (isset($this->texts[$domain.'.'.$name])) {
+          $ref_domain = $domain;
+          return true;
+        }
+    }
+    // specified domain
+    else if ($domain) {
+      $ref_domain = $domain;
+      return isset($this->texts[$domain.'.'.$name]);
+    }
+
+    return false;
   }
 
   /**
@@ -1204,7 +1227,6 @@ class rcmail
 
     // before closing the database connection, write session data
     if ($_SERVER['REMOTE_ADDR'] && is_object($this->session)) {
-      $this->session->cleanup();
       session_write_close();
     }
 
@@ -1246,7 +1268,7 @@ class rcmail
   {
     $sess_id = $_COOKIE[ini_get('session.name')];
     if (!$sess_id) $sess_id = session_id();
-    $plugin = $this->plugins->exec_hook('request_token', array('value' => md5('RT' . $this->task . $this->config->get('des_key') . $sess_id)));
+    $plugin = $this->plugins->exec_hook('request_token', array('value' => md5('RT' . $this->user->ID . $this->config->get('des_key') . $sess_id)));
     return $plugin['value'];
   }
 
@@ -1540,7 +1562,7 @@ class rcmail
 
     // use strtr behaviour of going through source string once
     $cmd = strtr($cmd, $replacements);
-    
+
     return (string)shell_exec($cmd);
   }
 
@@ -1576,7 +1598,7 @@ class rcmail
       }
     }
   }
-  
+
   /**
    * Returns current action filename
    *
@@ -1606,8 +1628,8 @@ class rcmail
     if (!$prefix_len)
       return;
 
-    $prefs = $user->get_prefs();
-    if (empty($prefs) || $prefs['namespace_fixed'])
+    $prefs = $this->config->all();
+    if (!empty($prefs['namespace_fixed']))
       return;
 
     // Build namespace prefix regexp
