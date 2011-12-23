@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_smtp.php 5033 2011-08-09 09:46:54Z alec $
+ $Id: rcube_smtp.php 5499 2011-11-28 09:03:27Z alec $
 
 */
 
@@ -214,14 +214,10 @@ class rcube_smtp
     if ($opts['dsn']) {
       $exts = $this->conn->getServiceExtensions();
 
-      if (!isset($exts['DSN'])) {
-        $this->error = array('label' => 'smtpdsnerror');
-        $this->response[] = "DSN not supported";
-        return false;
+      if (isset($exts['DSN'])) {
+        $from_params      = 'RET=HDRS';
+        $recipient_params = 'NOTIFY=SUCCESS,FAILURE';
       }
-
-      $from_params      = 'RET=HDRS';
-      $recipient_params = 'NOTIFY=SUCCESS,FAILURE';
     }
 
     // RFC2298.3: remove envelope sender address
@@ -385,7 +381,7 @@ class rcube_smtp
           $from = $addresses[0];
 
         // Reject envelope From: addresses with spaces.
-        if (strstr($from, ' '))
+        if (strpos($from, ' ') !== false)
           return false;
 
         $lines[] = $key . ': ' . $value;

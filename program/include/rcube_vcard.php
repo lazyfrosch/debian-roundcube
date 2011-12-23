@@ -14,7 +14,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_vcard.php 5165 2011-09-05 08:49:04Z thomasb $
+ $Id: rcube_vcard.php 5160 2011-09-05 07:40:18Z thomasb $
 
 */
 

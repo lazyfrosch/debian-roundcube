@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_json_output.php 5037 2011-08-09 18:40:42Z alec $
+ $Id: rcube_json_output.php 5227 2011-09-16 17:54:07Z thomasb $
 
 */
 

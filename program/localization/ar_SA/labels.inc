@@ -13,7 +13,7 @@
 | Author: Ossama Khayat <okhayat@yahoo.com>                             |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 5067 2011-08-14 18:47:58Z thomasb $
+@version $Id: labels.inc 5569 2011-12-07 14:47:32Z thomasb $
 
 */
 
@@ -117,7 +117,7 @@ $labels['markread'] = 'كمقروءة';
 $labels['markunread'] = 'كغير مقروءة';
 $labels['markflagged'] = 'كموْسومة';
 $labels['markunflagged'] = 'كغير موْسومة';
-$labels['messageactions'] = 'إجراءات إضافية...';
+$labels['moreactions'] = 'إجراءات إضافية...';
 $labels['select'] = 'تحديد';
 $labels['all'] = 'الكل';
 $labels['none'] = 'لا شيء';
@@ -170,6 +170,8 @@ $labels['charset'] = 'مجموعة المحارف';
 $labels['editortype'] = 'نوع المُحرّر';
 $labels['returnreceipt'] = 'ايصال استلام';
 $labels['dsn'] = 'تنويه حالة التوصيل';
+$labels['mailreplyintro'] = 'كتب $sender في $date:';
+$labels['originalmessage'] = 'الرسالة الأساسية';
 $labels['editidents'] = 'تعديل الهويات';
 $labels['checkspelling'] = 'التدقيق الإملائي';
 $labels['resumeediting'] = 'متابعة التحرير';
@@ -187,6 +189,7 @@ $labels['highest'] = 'الأعلى';
 $labels['nosubject'] = '(دون موضوع)';
 $labels['showimages'] = 'إظهار الصور';
 $labels['alwaysshow'] = 'دائماً أظهر الصّور القادمة من $sender';
+$labels['isdraft'] = 'هذه مسودّة رسالة';
 $labels['htmltoggle'] = 'HTML';
 $labels['plaintoggle'] = 'نص مجرد';
 $labels['savesentmessagein'] = 'احفظ الرسالة المُرسلة في';
@@ -245,6 +248,8 @@ $labels['typepager'] = 'الرنان';
 $labels['typevideo'] = 'الفيديو';
 $labels['typeassistant'] = 'المساعد';
 $labels['typehomepage'] = 'الرئيسية';
+$labels['typeblog'] = 'المدوّنة';
+$labels['typeprofile'] = 'الملف الشخصي';
 $labels['addfield'] = 'إضافة حقل...';
 $labels['addcontact'] = 'إضافة المراسل المحدد إلى دفتر عناويني';
 $labels['editcontact'] = 'تحرير بيانات المراسل';
@@ -266,7 +271,6 @@ $labels['print'] = 'طباعة';
 $labels['export'] = 'تصدير';
 $labels['exportvcards'] = 'صدّر المراسلين بنسق vCard';
 $labels['newcontactgroup'] = 'إنشاء مجموعة مراسلين جديدة';
-$labels['groupactions'] = 'إجراءات مجموعات المراسلين...';
 $labels['grouprename'] = 'تغيير اسم المجموعة';
 $labels['groupdelete'] = 'حذف المجموعة';
 $labels['previouspage'] = 'عرض المجموعة السابقة';
@@ -276,6 +280,8 @@ $labels['lastpage'] = 'عرض المجموعة الأخيرة';
 $labels['group'] = 'مجموعة';
 $labels['groups'] = 'المجموعات';
 $labels['personaladrbook'] = 'العناوين الشخصية';
+$labels['searchsave'] = 'حفظ البحث';
+$labels['searchdelete'] = 'حذف البحث';
 $labels['import'] = 'استورد';
 $labels['importcontacts'] = 'استورد المراسلين';
 $labels['importfromfile'] = 'استورد من ملف:';
@@ -284,6 +290,7 @@ $labels['importreplace'] = 'استبدل دفتر العناوين بأكمله'
 $labels['importtext'] = 'يمكنك رفع قائمة المراسلين من دفتر عناوين موجود.<br/>ندعم حالياً استيراد العناوين من نسق بيانات <a href="http://en.wikipedia.org/wiki/VCard">vCard</a>.';
 $labels['done'] = 'تم';
 $labels['settingsfor'] = 'إعدادات';
+$labels['about'] = 'نبذة';
 $labels['preferences'] = 'التفضيلات';
 $labels['userpreferences'] = 'تفضيلات المستخدم';
 $labels['editpreferences'] = 'تحرير تفضيلات المستخدم';
@@ -295,6 +302,8 @@ $labels['edititem'] = 'تحرير عنصر';
 $labels['preferhtml'] = 'تفضيل صيغة HTML';
 $labels['defaultcharset'] = 'ترميز المحارف الافتراضي';
 $labels['htmlmessage'] = 'رسالة بنسق HTML';
+$labels['dateformat'] = 'نسق التاريخ';
+$labels['timeformat'] = 'نسق الوقت';
 $labels['prettydate'] = 'تواريخ منمقة';
 $labels['setdefault'] = 'تعيين كإفتراضي';
 $labels['autodetect'] = 'آلي';
@@ -366,7 +375,13 @@ $labels['reqmdn'] = 'طلب إشعار استلام دائماً';
 $labels['reqdsn'] = 'طلب تنويه لحالة التوصيل دائماً';
 $labels['replysamefolder'] = 'وضع الردود في المجلد الذي يحوي الرسالة المردود عليها';
 $labels['defaultaddressbook'] = 'أضف المراسلين الجديد إلى دفتر العناوين المحدد';
+$labels['autocompletesingle'] = 'تجاهل عنوان البريد الإلكتروني البديل في التكملة التلقائية';
 $labels['spellcheckbeforesend'] = 'تحقق من الإملاء قبل إرسال الرسائل';
+$labels['spellcheckoptions'] = 'خيارات التدقيق الإملاءي';
+$labels['spellcheckignoresyms'] = 'تجاهل الكلمات التي تحتوي رموز';
+$labels['spellcheckignorenums'] = 'تجاهل الكلمات التي تحتوي أرقام';
+$labels['spellcheckignorecaps'] = 'تجاهل الكلمات التي بها أحرف كبيرة';
+$labels['addtodict'] = 'إضافة إلى القامس';
 $labels['folder'] = 'مجلد';
 $labels['folders'] = 'مجلدات';
 $labels['foldername'] = 'اسم المجلد';
@@ -391,6 +406,11 @@ $labels['sortby'] = 'ترتيب بحسب';
 $labels['sortasc'] = 'ترتيب تصاعدي';
 $labels['sortdesc'] = 'ترتيب تنازلي';
 $labels['undo'] = 'تراجع';
+$labels['plugin'] = 'إضافة';
+$labels['version'] = 'النسخة';
+$labels['source'] = 'المصدر';
+$labels['license'] = 'الترخيص';
+$labels['support'] = 'احصل على الدعم الفني';
 $labels['B'] = 'ب';
 $labels['KB'] = 'ك.ب';
 $labels['MB'] = 'م.ب';

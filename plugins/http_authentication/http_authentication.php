@@ -53,7 +53,7 @@ class http_authentication extends rcube_plugin
 
     return $args;
   }
-
+  
   function logout($args)
   {
     // redirect to configured URL in order to clear HTTP auth credentials

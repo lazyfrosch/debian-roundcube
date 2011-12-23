@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: list.inc 4410 2011-01-12 18:25:02Z thomasb $
+ $Id: list.inc 5266 2011-09-22 07:49:33Z alec $
 
 */
 
@@ -52,6 +52,9 @@ if ($save_arr)
   $RCMAIL->user->save_prefs($save_arr);
 
 $mbox_name = $IMAP->get_mailbox_name();
+
+// Synchronize mailbox cache, handle flag changes
+$IMAP->mailbox_sync($mbox_name);
 
 // initialize searching result if search_filter is used
 if ($_SESSION['search_filter'] && $_SESSION['search_filter'] != 'ALL')
@@ -93,7 +96,7 @@ $OUTPUT->set_env('messagecount', $count);
 $OUTPUT->set_env('pagecount', $pages);
 $OUTPUT->set_env('threading', (bool) $IMAP->threading);
 $OUTPUT->set_env('current_page', $count ? $IMAP->list_page : 1);
-$OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($count));
+$OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($count), $mbox_name);
 $OUTPUT->command('set_mailboxname', rcmail_get_mailbox_name_text());
 
 // add message rows
@@ -116,5 +119,3 @@ else {
 
 // send response
 $OUTPUT->send();
-
-

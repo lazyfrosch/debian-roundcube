@@ -6,6 +6,7 @@
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2005-2011, The Roundcube Dev Team                       |
+ | Copyright (C) 2011, Kolab Systems AG                                  |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -330,20 +331,7 @@ class rcube_session
   public function gc()
   {
     foreach ($this->gc_handlers as $fct)
-      $fct();
-  }
-
-
-  /**
-   * Cleanup session data before saving
-   */
-  public function cleanup()
-  {
-    // current compose information is stored in $_SESSION['compose'], move it to $_SESSION['compose_data_<ID>']
-    if ($compose_id = $_SESSION['compose']['id']) {
-      $_SESSION['compose_data_'.$compose_id] = $_SESSION['compose'];
-      $this->remove('compose');
-    }
+      call_user_func($fct);
   }
 
 
@@ -400,6 +388,21 @@ class rcube_session
     $this->vars = false;
     $this->destroy(session_id());
     rcmail::setcookie($this->cookiename, '-del-', time() - 60);
+  }
+
+
+  /**
+   * Re-read session data from storage backend
+   */
+  public function reload()
+  {
+    if ($this->key && $this->memcache)
+      $data = $this->mc_read($this->key);
+    else if ($this->key)
+      $data = $this->db_read($this->key);
+
+    if ($data)
+     session_decode($data);
   }
 
 

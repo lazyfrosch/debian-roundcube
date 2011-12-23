@@ -6,7 +6,7 @@
 -- Table structure for table `session`
 
 CREATE TABLE `session` (
- `sess_id` varchar(40) NOT NULL,
+ `sess_id` varchar(128) NOT NULL,
  `created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
  `changed` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
  `ip` varchar(40) NOT NULL,
@@ -20,9 +20,9 @@ CREATE TABLE `session` (
 
 CREATE TABLE `users` (
  `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
- `username` varchar(128) NOT NULL,
+ `username` varchar(128) BINARY NOT NULL,
  `mail_host` varchar(128) NOT NULL,
- `alias` varchar(128) NOT NULL,
+ `alias` varchar(128) BINARY NOT NULL,
  `created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
  `last_login` datetime DEFAULT NULL,
  `language` varchar(5),
@@ -30,33 +30,6 @@ CREATE TABLE `users` (
  PRIMARY KEY(`user_id`),
  UNIQUE `username` (`username`, `mail_host`),
  INDEX `alias_index` (`alias`)
-) /*!40000 ENGINE=INNODB */ /*!40101 CHARACTER SET utf8 COLLATE utf8_general_ci */;
-
-
--- Table structure for table `messages`
-
-CREATE TABLE `messages` (
- `message_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
- `user_id` int(10) UNSIGNED NOT NULL DEFAULT '0',
- `del` tinyint(1) NOT NULL DEFAULT '0',
- `cache_key` varchar(128) /*!40101 CHARACTER SET ascii COLLATE ascii_general_ci */ NOT NULL,
- `created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
- `idx` int(11) UNSIGNED NOT NULL DEFAULT '0',
- `uid` int(11) UNSIGNED NOT NULL DEFAULT '0',
- `subject` varchar(255) NOT NULL,
- `from` varchar(255) NOT NULL,
- `to` varchar(255) NOT NULL,
- `cc` varchar(255) NOT NULL,
- `date` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
- `size` int(11) UNSIGNED NOT NULL DEFAULT '0',
- `headers` text NOT NULL,
- `structure` text,
- PRIMARY KEY(`message_id`),
- CONSTRAINT `user_id_fk_messages` FOREIGN KEY (`user_id`)
-   REFERENCES `users`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
- INDEX `created_index` (`created`),
- INDEX `index_index` (`user_id`, `cache_key`, `idx`),
- UNIQUE `uniqueness` (`user_id`, `cache_key`, `uid`)
 ) /*!40000 ENGINE=INNODB */ /*!40101 CHARACTER SET utf8 COLLATE utf8_general_ci */;
 
 
@@ -73,6 +46,51 @@ CREATE TABLE `cache` (
    REFERENCES `users`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
  INDEX `created_index` (`created`),
  INDEX `user_cache_index` (`user_id`,`cache_key`)
+) /*!40000 ENGINE=INNODB */ /*!40101 CHARACTER SET utf8 COLLATE utf8_general_ci */;
+
+
+-- Table structure for table `cache_index`
+
+CREATE TABLE `cache_index` (
+ `user_id` int(10) UNSIGNED NOT NULL DEFAULT '0',
+ `mailbox` varchar(255) BINARY NOT NULL,
+ `changed` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
+ `valid` tinyint(1) NOT NULL DEFAULT '0',
+ `data` longtext NOT NULL,
+ CONSTRAINT `user_id_fk_cache_index` FOREIGN KEY (`user_id`)
+   REFERENCES `users`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ INDEX `changed_index` (`changed`),
+ PRIMARY KEY (`user_id`, `mailbox`)
+) /*!40000 ENGINE=INNODB */ /*!40101 CHARACTER SET utf8 COLLATE utf8_general_ci */;
+
+
+-- Table structure for table `cache_thread`
+
+CREATE TABLE `cache_thread` (
+ `user_id` int(10) UNSIGNED NOT NULL DEFAULT '0',
+ `mailbox` varchar(255) BINARY NOT NULL,
+ `changed` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
+ `data` longtext NOT NULL,
+ CONSTRAINT `user_id_fk_cache_thread` FOREIGN KEY (`user_id`)
+   REFERENCES `users`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ INDEX `changed_index` (`changed`),
+ PRIMARY KEY (`user_id`, `mailbox`)
+) /*!40000 ENGINE=INNODB */ /*!40101 CHARACTER SET utf8 COLLATE utf8_general_ci */;
+
+
+-- Table structure for table `cache_messages`
+
+CREATE TABLE `cache_messages` (
+ `user_id` int(10) UNSIGNED NOT NULL DEFAULT '0',
+ `mailbox` varchar(255) BINARY NOT NULL,
+ `uid` int(11) UNSIGNED NOT NULL DEFAULT '0',
+ `changed` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
+ `data` longtext NOT NULL,
+ `flags` int(11) NOT NULL DEFAULT '0',
+ CONSTRAINT `user_id_fk_cache_messages` FOREIGN KEY (`user_id`)
+   REFERENCES `users`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ INDEX `changed_index` (`changed`),
+ PRIMARY KEY (`user_id`, `mailbox`, `uid`)
 ) /*!40000 ENGINE=INNODB */ /*!40101 CHARACTER SET utf8 COLLATE utf8_general_ci */;
 
 
@@ -141,6 +159,33 @@ CREATE TABLE `identities` (
  CONSTRAINT `user_id_fk_identities` FOREIGN KEY (`user_id`)
    REFERENCES `users`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
  INDEX `user_identities_index` (`user_id`, `del`)
+) /*!40000 ENGINE=INNODB */ /*!40101 CHARACTER SET utf8 COLLATE utf8_general_ci */;
+
+
+-- Table structure for table `dictionary`
+
+CREATE TABLE `dictionary` (
+  `user_id` int(10) UNSIGNED DEFAULT NULL,
+  `language` varchar(5) NOT NULL,
+  `data` longtext NOT NULL,
+  CONSTRAINT `user_id_fk_dictionary` FOREIGN KEY (`user_id`)
+    REFERENCES `users`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  UNIQUE `uniqueness` (`user_id`, `language`)
+) /*!40000 ENGINE=INNODB */ /*!40101 CHARACTER SET utf8 COLLATE utf8_general_ci */;
+
+
+-- Table structure for table `searches`
+
+CREATE TABLE `searches` (
+ `search_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+ `user_id` int(10) UNSIGNED NOT NULL DEFAULT '0',
+ `type` int(3) NOT NULL DEFAULT '0',
+ `name` varchar(128) NOT NULL,
+ `data` text,
+ PRIMARY KEY(`search_id`),
+ CONSTRAINT `user_id_fk_searches` FOREIGN KEY (`user_id`)
+   REFERENCES `users`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ UNIQUE `uniqueness` (`user_id`, `type`, `name`)
 ) /*!40000 ENGINE=INNODB */ /*!40101 CHARACTER SET utf8 COLLATE utf8_general_ci */;
 
 

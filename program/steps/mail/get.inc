@@ -15,14 +15,14 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: get.inc 5151 2011-08-31 12:49:44Z alec $
+ $Id: get.inc 5514 2011-11-30 11:35:43Z alec $
 
 */
 
 
 // show loading page
 if (!empty($_GET['_preload'])) {
-  $url = str_replace('&_preload=1', '', $_SERVER['REQUEST_URI']);
+  $url = preg_replace('/[&?]+_preload=1/', '', $_SERVER['REQUEST_URI']);
   $message = rcube_label('loadingdata');
 
   header('Content-Type: text/html; charset=' . RCMAIL_CHARSET);
@@ -63,8 +63,6 @@ if (!empty($_GET['_uid'])) {
   $RCMAIL->config->set('prefer_html', true);
   $MESSAGE = new rcube_message(get_input_value('_uid', RCUBE_INPUT_GET));
 }
-
-send_nocacheing_headers();
 
 // show part page
 if (!empty($_GET['_frame'])) {
@@ -136,11 +134,24 @@ else if ($pid = get_input_value('_part', RCUBE_INPUT_GET)) {
 
       header("Content-Disposition: $disposition; filename=\"$filename\"");
 
-      // turn off output buffering and print part content
-      if ($part->body)
-        echo $part->body;
-      else if ($part->size)
-        $IMAP->get_message_part($MESSAGE->uid, $part->mime_id, $part, true);
+      // do content filtering to avoid XSS through fake images
+      if (!empty($_REQUEST['_embed']) && $browser->ie && $browser->ver <= 8) {
+        if ($part->body)
+          echo preg_match('/<(script|iframe|object)/i', $part->body) ? '' : $part->body;
+        else if ($part->size) {
+          $stdout = fopen('php://output', 'w');
+          stream_filter_register('rcube_content', 'rcube_content_filter') or die('Failed to register content filter');
+          stream_filter_append($stdout, 'rcube_content');
+          $IMAP->get_message_part($MESSAGE->uid, $part->mime_id, $part, false, $stdout);
+        }
+      }
+      else {
+        // turn off output buffering and print part content
+        if ($part->body)
+          echo $part->body;
+        else if ($part->size)
+          $IMAP->get_message_part($MESSAGE->uid, $part->mime_id, $part, true);
+      }
     }
 
     exit;
@@ -167,4 +178,40 @@ else {
 header('HTTP/1.1 404 Not Found');
 exit;
 
+
+
+/**
+ * PHP stream filter to detect html/javascript code in attachments
+ */
+class rcube_content_filter extends php_user_filter
+{
+  private $buffer = '';
+  private $cutoff = 2048;
+
+  function onCreate()
+  {
+    $this->cutoff = rand(2048, 3027);
+    return true;
+  }
+
+  function filter($in, $out, &$consumed, $closing)
+  {
+    while ($bucket = stream_bucket_make_writeable($in)) {
+      $this->buffer .= $bucket->data;
+
+      // check for evil content and abort
+      if (preg_match('/<(script|iframe|object)/i', $this->buffer))
+        return PSFS_ERR_FATAL;
+
+      // keep buffer small enough
+      if (strlen($this->buffer) > 4096)
+        $this->buffer = substr($this->buffer, $this->cutoff);
+
+      $consumed += $bucket->datalen;
+      stream_bucket_append($out, $bucket);
+    }
+
+    return PSFS_PASS_ON;
+  }
+}
 

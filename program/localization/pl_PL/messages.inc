@@ -18,7 +18,7 @@
 |         Aleksander Machniak <alec@alec.pl>                            |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 5003 2011-08-02 09:22:02Z alec $
+@version $Id: messages.inc 5569 2011-12-07 14:47:32Z thomasb $
 
 */
 
@@ -117,7 +117,6 @@ $messages['smtpautherror'] = 'Błąd SMTP ($code): Uwierzytelnianie nie powiodł
 $messages['smtpfromerror'] = 'Błąd SMTP ($code): Nie można ustawić nadawcy "$from" ($msg).';
 $messages['smtptoerror'] = 'Błąd SMTP ($code): Nie można dodać odbiorcy "$to" ($msg).';
 $messages['smtprecipientserror'] = 'Błąd SMTP: Parsowanie listy odbiorców nie powiodło się.';
-$messages['smtpdsnerror'] = 'Błąd SMTP: Statusy dostarczenia (DSN) nie są obsługiwane przez serwer.';
 $messages['smtperror'] = 'Błąd SMTP: $msg';
 $messages['emailformaterror'] = 'Błędny adres e-mail: $email';
 $messages['toomanyrecipients'] = 'Zbyt wielu odbiorców. Zmniejsz ich liczbę do $max.';
@@ -150,5 +149,20 @@ $messages['invalidimageformat'] = 'Niepoprawny format obrazka.';
 $messages['mispellingsfound'] = 'Wykryto błędy pisowni w tej wiadomości.';
 $messages['contactrestoreerror'] = 'Przywracanie kontaktów nie powiodło się.';
 $messages['contactrestored'] = 'Kontakt(y) zostały przywrócone.';
+$messages['dberror'] = 'Błąd bazy danych!';
+$messages['contactnameexists'] = 'Kontakt z podaną nazwą już istnieje!';
+$messages['copyingcontact'] = 'Kopiowanie kontaktów...';
+$messages['addingmember'] = 'Dodawanie kontaktów do grupy...';
+$messages['removingmember'] = 'Usuwanie kontaktów z grupy...';
+$messages['parentnotwritable'] = 'Nie można utworzyć/przenieść folderu w wybrane miejsce. Brak upranień.';
+$messages['contactsearchsuccessful'] = 'Znaleziono $nr kontaktów.';
+$messages['savedsearchdeleted'] = 'Wyszukiwanie usunięto pomyślnie.';
+$messages['savedsearchdeleteerror'] = 'Nie można usunąć wyszukiwania.';
+$messages['savedsearchcreated'] = 'Wyszukiwanie zapisano pomyślnie.';
+$messages['savedsearchcreateerror'] = 'Nie można zapisać wyszukiwania.';
+$messages['contactsearchonly'] = 'Użyj wyszukiwarki aby wyświetlić kontakty.';
+$messages['contactdeleting'] = 'Usuwanie kontaktów...';
+$messages['autocompletemore'] = 'Znaleziono więcej pasujących wpisów. Wprowadź więcej znaków.';
+$messages['messagetoobig'] = 'Ta część wiadomości jest zbyt duża aby ją przetworzyć.';
 
 ?>

@@ -17,7 +17,7 @@
 |         Martin Lacina	<martin@whistler.sk>                            |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 5067 2011-08-14 18:47:58Z thomasb $
+@version $Id: labels.inc 5585 2011-12-09 19:28:20Z alec $
 
 */
 
@@ -365,7 +365,7 @@ $labels['belowquote'] = 'nad citáciu';
 $labels['abovequote'] = 'pod citáciu';
 $labels['insertsignature'] = 'Vložit podpis';
 $labels['previewpanemarkread'] = 'Označiť zobrazenej správy ako prečítané';
-$labels['afternseconds'] = 'po $ sekundách';
+$labels['afternseconds'] = 'po $n sekundách';
 $labels['reqmdn'] = 'Vždy požadovať doručenku';
 $labels['reqdsn'] = 'Vždy vyžadovať potvrdenie o doručení správy';
 $labels['replysamefolder'] = 'Umietniť odpoveď do adresára, kde je umiestnená správa, na ktorú sa odpovedalo';

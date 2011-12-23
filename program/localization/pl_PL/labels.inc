@@ -18,7 +18,7 @@
 |         Aleksander Machniak <alec@alec.pl>                            |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 5165 2011-09-05 08:49:04Z thomasb $
+@version $Id: labels.inc 5569 2011-12-07 14:47:32Z thomasb $
 
 */
 
@@ -38,8 +38,8 @@ $labels['sent'] = 'Wysłane';
 $labels['trash'] = 'Kosz';
 $labels['junk'] = 'Spam';
 $labels['subject'] = 'Temat';
-$labels['from'] = 'Nadawca';
-$labels['to'] = 'Odbiorca';
+$labels['from'] = 'Od';
+$labels['to'] = 'Do';
 $labels['cc'] = 'Kopia';
 $labels['bcc'] = 'Ukryta kopia';
 $labels['replyto'] = 'Odpowiedź do';
@@ -137,7 +137,7 @@ $labels['threaded'] = 'Powątkowane';
 $labels['autoexpand_threads'] = 'Rozwijaj wątki';
 $labels['do_expand'] = 'wszystkie';
 $labels['expand_only_unread'] = 'tylko nieprzeczytane';
-$labels['fromto'] = 'Nadawca/Odbiorca';
+$labels['fromto'] = 'Od/Do';
 $labels['flag'] = 'Flaga';
 $labels['attachment'] = 'Załącznik';
 $labels['nonesort'] = 'Brak';
@@ -419,5 +419,27 @@ $labels['importtarget'] = 'Dodaj nowe kontakty do książki adresowej:';
 $labels['grouprename'] = 'Zmień nazwę grupy';
 $labels['groupdelete'] = 'Usuń grupę';
 $labels['undo'] = 'Cofnij';
+$labels['mailreplyintro'] = 'W dniu $date, $sender napisał(a):';
+$labels['uploadprogress'] = '$percent ($current z $total)';
+$labels['originalmessage'] = 'Wiadomość oryginalna';
+$labels['moreactions'] = 'Więcej akcji...';
+$labels['searchsave'] = 'Zapisz wyszukiwanie';
+$labels['searchdelete'] = 'Usuń wyszukiwanie';
+$labels['spellcheckoptions'] = 'Opcje sprawdzania pisowni';
+$labels['spellcheckignoresyms'] = 'Ignoruj słowa zawierające symbole';
+$labels['spellcheckignorenums'] = 'Ignoruj słowa zawierające cyfry';
+$labels['spellcheckignorecaps'] = 'Ignoruj słowa pisane wielkimi literami';
+$labels['addtodict'] = 'Dodaj do słownika';
+$labels['dateformat'] = 'Format daty';
+$labels['timeformat'] = 'Format czasu';
+$labels['isdraft'] = 'To jest kopia robocza wiadomości.';
+$labels['autocompletesingle'] = 'Nie pokazuj alternatywnych adresów przy autouzupełnianiu';
+$labels['plugin'] = 'Wtyczka';
+$labels['version'] = 'Wersja';
+$labels['source'] = 'Źródła';
+$labels['license'] = 'Licencja';
+$labels['about'] = 'O programie';
+$labels['support'] = 'Wsparcie techniczne';
+$labels['defaultfont'] = 'Czcionka wiadomości HTML';
 
 ?>

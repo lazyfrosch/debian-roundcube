@@ -6,7 +6,7 @@
 | language/fr_FR/messages.inc                                           |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
+| Copyright (C) 2005-2011, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -15,7 +15,7 @@
 |         Maximilien Cuony <theglu@theglu.org>                          |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 5291 2011-09-28 17:10:45Z thomasb $
+@version $Id: messages.inc 5609 2011-12-14 12:58:13Z thomasb $
 
 */
 
@@ -50,6 +50,7 @@ $messages['blockedimages'] = 'Afin de préserver votre vie privée, les images d
 $messages['encryptedmessage'] = 'Ceci est un message crypté et il ne peut pas être affiché. Désolé !';
 $messages['nocontactsfound'] = 'Aucun contact n\'a pu être trouvé';
 $messages['contactnotfound'] = 'Le contact demandé n\'a pas été trouvé';
+$messages['contactsearchonly'] = 'Entrez un ou plusieurs mots clés pour trouver des contacts';
 $messages['sendingfailed'] = 'L\'envoi du message a échoué';
 $messages['senttooquickly'] = 'Vous devez attendre $sec sec. pour envoyer le message';
 $messages['errorsavingsent'] = 'Une erreur est survenue pendant la sauvegarde du message envoyé';
@@ -63,6 +64,7 @@ $messages['deletegroupconfirm'] = 'Êtes-vous sûr de vouloir supprimer le group
 $messages['deletemessagesconfirm'] = 'Voulez-vous vraiment supprimer le(s) message(s) sélectionné(s) ?';
 $messages['deletefolderconfirm'] = 'Voulez-vous vraiment effacer ce dossier ?';
 $messages['purgefolderconfirm'] = 'Voulez-vous vraiment effacer tous les messages de ce dossier ?';
+$messages['contactdeleting'] = 'Suppression de contact(s)...';
 $messages['groupdeleting'] = 'Suppression du groupe ...';
 $messages['folderdeleting'] = 'Suppression du dossier...';
 $messages['foldermoving'] = 'Déplacement du dossier...';
@@ -74,14 +76,14 @@ $messages['nonamewarning'] = 'Veuillez fournir un nom';
 $messages['nopagesizewarning'] = 'Veuillez indiquer une taille de page';
 $messages['nosenderwarning'] = 'Veuillez renseigner l\'adresse d\'expéditeur';
 $messages['norecipientwarning'] = 'Veuillez ajouter au moins un destinataire';
-$messages['nosubjectwarning'] = 'Le champ « Objet » est vide. Souhaitez-vous le renseigner maintenant ?';
+$messages['nosubjectwarning'] = 'Le champ «Objet» est vide. Souhaitez-vous le renseigner maintenant ?';
 $messages['nobodywarning'] = 'Envoyer ce message sans texte ?';
 $messages['notsentwarning'] = 'Le message n\'a pas été envoyé. Voulez-vous abandonner ce message ?';
 $messages['noldapserver'] = 'Choisissez un serveur LDAP pour la recherche';
-$messages['nocontactsreturned'] = 'Aucun contact trouvé';
 $messages['nosearchname'] = 'Entrez un nom de contact ou un courriel';
 $messages['notuploadedwarning'] = 'Toutes les pièces jointes ne sont pas encore envoyées pour le moment. Merci d\'attendre ou d\'annuler l\'envoi.';
 $messages['searchsuccessful'] = '$nr messages trouvés';
+$messages['contactsearchsuccessful'] = '$nr contact(s) trouvé(s).';
 $messages['searchnomatch'] = 'La recherche ne donne aucun résultat';
 $messages['searching'] = 'En cours de recherche...';
 $messages['checking'] = 'Vérification...';
@@ -90,7 +92,7 @@ $messages['folderdeleted'] = 'Dossier effacé';
 $messages['foldersubscribed'] = 'Le dossier a bien été inscrit';
 $messages['folderunsubscribed'] = 'Le dossier a bien été désinscrit';
 $messages['folderpurged'] = 'Le dossier a bien été vidé';
-$messages['folderexpunged'] = 'Le dossier a bien été comptacté';
+$messages['folderexpunged'] = 'Le dossier a bien été compacté';
 $messages['deletedsuccessfully'] = 'Supprimé(s) avec succès';
 $messages['converting'] = 'Suppression de la mise en forme...';
 $messages['messageopenerror'] = 'Impossible de charger le message depuis serveur';
@@ -128,7 +130,6 @@ $messages['smtpautherror'] = 'Erreur SMTP ($code): Echec de l\'authentification'
 $messages['smtpfromerror'] = 'Erreur SMTP ($code): Impossible de définir l\'expéditeur "$from" ($msg)';
 $messages['smtptoerror'] = 'Erreur SMTP ($code): Impossible d\'ajouter le destinataire "$to" ($msg)';
 $messages['smtprecipientserror'] = 'Erreur SMTP: Impossible de lire la liste des destinataires';
-$messages['smtpdsnerror'] = 'Erreur SMTP: Pas de support des notifications d\'état de distribution';
 $messages['smtperror'] = 'Erreur SMTP: $msg';
 $messages['emailformaterror'] = 'Adresse email incorrecte: $email';
 $messages['toomanyrecipients'] = 'Trop de destinataires. Réduisez leur nombre à $max maximum.';
@@ -141,11 +142,16 @@ $messages['contactrestored'] = 'Les contacts ont bien été restaurés.';
 $messages['groupdeleted'] = 'Le groupe a bien été supprimé';
 $messages['grouprenamed'] = 'Le groupe a bien été renommé';
 $messages['groupcreated'] = 'Le groupe a bien été créé';
+$messages['savedsearchdeleted'] = 'La recherche enregistrée a bien été supprimée.';
+$messages['savedsearchdeleteerror'] = 'Impossible de supprimer la recherche enregistrée.';
+$messages['savedsearchcreated'] = 'La recherche enregistrée a bien été crée.';
+$messages['savedsearchcreateerror'] = 'Impossible de créer la recherche enregistrée.';
 $messages['messagedeleted'] = 'Les messages ont bien été supprimés';
 $messages['messagemoved'] = 'Les messages ont bien été déplacés';
 $messages['messagecopied'] = 'Les messages ont bien été copiés';
 $messages['messagemarked'] = 'Les messages ont bien été marqués';
 $messages['autocompletechars'] = 'Entrez au moins $min caractères pour l\'auto-complétion';
+$messages['autocompletemore'] = 'Plusieurs entrées trouvées. Tapez plus de caractères.';
 $messages['namecannotbeempty'] = 'Le nom ne peut pas être vide';
 $messages['nametoolong'] = 'Le nom est trop long';
 $messages['folderupdated'] = 'Le dossier a bien été mis à jour';
@@ -153,5 +159,6 @@ $messages['foldercreated'] = 'Le dossier a bien été créé';
 $messages['invalidimageformat'] = 'Format d\'image invalide';
 $messages['mispellingsfound'] = 'Des fautes d\'orthographe ont été détectées dans le message.';
 $messages['parentnotwritable'] = 'Impossible de créer/déplacer le dossier dans le dossier parent sélectionné. Aucun droit d\'accès.';
+$messages['messagetoobig'] = 'Le message est trop gros pour être traité.';
 
 ?>

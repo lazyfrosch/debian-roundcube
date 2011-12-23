@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: check_recent.inc 4872 2011-06-22 05:52:48Z thomasb $
+ $Id: check_recent.inc 5266 2011-09-22 07:49:33Z alec $
 
 */
 
@@ -34,10 +34,24 @@ else {
 
 // check recent/unseen counts
 foreach ($a_mailboxes as $mbox_name) {
-    if ($mbox_name == $current && ($status = $IMAP->mailbox_status($mbox_name))) {
+    $is_current = $mbox_name == $current;
+    if ($is_current) {
+        // Synchronize mailbox cache, handle flag changes
+        $IMAP->mailbox_sync($mbox_name);
+    }
 
-        rcmail_send_unread_count($mbox_name, true);
+    // Get mailbox status
+    $status = $IMAP->mailbox_status($mbox_name);
 
+    if ($status & 1) {
+        // trigger plugin hook
+        $RCMAIL->plugins->exec_hook('new_messages',
+            array('mailbox' => $mbox_name, 'is_current' => $is_current));
+    }
+
+    rcmail_send_unread_count($mbox_name, true);
+
+    if ($status && $is_current) {
         // refresh saved search set
         $search_request = get_input_value('_search', RCUBE_INPUT_GPC);
         if ($search_request && isset($_SESSION['search'])
@@ -67,13 +81,8 @@ foreach ($a_mailboxes as $mbox_name) {
 
         $OUTPUT->set_env('messagecount', $all_count);
         $OUTPUT->set_env('pagecount', ceil($all_count/$IMAP->page_size));
-        $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($all_count));
+        $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($all_count), $mbox_name);
         $OUTPUT->set_env('current_page', $all_count ? $IMAP->list_page : 1);
-
-        if ($status & 1) {
-            // trigger plugin hook
-            $RCMAIL->plugins->exec_hook('new_messages', array('mailbox' => $mbox_name));
-        }
 
         // remove old rows (and clear selection if new list is empty)
         $OUTPUT->command('message_list.clear', $all_count ? false : true);
@@ -85,9 +94,6 @@ foreach ($a_mailboxes as $mbox_name) {
             // remove messages that don't exists from list selection array
             $OUTPUT->command('update_selection');
         }
-    }
-    else {
-        rcmail_send_unread_count($mbox_name, true);
     }
 }
 

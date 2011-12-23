@@ -15,7 +15,7 @@
  | Author: Aleksander Machniak <alec@alec.pl>                            |
  +-----------------------------------------------------------------------+
 
- $Id: save_folder.inc 5102 2011-08-19 16:32:38Z thomasb $
+ $Id: save_folder.inc 5096 2011-08-19 08:07:05Z alec $
 
 */
 

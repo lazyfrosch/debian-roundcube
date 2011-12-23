@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: list.inc 4850 2011-06-14 13:45:26Z alec $
+ $Id: list.inc 5315 2011-10-06 12:31:38Z thomasb $
 
 */
 
@@ -73,6 +73,11 @@ else {
 
     // get contacts for this user
     $result = $CONTACTS->list_records(array('name'));
+    
+    if (!$result->count && $result->searchonly) {
+        $OUTPUT->show_message('contactsearchonly', 'notice');
+        $OUTPUT->command('command', 'advanced-search');
+    }
 }
 
 // update message count display

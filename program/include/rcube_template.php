@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_template.php 5165 2011-09-05 08:49:04Z thomasb $
+ $Id: rcube_template.php 5481 2011-11-24 07:53:00Z alec $
 
  */
 
@@ -71,6 +71,7 @@ class rcube_template extends rcube_html_page
 
         //$this->framed = $framed;
         $this->set_env('task', $task);
+        $this->set_env('x_frame_options', $this->app->config->get('x_frame_options', 'sameorigin'));
 
         // load the correct skin (in case user-defined)
         $this->set_skin($this->config['skin']);
@@ -217,7 +218,9 @@ class rcube_template extends rcube_html_page
     public function command()
     {
         $cmd = func_get_args();
-        if (strpos($cmd[0], 'plugin.') === false)
+        if (strpos($cmd[0], 'plugin.') !== false)
+          $this->js_commands[] = array('triggerEvent', $cmd[0], $cmd[1]);
+        else
           $this->js_commands[] = $cmd;
     }
 
@@ -353,10 +356,6 @@ class rcube_template extends rcube_html_page
         $js .= $this->get_js_commands() . ($this->framed ? ' }' : '');
         $this->add_script($js, 'head_top');
 
-        // make sure all <form> tags have a valid request token
-        $template = preg_replace_callback('/<form\s+([^>]+)>/Ui', array($this, 'alter_form_tag'), $template);
-        $this->footer = preg_replace_callback('/<form\s+([^>]+)>/Ui', array($this, 'alter_form_tag'), $this->footer);
-        
         // send clickjacking protection headers
         $iframe = $this->framed || !empty($_REQUEST['_framed']);
         if (!headers_sent() && ($xframe = $this->app->config->get('x_frame_options', 'sameorigin')))
@@ -436,6 +435,10 @@ class rcube_template extends rcube_html_page
         $hook = $this->app->plugins->exec_hook("render_page", array('template' => $realname, 'content' => $output));
 
         $output = $this->parse_with_globals($hook['content']);
+
+        // make sure all <form> tags have a valid request token
+        $output = preg_replace_callback('/<form\s+([^>]+)>/Ui', array($this, 'alter_form_tag'), $output);
+        $this->footer = preg_replace_callback('/<form\s+([^>]+)>/Ui', array($this, 'alter_form_tag'), $this->footer);
 
         if ($write) {
             // add debug console
@@ -689,7 +692,7 @@ class rcube_template extends rcube_html_page
                     $vars = $attrib + array('product' => $this->config['product_name']);
                     unset($vars['name'], $vars['command']);
                     $label = rcube_label($attrib + array('vars' => $vars));
-                    return !$attrbi['noshow'] ? Q($label) : '';
+                    return !$attrib['noshow'] ? (get_boolean((string)$attrib['html']) ? $label : Q($label)) : '';
                 }
                 break;
 
@@ -913,6 +916,7 @@ class rcube_template extends rcube_html_page
             // make valid href to specific buttons
             if (in_array($attrib['command'], rcmail::$main_tasks)) {
                 $attrib['href'] = rcmail_url(null, null, $attrib['command']);
+                $attrib['onclick'] = sprintf("%s.switch_task('%s');return false", JS_OBJECT_NAME, $attrib['command']);
             }
             else if ($attrib['task'] && in_array($attrib['task'], rcmail::$main_tasks)) {
                 $attrib['href'] = rcmail_url($attrib['command'], null, $attrib['task']);
@@ -1105,6 +1109,7 @@ class rcube_template extends rcube_html_page
         $input_task   = new html_hiddenfield(array('name' => '_task', 'value' => 'login'));
         $input_action = new html_hiddenfield(array('name' => '_action', 'value' => 'login'));
         $input_tzone  = new html_hiddenfield(array('name' => '_timezone', 'id' => 'rcmlogintz', 'value' => '_default_'));
+        $input_dst    = new html_hiddenfield(array('name' => '_dstactive', 'id' => 'rcmlogindst', 'value' => '_default_'));
         $input_url    = new html_hiddenfield(array('name' => '_url', 'id' => 'rcmloginurl', 'value' => $url));
         $input_user   = new html_inputfield(array('name' => '_user', 'id' => 'rcmloginuser')
             + $attrib + $user_attrib);
@@ -1142,20 +1147,21 @@ class rcube_template extends rcube_html_page
         $table = new html_table(array('cols' => 2));
 
         $table->add('title', html::label('rcmloginuser', Q(rcube_label('username'))));
-        $table->add(null, $input_user->show(get_input_value('_user', RCUBE_INPUT_GPC)));
+        $table->add('input', $input_user->show(get_input_value('_user', RCUBE_INPUT_GPC)));
 
         $table->add('title', html::label('rcmloginpwd', Q(rcube_label('password'))));
-        $table->add(null, $input_pass->show());
+        $table->add('input', $input_pass->show());
 
         // add host selection row
         if (is_object($input_host) && !$hide_host) {
             $table->add('title', html::label('rcmloginhost', Q(rcube_label('server'))));
-            $table->add(null, $input_host->show(get_input_value('_host', RCUBE_INPUT_GPC)));
+            $table->add('input', $input_host->show(get_input_value('_host', RCUBE_INPUT_GPC)));
         }
 
         $out  = $input_task->show();
         $out .= $input_action->show();
         $out .= $input_tzone->show();
+        $out .= $input_dst->show();
         $out .= $input_url->show();
         $out .= $table->show();
 

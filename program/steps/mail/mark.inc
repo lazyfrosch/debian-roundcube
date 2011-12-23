@@ -14,7 +14,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: mark.inc 4410 2011-01-12 18:25:02Z thomasb $
+ $Id: mark.inc 5266 2011-09-22 07:49:33Z alec $
 
 */
 
@@ -104,7 +104,7 @@ if (($uids = get_input_value('_uid', RCUBE_INPUT_POST)) && ($flag = get_input_va
         $OUTPUT->command('set_unread_count', $mbox, $unseen_count, ($mbox == 'INBOX'));
         rcmail_set_unseen_count($mbox, $unseen_count);
       }
-      $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($msg_count));
+      $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($msg_count), $mbox);
 
       if ($IMAP->threading)
 	    $count = get_input_value('_count', RCUBE_INPUT_POST);

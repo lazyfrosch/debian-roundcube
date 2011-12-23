@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: addcontact.inc 4933 2011-07-18 16:57:15Z thomasb $
+ $Id: addcontact.inc 5415 2011-11-11 15:04:45Z alec $
 
 */
 
@@ -50,7 +50,7 @@ if (!empty($_POST['_address']) && is_object($CONTACTS))
       $OUTPUT->show_message('errorsavingcontact', 'error');
       $OUTPUT->send();
     }
-    
+
     $email = rcube_idn_to_ascii($contact['email']);
     if (!check_email($email, false)) {
       $OUTPUT->show_message('emailformaterror', 'error', array('email' => $contact['email']));
@@ -60,8 +60,18 @@ if (!empty($_POST['_address']) && is_object($CONTACTS))
     $contact['email'] = rcube_idn_to_utf8($contact['email']);
     $contact['name'] = rcube_addressbook::compose_display_name($contact);
 
+    // validate contact record
+    if (!$CONTACTS->validate($contact, true)) {
+      $error = $CONTACTS->get_error();
+      // TODO: show dialog to complete record
+      // if ($error['type'] == rcube_addressbook::ERROR_VALIDATE) { }
+
+      $OUTPUT->show_message($error['message'] ? $error['message'] : 'errorsavingcontact', 'error');
+      $OUTPUT->send();
+    }
+
     // check for existing contacts
-    $existing = $CONTACTS->search('email', $contact['email'], true, false);
+    $existing = $CONTACTS->search('email', $contact['email'], 1, false);
 
     if ($done = $existing->count)
       $OUTPUT->show_message('contactexists', 'warning');

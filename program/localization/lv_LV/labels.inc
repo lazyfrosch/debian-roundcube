@@ -16,7 +16,7 @@
 |         Kaspars Tenters <kaspars.tenters@va.lv>                       |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 5175 2011-09-05 18:42:24Z thomasb $
+@version $Id: labels.inc 5173 2011-09-05 18:41:04Z thomasb $
 
 */
 

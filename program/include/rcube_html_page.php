@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_html_page.php 5151 2011-08-31 12:49:44Z alec $
+ $Id: rcube_html_page.php 5135 2011-08-26 09:22:53Z alec $
 
 */
 

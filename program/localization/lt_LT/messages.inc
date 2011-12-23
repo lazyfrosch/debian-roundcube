@@ -14,7 +14,7 @@
 |          Rimas Kudelis <rq@akl.lt>                                    |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 5175 2011-09-05 18:42:24Z thomasb $
+@version $Id: messages.inc 5569 2011-12-07 14:47:32Z thomasb $
 
 */
 
@@ -25,7 +25,7 @@ $messages['sessionerror'] = 'Jūsų sesija negaliojanti.';
 $messages['imaperror'] = 'Nepavyko prisijungti prie IMAP serverio.';
 $messages['servererror'] = 'Serverio klaida!';
 $messages['servererrormsg'] = 'Serverio klaida: $msg';
-$messages['databaserror'] = 'Duomenų bazės klaida!';
+$messages['dberror'] = 'Duomenų bazės klaida!';
 $messages['errorreadonly'] = 'Nepavyko atlikti veiksmo – aplankas prieinamas tik skaitymui.';
 $messages['errornoperm'] = 'Nepavyko atlikti veiksmo – nepakanka teisių.';
 $messages['invalidrequest'] = 'Netinkama užklausa! Duomenys neišsaugoti.';
@@ -49,6 +49,7 @@ $messages['blockedimages'] = 'Siekiant apsaugoti Jūsų privatumą, paveikslėli
 $messages['encryptedmessage'] = 'Apgailestaujame, tačiau šis laiškas užšifruotas ir negali būti parodytas.';
 $messages['nocontactsfound'] = 'Adresatų nerasta.';
 $messages['contactnotfound'] = 'Ieškotas adresatas nerastas.';
+$messages['contactsearchonly'] = 'Įveskite reikšminius žodžius adresatų paieškai';
 $messages['sendingfailed'] = 'Laiško išsiųsti nepavyko.';
 $messages['senttooquickly'] = 'Turite luktelėti $sec sek., kad galėtumėte išsiųsti laišką.';
 $messages['errorsavingsent'] = 'Įrašant išsiųstą laišką įvyko klaida.';
@@ -62,6 +63,7 @@ $messages['deletegroupconfirm'] = 'Ar tikrai pašalinti pažymėtą grupę?';
 $messages['deletemessagesconfirm'] = 'Ar tikrai pašalinti pažymėtą(-us) laišką(-us)?';
 $messages['deletefolderconfirm'] = 'Ar tikrai pašalinti šį aplanką?';
 $messages['purgefolderconfirm'] = 'Ar tikrai pašalinti visus šiame aplanke esančius laiškus?';
+$messages['contactdeleting'] = 'Adresatas(-ai) šalinamas(-i)…';
 $messages['groupdeleting'] = 'Grupė šalinama…';
 $messages['folderdeleting'] = 'Aplankas šalinamas…';
 $messages['foldermoving'] = 'Aplankas perkeliamas…';
@@ -77,10 +79,10 @@ $messages['nosubjectwarning'] = 'Temos laukelis tuščias. Ar norite temą įves
 $messages['nobodywarning'] = 'Išsiųsti šį laišką be teksto?';
 $messages['notsentwarning'] = 'Laiškas neišsiųstas. Ar jūs tikrai norite jo atsikratyti?';
 $messages['noldapserver'] = 'Prašome pasirinkti LDAP serverį paieškai.';
-$messages['nocontactsreturned'] = 'Jokių adresatų nerasta.';
 $messages['nosearchname'] = 'Prašom įvesti vardą arba el. pašto adresą.';
 $messages['notuploadedwarning'] = 'Įkelti dar ne visi priedai. Prašom palaukti arba atšaukti jų įkėlimą.';
 $messages['searchsuccessful'] = 'Rasta laiškų: $nr.';
+$messages['contactsearchsuccessful'] = 'Rasta adresatų: $nr.';
 $messages['searchnomatch'] = 'Paiešką atitinkančių rezultatų nėra.';
 $messages['searching'] = 'Ieškoma…';
 $messages['checking'] = 'Tikrinama…';
@@ -127,7 +129,6 @@ $messages['smtpautherror'] = 'SMTP klaida ($code): nepavyko autentikuotis.';
 $messages['smtpfromerror'] = 'SMTP klaida ($code): nepavyko nurodyti siuntėjo „$from“ ($msg).';
 $messages['smtptoerror'] = 'SMTP klaida ($code): nepavyko pridėti gavėjo „$to“ ($msg).';
 $messages['smtprecipientserror'] = 'SMTP klaida: nepavyko apdoroti gavėjų sąrašo.';
-$messages['smtpdsnerror'] = 'SMTP klaida: laiškų pristatymo pažymos nepalaikomos.';
 $messages['smtperror'] = 'SMTP klaida: $msg';
 $messages['emailformaterror'] = 'Netinkamas el. pašto adresas: $email';
 $messages['toomanyrecipients'] = 'Per daug gavėjų. Sumažinkite jų bent iki $max.';
@@ -140,11 +141,16 @@ $messages['contactrestored'] = 'Adresatas(-ai) sėkmingai atkurtas(-i).';
 $messages['groupdeleted'] = 'Grupė sėkmingai pašalinta.';
 $messages['grouprenamed'] = 'Grupė sėkmingai pervardinta.';
 $messages['groupcreated'] = 'Grupė sėkmingai sukurta.';
+$messages['savedsearchdeleted'] = 'Radinių aplankas sėkmingai pašalintas.';
+$messages['savedsearchdeleteerror'] = 'Radinių aplanko pašalinti nepavyko.';
+$messages['savedsearchcreated'] = 'Radinių aplankas sėkmingai sukurtas.';
+$messages['savedsearchcreateerror'] = 'Radinių aplanko sukurti nepavyko.';
 $messages['messagedeleted'] = 'Laiškas(-ai) sėkmingai pašalintas(-i).';
 $messages['messagemoved'] = 'Laiškas(-ai) sėkmingai perkeltas(-i).';
 $messages['messagecopied'] = 'Laiškas(-ai) sėkmingai nukopijuotas(-i).';
 $messages['messagemarked'] = 'Laiškas(-ai) sėkmingai pažymėtas(-i).';
 $messages['autocompletechars'] = 'Automatiniam užbaigimui būtini bent $min simboliai.';
+$messages['autocompletemore'] = 'Rasta daugiau atitikmenų. Įveskite dar porą simbolių.';
 $messages['namecannotbeempty'] = 'Vardas negali būti tuščias.';
 $messages['nametoolong'] = 'Vardas yra per ilgas.';
 $messages['folderupdated'] = 'Aplanko savybės sėkmingai atnaujintos.';
@@ -152,5 +158,6 @@ $messages['foldercreated'] = 'Aplankas sėkmingai sukurtas.';
 $messages['invalidimageformat'] = 'Paveikslo formatas netinkamas.';
 $messages['mispellingsfound'] = 'Laiške rasta rašybos klaidų.';
 $messages['parentnotwritable'] = 'Nepavyko sukurti arba perkelti aplanko į parinktą tėvinį aplanką. Trūksta prieigos teisių.';
+$messages['messagetoobig'] = 'Laiško dalis yra per didelė, kad galėtų būti apdorota.';
 
 ?>

@@ -12,11 +12,11 @@
 +-----------------------------------------------------------------------+
 | Authors: Sergio Rocha <sergio.rocha@makeitsimple.pt>                  |
 |          João Vale <jpvale@gmail.com>                                |
-|         Nuno Costa <nuno@criacaoweb.net>                              |
-|         Teotónio Ricardo <teotonio.ricardo@webtuga.pt>               |
+|          Nuno Costa <nuno@criacaoweb.net>                              |
+|          Teotónio Ricardo <teotonio.ricardo@webtuga.pt>               |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 5175 2011-09-05 18:42:24Z thomasb $
+@version $Id: messages.inc 5569 2011-12-07 14:47:32Z thomasb $
 
 */
 
@@ -27,7 +27,7 @@ $messages['sessionerror'] = 'A sua sessão é inválida ou expirou';
 $messages['imaperror'] = 'A ligação ao servidor IMAP falhou';
 $messages['servererror'] = 'Erro do Servidor!';
 $messages['servererrormsg'] = 'Erro do Servidor: $msg';
-$messages['databaserror'] = 'Erro de base de dados!';
+$messages['dberror'] = 'Erro na base de dados!';
 $messages['errorreadonly'] = 'Não foi possível efectuar a operação. A pasta é só de leitura.';
 $messages['errornoperm'] = 'Não tem permissões para efectuar esta operação.';
 $messages['invalidrequest'] = 'Pedido inválido! Não foi guardada nenhuma informação.';
@@ -51,6 +51,7 @@ $messages['blockedimages'] = 'Para proteger a sua privacidade, as imagens desta 
 $messages['encryptedmessage'] = 'Esta mensagem está encriptada e não pode ser exibida. Desculpe.';
 $messages['nocontactsfound'] = 'Nenhum contacto encontrado';
 $messages['contactnotfound'] = 'O contacto especificado não foi encontrado';
+$messages['contactsearchonly'] = 'Insira os termos de pesquisa para localizar os contactos';
 $messages['sendingfailed'] = 'Falha no envio da mensagem';
 $messages['senttooquickly'] = 'Por favor espere $sec seg(s). antes de enviar esta mensagem';
 $messages['errorsavingsent'] = 'Ocorreu um erro ao guardar a mensagem enviada';
@@ -64,6 +65,7 @@ $messages['deletegroupconfirm'] = 'Tem a certeza que pretende eliminar o grupo s
 $messages['deletemessagesconfirm'] = 'Deseja realmente eliminar a(s) mensagem(ns) selecionada(s)?';
 $messages['deletefolderconfirm'] = 'Deseja realmente eliminar esta pasta?';
 $messages['purgefolderconfirm'] = 'Deseja realmente eliminar todas mensagens desta pasta?';
+$messages['contactdeleting'] = 'A eliminar contacto(s)...';
 $messages['groupdeleting'] = 'A eliminar grupo...';
 $messages['folderdeleting'] = 'A eliminar pasta...';
 $messages['foldermoving'] = 'A mover pasta...';
@@ -79,10 +81,10 @@ $messages['nosubjectwarning'] = 'O campo "Assunto" não foi preenchido. Deseja i
 $messages['nobodywarning'] = 'Enviar a mensagem sem texto?';
 $messages['notsentwarning'] = 'A mensagem não foi enviada, deseja apagá-la?';
 $messages['noldapserver'] = 'Seleccione um servidor LDAP para a pesquisa';
-$messages['nocontactsreturned'] = 'Não foi encontrado nenhum contacto';
 $messages['nosearchname'] = 'Por favor, escreva o nome do contacto ou endereço de e-mail';
 $messages['notuploadedwarning'] = 'Nem todos os anexos foram ainda enviados. Por favor aguarde ou cancele o envio.';
 $messages['searchsuccessful'] = '$nr mensagens encontradas';
+$messages['contactsearchsuccessful'] = '$nr contactos encontrados.';
 $messages['searchnomatch'] = 'A pesquisa não devolveu resultados';
 $messages['searching'] = 'A pesquisar...';
 $messages['checking'] = 'A verificar...';
@@ -129,7 +131,6 @@ $messages['smtpautherror'] = 'Erro SMTP ($code): A autenticação falhou';
 $messages['smtpfromerror'] = 'Erro SMTP ($code): Falha ao definir o remetente "$from" ($msg)';
 $messages['smtptoerror'] = 'Erro SMTP ($code): Falha ao adicionar o destinatário: "$to" ($msg)';
 $messages['smtprecipientserror'] = 'Erro SMTP: Impossível analisar a lista de destinatários';
-$messages['smtpdsnerror'] = 'Erro SMTP: Não há suporte para recibo de entrega';
 $messages['smtperror'] = 'Erro SMTP: $msg';
 $messages['emailformaterror'] = 'Endereço de e-mail incorrecto: $email';
 $messages['toomanyrecipients'] = 'Demasiados destinatários. Reduza o numero de destinatários para o máximo de $max.';
@@ -142,11 +143,16 @@ $messages['contactrestored'] = 'Contacto(s) restaurado(s) com sucesso.';
 $messages['groupdeleted'] = 'Grupo eliminado com sucesso';
 $messages['grouprenamed'] = 'Grupo renomeado com sucesso';
 $messages['groupcreated'] = 'Grupo criado com sucesso';
+$messages['savedsearchdeleted'] = 'Pesquisa guardada eliminada com sucesso.';
+$messages['savedsearchdeleteerror'] = 'Não foi possível eliminar a pesquisa guardada.';
+$messages['savedsearchcreated'] = 'Pesquisa guardada criada com sucesso.';
+$messages['savedsearchcreateerror'] = 'Não foi possível criar a pesquisa guardada.';
 $messages['messagedeleted'] = 'Mensagens eliminadas com sucesso';
 $messages['messagemoved'] = 'Mensagens movidas com sucesso';
 $messages['messagecopied'] = 'Mensagens copiadas com sucesso';
 $messages['messagemarked'] = 'Mensagens marcadas com sucesso';
 $messages['autocompletechars'] = 'Indique pelo menos $min caracteres para auto completar';
+$messages['autocompletemore'] = 'Muitos registros encontrados. Por favor, insira mais caracteres.';
 $messages['namecannotbeempty'] = 'O nome não pode estar em branco';
 $messages['nametoolong'] = 'O nome é demasiado longo';
 $messages['folderupdated'] = 'Actualização da pasta concluída com sucesso';
@@ -154,5 +160,6 @@ $messages['foldercreated'] = 'Pasta criada com sucesso';
 $messages['invalidimageformat'] = 'Formato de imagem não suportado';
 $messages['mispellingsfound'] = 'Foram detectados erros de ortografia nesta mensagem';
 $messages['parentnotwritable'] = 'Não é possível criar/mover esta pasta para a pasta seleccionada. Acesso negado.';
+$messages['messagetoobig'] = 'A mensagem é demasiado grande para ser processada.';
 
 ?>

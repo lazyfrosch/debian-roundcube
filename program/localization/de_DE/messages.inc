@@ -12,9 +12,10 @@
 +-----------------------------------------------------------------------+
 | Author: Thomas Bruederli <roundcube@gmail.com>                        |
 | Author: Marcel Schlesinger <info@marcel-schlesinger.de>               |
+| Author: Roland Liebl <myroundcube@mail4us.net>                        |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 5079 2011-08-16 19:57:45Z thomasb $
+@version $Id: messages.inc 5569 2011-12-07 14:47:32Z thomasb $
 
 */
 
@@ -25,7 +26,7 @@ $messages['sessionerror'] = 'Ihre Session ist ungültig oder abgelaufen';
 $messages['imaperror'] = 'Keine Verbindung zum IMAP Server';
 $messages['servererror'] = 'Serverfehler!';
 $messages['servererrormsg'] = 'Serverfehler: $msg';
-$messages['databaserror'] = 'Datenbankfehler!';
+$messages['dberror'] = 'Datenbankfehler!';
 $messages['errorreadonly'] = 'Die Aktion kann nicht ausgeführt werden. Der Ordner ist schreibgeschützt.';
 $messages['errornoperm'] = 'Die Aktion kann nicht ausgeführt werden. Zugriff verweigert.';
 $messages['invalidrequest'] = 'Ungültige Anfrage! Es wurden keine Daten gespeichert.';
@@ -49,6 +50,7 @@ $messages['blockedimages'] = 'Um Ihre Privatsphäre zur schützen, wurden extern
 $messages['encryptedmessage'] = 'Dies ist eine verschlüsselte Nachricht und kann leider nicht angezeigt werden.';
 $messages['nocontactsfound'] = 'Keine Kontakte gefunden';
 $messages['contactnotfound'] = 'Der angeforderte Kontakt wurde nicht gefunden';
+$messages['contactsearchonly'] = 'Geben Sie einen Suchbegriff ein, um Kontakte zu finden';
 $messages['sendingfailed'] = 'Versenden der Nachricht fehlgeschlagen';
 $messages['senttooquickly'] = 'Bitte warten Sie $sec Sekunde(n) vor dem Senden dieser Nachricht';
 $messages['errorsavingsent'] = 'Ein Fehler ist beim Speichern der gesendeten Nachricht aufgetreten';
@@ -77,10 +79,10 @@ $messages['nosubjectwarning'] = 'Die Betreffzeile ist leer. Möchten Sie jetzt e
 $messages['nobodywarning'] = 'Diese Nachricht ohne Inhalt senden?';
 $messages['notsentwarning'] = 'Ihre Nachricht wurde nicht gesendet. Wollen Sie die Nachricht verwerfen?';
 $messages['noldapserver'] = 'Bitte wählen Sie einen LDAP-Server aus';
-$messages['nocontactsreturned'] = 'Es wurden keine Kontakte gefunden';
 $messages['nosearchname'] = 'Bitte geben Sie einen Namen oder eine E-Mail-Adresse ein';
 $messages['notuploadedwarning'] = 'Es wurden noch nicht alle Dateien hochgeladen. Bitte warten oder Upload abbrechen.';
 $messages['searchsuccessful'] = '$nr Nachrichten gefunden';
+$messages['contactsearchsuccessful'] = '$nr Kontakte gefunden';
 $messages['searchnomatch'] = 'Die Suche lieferte keine Treffer';
 $messages['searching'] = 'Suche...';
 $messages['checking'] = 'Prüfe...';
@@ -127,7 +129,6 @@ $messages['smtpautherror'] = 'SMTP Fehler ($code): Die Authentisierung ist fehlg
 $messages['smtpfromerror'] = 'SMTP Fehler ($code): Der Absender "$from" konnte nicht gesetzt werden ($msg)';
 $messages['smtptoerror'] = 'SMTP Fehler ($code): Der Empfänger "$to" konnte nicht gesetzt werden ($msg)';
 $messages['smtprecipientserror'] = 'SMTP Fehler: Die Empfängerliste konnte nicht verarbeitet werden';
-$messages['smtpdsnerror'] = 'SMTP-Fehler: Übermittlungsbestätigungen werden nicht unterstützt';
 $messages['smtperror'] = 'SMTP Fehler: $msg';
 $messages['emailformaterror'] = 'Ungültige E-Mail-Adresse: $email';
 $messages['toomanyrecipients'] = 'Zuviele Empfänger. Reduzieren Sie die Anzahl Empfängeradressen auf $max.';
@@ -140,11 +141,16 @@ $messages['contactrestored'] = 'Kontakte erfolgreich wiederhergestellt.';
 $messages['groupdeleted'] = 'Gruppe erfolgreich gelöscht';
 $messages['grouprenamed'] = 'Gruppe erlogreich umbenannt';
 $messages['groupcreated'] = 'Gruppe erlogreich erstellt';
+$messages['savedsearchdeleted'] = 'Suchergebnisse erfolgreich gelöscht';
+$messages['savedsearchdeleteerror'] = 'Suchergebnisse konnten nicht gelöscht werden';
+$messages['savedsearchcreated'] = 'Suchergebnisse wurden erfolgreich wiederherstellt';
+$messages['savedsearchcreateerror'] = 'Suchergebnisse konnten nicht wiederhergestellt werden';
 $messages['messagedeleted'] = 'Nachricht(en) erfolgreich gelöscht';
 $messages['messagemoved'] = 'Nachricht(en) erfolgreich verschoben';
 $messages['messagecopied'] = 'Nachricht(en) erfolgreich kopiert';
 $messages['messagemarked'] = 'Nachricht(en) erfolgreich markiert';
 $messages['autocompletechars'] = 'Geben Sie mind. $min Zeichen für die Auto-Vervollständigung ein';
+$messages['autocompletemore'] = 'Mehrere Treffer. Bitte geben Sie mehr Buchstaben ein';
 $messages['namecannotbeempty'] = 'Der Name darf nicht leer sein';
 $messages['nametoolong'] = 'Der Name ist zu lang';
 $messages['folderupdated'] = 'Der Ordner wurde erfolgreich aktualisiert';

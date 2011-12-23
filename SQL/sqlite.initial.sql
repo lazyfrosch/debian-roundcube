@@ -1,7 +1,7 @@
 -- Roundcube Webmail initial database structure
 
 -- 
--- Table structure for table `cache`
+-- Table structure for table cache
 -- 
 
 CREATE TABLE cache (
@@ -9,7 +9,7 @@ CREATE TABLE cache (
   user_id integer NOT NULL default 0,
   cache_key varchar(128) NOT NULL default '',
   created datetime NOT NULL default '0000-00-00 00:00:00',
-  data longtext NOT NULL
+  data text NOT NULL
 );
 
 CREATE INDEX ix_cache_user_cache_key ON cache(user_id, cache_key);
@@ -110,7 +110,7 @@ CREATE INDEX ix_users_alias ON users(alias);
 -- 
 
 CREATE TABLE session (
-  sess_id varchar(40) NOT NULL PRIMARY KEY,
+  sess_id varchar(128) NOT NULL PRIMARY KEY,
   created datetime NOT NULL default '0000-00-00 00:00:00',
   changed datetime NOT NULL default '0000-00-00 00:00:00',
   ip varchar(40) NOT NULL default '',
@@ -121,28 +121,81 @@ CREATE INDEX ix_session_changed ON session (changed);
 
 -- --------------------------------------------------------
 
--- 
--- Table structure for table messages
--- 
+--
+-- Table structure for table dictionary
+--
 
-CREATE TABLE messages (
-  message_id integer NOT NULL PRIMARY KEY,
-  user_id integer NOT NULL default '0',
-  del tinyint NOT NULL default '0',
-  cache_key varchar(128) NOT NULL default '',
-  created datetime NOT NULL default '0000-00-00 00:00:00',
-  idx integer NOT NULL default '0',
-  uid integer NOT NULL default '0',
-  subject varchar(255) NOT NULL default '',
-  "from" varchar(255) NOT NULL default '',
-  "to" varchar(255) NOT NULL default '',
-  "cc" varchar(255) NOT NULL default '',
-  "date" datetime NOT NULL default '0000-00-00 00:00:00',
-  size integer NOT NULL default '0',
-  headers text NOT NULL,
-  structure text
+CREATE TABLE dictionary (
+    user_id integer DEFAULT NULL,
+   "language" varchar(5) NOT NULL,
+    data text NOT NULL
 );
 
-CREATE UNIQUE INDEX ix_messages_user_cache_uid ON messages (user_id,cache_key,uid);
-CREATE INDEX ix_messages_index ON messages (user_id,cache_key,idx);
-CREATE INDEX ix_messages_created ON messages (created);
+CREATE UNIQUE INDEX ix_dictionary_user_language ON dictionary (user_id, "language");
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table searches
+--
+
+CREATE TABLE searches (
+  search_id integer NOT NULL PRIMARY KEY,
+  user_id integer NOT NULL DEFAULT '0',
+  "type" smallint NOT NULL DEFAULT '0',
+  name varchar(128) NOT NULL,
+  data text NOT NULL
+);
+
+CREATE UNIQUE INDEX ix_searches_user_type_name (user_id, type, name);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table cache_index
+--
+
+CREATE TABLE cache_index (
+    user_id integer NOT NULL,
+    mailbox varchar(255) NOT NULL,
+    changed datetime NOT NULL default '0000-00-00 00:00:00',
+    valid smallint NOT NULL DEFAULT '0',
+    data text NOT NULL,
+    PRIMARY KEY (user_id, mailbox)
+);
+
+CREATE INDEX ix_cache_index_changed ON cache_index (changed);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table cache_thread
+--
+
+CREATE TABLE cache_thread (
+    user_id integer NOT NULL,
+    mailbox varchar(255) NOT NULL,
+    changed datetime NOT NULL default '0000-00-00 00:00:00',
+    data text NOT NULL,
+    PRIMARY KEY (user_id, mailbox)
+);
+
+CREATE INDEX ix_cache_thread_changed ON cache_thread (changed);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table cache_messages
+--
+
+CREATE TABLE cache_messages (
+    user_id integer NOT NULL,
+    mailbox varchar(255) NOT NULL,
+    uid integer NOT NULL,
+    changed datetime NOT NULL default '0000-00-00 00:00:00',
+    data text NOT NULL,
+    flags integer NOT NULL DEFAULT '0',
+    PRIMARY KEY (user_id, mailbox, uid)
+);
+
+CREATE INDEX ix_cache_messages_changed ON cache_messages (changed);

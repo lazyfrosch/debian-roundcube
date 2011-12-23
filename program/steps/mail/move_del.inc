@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: move_del.inc 4410 2011-01-12 18:25:02Z thomasb $
+ $Id: move_del.inc 5266 2011-09-22 07:49:33Z alec $
 
 */
 
@@ -116,12 +116,12 @@ else
     rcmail_set_unseen_count($mbox, $unseen_count);
   }
 
-  if ($RCMAIL->action=='moveto' && strlen($target)) {
+  if ($RCMAIL->action == 'moveto' && strlen($target)) {
     rcmail_send_unread_count($target, true);
   }
 
   $OUTPUT->command('set_quota', rcmail_quota_content());
-  $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($msg_count));
+  $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($msg_count), $mbox);
 
   if ($IMAP->threading)
     $count = get_input_value('_count', RCUBE_INPUT_POST);

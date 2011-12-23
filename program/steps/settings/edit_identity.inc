@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: edit_identity.inc 4668 2011-04-19 20:41:24Z thomasb $
+ $Id: edit_identity.inc 5139 2011-08-28 09:47:15Z alec $
 
 */
 
@@ -28,7 +28,7 @@ if (($_GET['_iid'] || $_POST['_iid']) && $RCMAIL->action=='edit-identity') {
   if (is_array($IDENTITY_RECORD))
     $OUTPUT->set_env('iid', $IDENTITY_RECORD['identity_id']);
   else {
-    $OUTPUT->show_message('databaserror', 'error');
+    $OUTPUT->show_message('dberror', 'error');
     // go to identities page
     rcmail_overwrite_action('identities');
     return;

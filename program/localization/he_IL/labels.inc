@@ -11,7 +11,7 @@
 +-----------------------------------------------------------------------+
 | Author: Moshe Leibovitch  <moish@mln.co.il>                           |
 | Updates: Noor Dawod <noor@comrax.com>                                 |
-| Updates: Moshe Leibovitch  <moish@mln.co.il>  05092011                |
+| Updates: Moshe Leibovitch  <moish@mln.co.il>  28112011                |
 +-----------------------------------------------------------------------+
 */
 
@@ -115,7 +115,7 @@ $labels['markread'] = 'כנקראו';
 $labels['markunread'] = 'כלא נקראו';
 $labels['markflagged'] = 'כמסומן';
 $labels['markunflagged'] = 'כלא מסומן';
-$labels['messageactions'] = 'פעולות נוספות';
+$labels['moreactions'] = 'פעולות נוספות...';
 $labels['select'] = 'בחירה';
 $labels['all'] = 'הכל';
 $labels['none'] = 'כלום';
@@ -187,6 +187,7 @@ $labels['highest'] = 'גבוה ביותר';
 $labels['nosubject'] = '(ללא נושא)';
 $labels['showimages'] = 'הצגת תמונות';
 $labels['alwaysshow'] = '$sender תמיד להציג תמונות מאת ';
+$labels['isdraft'] = 'זו טיוטה של הודעה';
 $labels['htmltoggle'] = 'HTML';
 $labels['plaintoggle'] = 'ללא עיצוב';
 $labels['savesentmessagein'] = 'היכן לשמור ההודעה?';
@@ -268,7 +269,6 @@ $labels['print'] = 'הדפסה';
 $labels['export'] = 'ייצוא';
 $labels['exportvcards'] = 'ייצוא אנשי קשר בפורמט  vCard ';
 $labels['newcontactgroup'] = 'יצירת קבוצה חדשה של אנשי קשר';
-$labels['groupactions'] = 'פעולות על קבוצת אנשי הקשר...';
 $labels['grouprename'] = 'שינוי שם קבוצה';
 $labels['groupdelete'] = 'מחיקת קבוצה';
 $labels['previouspage'] = 'הצגת הקבוצה הקודמת';
@@ -278,6 +278,8 @@ $labels['lastpage'] = 'הצגת הקבוצה האחרונה';
 $labels['group'] = 'קבוצה';
 $labels['groups'] = 'קבוצות';
 $labels['personaladrbook'] = 'כתובות פרטיות';
+$labels['searchsave'] = 'שמירת החיפוש';
+$labels['searchdelete'] = 'מחיקת החיפוש';
 $labels['import'] = 'ייבוא';
 $labels['importcontacts'] = 'ייבוא אנשי קשר';
 $labels['importfromfile'] = 'ייבוא מקובץ';
@@ -286,6 +288,7 @@ $labels['importreplace'] = 'החלפת כל פנקס הכתובות';
 $labels['importtext'] = '<a href="http://en.wikipedia.org/wiki/VCard">vCard</a>  ניתן לייבא אנשי קשר מפנקס כתובות קיים.  אנו תומכים בפורמט';
 $labels['done'] = 'בוצע';
 $labels['settingsfor'] = 'הגדרות עבור';
+$labels['about'] = 'אודות';
 $labels['preferences'] = 'העדפות';
 $labels['userpreferences'] = 'העדפות משתמש';
 $labels['editpreferences'] = 'עריכה של העדפות משתמש';
@@ -297,6 +300,8 @@ $labels['edititem'] = 'עריכת רשומה';
 $labels['preferhtml'] = 'הצגת HTML';
 $labels['defaultcharset'] = 'ברירת מחדל של תווים';
 $labels['htmlmessage'] = 'תוכן HTML';
+$labels['dateformat'] = 'פורמט התאריך';
+$labels['timeformat'] = 'פורמט השעה';
 $labels['prettydate'] = 'תאריכים מעוצבים';
 $labels['setdefault'] = 'קביעה כברירת מחדל';
 $labels['autodetect'] = 'אוטומטי';
@@ -368,7 +373,13 @@ $labels['reqmdn'] = 'תמיד יש לדרוש אישור קבלה';
 $labels['reqdsn'] = 'תמיד לבקש הודעה על מצב המסירה';
 $labels['replysamefolder'] = 'המענה ישמר בתיקיה של ההודעה המקורית';
 $labels['defaultaddressbook'] = 'הוספת אנשי קשר לספר הכתובות שנבחר';
+$labels['autocompletesingle'] = 'לדלג על כתובת דואר חילופית בעת שימוש בהשלמה אוטומטית של הקלדה';
 $labels['spellcheckbeforesend'] = 'בדיקת איות לפני המשלוח';
+$labels['spellcheckoptions'] = 'אפשריות בדיקת איות';
+$labels['spellcheckignoresyms'] = 'התעלמות ממילים המכילות סמלים';
+$labels['spellcheckignorenums'] = 'התעלמות ממילים המכילות מספרים';
+$labels['spellcheckignorecaps'] = 'התעלמות ממילים עם אותציות ראשיות';
+$labels['addtodict'] = 'הוספה למילון';
 $labels['folder'] = 'תיק';
 $labels['folders'] = 'תיקים';
 $labels['foldername'] = 'שם תיק';
@@ -393,6 +404,11 @@ $labels['sortby'] = 'מיון לפי';
 $labels['sortasc'] = 'מיון בסדר עולה';
 $labels['sortdesc'] = 'מיון בסדר יורד';
 $labels['undo'] = 'ביטול שינוי';
+$labels['plugin'] = 'תוסף תוכנה';
+$labels['version'] = 'גירסה';
+$labels['source'] = 'מקור';
+$labels['license'] = 'רשיון';
+$labels['support'] = 'קבלת תמיכה';
 $labels['B'] = 'בייט';
 $labels['KB'] = 'ק"ב';
 $labels['MB'] = 'מ"ב';

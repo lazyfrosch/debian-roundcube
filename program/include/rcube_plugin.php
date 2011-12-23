@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_plugin.php 4870 2011-06-21 09:10:14Z alec $
+ $Id: rcube_plugin.php 5168 2011-09-05 11:08:48Z alec $
 
 */
 
@@ -147,8 +147,11 @@ abstract class rcube_plugin
     ob_start();
 
     foreach (array('en_US', $lang) as $lng) {
-      @include($locdir . $lng . '.inc');
-      $texts = (array)$labels + (array)$messages + (array)$texts;
+      $fpath = $locdir . $lng . '.inc';
+      if (is_file($fpath) && is_readable($fpath)) {
+        include($fpath);
+        $texts = (array)$labels + (array)$messages + (array)$texts;
+      }
     }
 
     ob_end_clean();
