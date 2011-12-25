@@ -1,3 +1,9 @@
+roundcube (0.7-2) unstable; urgency=low
+
+  * Fix SQLite upgrade file. Closes: #653217.
+
+ -- Vincent Bernat <bernat@debian.org>  Sun, 25 Dec 2011 16:14:04 +0100
+
 roundcube (0.7-1) unstable; urgency=low
 
   * New upstream version. Closes: #652564.
