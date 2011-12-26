@@ -1,6 +1,10 @@
 robots.txt index.php .htaccess program/ bin/ usr/share/roundcube
 skins/default/ usr/share/roundcube/skins
+
 plugins/filesystem_attachments/ usr/share/roundcube/plugins
+
+plugins/jqueryui/jqueryui.php usr/share/roundcube/plugins/jqueryui
+plugins/jqueryui/config.inc.php.dist usr/share/roundcube/plugins/jqueryui
 
 debian/conf/* etc/roundcube
 config/*.php etc/roundcube

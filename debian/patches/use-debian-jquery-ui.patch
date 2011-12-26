@@ -1,0 +1,30 @@
+Use packaged libjs-jquery-ui.
+
+diff --git a/plugins/jqueryui/jqueryui.php b/plugins/jqueryui/jqueryui.php
+index 7ed2018..5f4545c 100644
+--- a/plugins/jqueryui/jqueryui.php
++++ b/plugins/jqueryui/jqueryui.php
+@@ -21,18 +21,18 @@ class jqueryui extends rcube_plugin
+     $this->load_config();
+ 
+     // include UI scripts
+-    $this->include_script("js/jquery-ui-$version.custom.min.js");
++    $this->include_script("js/jquery-ui.min.js");
+ 
+     // include UI stylesheet
+     $skin = $rcmail->config->get('skin', 'default');
+     $ui_map = $rcmail->config->get('jquery_ui_skin_map', array());
+-    $ui_theme = $ui_map[$skin] ? $ui_map[$skin] : 'default';
++    $ui_theme = $ui_map[$skin] ? $ui_map[$skin] : 'smoothness';
+ 
+-    if (file_exists($this->home . "/themes/$ui_theme/jquery-ui-$version.custom.css")) {
+-      $this->include_stylesheet("themes/$ui_theme/jquery-ui-$version.custom.css");
++    if (file_exists($this->home . "/css/$ui_theme/jquery-ui.custom.css")) {
++      $this->include_stylesheet("css/$ui_theme/jquery-ui.min.css");
+     }
+     else {
+-      $this->include_stylesheet("themes/default/jquery-ui-$version.custom.css");
++      $this->include_stylesheet("css/smoothness/jquery-ui.min.css");
+     }
+ 
+     // jquery UI localization

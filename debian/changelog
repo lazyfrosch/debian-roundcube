@@ -1,3 +1,12 @@
+roundcube (0.7-3) unstable; urgency=low
+
+  * Ship jqueryui plugin. Closes: #653274.
+      + Depend on libjs-jquery-ui package (instead of builtin copy).
+      + Conflict with versions of roundcube-plugins-extra providing this
+        plugin.
+
+ -- Vincent Bernat <bernat@debian.org>  Mon, 26 Dec 2011 21:24:11 +0100
+
 roundcube (0.7-2) unstable; urgency=low
 
   * Fix SQLite upgrade file. Closes: #653217.
