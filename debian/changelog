@@ -4,8 +4,9 @@ roundcube (0.7-3) unstable; urgency=low
       + Depend on libjs-jquery-ui package (instead of builtin copy).
       + Conflict with versions of roundcube-plugins-extra providing this
         plugin.
+  * More SQL fixes on update. Closes: #654297.
 
- -- Vincent Bernat <bernat@debian.org>  Mon, 26 Dec 2011 21:24:11 +0100
+ -- Vincent Bernat <bernat@debian.org>  Mon, 02 Jan 2012 21:45:42 +0100
 
 roundcube (0.7-2) unstable; urgency=low
 
