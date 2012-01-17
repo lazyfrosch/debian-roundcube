@@ -1,6 +1,8 @@
 roundcube (0.7.1-1) unstable; urgency=low
 
   * New upstream version. Closes: #656093.
+  * Add Dutch debconf translation, thanks to Jeroen Schot.
+    Closes: #656082.
 
  -- Vincent Bernat <bernat@debian.org>  Tue, 17 Jan 2012 08:57:11 +0100
 
