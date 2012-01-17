@@ -1,3 +1,9 @@
+roundcube (0.7.1-1) unstable; urgency=low
+
+  * New upstream version. Closes: #656093.
+
+ -- Vincent Bernat <bernat@debian.org>  Tue, 17 Jan 2012 08:57:11 +0100
+
 roundcube (0.7-3) unstable; urgency=low
 
   * Ship jqueryui plugin. Closes: #653274.
