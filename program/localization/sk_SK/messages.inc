@@ -6,7 +6,7 @@
 | language/sk/messages.inc                                              |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -17,7 +17,7 @@
 |         Martin Lacina	<martin@whistler.sk>                            |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 4469 2011-01-29 14:55:12Z thomasb $
+@version $Id: messages.inc 5139 2011-08-28 09:47:15Z alec $
 
 */
 
@@ -28,6 +28,7 @@ $messages['sessionerror'] = 'Vaše prihlásenie je neplatné alebo vypršala jeh
 $messages['imaperror'] = 'Nepodarilo sa spojiť s IMAP serverom';
 $messages['servererror'] = 'Chyba servera!';
 $messages['servererrormsg'] = 'Chyba servera: $msg';
+$messages['dberror'] = 'Databázová chyba!';
 $messages['errorreadonly'] = 'Nemožno vykonať operáciu. Adresár je len na čítanie';
 $messages['errornoperm'] = 'Nemožno vykonať operáciu. Prístup odmietnutý';
 $messages['invalidrequest'] = 'Chybný požiadavek. Žiadne údaje neboli uložené.';
@@ -36,6 +37,7 @@ $messages['loggedout'] = 'Odhlásenie prebehlo úspešne. Dovidenia.';
 $messages['mailboxempty'] = 'Schránka je prázdna';
 $messages['loading'] = 'Načítava sa...';
 $messages['uploading'] = 'Nahrávám súbor...';
+$messages['uploadingmany'] = 'Nahrávam súbory...';
 $messages['loadingdata'] = 'Načítavajú sa údaje...';
 $messages['checkingmail'] = 'Kontrolujú sa nové správy...';
 $messages['sendingmessage'] = 'Správa sa odosiela...';
@@ -112,6 +114,7 @@ $messages['contactremovedfromgroup'] = 'Kontakty boli úspešne odstráneny z te
 $messages['importwait'] = 'Prebieha import, počkajte ...';
 $messages['importerror'] = 'Import zlyhal. Načítavaný súbor nie je platným vCard súborom.';
 $messages['importconfirm'] = '<b>Úspešne sa načítalo $inserted kontaktov, preskočilo sa $skipped existujúcich záznamov</b>:<p><em>$names</em></p>';
+$messages['importconfirmskipped'] = '<b>Preskočených $skipped existujúcich záznamov</b>';
 $messages['opnotpermitted'] = 'Operácia nie je povolená!';
 $messages['nofromaddress'] = 'Zvolená identita neobsahuje e-mailovú adresu';
 $messages['editorwarning'] = 'Prepnutie na editor obyčajného textu spôsobí stratu formátovania. Chcete napriek tomu pokračovať?';
@@ -129,6 +132,8 @@ $messages['maxgroupmembersreached'] = 'Počet členov skupiny dosiahol maxima z 
 $messages['internalerror'] = 'Došlo k internej chybe. Skúste to znova';
 $messages['contactdelerror'] = 'Nemôžem vymazať kontakt(y)';
 $messages['contactdeleted'] = 'Kontakt(y) bol vymazaný';
+$messages['contactrestoreerror'] = 'Nemôžem obnoviť zmazané kontakty';
+$messages['contactrestored'] = 'Kontakty boli úspešne obnovené';
 $messages['groupdeleted'] = 'Skupina bola vymazaná';
 $messages['grouprenamed'] = 'Skupina bola premenovaná';
 $messages['groupcreated'] = 'Skupina bola vytvorená';
@@ -141,5 +146,8 @@ $messages['namecannotbeempty'] = 'Meno nemôže byť prázdne';
 $messages['nametoolong'] = 'Meno je príliš dlhé';
 $messages['folderupdated'] = 'Adresár bol aktualizovaný';
 $messages['foldercreated'] = 'Adresár bol vytvorený';
+$messages['invalidimageformat'] = 'Zlý formát obrázku';
+$messages['mispellingsfound'] = 'V správe boli nájdené pravopisné chyby';
+$messages['itemsdeleted'] = 'Bolo vymazaných $num položiek.';
 
 ?>

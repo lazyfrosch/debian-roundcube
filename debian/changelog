@@ -1,8 +1,50 @@
-roundcube (0.5.4+dfsg-1~bpo60+1) squeeze-backports; urgency=low
+roundcube (0.7.1-1~bpo60+1) squeeze-backports; urgency=low
 
   * Rebuild for squeeze-backports.
 
- -- Jérémy Bobbio <lunar@debian.org>  Sat, 01 Oct 2011 13:47:43 +0200
+ -- Vincent Bernat <bernat@debian.org>  Sat, 04 Feb 2012 09:14:58 +0100
+
+roundcube (0.7.1-1) unstable; urgency=low
+
+  * New upstream version. Closes: #656093.
+  * Add Dutch debconf translation, thanks to Jeroen Schot.
+    Closes: #656082.
+
+ -- Vincent Bernat <bernat@debian.org>  Tue, 17 Jan 2012 08:57:11 +0100
+
+roundcube (0.7-3) unstable; urgency=low
+
+  * Ship jqueryui plugin. Closes: #653274.
+      + Depend on libjs-jquery-ui package (instead of builtin copy).
+      + Conflict with versions of roundcube-plugins-extra providing this
+        plugin.
+  * More SQL fixes on update. Closes: #654297.
+
+ -- Vincent Bernat <bernat@debian.org>  Mon, 02 Jan 2012 21:45:42 +0100
+
+roundcube (0.7-2) unstable; urgency=low
+
+  * Fix SQLite upgrade file. Closes: #653217.
+  * Also fixes MySQL upgrade file and SQLite regular file.
+
+ -- Vincent Bernat <bernat@debian.org>  Sun, 25 Dec 2011 16:14:04 +0100
+
+roundcube (0.7-1) unstable; urgency=low
+
+  * New upstream version. Closes: #652564.
+      + Does not ship SWF with TinyMCE anymore.
+
+ -- Vincent Bernat <bernat@debian.org>  Fri, 23 Dec 2011 22:04:39 +0100
+
+roundcube (0.6+dfsg-1) unstable; urgency=low
+
+  * New upstream version. Closes: #643707.
+      + Repack to remove SWF file without source from TinyMCE.      
+      + Add SQL upgrade procedures.
+      + Add new plugins: acl, enigma and newmail_notifier.
+      + Update jQuery dependency to jQuery 1.6.4.
+
+ -- Vincent Bernat <bernat@debian.org>  Sun, 02 Oct 2011 15:20:57 +0200
 
 roundcube (0.5.4+dfsg-1) unstable; urgency=high
 

@@ -5,7 +5,7 @@
  | program/steps/mail/copy.inc                                           |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2010, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Aleksander Machniak <alec@alec.pl>                            |
  +-----------------------------------------------------------------------+
 
- $Id: copy.inc 4321 2010-12-08 12:52:04Z alec $
+ $Id: copy.inc 4410 2011-01-12 18:25:02Z thomasb $
 
 */
 

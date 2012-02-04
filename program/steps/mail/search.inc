@@ -11,7 +11,7 @@
  |         Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: search.inc 4321 2010-12-08 12:52:04Z alec $
+ $Id: search.inc 5527 2011-12-02 09:58:03Z alec $
 
 */
 
@@ -27,10 +27,12 @@ $_SESSION['page'] = 1;
 $imap_charset = RCMAIL_CHARSET;
 
 // get search string
-$str = get_input_value('_q', RCUBE_INPUT_GET);
-$filter = get_input_value('_filter', RCUBE_INPUT_GET);
-$mbox = get_input_value('_mbox', RCUBE_INPUT_GET);
+$str     = get_input_value('_q', RCUBE_INPUT_GET, true);
+$mbox    = get_input_value('_mbox', RCUBE_INPUT_GET, true);
+$filter  = get_input_value('_filter', RCUBE_INPUT_GET);
 $headers = get_input_value('_headers', RCUBE_INPUT_GET);
+$subject = array();
+
 $search_request = md5($mbox.$filter.$str);
 
 // add list filter string
@@ -69,15 +71,20 @@ else if (preg_match("/^body:.*/i", $str))
   list(,$srch) = explode(":", $str);
   $subject['text'] = "TEXT";
 }
-else if(trim($str))
+else if (strlen(trim($str)))
 {
   if ($headers) {
-    foreach(explode(',', $headers) as $header)
-      switch ($header) {
-        case 'text': $subject['text'] = 'TEXT'; break;
-        default:     $subject[$header] = 'HEADER '.strtoupper($header);
+    foreach (explode(',', $headers) as $header) {
+      if ($header == 'text') {
+        // #1488208: get rid of other headers when searching by "TEXT"
+        $subject = array('text' => 'TEXT');
+        break;
       }
-    
+      else {
+        $subject[$header] = 'HEADER '.strtoupper($header);
+      }
+    }
+
     // save search modifiers for the current folder to user prefs
     $search_mods = $RCMAIL->config->get('search_mods', $SEARCH_MODS_DEFAULT);
     $search_mods[$mbox] = array_fill_keys(array_keys($subject), 1);
@@ -88,9 +95,9 @@ else if(trim($str))
   }
 }
 
-$search = $srch ? trim($srch) : trim($str);
+$search = isset($srch) ? trim($srch) : trim($str);
 
-if ($subject) {
+if (!empty($subject)) {
   $search_str .= str_repeat(' OR', count($subject)-1);
   foreach ($subject as $sub)
     $search_str .= sprintf(" %s {%d}\r\n%s", $sub, strlen($search), $search);
@@ -100,7 +107,7 @@ $search_str = trim($search_str);
 
 // execute IMAP search
 if ($search_str)
-  $result = $IMAP->search($mbox, $search_str, $imap_charset, $_SESSION['sort_col']);
+  $IMAP->search($mbox, $search_str, $imap_charset, $_SESSION['sort_col']);
 
 // Get the headers
 $result_h = $IMAP->list_headers($mbox, 1, $_SESSION['sort_col'], $_SESSION['sort_order']);
@@ -134,7 +141,7 @@ else {
 $OUTPUT->set_env('search_request', $search_str ? $search_request : '');
 $OUTPUT->set_env('messagecount', $count);
 $OUTPUT->set_env('pagecount', ceil($count/$IMAP->page_size));
-$OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($count, 1));
+$OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($count, 1), $mbox);
 $OUTPUT->send();
 
 

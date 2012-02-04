@@ -6,7 +6,7 @@
 | localization/zh_TW/messages.inc                                       |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -15,7 +15,7 @@
 |         Ting-Hung Chiu <earrl@mmlab.cse.yzu.edu.tw>                   |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 4469 2011-01-29 14:55:12Z thomasb $
+@version $Id: messages.inc 4627 2011-03-31 13:47:22Z yllar $
 
 */
 
@@ -110,6 +110,7 @@ $messages['contactremovedfromgroup'] = '成功把移除此群組中的聯絡人'
 $messages['importwait'] = '匯入中，請稍候...';
 $messages['importerror'] = '匯入失敗！上傳的檔案並非支援的 vCard 格式。';
 $messages['importconfirm'] = '<b>成功匯入 $inserted 筆資料，略過 $skipped 筆已存在的資料</b>：<p><em>$names</em></p>';
+$messages['importconfirmskipped'] = '<b>略過 $skipped 個已存在的項目</b>';
 $messages['opnotpermitted'] = '不允許的操作';
 $messages['nofromaddress'] = '在選擇的身分中遺失了電子郵件位址';
 $messages['editorwarning'] = '切換到純文字編輯模式將會遺失所有設定的樣式。您確定要繼續嗎？';

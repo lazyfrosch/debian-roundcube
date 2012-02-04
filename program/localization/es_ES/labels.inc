@@ -6,7 +6,7 @@
 | language/es_ES/labels.inc                                             |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -16,7 +16,7 @@
 |         José M. Ciordia <ciordia@gmail.com>                           |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4368 2010-12-27 08:51:22Z yllar $
+@version $Id: labels.inc 5290 2011-09-28 17:09:50Z thomasb $
 
 */
 
@@ -103,18 +103,16 @@ $labels['replytomessage'] = 'Responder mensaje';
 $labels['replytoallmessage'] = 'Responder al emisor y a todos los destinatarios';
 $labels['replyall'] = 'Responder a todos';
 $labels['replylist'] = 'Responder a la lista';
+$labels['forwardinline'] = 'Reenviar directamente';
+$labels['forwardattachment'] = 'Reenviar como adjunto';
 $labels['forwardmessage'] = 'Reenviar mensaje';
 $labels['deletemessage'] = 'Eliminar mensaje';
 $labels['movemessagetotrash'] = 'Mover mensaje a la papelera';
 $labels['printmessage'] = 'Imprimir este mensaje';
 $labels['previousmessage'] = 'Mostrar mensaje anterior';
-$labels['previousmessages'] = 'Mostrar grupo anterior de mensajes';
 $labels['firstmessage'] = 'Mostrar primer mensaje';
-$labels['firstmessages'] = 'Mostrar primer grupo de mensajes';
 $labels['nextmessage'] = 'Mostrar el siguiente mensaje';
-$labels['nextmessages'] = 'Mostrar el siguiente grupo de mensajes';
 $labels['lastmessage'] = 'Mostrar el último mensaje';
-$labels['lastmessages'] = 'Mostrar el último grupo de mensajes';
 $labels['backtolist'] = 'Volver a la lista de mensajes';
 $labels['viewsource'] = 'Mostrar código';
 $labels['markmessages'] = 'Marcar mensajes';
@@ -122,7 +120,7 @@ $labels['markread'] = 'Como leído';
 $labels['markunread'] = 'Como no leído';
 $labels['markflagged'] = 'Como marcado';
 $labels['markunflagged'] = 'Como no marcado';
-$labels['messageactions'] = 'Más acciones...';
+$labels['moreactions'] = 'Más acciones…';
 $labels['select'] = 'Elija';
 $labels['all'] = 'Todos';
 $labels['none'] = 'Ninguno';
@@ -157,7 +155,6 @@ $labels['listmode'] = 'Modo de vista de lista';
 $labels['folderactions'] = 'Acciones de bandeja...';
 $labels['compact'] = 'Compactar';
 $labels['empty'] = 'Vaciar';
-$labels['purge'] = 'Eliminar';
 $labels['quota'] = 'Uso de disco';
 $labels['unknown'] = 'desconocido';
 $labels['unlimited'] = 'sin límite';
@@ -176,12 +173,15 @@ $labels['charset'] = 'Codificación';
 $labels['editortype'] = 'Tipo de editor';
 $labels['returnreceipt'] = 'Acuse de recibo';
 $labels['dsn'] = 'Entrega de notificaciones de estado';
+$labels['mailreplyintro'] = 'El $date, $sender escribió:';
+$labels['originalmessage'] = 'Mensaje original';
 $labels['editidents'] = 'Editar identidades';
 $labels['checkspelling'] = 'Revisar ortografía';
 $labels['resumeediting'] = 'Continuar edición';
 $labels['revertto'] = 'Revertir a';
 $labels['attachments'] = 'Adjuntos';
 $labels['upload'] = 'Subir';
+$labels['uploadprogress'] = '$percent ($current de $total)';
 $labels['close'] = 'Cerrar';
 $labels['messageoptions'] = 'Opciones de mensaje...';
 $labels['low'] = 'Bajo';
@@ -208,15 +208,63 @@ $labels['receiptnote'] = 'Nota: Esta notificación sólo significa que su mensaj
 $labels['name'] = 'Mostra nombre';
 $labels['firstname'] = 'Nombre';
 $labels['surname'] = 'Apellido';
+$labels['middlename'] = 'Segundo nombre';
+$labels['nameprefix'] = 'Prefijo';
+$labels['namesuffix'] = 'Sufijo';
+$labels['nickname'] = 'Alias';
+$labels['jobtitle'] = 'Tratamiento';
+$labels['department'] = 'Departamento';
+$labels['gender'] = 'Sexo';
+$labels['maidenname'] = 'Apellido de soltera';
 $labels['email'] = 'Correo';
+$labels['phone'] = 'Teléfono';
+$labels['address'] = 'Dirección';
+$labels['street'] = 'Calle';
+$labels['locality'] = 'Ciudad';
+$labels['zipcode'] = 'Código postal';
+$labels['region'] = 'Provincia';
+$labels['country'] = 'País';
+$labels['birthday'] = 'Cumpleaños';
+$labels['anniversary'] = 'Santo';
+$labels['website'] = 'Página web';
+$labels['instantmessenger'] = 'Instant Messenger';
+$labels['notes'] = 'Notas';
+$labels['male'] = 'Hombre';
+$labels['female'] = 'Mujer';
+$labels['manager'] = 'Director';
+$labels['assistant'] = 'Auxiliar';
+$labels['spouse'] = 'Cónyuge';
+$labels['allfields'] = 'Todos los campos';
+$labels['search'] = 'Buscar';
+$labels['advsearch'] = 'Búsqueda avanzada';
+$labels['other'] = 'Otro';
+$labels['typehome'] = 'Casa';
+$labels['typework'] = 'Trabajo';
+$labels['typeother'] = 'Otro';
+$labels['typemobile'] = 'Móvil';
+$labels['typemain'] = 'Principal';
+$labels['typehomefax'] = 'Fax de casa';
+$labels['typeworkfax'] = 'Fax del trabajo';
+$labels['typecar'] = 'Coche';
+$labels['typepager'] = 'Busca';
+$labels['typevideo'] = 'Vídeo';
+$labels['typeassistant'] = 'Auxiliar';
+$labels['typehomepage'] = 'Inicio';
+$labels['typeblog'] = 'Blog';
+$labels['typeprofile'] = 'Perfil';
+$labels['addfield'] = 'Añadir campo...';
 $labels['addcontact'] = 'Añadir nuevo contacto';
 $labels['editcontact'] = 'Editar contacto';
 $labels['contacts'] = 'Contactos';
 $labels['contactproperties'] = 'Propiedades del contacto';
+$labels['personalinfo'] = 'Información personal';
 $labels['edit'] = 'Editar';
 $labels['cancel'] = 'Cancelar';
 $labels['save'] = 'Guardar';
 $labels['delete'] = 'Eliminar';
+$labels['rename'] = 'Renombrar';
+$labels['addphoto'] = 'Añadir';
+$labels['replacephoto'] = 'Reemplazar';
 $labels['newcontact'] = 'Crear nueva tarjeta de contacto';
 $labels['deletecontact'] = 'Eliminar contactos seleccionados';
 $labels['composeto'] = 'Escribir mensaje a';
@@ -225,7 +273,8 @@ $labels['print'] = 'Imprimir';
 $labels['export'] = 'Exportar';
 $labels['exportvcards'] = 'Exportar contactos en formato vCard';
 $labels['newcontactgroup'] = 'Crear un nuevo grupo de contactos';
-$labels['groupactions'] = 'Acciones para grupos de contactos...';
+$labels['grouprename'] = 'Renombrar grupo';
+$labels['groupdelete'] = 'Borrar grupo';
 $labels['previouspage'] = 'Mostrar grupo anterior';
 $labels['firstpage'] = 'Mostrar primer grupo';
 $labels['nextpage'] = 'Mostrar grupo siguiente';
@@ -233,9 +282,12 @@ $labels['lastpage'] = 'Mostrar último grupo';
 $labels['group'] = 'Grupo';
 $labels['groups'] = 'Grupos';
 $labels['personaladrbook'] = 'Direcciones personales';
+$labels['searchsave'] = 'Guardar búsqueda';
+$labels['searchdelete'] = 'Borrar búsqueda';
 $labels['import'] = 'Importar';
 $labels['importcontacts'] = 'Importar contactos';
 $labels['importfromfile'] = 'Importar desde archivo:';
+$labels['importtarget'] = 'Añadir un nuevo contacto a la los contactos:';
 $labels['importreplace'] = 'Reemplazar toda la lista de contactos';
 $labels['importtext'] = 'Puede importar contactos desde una lista existente.<br/>Actualmente sólo soportamos el formato <a href="http://es.wikipedia.org/wiki/VCard">vCard</a>.';
 $labels['done'] = 'Hecho';
@@ -251,6 +303,8 @@ $labels['edititem'] = 'Editar';
 $labels['preferhtml'] = 'Prefiero HTML';
 $labels['defaultcharset'] = 'Juego de caracteres por defecto';
 $labels['htmlmessage'] = 'Mensaje HTML';
+$labels['dateformat'] = 'Formato de fecha';
+$labels['timeformat'] = 'Formato de hora';
 $labels['prettydate'] = 'Fecha detallada';
 $labels['setdefault'] = 'Seleccionar opción por defecto';
 $labels['autodetect'] = 'Automático';
@@ -321,6 +375,13 @@ $labels['afternseconds'] = 'después de $n segundos';
 $labels['reqmdn'] = 'Solicitar siempre un acuse de recibo';
 $labels['reqdsn'] = 'Solicitar siempre la entrega de notificaciones de estado';
 $labels['replysamefolder'] = 'Coloque las respuestas en la bandeja del mensaje que se responde';
+$labels['defaultaddressbook'] = 'Añadir nuevos contactos a la lista de contactos seleccionada';
+$labels['spellcheckbeforesend'] = 'Comprobar ortografía antes de enviar un mensaje';
+$labels['spellcheckoptions'] = 'Opciones de ortografía';
+$labels['spellcheckignoresyms'] = 'Ignorar palabras con símbolos';
+$labels['spellcheckignorenums'] = 'Ignorar palabras con números';
+$labels['spellcheckignorecaps'] = 'Ignorar palabras con todo mayúsculas';
+$labels['addtodict'] = 'Añadir al diccionario';
 $labels['folder'] = 'Bandeja';
 $labels['folders'] = 'Bandejas';
 $labels['foldername'] = 'Nombre de bandeja';
@@ -337,9 +398,14 @@ $labels['location'] = 'Ubicación';
 $labels['info'] = 'Información';
 $labels['getfoldersize'] = 'Clic para saber el tamaño de la bandeja';
 $labels['changesubscription'] = 'Clic para cambiar suscripción';
+$labels['foldertype'] = 'Tipo de bandeja';
+$labels['personalfolder'] = 'Bandeja privada';
+$labels['otherfolder'] = 'Bandeja de otro usuario';
+$labels['sharedfolder'] = 'Bandeja pública';
 $labels['sortby'] = 'Ordenar por';
 $labels['sortasc'] = 'Orden ascendente';
 $labels['sortdesc'] = 'Orden descendente';
+$labels['undo'] = 'Deshacer';
 $labels['B'] = 'B';
 $labels['KB'] = 'KB';
 $labels['MB'] = 'MB';

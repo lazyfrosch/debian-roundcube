@@ -5,7 +5,7 @@
  | rcube_shared.inc                                                      |
  |                                                                       |
  | This file is part of the Roundcube PHP suite                          |
- | Copyright (C) 2005-2007, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2007, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | CONTENTS:                                                             |
@@ -15,14 +15,14 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_shared.inc 4729 2011-05-04 18:53:11Z alec $
+ $Id: rcube_shared.inc 5715 2012-01-05 10:28:24Z alec $
 
 */
 
 
 /**
  * Roundcube shared functions
- * 
+ *
  * @package Core
  */
 
@@ -70,50 +70,6 @@ function send_future_expire_header($offset=2600000)
 
 
 /**
- * Check request for If-Modified-Since and send an according response.
- * This will terminate the current script if headers match the given values
- *
- * @param int Modified date as unix timestamp
- * @param string Etag value for caching
- */
-function send_modified_header($mdate, $etag=null, $skip_check=false)
-{
-  if (headers_sent())
-    return;
-    
-  $iscached = false;
-  $etag = $etag ? "\"$etag\"" : null;
-
-  if (!$skip_check)
-  {
-    if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= $mdate)
-      $iscached = true;
-  
-    if ($etag)
-      $iscached = ($_SERVER['HTTP_IF_NONE_MATCH'] == $etag);
-  }
-  
-  if ($iscached)
-    header("HTTP/1.x 304 Not Modified");
-  else
-    header("Last-Modified: ".gmdate("D, d M Y H:i:s", $mdate)." GMT");
-  
-  header("Cache-Control: private, must-revalidate, max-age=0");
-  header("Expires: ");
-  header("Pragma: ");
-  
-  if ($etag)
-    header("Etag: $etag");
-  
-  if ($iscached)
-    {
-    ob_end_clean();
-    exit;
-    }
-}
-
-
-/**
  * Similar function as in_array() but case-insensitive
  *
  * @param mixed Needle value
@@ -126,7 +82,7 @@ function in_array_nocase($needle, $haystack)
   foreach ($haystack as $value)
     if ($needle===mb_strtolower($value))
       return true;
-  
+
   return false;
 }
 
@@ -140,7 +96,7 @@ function in_array_nocase($needle, $haystack)
 function get_boolean($str)
 {
   $str = strtolower($str);
-  if (in_array($str, array('false', '0', 'no', 'nein', ''), TRUE))
+  if (in_array($str, array('false', '0', 'no', 'off', 'nein', ''), TRUE))
     return FALSE;
   else
     return TRUE;
@@ -180,7 +136,7 @@ function parse_bytes($str)
 
   return floatval($bytes);
 }
-    
+
 /**
  * Create a human readable string for a number of bytes
  *
@@ -189,69 +145,22 @@ function parse_bytes($str)
  */
 function show_bytes($bytes)
 {
-  if ($bytes > 1073741824)
+  if ($bytes >= 1073741824)
   {
     $gb = $bytes/1073741824;
     $str = sprintf($gb>=10 ? "%d " : "%.1f ", $gb) . rcube_label('GB');
   }
-  else if ($bytes > 1048576)
+  else if ($bytes >= 1048576)
   {
     $mb = $bytes/1048576;
     $str = sprintf($mb>=10 ? "%d " : "%.1f ", $mb) . rcube_label('MB');
   }
-  else if ($bytes > 1024)
+  else if ($bytes >= 1024)
     $str = sprintf("%d ",  round($bytes/1024)) . rcube_label('KB');
   else
     $str = sprintf('%d ', $bytes) . rcube_label('B');
 
   return $str;
-}
-
-
-/**
- * Convert paths like ../xxx to an absolute path using a base url
- *
- * @param string Relative path
- * @param string Base URL
- * @return string Absolute URL
- */
-function make_absolute_url($path, $base_url)
-{
-  $host_url = $base_url;
-  $abs_path = $path;
-  
-  // check if path is an absolute URL
-  if (preg_match('/^[fhtps]+:\/\//', $path))
-    return $path;
-
-  // cut base_url to the last directory
-  if (strrpos($base_url, '/')>7)
-  {
-    $host_url = substr($base_url, 0, strpos($base_url, '/', 7));
-    $base_url = substr($base_url, 0, strrpos($base_url, '/'));
-  }
-
-  // $path is absolute
-  if ($path[0] == '/')
-    $abs_path = $host_url.$path;
-  else
-  {
-    // strip './' because its the same as ''
-    $path = preg_replace('/^\.\//', '', $path);
-
-    if (preg_match_all('/\.\.\//', $path, $matches, PREG_SET_ORDER))
-      foreach ($matches as $a_match)
-      {
-        if (strrpos($base_url, '/'))
-          $base_url = substr($base_url, 0, strrpos($base_url, '/'));
-
-        $path = substr($path, 3);
-      }
-
-    $abs_path = $base_url.'/'.$path;
-  }
-
-  return $abs_path;
 }
 
 /**
@@ -326,7 +235,7 @@ function rc_request_header($name)
   }
 
   return $hdrs[$key];
-  }
+}
 
 
 /**
@@ -345,7 +254,7 @@ function unslashify($str)
 {
   return preg_replace('/\/$/', '', $str);
 }
-  
+
 
 /**
  * Delete all files within a folder
@@ -375,7 +284,7 @@ function clear_directory($dir_path)
  * @return int Unix timestamp
  */
 function get_offset_time($offset_str, $factor=1)
-  {
+{
   if (preg_match('/^([0-9]+)\s*([smhdw])/i', $offset_str, $regs))
   {
     $amount = (int)$regs[1];
@@ -386,7 +295,7 @@ function get_offset_time($offset_str, $factor=1)
     $amount = (int)$offset_str;
     $unit = 's';
   }
-    
+
   $ts = mktime();
   switch ($unit)
   {
@@ -419,7 +328,7 @@ function get_offset_time($offset_str, $factor=1)
 function abbreviate_string($str, $maxlength, $place_holder='...', $ending=false)
 {
   $length = mb_strlen($str);
-  
+
   if ($length > $maxlength)
   {
     if ($ending)
@@ -433,6 +342,7 @@ function abbreviate_string($str, $maxlength, $place_holder='...', $ending=false)
 
   return $str;
 }
+
 
 /**
  * A method to guess the mime_type of an attachment.
@@ -485,6 +395,25 @@ function rc_mime_content_type($path, $name, $failover = 'application/octet-strea
     return $mime_type;
 }
 
+
+/**
+ * Detect image type of the given binary data by checking magic numbers
+ *
+ * @param string  Binary file content
+ * @return string Detected mime-type or jpeg as fallback
+ */
+function rc_image_content_type($data)
+{
+    $type = 'jpeg';
+    if      (preg_match('/^\x89\x50\x4E\x47/', $data)) $type = 'png';
+    else if (preg_match('/^\x47\x49\x46\x38/', $data)) $type = 'gif';
+    else if (preg_match('/^\x00\x00\x01\x00/', $data)) $type = 'ico';
+//  else if (preg_match('/^\xFF\xD8\xFF\xE0/', $data)) $type = 'jpeg';
+
+    return 'image/' . $type;
+}
+
+
 /**
  * A method to guess encoding of a string.
  *
@@ -529,7 +458,7 @@ function rc_utf8_clean($input)
       $input[$idx] = rc_utf8_clean($val);
     return $input;
   }
-  
+
   if (!is_string($input) || $input == '')
     return $input;
 
@@ -551,7 +480,7 @@ function rc_utf8_clean($input)
     '|[\xF1-\xF3][\x80-\xBF][\x80-\xBF][\x80-\xBF]'.// UTF8-4
     '|\xF4[\x80-\x8F][\x80-\xBF][\x80-\xBF]'.       // UTF8-4
     ')$/';
-  
+
   $seq = '';
   $out = '';
 
@@ -622,7 +551,7 @@ function rcube_explode_quoted_string($delimiter, $string)
       $p = $i + 1;
     }
   }
-  
+
   $result[] = substr($string, $p);
   return $result;
 }
@@ -637,7 +566,7 @@ function rcube_explode_quoted_string($delimiter, $string)
 function array_keys_recursive($array)
 {
   $keys = array();
-  
+
   if (!empty($array))
     foreach ($array as $key => $child) {
       $keys[] = $key;

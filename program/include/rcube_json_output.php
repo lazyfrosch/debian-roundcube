@@ -5,7 +5,7 @@
  | program/include/rcube_json_output.php                                 |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2008-2010, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2008-2010, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -16,7 +16,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_json_output.php 4139 2010-10-26 13:20:34Z alec $
+ $Id: rcube_json_output.php 5227 2011-09-16 17:54:07Z thomasb $
 
 */
 
@@ -75,7 +75,11 @@ class rcube_json_output
      */
     public function set_pagetitle($title)
     {
-        $name = $this->config->get('product_name');
+        if ($this->config->get('devel_mode') && !empty($_SESSION['username']))
+            $name = $_SESSION['username'];
+        else
+            $name = $this->config->get('product_name');
+
         $this->command('set_pagetitle', empty($name) ? $title : $name.' :: '.$title);
     }
 
@@ -164,9 +168,10 @@ class rcube_json_output
      * @param string  $type     Message type [notice|confirm|error]
      * @param array   $vars     Key-value pairs to be replaced in localized text
      * @param boolean $override Override last set message
+     * @param int     $timeout  Message displaying time in seconds
      * @uses self::command()
      */
-    public function show_message($message, $type='notice', $vars=null, $override=true)
+    public function show_message($message, $type='notice', $vars=null, $override=true, $timeout=0)
     {
         if ($override || !$this->message) {
             if (rcube_label_exists($message)) {

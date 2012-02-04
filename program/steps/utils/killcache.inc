@@ -5,17 +5,17 @@
  | program/steps/utils/killcache.inc                                     |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2010, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
- |   Delete rows from cache and messages tables                          |
+ |   Delete rows from cache tables                                       |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Dennis P. Nikolaenko <dennis@nikolaenko.ru>                   |
  +-----------------------------------------------------------------------+
 
- $Id: killcache.inc 3989 2010-09-25 13:03:53Z alec $
+ $Id: killcache.inc 5578 2011-12-09 07:23:04Z alec $
 
 */
 
@@ -41,12 +41,20 @@ if (PEAR::isError($res)) {
     exit($res->getMessage());
 }
 
-$res = $RCMAIL->db->query("DELETE FROM messages");
+$res = $RCMAIL->db->query("DELETE FROM cache_messages");
+if (PEAR::isError($res)) {
+    exit($res->getMessage());
+}
+
+$res = $RCMAIL->db->query("DELETE FROM cache_index");
+if (PEAR::isError($res)) {
+    exit($res->getMessage());
+}
+
+$res = $RCMAIL->db->query("DELETE FROM cache_thread");
 if (PEAR::isError($res)) {
     exit($res->getMessage());
 }
 
 echo "Cache cleared\n";
 exit;
-
-

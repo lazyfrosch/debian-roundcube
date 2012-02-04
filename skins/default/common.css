@@ -2,9 +2,11 @@
 
 body
 {
+  font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
   margin: 8px;
   background-color: #F6F6F6;
-  color: #000000;
+  color: #000;
+  font-size: 12px;
 }
 
 body.iframe
@@ -18,10 +20,10 @@ body.extwin
   margin: 10px;
 }
 
-body, td, th, div, p, h3, select, input, textarea
+td, th, div, p, select, input, textarea
 {
-  font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
   font-size: 12px;
+  font-family: inherit;
 }
 
 th
@@ -36,13 +38,13 @@ h3
 
 a, a:active, a:visited
 {
-  color: #000000;
+  color: #000;
   outline: none;
 }
 
 a.button, a.button:visited, a.tab, a.tab:visited, a.axislist
 {
-  color: #000000;
+  color: #000;
   text-decoration: none;
 }
 
@@ -56,7 +58,7 @@ a.tab
 hr
 {
   height: 1px;
-  background-color: #666666;
+  background-color: #666;
   border-style: none;
 }
 
@@ -65,15 +67,21 @@ input[type="button"],
 input[type="password"],
 textarea
 {
-  border: 1px solid #666666;
-  color: #333333;
-  background-color: #ffffff;
+  border: 1px solid #666;
+  color: #333;
+  background-color: #FFF;
 }
 
 input, textarea
 {
   color: black;
   padding: 1px 3px;
+}
+
+input.placeholder,
+textarea.placeholder
+{
+  color: #aaa;
 }
 
 input.button
@@ -90,6 +98,13 @@ input.button
 input.button:hover
 {
   color: black;
+}
+
+input.button[disabled],
+input.button[disabled]:hover
+{
+  color: #aaa;
+  border-color: #ccc;
 }
 
 input.mainaction
@@ -112,6 +127,20 @@ img
 {
   color: #666;
   font-size: 11px;
+}
+
+.formlinks a,
+.formlinks a:visited
+{
+  color: #CC0000;
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.formlinks a.disabled,
+.formlinks a.disabled:visited
+{
+  color: #999999;
 }
 
 /** common user interface objects */
@@ -143,7 +172,7 @@ img
   height: 24px;
   width: 100%;
   background: url(images/taskbar.png) top right no-repeat;
-  padding: 10px 4px 5px 0px;
+  padding: 10px 6px 5px 0px;
   text-align: right;
   white-space: nowrap;
   z-index: 2;
@@ -203,7 +232,7 @@ img
 }
 
 #message div.notice,
-#remote-objects-message
+#message-objects div.notice
 {
   background: url(images/display/icons.png) 6px 3px no-repeat;
   background-color: #F7FDCB;
@@ -211,25 +240,35 @@ img
 }
 
 #message div.error,
-#message div.warning
+#message div.warning,
+#message-objects div.warning,
+#message-objects div.error
 {
   background: url(images/display/icons.png) 6px -97px no-repeat;
   background-color: #EF9398;
   border: 1px solid #DC5757;
 }
 
-#message div.confirmation
+#message div.confirmation,
+#message-objects div.confirmation
 {
   background: url(images/display/icons.png) 6px -47px no-repeat;
   background-color: #A6EF7B;
   border: 1px solid #76C83F;
 }
 
-#message div.loading
+#message div.loading,
+#message-objects div.loading
 {
   background: url(images/display/loading.gif) 6px 3px no-repeat;
   background-color: #EBEBEB;
   border: 1px solid #CCCCCC;
+}
+
+#message a
+{
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .box
@@ -246,6 +285,9 @@ img
   font-size: 11px;
   font-weight: bold;
   overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  white-space: nowrap;
   background: url(images/listheader.gif) top left repeat-x #CCC;
 }
 
@@ -470,6 +512,11 @@ body.iframe .boxtitle
   background-color: #c00;
 }
 
+.popupmenu li.block input
+{
+  float: left;
+}
+
 .darkbg
 {
   background-color: #F2F2F2 !important;
@@ -553,8 +600,8 @@ table.records-table tr.unfocused td
 {
   position: absolute;
   top: 55px;
-  right: 20px;
-  width: 182px;
+  right: 30px;
+  width: 190px;
   height: 20px;
   text-align: right;
   background: url(images/searchfield.gif) top left no-repeat;
@@ -564,7 +611,7 @@ table.records-table tr.unfocused td
 {
   position: absolute;
   top: 3px;
-  right: 4px;
+  right: 12px;
   text-decoration: none;
 }
 
@@ -572,7 +619,7 @@ table.records-table tr.unfocused td
 {
  position: absolute;
  top: 3px;
- right: 160px;
+ right: 168px;
 }
 
 #quicksearchbar img
@@ -591,7 +638,6 @@ table.records-table tr.unfocused td
   padding: 0px;
   border: none;
 }
-
 
 /***** roundcube webmail pre-defined classes *****/
 
@@ -701,7 +747,7 @@ a.rcmContactAddress:hover
   margin: auto;
 }
 
-#rcmloginuser, #rcmloginpwd, #rcmloginhost
+#login-form table td.input input
 {
   width: 200px;
 }
@@ -788,6 +834,21 @@ ul.toolbarmenu li.separator_above
   border-top: 1px solid #ccc;
   margin-top: 2px;
   padding-top: 2px;
+}
+
+#searchmenu
+{
+  width: 160px;
+}
+
+#searchmenu ul.toolbarmenu
+{
+  margin: 0;
+}
+
+#searchmenu ul.toolbarmenu li
+{
+  margin: 1px 4px 1px;
 }
 
 
@@ -882,9 +943,9 @@ fieldset.tabbed
   cursor: default;
 }
 .quota_bg { background-color: white; }
-.quota_high { background-color: #F33131; }
-.quota_mid { background-color: #F5AD3C; }
-.quota_low { background-color: #91E164; }
+.quota_high { background: url(images/quota-colors.png) repeat-x 0 -28px #f90509; }
+.quota_mid { background: url(images/quota-colors.png) repeat-x 0 -14px #e3e909; }
+.quota_low { background: url(images/quota-colors.png) repeat-x 0 0px #05f905; }
 .quota_text_high { color: white; }
 .quota_text_mid { color: #666; }
 .quota_text_low { color: #666; }

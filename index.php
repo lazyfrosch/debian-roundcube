@@ -2,9 +2,9 @@
 /*
  +-------------------------------------------------------------------------+
  | Roundcube Webmail IMAP Client                                           |
- | Version 0.5.3                                                           |
+ | Version 0.7.1                                                           |
  |                                                                         |
- | Copyright (C) 2005-2011, Roundcube Dev. - Switzerland                   |
+ | Copyright (C) 2005-2011, The Roundcube Dev Team                         |
  |                                                                         |
  | This program is free software; you can redistribute it and/or modify    |
  | it under the terms of the GNU General Public License version 2          |
@@ -23,7 +23,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                          |
  +-------------------------------------------------------------------------+
 
- $Id: index.php 4831 2011-06-02 13:36:57Z thomasb $
+ $Id: index.php 5738 2012-01-06 16:01:53Z thomasb $
 
 */
 
@@ -32,6 +32,9 @@ require_once 'program/include/iniset.php';
 
 // init application, start session, init output class, etc.
 $RCMAIL = rcmail::get_instance();
+
+// Make the whole PHP output non-cacheable (#1487797)
+send_nocacheing_headers();
 
 // turn on output buffering
 ob_start();
@@ -103,7 +106,7 @@ if ($RCMAIL->task == 'login' && $RCMAIL->action == 'login') {
     $RCMAIL->session->regenerate_id(false);
 
     // send auth cookie if necessary
-    $RCMAIL->authenticate_session();
+    $RCMAIL->session->set_auth_cookie();
 
     // log successful login
     rcmail_log_login();
@@ -120,7 +123,7 @@ if ($RCMAIL->task == 'login' && $RCMAIL->action == 'login') {
 
     // allow plugins to control the redirect url after login success
     $redir = $RCMAIL->plugins->exec_hook('login_after', $query + array('_task' => 'mail'));
-    unset($redir['abort']);
+    unset($redir['abort'], $redir['_err']);
 
     // send redirect
     $OUTPUT->redirect($redir);
@@ -146,19 +149,25 @@ else if ($RCMAIL->task == 'logout' && isset($_SESSION['user_id']) && (!$RCMAIL->
 
 // check session and auth cookie
 else if ($RCMAIL->task != 'login' && $_SESSION['user_id'] && $RCMAIL->action != 'send') {
-  if (!$RCMAIL->authenticate_session()) {
-    $OUTPUT->show_message('sessionerror', 'error');
+  if (!$RCMAIL->session->check_auth()) {
     $RCMAIL->kill_session();
+    $session_error = true;
   }
 }
 
 // not logged in -> show login page
 if (empty($RCMAIL->user->ID)) {
+  // log session failures
+  if (($task = get_input_value('_task', RCUBE_INPUT_GPC)) && !in_array($task, array('login','logout')) && !$session_error && ($sess_id = $_COOKIE[ini_get('session.name')])) {
+    $RCMAIL->session->log("Aborted session " . $sess_id . "; no valid session data found");
+    $session_error = true;
+  }
+
   if ($OUTPUT->ajax_call)
-    $OUTPUT->redirect(array(), 2000);
+    $OUTPUT->redirect(array('_err' => 'session'), 2000);
 
   if (!empty($_REQUEST['_framed']))
-    $OUTPUT->command('redirect', '?');
+    $OUTPUT->command('redirect', $RCMAIL->url(array('_err' => 'session')));
 
   // check if installer is still active
   if ($RCMAIL->config->get('enable_installer') && is_readable('./installer/index.php')) {
@@ -172,6 +181,9 @@ if (empty($RCMAIL->user->ID)) {
     );
   }
 
+  if ($session_error || $_REQUEST['_err'] == 'session')
+    $OUTPUT->show_message('sessionerror', 'error', null, true, -1);
+
   $RCMAIL->set_task('login');
   $OUTPUT->send('login');
 }
@@ -183,7 +195,7 @@ else {
   // check client X-header to verify request origin
   if ($OUTPUT->ajax_call) {
     if (rc_request_header('X-Roundcube-Request') != $RCMAIL->get_request_token() && !$RCMAIL->config->get('devel_mode')) {
-      header('HTTP/1.1 404 Not Found');
+      header('HTTP/1.1 403 Forbidden');
       die("Invalid Request");
     }
   }
@@ -202,65 +214,33 @@ else {
   }
 }
 
+// we're ready, user is authenticated and the request is safe
+$plugin = $RCMAIL->plugins->exec_hook('ready', array('task' => $RCMAIL->task, 'action' => $RCMAIL->action));
+$RCMAIL->set_task($plugin['task']);
+$RCMAIL->action = $plugin['action'];
+
+
 // handle special actions
 if ($RCMAIL->action == 'keep-alive') {
   $OUTPUT->reset();
+  $RCMAIL->plugins->exec_hook('keep_alive', array());
   $OUTPUT->send();
 }
 else if ($RCMAIL->action == 'save-pref') {
-  include 'steps/utils/save_pref.inc';
+  include INSTALL_PATH . 'program/steps/utils/save_pref.inc';
 }
 
 
-// map task/action to a certain include file
-$action_map = array(
-  'mail' => array(
-    'preview' => 'show.inc',
-    'print'   => 'show.inc',
-    'moveto'  => 'move_del.inc',
-    'delete'  => 'move_del.inc',
-    'send'    => 'sendmail.inc',
-    'expunge' => 'folders.inc',
-    'purge'   => 'folders.inc',
-    'remove-attachment'  => 'attachments.inc',
-    'display-attachment' => 'attachments.inc',
-    'upload' => 'attachments.inc',
-    'group-expand' => 'autocomplete.inc',
-  ),
-  
-  'addressbook' => array(
-    'add' => 'edit.inc',
-    'group-create' => 'groups.inc',
-    'group-rename' => 'groups.inc',
-    'group-delete' => 'groups.inc',
-    'group-addmembers' => 'groups.inc',
-    'group-delmembers' => 'groups.inc',
-  ),
-
-  'settings' => array(
-    'folders'       => 'folders.inc',
-    'rename-folder' => 'folders.inc',
-    'delete-folder' => 'folders.inc',
-    'subscribe'     => 'folders.inc',
-    'unsubscribe'   => 'folders.inc',
-    'purge'         => 'folders.inc',
-    'folder-size'   => 'folders.inc',
-    'add-identity'  => 'edit_identity.inc',
-  )
-);
-
 // include task specific functions
-if (is_file($incfile = 'program/steps/'.$RCMAIL->task.'/func.inc'))
-  include_once($incfile);
+if (is_file($incfile = INSTALL_PATH . 'program/steps/'.$RCMAIL->task.'/func.inc'))
+  include_once $incfile;
 
 // allow 5 "redirects" to another action
 $redirects = 0; $incstep = null;
 while ($redirects < 5) {
-  $stepfile = !empty($action_map[$RCMAIL->task][$RCMAIL->action]) ?
-    $action_map[$RCMAIL->task][$RCMAIL->action] : strtr($RCMAIL->action, '-', '_') . '.inc';
-    
   // execute a plugin action
   if ($RCMAIL->plugins->is_plugin_task($RCMAIL->task)) {
+    if (!$RCMAIL->action) $RCMAIL->action = 'index';
     $RCMAIL->plugins->exec_action($RCMAIL->task.'.'.$RCMAIL->action);
     break;
   }
@@ -269,8 +249,10 @@ while ($redirects < 5) {
     break;
   }
   // try to include the step file
-  else if (is_file($incfile = 'program/steps/'.$RCMAIL->task.'/'.$stepfile)) {
-    include($incfile);
+  else if (($stepfile = $RCMAIL->get_action_file())
+    && is_file($incfile = INSTALL_PATH . 'program/steps/'.$RCMAIL->task.'/'.$stepfile)
+  ) {
+    include $incfile;
     $redirects++;
   }
   else {

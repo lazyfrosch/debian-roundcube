@@ -5,7 +5,7 @@
  | program/steps/mail/move_del.inc                                       |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2009, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: move_del.inc 4321 2010-12-08 12:52:04Z alec $
+ $Id: move_del.inc 5266 2011-09-22 07:49:33Z alec $
 
 */
 
@@ -116,12 +116,12 @@ else
     rcmail_set_unseen_count($mbox, $unseen_count);
   }
 
-  if ($RCMAIL->action=='moveto' && strlen($target)) {
+  if ($RCMAIL->action == 'moveto' && strlen($target)) {
     rcmail_send_unread_count($target, true);
   }
 
   $OUTPUT->command('set_quota', rcmail_quota_content());
-  $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($msg_count));
+  $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($msg_count), $mbox);
 
   if ($IMAP->threading)
     $count = get_input_value('_count', RCUBE_INPUT_POST);

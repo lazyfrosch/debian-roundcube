@@ -200,7 +200,7 @@ function substitute_vars($str)
  *
  */
 
-function hashPassword( $passwordClear, $encodageType ) 
+function hashPassword( $passwordClear, $encodageType )
 {
     $encodageType = strtolower( $encodageType );
     switch( $encodageType ) {
@@ -271,7 +271,8 @@ function hashPassword( $passwordClear, $encodageType )
 
         case 'samba':
             if (function_exists('hash')) {
-                $cryptedPassword = hash('md4', rcube_charset_convert($password_clear, RCMAIL_CHARSET, 'UTF-16LE'));
+                $cryptedPassword = hash('md4', rcube_charset_convert($passwordClear, RCMAIL_CHARSET, 'UTF-16LE'));
+                $cryptedPassword = strtoupper($cryptedPassword);
             } else {
 				/* Your PHP install does not have the hash() function */
 				return false;

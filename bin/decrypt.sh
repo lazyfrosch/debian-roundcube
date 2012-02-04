@@ -6,7 +6,7 @@
  | bin/decrypt.sh                                                        |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2009, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -16,7 +16,7 @@
  | Author: Tomas Tevesz <ice@extreme.hu>                                 |
  +-----------------------------------------------------------------------+
 
- $Id: decrypt.sh 3989 2010-09-25 13:03:53Z alec $
+ $Id: decrypt.sh 4677 2011-04-20 13:10:45Z alec $
 */
 
 /*-
@@ -52,12 +52,9 @@
  *  - you are dealing with counterfeit header data.
  */
 
-if (php_sapi_name() != 'cli') {
-	die("Not on the 'shell' (php-cli).\n");
-}
-
 define('INSTALL_PATH', realpath(dirname(__FILE__).'/..') . '/');
-require INSTALL_PATH . 'program/include/iniset.php';
+
+require INSTALL_PATH . 'program/include/clisetup.php';
 
 if ($argc < 2) {
 	die("Usage: " . basename($argv[0]) . " encrypted-hdr-part [encrypted-hdr-part ...]\n");

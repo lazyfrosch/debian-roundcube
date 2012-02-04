@@ -5,7 +5,7 @@
  | rcube_install.php                                                     |
  |                                                                       |
  | This file is part of the Roundcube Webmail package                    |
- | Copyright (C) 2008-2009, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2008-2011, The Roundcube Dev Team                       |
  | Licensed under the GNU Public License                                 |
  +-----------------------------------------------------------------------+
 
@@ -29,10 +29,11 @@ class rcube_install
   var $config = array();
   var $configured = false;
   var $last_error = null;
+  var $db_map = array('pgsql' => 'postgres', 'mysqli' => 'mysql', 'sqlsrv' => 'mssql');
   var $email_pattern = '([a-z0-9][a-z0-9\-\.\+\_]*@[a-z0-9]([a-z0-9\-][.]?)*[a-z0-9])';
   var $bool_config_props = array();
 
-  var $obsolete_config = array('db_backend');
+  var $obsolete_config = array('db_backend', 'double_auth');
   var $replaced_config = array(
     'skin_path' => 'skin',
     'locale_string' => 'language',
@@ -42,7 +43,10 @@ class rcube_install
   );
   
   // these config options are required for a working system
-  var $required_config = array('db_dsnw', 'db_table_contactgroups', 'db_table_contactgroupmembers', 'des_key');
+  var $required_config = array(
+    'db_dsnw', 'db_table_contactgroups', 'db_table_contactgroupmembers',
+    'des_key', 'session_lifetime',
+  );
   
   /**
    * Constructor
@@ -91,14 +95,15 @@ class rcube_install
    */
   function _load_config($suffix)
   {
-    @include RCMAIL_CONFIG_DIR . '/main.inc' . $suffix;
-    if (is_array($rcmail_config)) {
-      $this->config += $rcmail_config;
+    if (is_readable($main_inc = RCMAIL_CONFIG_DIR . '/main.inc' . $suffix)) {
+      include($main_inc);
+      if (is_array($rcmail_config))
+        $this->config += $rcmail_config;
     }
-      
-    @include RCMAIL_CONFIG_DIR . '/db.inc'. $suffix;
-    if (is_array($rcmail_config)) {
-      $this->config += $rcmail_config;
+    if (is_readable($db_inc = RCMAIL_CONFIG_DIR . '/db.inc'. $suffix)) {
+      include($db_inc);
+      if (is_array($rcmail_config))
+        $this->config += $rcmail_config;
     }
   }
   
@@ -119,8 +124,8 @@ class rcube_install
     
     return $value !== null && $value !== '' ? $value : $default;
   }
-  
-  
+
+
   /**
    * Take the default config file and replace the parameters
    * with the submitted form data
@@ -131,25 +136,28 @@ class rcube_install
   function create_config($which, $force = false)
   {
     $out = @file_get_contents(RCMAIL_CONFIG_DIR . "/{$which}.inc.php.dist");
-    
+
     if (!$out)
       return '[Warning: could not read the config template file]';
 
     foreach ($this->config as $prop => $default) {
-      $value = (isset($_POST["_$prop"]) || $this->bool_config_props[$prop]) ? $_POST["_$prop"] : $default;
-      
+
+      $is_default = !isset($_POST["_$prop"]);
+      $value      = !$is_default || $this->bool_config_props[$prop] ? $_POST["_$prop"] : $default;
+
       // convert some form data
-      if ($prop == 'debug_level') {
-        $val = 0;
-        if (is_array($value))
+      if ($prop == 'debug_level' && !$is_default) {
+        if (is_array($value)) {
+          $val = 0;
           foreach ($value as $dbgval)
             $val += intval($dbgval);
-        $value = $val;
+          $value = $val;
+        }
       }
       else if ($which == 'db' && $prop == 'db_dsnw' && !empty($_POST['_dbtype'])) {
         if ($_POST['_dbtype'] == 'sqlite')
           $value = sprintf('%s://%s?mode=0646', $_POST['_dbtype'], $_POST['_dbname']{0} == '/' ? '/' . $_POST['_dbname'] : $_POST['_dbname']);
-        else
+        else if ($_POST['_dbtype'])
           $value = sprintf('%s://%s:%s@%s/%s', $_POST['_dbtype'], 
             rawurlencode($_POST['_dbuser']), rawurlencode($_POST['_dbpass']), $_POST['_dbhost'], $_POST['_dbname']);
       }
@@ -171,9 +179,9 @@ class rcube_install
         $value = '%p';
       }
       else if ($prop == 'default_imap_folders') {
-	    $value = Array();
+	    $value = array();
 	    foreach ($this->config['default_imap_folders'] as $_folder) {
-	      switch($_folder) {
+	      switch ($_folder) {
 	      case 'Drafts': $_folder = $this->config['drafts_mbox']; break;
 	      case 'Sent':   $_folder = $this->config['sent_mbox']; break;
 	      case 'Junk':   $_folder = $this->config['junk_mbox']; break;
@@ -189,9 +197,9 @@ class rcube_install
       else if (is_numeric($value)) {
         $value = intval($value);
       }
-      
+
       // skip this property
-      if (!$force && ($value == $default))
+      if (!$force && !$this->configured && ($value == $default))
         continue;
 
       // save change
@@ -200,7 +208,7 @@ class rcube_install
       // replace the matching line in config file
       $out = preg_replace(
         '/(\$rcmail_config\[\''.preg_quote($prop).'\'\])\s+=\s+(.+);/Uie',
-        "'\\1 = ' . rcube_install::_dump_var(\$value) . ';'",
+        "'\\1 = ' . rcube_install::_dump_var(\$value, \$prop) . ';'",
         $out);
     }
 
@@ -293,8 +301,8 @@ class rcube_install
     $current = $this->config;
     $this->config = array();
     $this->load_defaults();
-    
-    foreach ($this->replaced_config as $prop => $replacement)
+
+    foreach ($this->replaced_config as $prop => $replacement) {
       if (isset($current[$prop])) {
         if ($prop == 'skin_path')
           $this->config[$replacement] = preg_replace('#skins/(\w+)/?$#', '\\1', $current[$prop]);
@@ -302,8 +310,8 @@ class rcube_install
           $this->config[$replacement] = $current[$prop] ? 2 : 0;
         else
           $this->config[$replacement] = $current[$prop];
-        
-        unset($current[$prop]);
+      }
+      unset($current[$prop]);
     }
     
     foreach ($this->obsolete_config as $prop) {
@@ -320,8 +328,11 @@ class rcube_install
       }
     }
     
+    if ($current['keep_alive'] && $current['session_lifetime'] < $current['keep_alive'])
+      $current['session_lifetime'] = max(10, ceil($current['keep_alive'] / 60) * 2);
+
     $this->config  = array_merge($this->config, $current);
-    
+
     foreach ((array)$current['ldap_public'] as $key => $values) {
       $this->config['ldap_public'][$key] = $current['ldap_public'][$key];
     }
@@ -339,18 +350,8 @@ class rcube_install
     if (!$this->configured)
       return false;
     
-    // simple ad hand-made db schema
-    $db_schema = array(
-      'users' => array(),
-      'identities' => array(),
-      'contacts' => array(),
-      'contactgroups' => array(),
-      'contactgroupmembers' => array(),
-      'cache' => array(),
-      'messages' => array(),
-      'session' => array(),
-    );
-    
+    // read reference schema from mysql.initial.sql
+    $db_schema = $this->db_read_schema(INSTALL_PATH . 'SQL/mysql.initial.sql');
     $errors = array();
     
     // check list of tables
@@ -358,13 +359,43 @@ class rcube_install
 
     foreach ($db_schema as $table => $cols) {
       $table = !empty($this->config['db_table_'.$table]) ? $this->config['db_table_'.$table] : $table;
-      if (!in_array($table, $existing_tables))
-        $errors[] = "Missing table ".$table;
-      // TODO: check cols and indices
+      if (!in_array($table, $existing_tables)) {
+        $errors[] = "Missing table '".$table."'";
+      }
+      else {  // compare cols
+        $db_cols = $DB->list_cols($table);
+        $diff = array_diff(array_keys($cols), $db_cols);
+        if (!empty($diff))
+          $errors[] = "Missing columns in table '$table': " . join(',', $diff);
+      }
     }
     
     return !empty($errors) ? $errors : false;
   }
+
+  /**
+   * Utility function to read database schema from an .sql file
+   */
+  private function db_read_schema($schemafile)
+  {
+    $lines = file($schemafile);
+    $table_block = false;
+    $schema = array();
+    foreach ($lines as $line) {
+      if (preg_match('/^\s*create table `?([a-z0-9_]+)`?/i', $line, $m)) {
+        $table_block = $m[1];
+      }
+      else if ($table_block && preg_match('/^\s*`?([a-z0-9_-]+)`?\s+([a-z]+)/', $line, $m)) {
+        $col = $m[1];
+        if (!in_array(strtoupper($col), array('PRIMARY','KEY','INDEX','UNIQUE','CONSTRAINT','REFERENCES','FOREIGN'))) {
+          $schema[$table_block][$col] = $m[2];
+        }
+      }
+    }
+    
+    return $schema;
+  }
+  
   
   /**
    * Compare the local database schema with the reference schema
@@ -473,7 +504,39 @@ class rcube_install
     
     return $out;
   }
-  
+
+  /**
+   * Create a HTML dropdown to select a previous version of Roundcube
+   */
+  function versions_select($attrib = array())
+  {
+    $select = new html_select($attrib);
+    $select->add(array(
+        '0.1-stable', '0.1.1',
+        '0.2-alpha', '0.2-beta', '0.2-stable',
+        '0.3-stable', '0.3.1',
+        '0.4-beta', '0.4.2',
+        '0.5-beta', '0.5', '0.5.1',
+        '0.6-beta', '0.6',
+        '0.7-beta', '0.7',
+    ));
+    return $select;
+  }
+
+  /**
+   * Return a list with available subfolders of the skin directory
+   */
+  function list_skins()
+  {
+    $skins = array();
+    $skindir = INSTALL_PATH . 'skins/';
+    foreach (glob($skindir . '*') as $path) {
+      if (is_dir($path) && is_readable($path)) {
+        $skins[] = substr($path, strlen($skindir));
+      }
+    }
+    return $skins;
+  }
   
   /**
    * Display OK status
@@ -561,7 +624,22 @@ class rcube_install
   }
   
   
-  static function _dump_var($var) {
+  static function _dump_var($var, $name=null) {
+    // special values
+    switch ($name) {
+    case 'syslog_facility':
+      $list = array(32 => 'LOG_AUTH', 80 => 'LOG_AUTHPRIV', 72 => ' LOG_CRON',
+                    24 => 'LOG_DAEMON', 0 => 'LOG_KERN', 128 => 'LOG_LOCAL0',
+                    136 => 'LOG_LOCAL1', 144 => 'LOG_LOCAL2', 152 => 'LOG_LOCAL3',
+                    160 => 'LOG_LOCAL4', 168 => 'LOG_LOCAL5', 176 => 'LOG_LOCAL6',
+                    184 => 'LOG_LOCAL7', 48 => 'LOG_LPR', 16 => 'LOG_MAIL',
+                    56 => 'LOG_NEWS', 40 => 'LOG_SYSLOG', 8 => 'LOG_USER', 64 => 'LOG_UUCP');
+      if ($val = $list[$var])
+        return $val;
+      break;
+    }
+
+
     if (is_array($var)) {
       if (empty($var)) {
         return 'array()';
@@ -592,25 +670,12 @@ class rcube_install
    */
   function init_db($DB)
   {
-    $db_map = array('pgsql' => 'postgres', 'mysqli' => 'mysql');
-    $engine = isset($db_map[$DB->db_provider]) ? $db_map[$DB->db_provider] : $DB->db_provider;
+    $engine = isset($this->db_map[$DB->db_provider]) ? $this->db_map[$DB->db_provider] : $DB->db_provider;
     
     // read schema file from /SQL/*
-    $fname = "../SQL/$engine.initial.sql";
-    if ($lines = @file($fname, FILE_SKIP_EMPTY_LINES)) {
-      $buff = '';
-      foreach ($lines as $i => $line) {
-        if (preg_match('/^--/', $line))
-          continue;
-          
-        $buff .= $line . "\n";
-        if (preg_match('/;$/', trim($line))) {
-          $DB->query($buff);
-          $buff = '';
-          if ($this->get_error())
-            break;
-        }
-      }
+    $fname = INSTALL_PATH . "SQL/$engine.initial.sql";
+    if ($sql = @file_get_contents($fname)) {
+      $this->exec_sql($sql, $DB);
     }
     else {
       $this->fail('DB Schema', "Cannot read the schema file: $fname");
@@ -624,6 +689,78 @@ class rcube_install
 
     return true;
   }
+  
+  
+  /**
+   * Update database with SQL statements from SQL/*.update.sql
+   *
+   * @param object rcube_db Database connection
+   * @param string Version to update from
+   * @return boolen True on success, False on error
+   */
+  function update_db($DB, $version)
+  {
+    $version = strtolower($version);
+    $engine = isset($this->db_map[$DB->db_provider]) ? $this->db_map[$DB->db_provider] : $DB->db_provider;
+    
+    // read schema file from /SQL/*
+    $fname = INSTALL_PATH . "SQL/$engine.update.sql";
+    if ($lines = @file($fname, FILE_SKIP_EMPTY_LINES)) {
+      $from = false; $sql = '';
+      foreach ($lines as $line) {
+        $is_comment = preg_match('/^--/', $line);
+        if (!$from && $is_comment && preg_match('/from version\s([0-9.]+[a-z-]*)/', $line, $m)) {
+          $v = strtolower($m[1]);
+          if ($v == $version || version_compare($version, $v, '<='))
+            $from = true;
+        }
+        if ($from && !$is_comment)
+          $sql .= $line. "\n";
+      }
+      
+      if ($sql)
+        $this->exec_sql($sql, $DB);
+    }
+    else {
+      $this->fail('DB Schema', "Cannot read the update file: $fname");
+      return false;
+    }
+    
+    if ($err = $this->get_error()) {
+      $this->fail('DB Schema', "Error updating database: $err");
+      return false;
+    }
+
+    return true;
+  }
+  
+  
+  /**
+   * Execute the given SQL queries on the database connection
+   *
+   * @param string SQL queries to execute
+   * @param object rcube_db Database connection
+   * @return boolen True on success, False on error
+   */
+  function exec_sql($sql, $DB)
+  {
+    $buff = '';
+    foreach (explode("\n", $sql) as $line) {
+      if (preg_match('/^--/', $line) || trim($line) == '')
+        continue;
+        
+      $buff .= $line . "\n";
+      if (preg_match('/(;|^GO)$/', trim($line))) {
+        $DB->query($buff);
+        $buff = '';
+        if ($DB->is_error())
+          break;
+      }
+    }
+    
+    return !$DB->is_error();
+  }
+  
   
   /**
    * Handler for Roundcube errors

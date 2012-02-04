@@ -6,7 +6,7 @@
 | language/ru_RU/labels.inc                                             |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -15,7 +15,7 @@
 | Support: www.roundcube.ru                                             |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4469 2011-01-29 14:55:12Z thomasb $
+@version $Id: labels.inc 5290 2011-09-28 17:09:50Z thomasb $
 
 */
 
@@ -102,18 +102,16 @@ $labels['replytomessage'] = 'Ответить';
 $labels['replytoallmessage'] = 'Ответить по списку или отправителю и всем получателям';
 $labels['replyall'] = 'Ответить всем';
 $labels['replylist'] = 'Ответить в список рассылки';
+$labels['forwardinline'] = 'Переслать в теле письма';
+$labels['forwardattachment'] = 'Переслать как вложение';
 $labels['forwardmessage'] = 'Переслать';
 $labels['deletemessage'] = 'В корзину';
 $labels['movemessagetotrash'] = 'Переместить сообщение в корзину';
 $labels['printmessage'] = 'Печать';
 $labels['previousmessage'] = 'Показать предыдущее сообщение';
-$labels['previousmessages'] = 'Предыдущее';
 $labels['firstmessage'] = 'Показать первое сообщение';
-$labels['firstmessages'] = 'Первое сообщение';
 $labels['nextmessage'] = 'Показать следующее сообщение';
-$labels['nextmessages'] = 'Следующее';
 $labels['lastmessage'] = 'Показать последнее сообщение';
-$labels['lastmessages'] = 'Последнее сообщение';
 $labels['backtolist'] = 'К списку сообщений';
 $labels['viewsource'] = 'Исходный текст';
 $labels['markmessages'] = 'Пометить сообщение';
@@ -174,12 +172,15 @@ $labels['charset'] = 'Кодировка';
 $labels['editortype'] = 'Редактор';
 $labels['returnreceipt'] = 'Запрос ответа';
 $labels['dsn'] = 'Уведомление о состоянии доставки';
+$labels['mailreplyintro'] = '$sender писал $date:';
+$labels['originalmessage'] = 'Исходное сообщение';
 $labels['editidents'] = 'Изменить данные';
 $labels['checkspelling'] = 'Проверить орфографию';
 $labels['resumeediting'] = 'Продолжить редактирование';
 $labels['revertto'] = 'Отменить правки';
 $labels['attachments'] = 'Вложения';
 $labels['upload'] = 'Загрузить';
+$labels['uploadprogress'] = '$percent ($current из $total)';
 $labels['close'] = 'Закрыть';
 $labels['messageoptions'] = 'Настройки сообщений...';
 $labels['low'] = 'Низкий';
@@ -232,6 +233,24 @@ $labels['female'] = 'женский';
 $labels['manager'] = 'Менеджер';
 $labels['assistant'] = 'Помощник';
 $labels['spouse'] = 'Супруг';
+$labels['allfields'] = 'Все поля';
+$labels['search'] = 'Поиск';
+$labels['advsearch'] = 'Расширенный поиск';
+$labels['other'] = 'Прочие';
+$labels['typehome'] = 'Дом';
+$labels['typework'] = 'Работа';
+$labels['typeother'] = 'Другое';
+$labels['typemobile'] = 'Мобильный';
+$labels['typemain'] = 'Основной';
+$labels['typehomefax'] = 'Домашний факс';
+$labels['typeworkfax'] = 'Рабочий факс';
+$labels['typecar'] = 'Автомобиль';
+$labels['typepager'] = 'Пэйджер';
+$labels['typevideo'] = 'Видео';
+$labels['typeassistant'] = 'Помощник';
+$labels['typehomepage'] = 'Домашняя страница';
+$labels['typeblog'] = 'Блог';
+$labels['typeprofile'] = 'Профиль';
 $labels['addfield'] = 'Добавить поле...';
 $labels['addcontact'] = 'Добавить выбранные контакты в список контактов';
 $labels['editcontact'] = 'Редактировать контакт';
@@ -254,6 +273,8 @@ $labels['export'] = 'Экспорт';
 $labels['exportvcards'] = 'Экспортировать контакты в формате vCard';
 $labels['newcontactgroup'] = 'Создать группу контактов';
 $labels['groupactions'] = 'Действия для групп контактов';
+$labels['grouprename'] = 'Переименовать группу';
+$labels['groupdelete'] = 'Удалить группу';
 $labels['previouspage'] = 'Показать предыдущий';
 $labels['firstpage'] = 'Показать первый';
 $labels['nextpage'] = 'Показать следующий';
@@ -264,6 +285,7 @@ $labels['personaladrbook'] = 'Персональные адреса';
 $labels['import'] = 'Импортировать';
 $labels['importcontacts'] = 'Импортировать контакты';
 $labels['importfromfile'] = 'Импортировать из файла:';
+$labels['importtarget'] = 'Добавить новые контакты в адресную книгу:';
 $labels['importreplace'] = 'Заменить всю адресную книгу';
 $labels['importtext'] = 'Вы можете загрузить контакты из существующей адресной книги. На данный момент поддерживается загрузка в формате vCard.';
 $labels['done'] = 'Завершено';
@@ -349,6 +371,8 @@ $labels['afternseconds'] = 'через $n секунд';
 $labels['reqmdn'] = 'Всегда запрашивать уведомление о доставке';
 $labels['reqdsn'] = 'Всегда запрашивать уведомление о состоянии доставки';
 $labels['replysamefolder'] = 'Помещать ответы в ту же папку, где находится оригинал';
+$labels['defaultaddressbook'] = 'Добавить новые контакты в выбранную адресную книгу';
+$labels['spellcheckbeforesend'] = 'Проверять орфографию перед отправкой';
 $labels['folder'] = 'Папка';
 $labels['folders'] = 'Папки';
 $labels['foldername'] = 'Имя папки';
@@ -365,9 +389,14 @@ $labels['location'] = 'Расположение';
 $labels['info'] = 'Информация';
 $labels['getfoldersize'] = 'Показать размер папки';
 $labels['changesubscription'] = 'Изменить подписку';
+$labels['foldertype'] = 'Тип каталога';
+$labels['personalfolder'] = 'Приватный каталог';
+$labels['otherfolder'] = 'Каталог другого пользователя';
+$labels['sharedfolder'] = 'Совместный каталог';
 $labels['sortby'] = 'Сортировать по';
 $labels['sortasc'] = 'Возрастанию';
 $labels['sortdesc'] = 'Убыванию';
+$labels['undo'] = 'Отмена';
 $labels['B'] = 'Б';
 $labels['KB'] = 'КБ';
 $labels['MB'] = 'МБ';

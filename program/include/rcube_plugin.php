@@ -5,7 +5,7 @@
  | program/include/rcube_plugin.php                                      |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2008-2009, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2008-2009, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_plugin.php 4363 2010-12-22 19:17:47Z alec $
+ $Id: rcube_plugin.php 5168 2011-09-05 11:08:48Z alec $
 
 */
 
@@ -83,7 +83,20 @@ abstract class rcube_plugin
    * Initialization method, needs to be implemented by the plugin itself
    */
   abstract function init();
-  
+
+
+  /**
+   * Attempt to load the given plugin which is required for the current plugin
+   *
+   * @param string Plugin name
+   * @return boolean True on success, false on failure
+   */
+  public function require_plugin($plugin_name)
+  {
+    return $this->api->load_plugin($plugin_name);
+  }
+
+
   /**
    * Load local config file from plugins directory.
    * The loaded values are patched over the global configuration.
@@ -134,8 +147,11 @@ abstract class rcube_plugin
     ob_start();
 
     foreach (array('en_US', $lang) as $lng) {
-      @include($locdir . $lng . '.inc');
-      $texts = (array)$labels + (array)$messages + (array)$texts;
+      $fpath = $locdir . $lng . '.inc';
+      if (is_file($fpath) && is_readable($fpath)) {
+        include($fpath);
+        $texts = (array)$labels + (array)$messages + (array)$texts;
+      }
     }
 
     ob_end_clean();
@@ -270,14 +286,14 @@ abstract class rcube_plugin
     else
       return $fn;
   }
-  
+
   /**
    * Provide path to the currently selected skin folder within the plugin directory
    * with a fallback to the default skin folder.
    *
    * @return string Skin path relative to plugins directory
    */
-  protected function local_skin_path()
+  public function local_skin_path()
   {
       $skin_path = 'skins/'.$this->api->config->get('skin');
       if (!is_dir(realpath(slashify($this->home) . $skin_path)))

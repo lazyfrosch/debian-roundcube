@@ -5,7 +5,7 @@
  | program/include/iniset.php                                            |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2008-2009, Roundcube Dev, - Switzerland                 |
+ | Copyright (C) 2008-2011, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -16,7 +16,7 @@
  |         Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: iniset.php 4831 2011-06-02 13:36:57Z thomasb $
+ $Id: iniset.php 5738 2012-01-06 16:01:53Z thomasb $
 
 */
 
@@ -28,6 +28,7 @@ $crit_opts = array(
     'suhosin.session.encrypt' => 0,
     'session.auto_start' => 0,
     'file_uploads' => 1,
+    'magic_quotes_runtime' => 0,
 );
 foreach ($crit_opts as $optname => $optval) {
     if ($optval != ini_get($optname)) {
@@ -36,7 +37,7 @@ foreach ($crit_opts as $optname => $optval) {
 }
 
 // application constants
-define('RCMAIL_VERSION', '0.5.3');
+define('RCMAIL_VERSION', '0.7.1');
 define('RCMAIL_CHARSET', 'UTF-8');
 define('JS_OBJECT_NAME', 'rcmail');
 define('RCMAIL_START', microtime(true));
@@ -57,10 +58,7 @@ if (!defined('PATH_SEPARATOR')) {
 // RC include folders MUST be included FIRST to avoid other
 // possible not compatible libraries (i.e PEAR) to be included
 // instead the ones provided by RC
-$include_path = INSTALL_PATH . PATH_SEPARATOR;
-$include_path.= INSTALL_PATH . 'program' . PATH_SEPARATOR;
-$include_path.= INSTALL_PATH . 'program/lib' . PATH_SEPARATOR;
-$include_path.= INSTALL_PATH . 'program/include' . PATH_SEPARATOR;
+$include_path = INSTALL_PATH . 'program/lib' . PATH_SEPARATOR;
 $include_path.= ini_get('include_path');
 
 if (set_include_path($include_path) === false) {
@@ -74,9 +72,10 @@ ini_set('error_reporting', E_ALL&~E_NOTICE);
 @set_time_limit(120);
 
 // set internal encoding for mbstring extension
-if(extension_loaded('mbstring'))
+if (extension_loaded('mbstring')) {
     mb_internal_encoding(RCMAIL_CHARSET);
-
+    @mb_regex_encoding(RCMAIL_CHARSET);
+}
 
 /**
  * Use PHP5 autoload for dynamic class loading
@@ -132,5 +131,5 @@ function rcube_pear_error($err)
 PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 'rcube_pear_error');
 
 // include global functions
-require_once 'include/main.inc';
-require_once 'include/rcube_shared.inc';
+require_once INSTALL_PATH . 'program/include/main.inc';
+require_once INSTALL_PATH . 'program/include/rcube_shared.inc';

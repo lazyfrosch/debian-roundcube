@@ -16,13 +16,14 @@ Depends: dbconfig-common, debconf | debconf-2.0, ucf,
  php5, php5-mcrypt, php5-gd, php5-intl,
  php-mdb2 (>= 2.5.0), php-auth, php-net-smtp (>= 1.4.2),
  php-net-socket, php-mail-mime (>= 1.8.0), php5-pspell,
- tinymce (>= 3), libjs-jquery (>= 1.4.2),
+ tinymce (>= 3), libjs-jquery (>= 1.6.4), libjs-jquery-ui (>= 1.8),
  libmagic1,
  roundcube-sqlite (= ${source:Version}) | roundcube-mysql (= ${source:Version}) | roundcube-pgsql (= ${source:Version}),
  ${misc:Depends}
-Suggests: php-auth-sasl (>= 1.0.3), roundcube-plugins
+Suggests: php-auth-sasl (>= 1.0.3), php-crypt-gpg, roundcube-plugins
 Replaces: roundcube
 Breaks: roundcube (<< 0.1~rc2-2)
+Conflicts: roundcube-plugins-extra (<= 0.6-20111030)
 Description: skinnable AJAX based webmail solution for IMAP servers
  RoundCube Webmail is a browser-based multilingual IMAP client with an
  application-like user interface. It provides full functionality

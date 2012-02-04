@@ -154,21 +154,6 @@
   padding-left: 2px;
 }
 
-#searchmenu
-{
-  width: 160px;
-}
-
-#searchmenu ul.toolbarmenu
-{
-  margin: 0;
-}
-
-#searchmenu ul.toolbarmenu li
-{
-  margin: 1px 4px 1px;
-}
-
 #messagemenu li a.active:hover,
 #markmessagemenu li a.active:hover
 {
@@ -236,7 +221,7 @@
 {
   white-space: nowrap;
   position: absolute;
-  right: 190px;
+  right: 198px;
   vertical-align: middle;
 }
 
@@ -312,12 +297,14 @@
   bottom: 0px;
   width: 100%;
   height: 100%;
+  min-height: 100%; /* Chrome 14 bug */
 }
 
 #messagepartframe
 {
   width: 100%;
   height: 100%;
+  min-height: 100%; /* Chrome 14 bug */
   border: 1px solid #999999;
   background-color: #F9F9F9;
 }
@@ -448,6 +435,7 @@
   padding-top: 2px;
   padding-bottom: 2px;
   text-decoration: none;
+  height: 15px;
 }
 
 #mailboxlist li.unread
@@ -645,7 +633,7 @@ body.messagelist
 #messagelist thead tr td.sortedASC,
 #messagelist thead tr td.sortedDESC
 {
-  background-position: 0 -22px;
+  background-position: 0 -26px;
 }
 
 #messagelist thead tr td.sortedASC a
@@ -699,7 +687,6 @@ body.messagelist
   cursor: inherit;
 }
 
-#messagelist td span,
 #messagelist td img
 {
   vertical-align: middle;
@@ -715,8 +702,10 @@ body.messagelist
 
 #messagelist tr td.flag span,
 #messagelist tr td.status span,
-#messagelist tr td.attachment span
+#messagelist tr td.attachment span,
+#messagelist tr td.priority span
 {
+  display: block;
   width: 15px;
 }
 
@@ -725,7 +714,14 @@ body.messagelist
 #messagelist tr td.threads div.listmenu,
 #messagelist tr td.attachment span.attachment,
 #messagelist tr td.attachment span.report,
+#messagelist tr td.priority span.priority,
+#messagelist tr td.priority span.prio1,
+#messagelist tr td.priority span.prio2,
+#messagelist tr td.priority span.prio3,
+#messagelist tr td.priority span.prio4,
+#messagelist tr td.priority span.prio5,
 #messagelist tr td.flag span.flagged,
+#messagelist tr td.flag span.unflagged,
 #messagelist tr td.flag span.unflagged:hover,
 #messagelist tr td.status span.status,
 #messagelist tr td.status span.msgicon,
@@ -739,6 +735,7 @@ body.messagelist
 #messagelist tr td.subject span.forwarded,
 #messagelist tr td.subject span.unreadchildren
 {
+  display: inline-block;
   vertical-align: middle;
   height: 17px;
   width: 15px;
@@ -753,6 +750,36 @@ body.messagelist
 #messagelist tr td.attachment span.report
 {
   background-position: 0 -255px;
+}
+
+#messagelist tr td.priority span.priority
+{
+  background-position: 0 -309px;
+}
+
+#messagelist tr td.priority span.prio5
+{
+  background-position: 0 -358px;
+}
+
+#messagelist tr td.priority span.prio4
+{
+  background-position: 0 -340px;
+}
+
+#messagelist tr td.priority span.prio3
+{
+  background-position: 0 -324px;
+}
+
+#messagelist tr td.priority span.prio2
+{
+  background-position: 0 -309px;
+}
+
+#messagelist tr td.priority span.prio1
+{
+  background-position: 0 -290px;
 }
 
 #messagelist tr td.flag span.flagged
@@ -788,6 +815,7 @@ body.messagelist
 }
 
 #messagelist tr td.status span.msgicon,
+#messagelist tr td.flag span.unflagged,
 #messagelist tr td.status span.unreadchildren
 {
   background-position: 0 17px; /* no icon */
@@ -837,8 +865,7 @@ body.messagelist
 #messagelist tbody tr td.subject a
 {
   cursor: default;
-  display: inline-block;
-  vertical-align: middle;
+  vertical-align: middle; /* #1487091 */
 }
 
 /* thread parent message with unread children */
@@ -850,7 +877,8 @@ body.messagelist
 #messagelist tr td.attachment,
 #messagelist tr td.threads,
 #messagelist tr td.status,
-#messagelist tr td.flag
+#messagelist tr td.flag,
+#messagelist tr td.priority
 {
   width: 17px;
   padding: 0 0 0 2px;
@@ -882,13 +910,6 @@ body.messagelist
 {
   background-color: #FFF;
 }
-
-/*
-#messagelist tr.odd
-{
-  background-color: #F9F9F9;
-}
-*/
 
 #messagelist tr.unread
 {
@@ -1046,6 +1067,11 @@ table.headers-table tr td.subject
   font-weight: bold;
 }
 
+table.headers-table tr td.header span
+{
+  white-space: nowrap;
+}
+
 #attachment-list
 {
   margin: 0;
@@ -1172,21 +1198,20 @@ div.message-htmlpart div.rcmBody
   margin: 8px;
 }
 
-#remote-objects-message
+#message-objects div
 {
-  display: none;
   margin: 8px;
   min-height: 20px;
   padding: 10px 10px 6px 46px;
 }
 
-#remote-objects-message a
+#message-objects div a
 {
   color: #666666;
   padding-left: 10px;
 }
 
-#remote-objects-message a:hover
+#message-objects div a:hover
 {
   color: #333333;
 }
@@ -1345,20 +1370,6 @@ input.from_address
 #compose-followupto
 {
   display: none;
-}
-
-.formlinks a,
-.formlinks a:visited
-{
-  color: #999999;
-  font-size: 11px;
-  text-decoration: none;
-}
-
-.formlinks a,
-.formlinks a:visited
-{
-  color: #CC0000;
 }
 
 #compose-editorfooter

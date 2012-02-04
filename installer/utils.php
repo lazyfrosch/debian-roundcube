@@ -2,9 +2,9 @@
 /*
  +-------------------------------------------------------------------------+
  | Roundcube Webmail IMAP Client                                           |
- | Version 0.3-20090702                                                    |
+ | Version 0.6                                                             |
  |                                                                         |
- | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                   |
+ | Copyright (C) 2005-2011, The Roundcube Dev Team                         |
  |                                                                         |
  | This program is free software; you can redistribute it and/or modify    |
  | it under the terms of the GNU General Public License version 2          |
@@ -33,12 +33,26 @@
  */
 function __autoload($classname)
 {
-  $filename = preg_replace(
-      array('/MDB2_(.+)/', '/Mail_(.+)/', '/Net_(.+)/', '/^html_.+/', '/^utf8$/'),
-      array('MDB2/\\1', 'Mail/\\1', 'Net/\\1', 'html', 'utf8.class'),
-      $classname
-  );
-  include_once $filename. '.php';
+    $filename = preg_replace(
+        array(
+            '/MDB2_(.+)/',
+            '/Mail_(.+)/',
+            '/Net_(.+)/',
+            '/Auth_(.+)/',
+            '/^html_.+/',
+            '/^utf8$/'
+        ),
+        array(
+            'MDB2/\\1',
+            'Mail/\\1',
+            'Net/\\1',
+            'Auth/\\1',
+            'html',
+            'utf8.class'
+        ),
+        $classname
+    );
+    include_once $filename. '.php';
 }
 
 
@@ -47,6 +61,20 @@ function __autoload($classname)
  */
 function raise_error($p)
 {
-  $rci = rcube_install::get_instance();
-  $rci->raise_error($p);
+    $rci = rcube_install::get_instance();
+    $rci->raise_error($p);
 }
+
+/**
+ * Local callback function for PEAR errors
+ */
+function rcube_pear_error($err)
+{
+    raise_error(array(
+        'code' => $err->getCode(),
+        'message' => $err->getMessage(),
+    ));
+}
+
+// set PEAR error handling (will also load the PEAR main class)
+PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 'rcube_pear_error');

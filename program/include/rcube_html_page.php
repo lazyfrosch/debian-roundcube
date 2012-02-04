@@ -5,7 +5,7 @@
  | program/include/rcube_html_page.php                                   |
  |                                                                       |
  | This file is part of the Roundcube PHP suite                          |
- | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2011 The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | CONTENTS:                                                             |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_html_page.php 4469 2011-01-29 14:55:12Z thomasb $
+ $Id: rcube_html_page.php 5135 2011-08-26 09:22:53Z alec $
 
 */
 
@@ -33,7 +33,7 @@ class rcube_html_page
     protected $charset = RCMAIL_CHARSET;
 
     protected $script_tag_file = "<script type=\"text/javascript\" src=\"%s\"></script>\n";
-    protected $script_tag  =  "<script type=\"text/javascript\">\n/* <![CDATA[ */\n%s\n/* ]]> */\n</script>";
+    protected $script_tag  =  "<script type=\"text/javascript\">\n/* <![CDATA[ */\n%s\n/* ]]> */\n</script>\n";
     protected $link_css_file = "<link rel=\"stylesheet\" type=\"text/css\" href=\"%s\" />\n";
     protected $default_template = "<html>\n<head><title></title></head>\n<body></body>\n</html>";
 
@@ -208,18 +208,23 @@ class rcube_html_page
             $page_header .= $this->header;
         }
 
+        // put docready commands into page footer
+        if (!empty($this->scripts['docready'])) {
+            $this->add_script('$(document).ready(function(){ ' . $this->scripts['docready'] . "\n});", 'foot');
+        }
+
         if (is_array($this->script_files['foot'])) {
             foreach ($this->script_files['foot'] as $file) {
                 $page_footer .= sprintf($this->script_tag_file, $file);
             }
         }
 
-        if (!empty($this->scripts['foot'])) {
-            $page_footer .= sprintf($this->script_tag, $this->scripts['foot']);
+        if (!empty($this->footer)) {
+            $page_footer .= $this->footer . "\n";
         }
 
-        if (!empty($this->footer)) {
-            $page_footer .= $this->footer;
+        if (!empty($this->scripts['foot'])) {
+            $page_footer .= sprintf($this->script_tag, $this->scripts['foot']);
         }
 
         // find page header
@@ -241,7 +246,7 @@ class rcube_html_page
 
         // add page hader
         if ($hpos) {
-            $output = substr($output,0,$hpos) . $page_header . substr($output,$hpos,strlen($output));
+            $output = substr_replace($output, $page_header, $hpos, 0);
         }
         else {
             $output = $page_header . $output;
@@ -249,7 +254,7 @@ class rcube_html_page
 
         // add page footer
         if (($fpos = strripos($output, '</body>')) || ($fpos = strripos($output, '</html>'))) {
-            $output = substr($output, 0, $fpos) . "$page_footer\n" . substr($output, $fpos);
+            $output = substr_replace($output, $page_footer."\n", $fpos, 0);
         }
         else {
             $output .= "\n".$page_footer;
@@ -263,24 +268,28 @@ class rcube_html_page
             foreach ($this->css_files as $file) {
                 $css .= sprintf($this->link_css_file, $file);
             }
-            $output = substr($output, 0, $pos) . $css . substr($output, $pos);
+            $output = substr_replace($output, $css, $pos, 0);
         }
 
-	    $this->base_path = $base_path;
+        $this->base_path = $base_path;
 
         // correct absolute paths in images and other tags
-	    // add timestamp to .js and .css filename
+        // add timestamp to .js and .css filename
         $output = preg_replace_callback(
             '!(src|href|background)=(["\']?)([a-z0-9/_.-]+)(["\'\s>])!i',
-	        array($this, 'file_callback'), $output);
+            array($this, 'file_callback'), $output);
         $output = str_replace('$__skin_path', $base_path, $output);
 
-        if ($this->charset != RCMAIL_CHARSET)
-	        echo rcube_charset_convert($output, RCMAIL_CHARSET, $this->charset);
-	    else
-	        echo $output;
+        // trigger hook with final HTML content to be sent
+        $hook = rcmail::get_instance()->plugins->exec_hook("send_page", array('content' => $output));
+        if (!$hook['abort']) {
+            if ($this->charset != RCMAIL_CHARSET)
+                echo rcube_charset_convert($hook['content'], RCMAIL_CHARSET, $this->charset);
+            else
+                echo $hook['content'];
+        }
     }
-    
+
     /**
      * Callback function for preg_replace_callback in write()
      *

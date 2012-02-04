@@ -156,6 +156,14 @@ if ($db_working && $_POST['initdb']) {
     }
 }
 
+else if ($db_working && $_POST['updatedb']) {
+  if (!($success = $RCI->update_db($DB, $_POST['version']))) {
+      $updatefile = INSTALL_PATH . 'SQL/' . (isset($RCI->db_map[$DB->db_provider]) ? $RCI->db_map[$DB->db_provider] : $DB->db_provider) . '.update.sql';
+      echo '<p class="warning">Please manually execute the SQL statements from '.$updatefile.' on your database.<br/>';
+      echo 'See comments in the file and execute queries below the comment with the currently installed version number.</p>';
+  }
+}
+
 // test database
 if ($db_working) {
     $db_read = $DB->query("SELECT count(*) FROM {$RCI->config['db_table_users']}");
@@ -164,12 +172,13 @@ if ($db_working) {
         echo '<p><input type="submit" name="initdb" value="Initialize database" /></p>';
         $db_working = false;
     }
-    else if ($RCI->db_schema_check($DB, $update = !empty($_POST['updatedb']))) {
+    else if ($err = $RCI->db_schema_check($DB, $update = !empty($_POST['updatedb']))) {
         $RCI->fail('DB Schema', "Database schema differs");
-        $db_map = array('pgsql' => 'postgres', 'mysqli' => 'mysql', 'sqlsrv' => 'mssql');
-        $updatefile = INSTALL_PATH . 'SQL/' . (isset($db_map[$DB->db_provider]) ? $db_map[$DB->db_provider] : $DB->db_provider) . '.update.sql';
-        echo '<p class="warning">Please manually execute the SQL statements from '.$updatefile.' on your database.<br/>';
-        echo 'See comments in the file and execute queries that are superscribed with the currently installed version number.</p>';
+        echo '<ul style="margin:0"><li>' . join("</li>\n<li>", $err) . "</li></ul>";
+        $select = $RCI->versions_select(array('name' => 'version'));
+        echo '<p class="suggestion">You should run the update queries to get the schmea fixed.<br/><br/>Version to update from: ' . $select->show() . '&nbsp;<input type="submit" name="updatedb" value="Update" /></p>';
+//        echo '<p class="warning">Please manually execute the SQL statements from '.$updatefile.' on your database.<br/>';
+//        echo 'See comments in the file and execute queries that are superscribed with the currently installed version number.</p>';
         $db_working = false;
     }
     else {
@@ -373,18 +382,20 @@ $pass_field = new html_passwordfield(array('name' => '_pass', 'id' => 'imappass'
 <?php
 
 if (isset($_POST['imaptest']) && !empty($_POST['_host']) && !empty($_POST['_user'])) {
-  
+
   echo '<p>Connecting to ' . Q($_POST['_host']) . '...<br />';
-  
-  $a_host = parse_url($_POST['_host']);
+
+  $imap_host = trim($_POST['_host']);
+  $imap_port = $RCI->getprop('default_port');
+  $a_host    = parse_url($imap_host);
+
   if ($a_host['host']) {
     $imap_host = $a_host['host'];
-    $imap_ssl = (isset($a_host['scheme']) && in_array($a_host['scheme'], array('ssl','imaps','tls'))) ? $a_host['scheme'] : null;
-    $imap_port = isset($a_host['port']) ? $a_host['port'] : ($imap_ssl ? 993 : $CONFIG['default_port']);
-  }
-  else {
-    $imap_host = trim($_POST['_host']);
-    $imap_port = $RCI->getprop('default_port');
+    $imap_ssl  = (isset($a_host['scheme']) && in_array($a_host['scheme'], array('ssl','imaps','tls'))) ? $a_host['scheme'] : null;
+    if (isset($a_host['port']))
+      $imap_port = $a_host['port'];
+    else if ($imap_ssl && $imap_ssl != 'tls' && (!$imap_port || $imap_port == 143))
+      $imap_port = 993;
   }
 
   $imap_host = idn_to_ascii($imap_host);
@@ -412,7 +423,7 @@ if (isset($_POST['imaptest']) && !empty($_POST['_host']) && !empty($_POST['_user
 
 After completing the installation and the final tests please <b>remove</b> the whole
 installer folder from the document root of the webserver or make sure that
-enable_installer option in main.inc.php is disabled.<br />
+<tt>enable_installer</tt> option in config/main.inc.php is disabled.<br />
 <br />
 
 These files may expose sensitive configuration data like server passwords and encryption keys

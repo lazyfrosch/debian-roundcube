@@ -5,7 +5,7 @@
  | program/include/rcube_string_replacer.php                             |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2009, Roundcube Dev. - Switzerland                      |
+ | Copyright (C) 2009, The Roundcube Dev Team                            |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_string_replacer.php 4729 2011-05-04 18:53:11Z alec $
+ $Id: rcube_string_replacer.php 5481 2011-11-24 07:53:00Z alec $
 
 */
 
@@ -37,9 +37,9 @@ class rcube_string_replacer
   {
     // Simplified domain expression for UTF8 characters handling
     // Support unicode/punycode in top-level domain part
-    $utf_domain = '[^?&@"\'\\/()\s\r\t\n]+\\.([^\\x00-\\x40\\x5b-\\x60\\x7b-\\x7f]{2,}|xn--[a-z0-9]{2,})';
-    $url1 = '.:;';
-    $url2 = 'a-z0-9%=#@+?&\\/_~\\[\\]-';
+    $utf_domain = '[^?&@"\'\\/()\s\r\t\n]+\\.([^\\x00-\\x2f\\x3b-\\x40\\x5b-\\x60\\x7b-\\x7f]{2,}|xn--[a-z0-9]{2,})';
+    $url1 = '.:;,';
+    $url2 = 'a-z0-9%=#@+?!&\\/_~\\[\\]{}-';
 
     $this->link_pattern = "/([\w]+:\/\/|\Wwww\.)($utf_domain([$url1]?[$url2]+)*)/i";
     $this->mailto_pattern = "/("

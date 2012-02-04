@@ -5,7 +5,7 @@
 | language/eu_ES/messages.inc                                           |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -13,7 +13,7 @@
 |         Bihar <gaurdabihar@gmail.com>                                 |
 +-----------------------------------------------------------------------+
 
-@version $Id: messages.inc 4304 2010-12-03 10:58:40Z alec $
+@version $Id: messages.inc 4410 2011-01-12 18:25:02Z thomasb $
 
 */
 

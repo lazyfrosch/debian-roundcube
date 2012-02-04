@@ -6,7 +6,7 @@
 | language/et_EE/labels.inc                                             |
 |                                                                       |
 | Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, Roundcube Dev. - Switzerland                 |
+| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
 | Licensed under the GNU GPL                                            |
 |                                                                       |
 +-----------------------------------------------------------------------+
@@ -15,7 +15,7 @@
 |         Elan Ruusamäe <glen@delfi.ee>                                 |
 +-----------------------------------------------------------------------+
 
-@version $Id: labels.inc 4370 2010-12-27 14:16:46Z yllar $
+@version $Id: labels.inc 5067 2011-08-14 18:47:58Z thomasb $
 
 */
 
@@ -102,18 +102,16 @@ $labels['replytomessage'] = 'Vasta kirjale';
 $labels['replytoallmessage'] = 'Vasta saatjale ja teistele kirja saanutele';
 $labels['replyall'] = 'Vasta kõigile';
 $labels['replylist'] = 'Vasta meilinglisti';
+$labels['forwardinline'] = 'Edasta kirja sees';
+$labels['forwardattachment'] = 'Edasta manusena';
 $labels['forwardmessage'] = 'Edasta see kiri';
 $labels['deletemessage'] = 'Kustuta kiri';
 $labels['movemessagetotrash'] = 'Liiguta kiri prügikasti';
 $labels['printmessage'] = 'Trüki kiri';
 $labels['previousmessage'] = 'Näita eelmist kirja';
-$labels['previousmessages'] = 'Näita eelmisi kirju';
 $labels['firstmessage'] = 'Näita esimest kirja';
-$labels['firstmessages'] = 'Näita esimest kirjade komplekti';
 $labels['nextmessage'] = 'Näita järgmist kirja';
-$labels['nextmessages'] = 'Näita järgmisi kirju';
 $labels['lastmessage'] = 'Näita viimast kirja';
-$labels['lastmessages'] = 'Näita viimast kirjade komplekti';
 $labels['backtolist'] = 'Tagasi kirjade nimekirja';
 $labels['viewsource'] = 'Näita lähtekoodi';
 $labels['markmessages'] = 'Märgi kirjad';
@@ -206,16 +204,61 @@ $labels['receiptnote'] = 'Märkus: Kättesaamiskinnituse saamine tähendab ainul
 $labels['name'] = 'Näidatav nimi';
 $labels['firstname'] = 'Eesnimi';
 $labels['surname'] = 'Perekonnanimi';
+$labels['middlename'] = 'Keskmine nimi';
+$labels['nameprefix'] = 'Eesliide';
+$labels['namesuffix'] = 'Järelliide';
+$labels['nickname'] = 'Hüüdnimi';
+$labels['jobtitle'] = 'Töökoht';
+$labels['department'] = 'Osakond';
+$labels['gender'] = 'Sugu';
+$labels['maidenname'] = 'Neiupõlve nimi';
 $labels['email'] = 'E-post';
+$labels['phone'] = 'Telefon';
+$labels['address'] = 'Aadress';
+$labels['street'] = 'Tänav';
+$labels['locality'] = 'Linn';
+$labels['zipcode'] = 'Postiindeks';
+$labels['region'] = 'Piirkond';
+$labels['country'] = 'Riik';
+$labels['birthday'] = 'Sünnipäev';
+$labels['anniversary'] = 'Tähtpäev';
+$labels['website'] = 'Veebileht';
+$labels['instantmessenger'] = 'Kiirsuhtlus';
+$labels['notes'] = 'Märkused';
+$labels['male'] = 'mees';
+$labels['female'] = 'naine';
+$labels['manager'] = 'Juht';
+$labels['assistant'] = 'Assistent';
+$labels['spouse'] = 'Abikaasa';
+$labels['allfields'] = 'Kõik väljad';
+$labels['search'] = 'Otsi';
+$labels['advsearch'] = 'Täpsem otsing';
+$labels['other'] = 'Muu';
+$labels['typehome'] = 'Kodu';
+$labels['typework'] = 'Töö';
+$labels['typeother'] = 'Muu';
+$labels['typemobile'] = 'Mobiil';
+$labels['typemain'] = 'Peamine';
+$labels['typehomefax'] = 'Kodune fax';
+$labels['typeworkfax'] = 'Töö fax';
+$labels['typecar'] = 'Auto';
+$labels['typepager'] = 'Piipar';
+$labels['typevideo'] = 'Video';
+$labels['typeassistant'] = 'Assistent';
+$labels['typehomepage'] = 'Veebileht';
+$labels['addfield'] = 'Lisa väli...';
 $labels['addcontact'] = 'Uue kontakti lisamine';
 $labels['editcontact'] = 'Muuda kontakti';
 $labels['contacts'] = 'Kontaktid';
 $labels['contactproperties'] = 'Kontakti omadused';
+$labels['personalinfo'] = 'Isiklik info';
 $labels['edit'] = 'Muuda';
 $labels['cancel'] = 'Katkesta';
 $labels['save'] = 'Salvesta';
 $labels['delete'] = 'Kustuta';
 $labels['rename'] = 'Nimeta ümber';
+$labels['addphoto'] = 'Lisa';
+$labels['replacephoto'] = 'Asenda';
 $labels['newcontact'] = 'Uue sissekande loomine';
 $labels['deletecontact'] = 'Kustuta märgistatud kontaktid';
 $labels['composeto'] = 'Kirjuta kiri';
@@ -320,6 +363,8 @@ $labels['afternseconds'] = '$n sekundi pärast';
 $labels['reqmdn'] = 'Alati nõua kättesaamise kinnitust';
 $labels['reqdsn'] = 'Alati nõua kohalejõudmise teavitust';
 $labels['replysamefolder'] = 'Paiguta vastused samasse kausta, millele vastatakse';
+$labels['defaultaddressbook'] = 'Lisa kontaktid valitud aadressiraamatusse';
+$labels['spellcheckbeforesend'] = 'Kontrolli õigekirja enne saatmist';
 $labels['folder'] = 'Kaust';
 $labels['folders'] = 'Kaustad';
 $labels['foldername'] = 'Kausta nimi';
@@ -336,6 +381,10 @@ $labels['location'] = 'Asukoht';
 $labels['info'] = 'Teave';
 $labels['getfoldersize'] = 'Kliki kausta suuruse teadasaamiseks';
 $labels['changesubscription'] = 'Kliki kausta tellimuste muutmiseks';
+$labels['foldertype'] = 'Kausta tüüp';
+$labels['personalfolder'] = 'Isiklik kaust';
+$labels['otherfolder'] = 'Teiste kasutajate kaust';
+$labels['sharedfolder'] = 'Avalik kaust';
 $labels['sortby'] = 'Järjesta';
 $labels['sortasc'] = 'Järjesta kasvavalt';
 $labels['sortdesc'] = 'Järjesta kahanevalt';

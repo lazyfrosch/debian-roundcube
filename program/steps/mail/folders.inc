@@ -5,7 +5,7 @@
  | program/steps/mail/folders.inc                                        |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2009, Roundcube Dev. - Switzerland                 |
+ | Copyright (C) 2005-2009, The Roundcube Dev Team                       |
  | Licensed under the GNU GPL                                            |
  |                                                                       |
  | PURPOSE:                                                              |
@@ -15,7 +15,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: folders.inc 4321 2010-12-08 12:52:04Z alec $
+ $Id: folders.inc 5266 2011-09-22 07:49:33Z alec $
 */
 
 // only process ajax requests
@@ -65,7 +65,7 @@ else if ($RCMAIL->action == 'purge')
                 $OUTPUT->set_env('messagecount', 0);
                 $OUTPUT->set_env('pagecount', 0);
                 $OUTPUT->command('message_list.clear');
-                $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text());
+                $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text(), $mbox);
                 $OUTPUT->command('set_unread_count', $mbox, 0);
                 $OUTPUT->command('set_quota', rcmail_quota_content());
                 rcmail_set_unseen_count($mbox, 0);
