@@ -1,3 +1,12 @@
+roundcube (0.7.1-2) unstable; urgency=high
+
+  * Remove roundcube-sqlite package since php5 package does not ship
+    SQLite 2.x support anymore. Roundcube is incompatible with SQLite 3.x.
+    Closes: #657092.
+  * Urgency set to high for php5 migration into testing.
+
+ -- Vincent Bernat <bernat@debian.org>  Tue, 07 Feb 2012 17:37:52 +0100
+
 roundcube (0.7.1-1) unstable; urgency=low
 
   * New upstream version. Closes: #656093.

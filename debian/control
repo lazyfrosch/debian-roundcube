@@ -18,7 +18,7 @@ Depends: dbconfig-common, debconf | debconf-2.0, ucf,
  php-net-socket, php-mail-mime (>= 1.8.0), php5-pspell,
  tinymce (>= 3), libjs-jquery (>= 1.6.4), libjs-jquery-ui (>= 1.8),
  libmagic1,
- roundcube-sqlite (= ${source:Version}) | roundcube-mysql (= ${source:Version}) | roundcube-pgsql (= ${source:Version}),
+ roundcube-mysql (= ${source:Version}) | roundcube-pgsql (= ${source:Version}),
  ${misc:Depends}
 Suggests: php-auth-sasl (>= 1.0.3), php-crypt-gpg, roundcube-plugins
 Replaces: roundcube
@@ -65,14 +65,6 @@ Description: metapackage providing PostgreSQL dependencies for RoundCube
  This package provides PostgreSQL dependencies for RoundCube Webmail,
  a skinnable AJAX based webmail solution for IMAP servers. Install
  this one if you want to use a PostgreSQL database with RoundCube.
-
-Package: roundcube-sqlite
-Architecture: all
-Depends: php-mdb2-driver-sqlite (>= 1.5.0b2), sqlite, ${misc:Depends}
-Description: metapackage providing sqlite dependencies for RoundCube
- This package provides sqlite dependencies for RoundCube Webmail, a
- skinnable AJAX based webmail solution for IMAP servers. Install this
- one if you want to use a sqlite database with RoundCube.
 
 Package: roundcube-plugins
 Architecture: all
