@@ -57,7 +57,8 @@ binary-install/roundcube-plugins::
 		dh_installdirs -proundcube-plugins etc/roundcube/plugins/$${plugin##*/} ; \
 		(echo "<?php" ; \
 		 echo "// Empty configuration for $${plugin##*/}" ; \
-		 echo "// See /usr/share/roundcube/plugins/$${plugin##*/}/config.inc.php.dist for instructions") > \
+		 echo "// See /usr/share/roundcube/plugins/$${plugin##*/}/config.inc.php.dist for instructions" ; \
+		 echo "?>") > \
 			$(CURDIR)/debian/roundcube-plugins/etc/roundcube/plugins/$${plugin##*/}/config.inc.php ; \
 		dh_link -proundcube-plugins etc/roundcube/plugins/$${plugin##*/}/config.inc.php \
 			usr/share/roundcube/plugins/$${plugin##*/}/config.inc.php ; \
