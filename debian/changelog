@@ -2,6 +2,7 @@ roundcube (0.7.2-1) unstable; urgency=low
 
   * New upstream version.
   * Bump Standards-Version. No changes required.
+  * Depends on php-mail-mime (>= 1.8.2). Closes: #656243.
 
  -- Vincent Bernat <bernat@debian.org>  Sat, 28 Apr 2012 10:29:15 +0200
 
