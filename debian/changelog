@@ -1,3 +1,10 @@
+roundcube (0.7.2-1) unstable; urgency=low
+
+  * New upstream version.
+  * Bump Standards-Version. No changes required.
+
+ -- Vincent Bernat <bernat@debian.org>  Sat, 28 Apr 2012 10:29:15 +0200
+
 roundcube (0.7.1-2) unstable; urgency=high
 
   * Remove roundcube-sqlite package since php5 package does not ship
