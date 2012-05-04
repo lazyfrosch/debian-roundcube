@@ -75,6 +75,7 @@ EOF
  	CONFFILE=/etc/roundcube/main.inc.php
  	touch $CONFFILE.ucftmp
  	chmod 640 $CONFFILE.ucftmp
+	chown root:www-data $CONFFILE.ucftmp
 
 	db_get roundcube/hosts || true
 	hosts="$RET"
@@ -119,8 +120,9 @@ EOF
 	done >> $CONFFILE.ucftmp
 
 	ucf --debconf-ok $CONFFILE.ucftmp $CONFFILE
- 	chown root:www-data $CONFFILE
-        rm -f $CONFFILE.ucftmp
+	chown root:www-data $CONFFILE
+	[ ! -f $CONFFILE.dpkg-dist ] || chown root:www-data $CONFFILE.dpkg-dist
+	rm -f $CONFFILE.ucftmp
 	
 	# Handle webserver reconfiguration/restart ; stolen from zabbix package
 	db_get roundcube/reconfigure-webserver || true
