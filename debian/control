@@ -21,8 +21,6 @@ Depends: dbconfig-common, debconf | debconf-2.0, ucf,
  roundcube-mysql (= ${source:Version}) | roundcube-pgsql (= ${source:Version}),
  ${misc:Depends}
 Suggests: php-auth-sasl (>= 1.0.3), php-crypt-gpg, roundcube-plugins
-Replaces: roundcube
-Breaks: roundcube (<< 0.1~rc2-2)
 Conflicts: roundcube-plugins-extra (<= 0.6-20111030)
 Description: skinnable AJAX based webmail solution for IMAP servers
  RoundCube Webmail is a browser-based multilingual IMAP client with an
