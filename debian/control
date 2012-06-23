@@ -48,7 +48,8 @@ Description: skinnable AJAX based webmail solution for IMAP servers - metapackag
 
 Package: roundcube-sqlite
 Architecture: all
-Depends: roundcube-mysql | roundcube-pgsql
+Depends: roundcube-mysql | roundcube-pgsql, ${misc:Depends}
+Section: oldlibs
 Description: transitional dummy package
  This package is a dummy transitional package. It can be safely removed.
 

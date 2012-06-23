@@ -1,0 +1,2 @@
+roundcube-core binary: package-contains-upstream-install-documentation
+roundcube-core binary: conflicts-with-version
