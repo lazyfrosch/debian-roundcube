@@ -1,3 +1,9 @@
+roundcube (0.7.2-4) unstable; urgency=high
+
+  * Fix self XSS with plain signatures. CVE-2012-3508. Closes: #685475.
+
+ -- Vincent Bernat <bernat@debian.org>  Sun, 26 Aug 2012 14:20:24 +0200
+
 roundcube (0.7.2-3) unstable; urgency=low
 
   * Remove old Replaces/Breaks for roundcube-core since it is not needed
