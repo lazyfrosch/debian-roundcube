@@ -1,10 +1,10 @@
 Use packaged libjs-jquery-ui.
 
-diff --git a/plugins/jqueryui/jqueryui.php b/plugins/jqueryui/jqueryui.php
-index 7ed2018..5f4545c 100644
---- a/plugins/jqueryui/jqueryui.php
-+++ b/plugins/jqueryui/jqueryui.php
-@@ -21,18 +21,18 @@ class jqueryui extends rcube_plugin
+Index: roundcube/plugins/jqueryui/jqueryui.php
+===================================================================
+--- roundcube.orig/plugins/jqueryui/jqueryui.php	2012-09-29 11:30:56.195077966 +0200
++++ roundcube/plugins/jqueryui/jqueryui.php	2012-09-29 11:31:49.528144533 +0200
+@@ -21,18 +21,18 @@
      $this->load_config();
  
      // include UI scripts
