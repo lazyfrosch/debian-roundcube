@@ -2,8 +2,11 @@ roundcube (0.7.2-5) unstable; urgency=low
 
   * Fix problem with some uuencoded attachments. Patch from Michał
     Mirosław. Closes: #686857.
+  * Don't handle old configuration files from legacy roundcube
+    package. roundcube package is an empty metapackage since
+    Squeeze. Closes: #688230.
 
- -- Vincent Bernat <bernat@debian.org>  Sat, 29 Sep 2012 11:30:04 +0200
+ -- Vincent Bernat <bernat@debian.org>  Sat, 29 Sep 2012 11:39:07 +0200
 
 roundcube (0.7.2-4) unstable; urgency=high
 

@@ -1,8 +1,0 @@
-# This file conflicts with /etc/default/roundcube-core. If you have
-# modified it, report your modifications to
-# /etc/default/roundcube-core. If this file is left empty or
-# untouched, it will be deleted.
-
-# If you leave the following marker, this file will be deleted during
-# the next upgrade:
-# 75321 DELETE 75321
