@@ -64,8 +64,8 @@ Description: metapackage providing MySQL dependencies for RoundCube
 
 Package: roundcube-pgsql
 Architecture: all
-Depends: php-mdb2-driver-pgsql (>= 1.5.0b2), postgresql-client-8.1 | postgresql-client, ${misc:Depends}
-Suggests: postgresql-server
+Depends: php-mdb2-driver-pgsql (>= 1.5.0b2), postgresql-client-9.1 | postgresql-client, ${misc:Depends}
+Suggests: postgresql
 Description: metapackage providing PostgreSQL dependencies for RoundCube
  This package provides PostgreSQL dependencies for RoundCube Webmail,
  a skinnable AJAX based webmail solution for IMAP servers. Install

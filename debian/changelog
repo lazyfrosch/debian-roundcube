@@ -1,3 +1,9 @@
+roundcube (0.7.2-7) UNRELEASED; urgency=low
+
+  * Fix dependencies to postgresql and postgresql-client. Closes: #699604.
+
+ -- Vincent Bernat <bernat@debian.org>  Sat, 02 Feb 2013 16:00:00 +0100
+
 roundcube (0.7.2-6) unstable; urgency=low
 
   * Fix the symlink mess in postinst when upgrading from 0.5 to a more
