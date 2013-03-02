@@ -1,3 +1,20 @@
+roundcube (0.7.2-7) unstable; urgency=low
+
+    Roundcube SQLite support is limited to SQLite 2.x. No support for
+    SQLite 3.x currently exists. Unfortunately, SQLite 2.x is unmaintained
+    for several years and therefore has been dropped from php5
+    package.
+
+    You need to select another database to continue to use
+    Roundcube. Unfortunately, there is currently no migration script
+    available. You have to start from an empty database and migrate
+    data yourself if you want to keep your settings.
+
+    Once the migration is done, you can remove roundcube-sqlite
+    package to resume upgrade of Roundcube.
+
+ -- Vincent Bernat <bernat@debian.org>  Sat, 02 Mar 2013 22:20:17 +0100
+
 roundcube (0.3.1-2) unstable; urgency=low
 
     Starting from Roundcube 0.3, an incompatibility with Suhosin session
