@@ -8,10 +8,12 @@ roundcube (0.7.2-7) unstable; urgency=low
     You need to select another database to continue to use
     Roundcube. Unfortunately, there is currently no migration script
     available. You have to start from an empty database and migrate
-    data yourself if you want to keep your settings.
+    data yourself if you want to keep your settings. You can find some
+    directions here:
+     http://wiki.debian.org/Roundcube/DeprecationOfSQLitev2
 
     Once the migration is done, you can remove roundcube-sqlite
-    package to resume upgrade of Roundcube.
+    package.
 
  -- Vincent Bernat <bernat@debian.org>  Sat, 02 Mar 2013 22:20:17 +0100
 
