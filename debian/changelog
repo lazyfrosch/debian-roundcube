@@ -1,4 +1,4 @@
-roundcube (0.7.2-7) UNRELEASED; urgency=low
+roundcube (0.7.2-7) unstable; urgency=low
 
   * Fix dependencies to postgresql and postgresql-client. Closes: #699604.
   * Drop roundcube-sqlite transition package since we don't provide an
@@ -6,7 +6,7 @@ roundcube (0.7.2-7) UNRELEASED; urgency=low
     herself. Move the related NEWS entry from roundcube-sqlite to
     roundcube-core and explain how to continue upgrade. Closes: #688634.
 
- -- Vincent Bernat <bernat@debian.org>  Sat, 02 Mar 2013 22:20:17 +0100
+ -- Vincent Bernat <bernat@debian.org>  Sat, 16 Mar 2013 17:26:20 +0100
 
 roundcube (0.7.2-6) unstable; urgency=low
 
