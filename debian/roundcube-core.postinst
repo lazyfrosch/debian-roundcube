@@ -81,7 +81,7 @@ fix_symlinks() {
         }
         # Remove the symbolic link and make a real directory.
         rm /usr/share/roundcube/${dir}
-        mkdir /usr/share/roundcube/${dir}
+        mkdir -m 0755 /usr/share/roundcube/${dir}
 
         # We move each subdirectory regardless we own them or not. The
         # ideal solution would be to leave files installed by the user

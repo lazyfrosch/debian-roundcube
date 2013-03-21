@@ -1,3 +1,10 @@
+roundcube (0.7.2-8) UNRELEASED; urgency=low
+
+  * In roundcube-core postinst, set appropriate rights on directory
+    created when fixing symlinks.
+
+ -- Vincent Bernat <bernat@debian.org>  Thu, 21 Mar 2013 22:47:33 +0100
+
 roundcube (0.7.2-7) unstable; urgency=low
 
   * Fix dependencies to postgresql and postgresql-client. Closes: #699604.
