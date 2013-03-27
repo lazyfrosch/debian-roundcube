@@ -1,6 +1,8 @@
 roundcube (0.7.2-9) unstable; urgency=high
 
-  * Fix a vulnerability allowing logged users to override any variable.
+  * Fix a vulnerability allowing logged users to override any variable
+    which may be used to steal credentials of other users or read
+    arbitrary files.
 
  -- Vincent Bernat <bernat@debian.org>  Wed, 27 Mar 2013 22:01:25 +0100
 
