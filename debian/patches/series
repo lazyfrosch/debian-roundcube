@@ -1,10 +1,1 @@
-dbconfig-common_support.patch
-correct_install_path.patch
-use_packaged_tinymce.patch
-use_pspell.patch
-loginbox-size.patch
-default-charset-utf8.patch
-debianize_password_plugin.patch
-use-debian-jquery-ui.patch
-cve-2012-3508.patch
-uuencoded-attachments.patch
+fix-save-pref-vulnerability.patch

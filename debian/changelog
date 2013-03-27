@@ -1,3 +1,9 @@
+roundcube (0.7.2-9) unstable; urgency=high
+
+  * Fix a vulnerability allowing logged users to override any variable.
+
+ -- Vincent Bernat <bernat@debian.org>  Wed, 27 Mar 2013 22:01:25 +0100
+
 roundcube (0.7.2-8) unstable; urgency=low
 
   * In roundcube-core postinst, set appropriate rights on directory
