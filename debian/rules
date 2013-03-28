@@ -23,6 +23,7 @@ binary-install/roundcube-core::
 	# Install empty tables and updates for each db type
 	install -m 0644 $(CURDIR)/SQL/mysql.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/mysql
 	install -m 0644 $(CURDIR)/SQL/postgres.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/pgsql
+	install -m 0644 $(CURDIR)/SQL/sqlite.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/sqlite
 
 	# Old database upgrades
 	cp -r $(CURDIR)/debian/sql/* $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/upgrade/.
