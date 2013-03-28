@@ -1,10 +1,10 @@
 Instead of using Google by default, we use pspell to avoid to send each mail to Google...
 
-Index: b/config/main.inc.php.dist
+Index: roundcube/config/main.inc.php.dist
 ===================================================================
---- a/config/main.inc.php.dist	2010-07-17 17:33:23.000000000 +0200
-+++ b/config/main.inc.php.dist	2010-07-17 17:33:24.000000000 +0200
-@@ -376,7 +376,7 @@
+--- roundcube.orig/config/main.inc.php.dist	2012-09-29 11:30:57.895111972 +0200
++++ roundcube/config/main.inc.php.dist	2012-09-29 11:31:46.232078634 +0200
+@@ -441,7 +441,7 @@
  
  // Set the spell checking engine. 'googie' is the default. 'pspell' is also available,
  // but requires the Pspell extensions. When using Nox Spell Server, also set 'googie' here.

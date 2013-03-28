@@ -35,6 +35,68 @@ apache_install() {
 	fi
 }
 
+fix_symlinks() {
+    # In 0.5.1-1, symlinks have been mangled. Before this version,
+    # /var/lib/roundcube and /usr/share/roundcube were using symlinks
+    # to each other:
+    #  /usr/share/roundcube/config   -> /var/lib/roundcube/config
+    #  /usr/share/roundcube/logs     -> /var/lib/roundcube/logs
+    #  /usr/share/roundcube/plugins  -> /var/lib/roundcube/plugins
+    #  /usr/share/roundcube/skins    -> /var/lib/roundcube/skins
+    #  /usr/share/roundcube/temp     -> /var/lib/roundcube/temp
+    #  /var/lib/roundcube/logs       -> ../../log/roundcube
+    #  /var/lib/roundcube/.htaccess  -> /usr/share/roundcube/.htaccess
+    #  /var/lib/roundcube/bin        -> /usr/share/roundcube/bin
+    #  /var/lib/roundcube/index.php  -> /usr/share/roundcube/bin
+    #  /var/lib/roundcube/program    -> /usr/share/roundcube/bin
+    #  /var/lib/roundcube/robots.txt -> /usr/share/roundcube/bin
+
+    # As of 0.7.2-6, the user is expected to use /var/lib/roundcube
+    # since /usr/share/roundcube does not contain the appropriate
+    # symlinks anymore.
+    #  /var/lib/roundcube/logs       -> ../../log/roundcube
+    #  /var/lib/roundcube/.htaccess  -> /usr/share/roundcube/.htaccess
+    #  /var/lib/roundcube/index.php  -> /usr/share/roundcube/bin
+    #  /var/lib/roundcube/program    -> /usr/share/roundcube/bin
+    #  /var/lib/roundcube/robots.txt -> /usr/share/roundcube/bin
+    #  /var/lib/roundcube/plugins/*  -> /usr/share/roundcube/plugins/*
+    #  /var/lib/roundcube/skins/*    -> /usr/share/roundcube/skins/*
+
+    # Because dpkg will not overwrite a symlink but follow them, an
+    # upgrade gives a confuse situation. We have the following
+    # symlinks in /usr/share/roundcube:
+    #  /usr/share/roundcube/plugins  -> /var/lib/roundcube/plugins
+    #  /usr/share/roundcube/skins    -> /var/lib/roundcube/skins
+    # And the following are not symlinks as they should be:
+    #  /var/lib/roundcube/plugins/*  -> /usr/share/roundcube/plugins/*
+    #  /var/lib/roundcube/skins/*    -> /usr/share/roundcube/skins/*
+
+    # We detect and fix that.
+    for dir in plugins skins; do
+        [ -L /usr/share/roundcube/${dir} ] || continue
+        echo "Fixing symbolic link /usr/share/roundcube/${dir}"
+        [ ! -L /var/lib/roundcube/${dir} ] || {
+            echo "/var/lib/roundcube/${dir} is not expected to be a symbolic link. Abort."
+            exit 1
+        }
+        # Remove the symbolic link and make a real directory.
+        rm /usr/share/roundcube/${dir}
+        mkdir -m 0755 /usr/share/roundcube/${dir}
+
+        # We move each subdirectory regardless we own them or not. The
+        # ideal solution would be to leave files installed by the user
+        # in /var/lib/roundcube/${dir} but since other packages (like
+        # roundcube-plugins and roundcube-plugins-extra) may have
+        # installed files, it is something difficult to track. We do
+        # not want each package to fix this mess. What's important is
+        # that user installation will keep working as expected,
+        # despite the move.
+        for d in /var/lib/roundcube/${dir}/*; do
+            mv ${d} /usr/share/roundcube/${dir}
+            ln -s /usr/share/roundcube/${dir}/${d##*/} /var/lib/roundcube/${dir}/${d##*/}
+        done
+    done
+}
 
 case "$1" in
     configure)
@@ -72,9 +134,15 @@ EOF
 	    fi
 	fi
 
+        # Fix bug 680917
+	if [ -n "$2" ] && dpkg --compare-versions "$2" lt 0.7.2-6; then
+            fix_symlinks
+        fi
+
  	CONFFILE=/etc/roundcube/main.inc.php
  	touch $CONFFILE.ucftmp
  	chmod 640 $CONFFILE.ucftmp
+	chown root:www-data $CONFFILE.ucftmp
 
 	db_get roundcube/hosts || true
 	hosts="$RET"
@@ -119,8 +187,9 @@ EOF
 	done >> $CONFFILE.ucftmp
 
 	ucf --debconf-ok $CONFFILE.ucftmp $CONFFILE
- 	chown root:www-data $CONFFILE
-        rm -f $CONFFILE.ucftmp
+	chown root:www-data $CONFFILE
+	[ ! -f $CONFFILE.dpkg-dist ] || chown root:www-data $CONFFILE.dpkg-dist
+	rm -f $CONFFILE.ucftmp
 	
 	# Handle webserver reconfiguration/restart ; stolen from zabbix package
 	db_get roundcube/reconfigure-webserver || true

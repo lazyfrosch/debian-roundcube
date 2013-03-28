@@ -20,6 +20,7 @@ Files: program/js/jquery*.js
 Copyright: 2010 John Resig
            2010 The Dojo Foundation
 License: GPL-2 or Expat
+Comment:
  Also includes sizzle.js, licensed under Expat, BSD-3-clause and
  GPL-2. This file is not shipped in the resulting Debian packages. We
  use system-included jQuery.

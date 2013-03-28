@@ -2,7 +2,6 @@ usr/share/roundcube
 usr/share/dbconfig-common/data/roundcube/install
 usr/share/dbconfig-common/data/roundcube/upgrade/mysql
 usr/share/dbconfig-common/data/roundcube/upgrade/pgsql
-usr/share/dbconfig-common/data/roundcube/upgrade/sqlite
 etc/roundcube
 etc/roundcube/plugins/jqueryui
 var/log/roundcube

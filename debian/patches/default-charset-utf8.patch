@@ -1,10 +1,10 @@
 Switch to UTF-8 as default charset
 
-Index: b/config/main.inc.php.dist
+Index: roundcube/config/main.inc.php.dist
 ===================================================================
---- a/config/main.inc.php.dist	2010-07-17 17:33:24.000000000 +0200
-+++ b/config/main.inc.php.dist	2010-07-17 17:33:25.000000000 +0200
-@@ -489,7 +489,7 @@
+--- roundcube.orig/config/main.inc.php.dist	2012-09-29 11:31:46.232078634 +0200
++++ roundcube/config/main.inc.php.dist	2012-09-29 11:31:47.872111424 +0200
+@@ -646,7 +646,7 @@
  // ----------------------------------
  
  // Use this charset as fallback for message decoding
