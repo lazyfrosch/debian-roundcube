@@ -3,6 +3,7 @@ roundcube (0.7.2-9~bpo60+1) squeeze-backports; urgency=low
   * Backport to Squeeze.
       + Add back roundcube-sqlite package.
       + Change wording of NEWS file.
+      + Depends on an older version of php-mail-mime.
 
  -- Vincent Bernat <bernat@debian.org>  Thu, 28 Mar 2013 08:59:38 +0100
 
