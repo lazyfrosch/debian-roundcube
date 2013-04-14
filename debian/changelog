@@ -1,4 +1,4 @@
-roundcube (0.8.6-1) UNRELEASED; urgency=low
+roundcube (0.8.6-1) experimental; urgency=low
 
   * New upstream version. Closes: #684769.
 
