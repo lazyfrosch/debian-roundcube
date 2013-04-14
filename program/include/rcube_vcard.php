@@ -6,7 +6,10 @@
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2008-2011, The Roundcube Dev Team                       |
- | Licensed under the GNU GPL                                            |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
  |                                                                       |
  | PURPOSE:                                                              |
  |   Logical representation of a vcard address record                    |
@@ -14,7 +17,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_vcard.php 5160 2011-09-05 07:40:18Z thomasb $
+ $Id$
 
 */
 
@@ -50,7 +53,7 @@ class rcube_vcard
     'spouse'      => 'X-SPOUSE',
     'edit'        => 'X-AB-EDIT',
   );
-  private $typemap = array('iPhone' => 'mobile', 'CELL' => 'mobile', 'WORK,FAX' => 'workfax');
+  private $typemap = array('IPHONE' => 'mobile', 'CELL' => 'mobile', 'WORK,FAX' => 'workfax');
   private $phonetypemap = array('HOME1' => 'HOME', 'BUSINESS1' => 'WORK', 'BUSINESS2' => 'WORK2', 'BUSINESSFAX' => 'WORK,FAX');
   private $addresstypemap = array('BUSINESS' => 'WORK');
   private $immap = array('X-JABBER' => 'jabber', 'X-ICQ' => 'icq', 'X-MSN' => 'msn', 'X-AIM' => 'aim', 'X-YAHOO' => 'yahoo', 'X-SKYPE' => 'skype', 'X-SKYPE-USERNAME' => 'skype');
@@ -159,7 +162,18 @@ class rcube_vcard
 
           if (!empty($raw['type'])) {
             $combined = join(',', self::array_filter((array)$raw['type'], 'internet,pref', true));
-            $subtype = $typemap[$combined] ? $typemap[$combined] : ($typemap[$raw['type'][++$k]] ? $typemap[$raw['type'][$k]] : strtolower($raw['type'][$k]));
+            $combined = strtoupper($combined);
+
+            if ($typemap[$combined]) {
+                $subtype = $typemap[$combined];
+            }
+            else if ($typemap[$raw['type'][++$k]]) {
+                $subtype = $typemap[$raw['type'][$k]];
+            }
+            else {
+                $subtype = strtolower($raw['type'][$k]);
+            }
+
             while ($k < count($raw['type']) && ($subtype == 'internet' || $subtype == 'pref'))
               $subtype = $typemap[$raw['type'][++$k]] ? $typemap[$raw['type'][$k]] : strtolower($raw['type'][$k]);
           }
@@ -167,8 +181,11 @@ class rcube_vcard
           // read vcard 2.1 subtype
           if (!$subtype) {
             foreach ($raw as $k => $v) {
-              if (!is_numeric($k) && $v === true && !in_array(strtolower($k), array('pref','internet','voice','base64'))) {
-                $subtype = $typemap[$k] ? $typemap[$k] : strtolower($k);
+              if (!is_numeric($k) && $v === true && ($k = strtolower($k))
+                && !in_array($k, array('pref','internet','voice','base64'))
+              ) {
+                $k_uc    = strtoupper($k);
+                $subtype = $typemap[$k_uc] ? $typemap[$k_uc] : $k;
                 break;
               }
             }
@@ -292,11 +309,10 @@ class rcube_vcard
       case 'photo':
         if (strpos($value, 'http:') === 0) {
             // TODO: fetch file from URL and save it locally?
-            $this->raw['PHOTO'][0] = array(0 => $value, 'URL' => true);
+            $this->raw['PHOTO'][0] = array(0 => $value, 'url' => true);
         }
         else {
-            $encoded = !preg_match('![^a-z0-9/=+-]!i', $value);
-            $this->raw['PHOTO'][0] = array(0 => $encoded ? $value : base64_encode($value), 'BASE64' => true);
+            $this->raw['PHOTO'][0] = array(0 => $value, 'base64' => (bool) preg_match('![^a-z0-9/=+-]!i', $value));
         }
         break;
 
@@ -313,8 +329,9 @@ class rcube_vcard
         break;
 
       case 'birthday':
-        if ($val = rcube_strtotime($value))
-          $this->raw['BDAY'][] = array(0 => date('Y-m-d', $val), 'value' => array('date'));
+      case 'anniversary':
+        if (($val = rcube_strtotime($value)) && ($fn = self::$fieldmap[$field]))
+          $this->raw[$fn][] = array(0 => date('Y-m-d', $val), 'value' => array('date'));
         break;
 
       case 'address':
@@ -335,7 +352,7 @@ class rcube_vcard
           $index = count($this->raw[$tag]);
           $this->raw[$tag][$index] = (array)$value;
           if ($type)
-            $this->raw[$tag][$index]['type'] = explode(',', ($typemap[$type] ? $typemap[$type] : $type));
+            $this->raw[$tag][$index]['type'] = explode(',', ($typemap[$type_uc] ? $typemap[$type_uc] : $type));
         }
         break;
     }
@@ -549,26 +566,46 @@ class rcube_vcard
       if (preg_match_all('/([^\\;]+);?/', $line[1], $regs2)) {
         $entry = array();
         $field = strtoupper($regs2[1][0]);
+        $enc   = null;
 
         foreach($regs2[1] as $attrid => $attr) {
           if ((list($key, $value) = explode('=', $attr)) && $value) {
             $value = trim($value);
             if ($key == 'ENCODING') {
+              $value = strtoupper($value);
               // add next line(s) to value string if QP line end detected
-              while ($value == 'QUOTED-PRINTABLE' && preg_match('/=$/', $lines[$i]))
+              if ($value == 'QUOTED-PRINTABLE') {
+                while (preg_match('/=$/', $lines[$i]))
                   $line[2] .= "\n" . $lines[++$i];
-
-              $line[2] = self::decode_value($line[2], $value);
+              }
+              $enc = $value;
             }
-            else
-              $entry[strtolower($key)] = array_merge((array)$entry[strtolower($key)], (array)self::vcard_unquote($value, ','));
+            else {
+              $lc_key = strtolower($key);
+              $entry[$lc_key] = array_merge((array)$entry[$lc_key], (array)self::vcard_unquote($value, ','));
+            }
           }
           else if ($attrid > 0) {
-            $entry[$key] = true;  // true means attr without =value
+            $entry[strtolower($key)] = true;  // true means attr without =value
           }
         }
 
-        $entry = array_merge($entry, (array)self::vcard_unquote($line[2]));
+        // decode value
+        if ($enc || !empty($entry['base64'])) {
+          // save encoding type (#1488432)
+          if ($enc == 'B') {
+            $entry['encoding'] = 'B';
+            // should we use vCard 3.0 instead?
+            // $entry['base64'] = true;
+          }
+          $line[2] = self::decode_value($line[2], $enc ? $enc : 'base64');
+        }
+
+        if ($enc != 'B' && empty($entry['base64'])) {
+          $line[2] = self::vcard_unquote($line[2]);
+        }
+
+        $entry = array_merge($entry, (array) $line[2]);
         $data[$field][] = $entry;
       }
     }
@@ -593,6 +630,7 @@ class rcube_vcard
         return quoted_printable_decode($value);
 
       case 'base64':
+      case 'b':
         self::$values_decoded = true;
         return base64_decode($value);
 
@@ -624,13 +662,20 @@ class rcube_vcard
         if (is_array($entry)) {
           $value = array();
           foreach($entry as $attrname => $attrvalues) {
-            if (is_int($attrname))
+            if (is_int($attrname)) {
+              if (!empty($entry['base64']) || $entry['encoding'] == 'B') {
+                $attrvalues = base64_encode($attrvalues);
+              }
               $value[] = $attrvalues;
-            elseif ($attrvalues === true)
-              $attr .= ";$attrname";    // true means just tag, not tag=value, as in PHOTO;BASE64:...
+            }
+            else if (is_bool($attrvalues)) {
+              if ($attrvalues) {
+                $attr .= strtoupper(";$attrname");    // true means just tag, not tag=value, as in PHOTO;BASE64:...
+              }
+            }
             else {
               foreach((array)$attrvalues as $attrvalue)
-                $attr .= ";$attrname=" . self::vcard_quote($attrvalue, ',');
+                $attr .= strtoupper(";$attrname=") . self::vcard_quote($attrvalue, ',');
             }
           }
         }

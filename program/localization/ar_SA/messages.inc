@@ -1,27 +1,23 @@
 <?php
 
 /*
-
-+-----------------------------------------------------------------------+
-| language/ar_SA/messages.inc                                           |
-|                                                                       |
-| Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
-| Licensed under the GNU GPL                                            |
-|                                                                       |
-+-----------------------------------------------------------------------+
-| Author: Ossama Khayat <okhayat@yahoo.com>                             |
-+-----------------------------------------------------------------------+
-
-@version $Id: messages.inc 5569 2011-12-07 14:47:32Z thomasb $
-
+ +-----------------------------------------------------------------------+
+ | localization/ar_SA/messages.inc                                       |
+ |                                                                       |
+ | Language file of the Roundcube Webmail client                         |
+ | Copyright (C) 2012, The Roundcube Dev Team                            |
+ | Licensed under the GNU General Public License                         |
+ |                                                                       |
+ +-----------------------------------------------------------------------+
+ | Author: Thomas                                                        |
+ +-----------------------------------------------------------------------+
 */
 
 $messages = array();
 $messages['loginfailed'] = 'فشل تسجيل الدخول';
 $messages['cookiesdisabled'] = 'المتصفح الخاص بك لا يقبل الكوكيز';
 $messages['sessionerror'] = 'انتهت صلاحية الجلسة الحالية أو أنها غير صالحة';
-$messages['imaperror'] = 'فشل الاتصال بخادم IMAP';
+$messages['storageerror'] = 'فشل الاتصال بخادم IMAP';
 $messages['servererror'] = 'خطأ في الخادم!';
 $messages['servererrormsg'] = 'خطأ خادم: $msg';
 $messages['dberror'] = 'خطأ في قاعدة البيانات!';
@@ -74,7 +70,7 @@ $messages['nonamewarning'] = 'الرجاء إدخال اسم';
 $messages['nopagesizewarning'] = 'الرجاء إدخال حجم الصفحة';
 $messages['nosenderwarning'] = 'رجاء اكتب عنوان البريد الالكتروني للمُرسل';
 $messages['norecipientwarning'] = 'الرجاء إدخال اسم مستقبل واحد على الأقل';
-$messages['nosubjectwarning'] = 'حقل \"الموضوع\" فارغ. هل تريد كتابة موضوع للرسالة؟';
+$messages['nosubjectwarning'] = 'حقل "الموضوع" فارغ. هل تريد كتابة موضوع للرسالة؟';
 $messages['nobodywarning'] = 'إرسال هذه الرسالة دون نص؟';
 $messages['notsentwarning'] = 'لم يتم إرسال الرسالة. هل تريد تجاهل الرسالة؟';
 $messages['noldapserver'] = 'الرجاء اختيار خادم ldap للبحث فيه';
@@ -159,4 +155,3 @@ $messages['mispellingsfound'] = 'عُثر على أخطاء إملائية في 
 $messages['parentnotwritable'] = 'تعذر إنشاء/نقل المجلد إلى المجلد المحدد. ليست لديك الصلاحية.';
 $messages['messagetoobig'] = 'جزء الرسالة أكبر بكثير مما يمكن معالجته.';
 
-?>

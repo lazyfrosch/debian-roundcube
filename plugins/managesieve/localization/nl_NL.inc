@@ -9,7 +9,7 @@
  | Licensed under the GNU General Public License                         |
  |                                                                       |
  +-----------------------------------------------------------------------+
- | Author: Justin van Beusekom <Unknown>                                 |
+ | Author: Geert Wirken <Unknown>                                        |
  +-----------------------------------------------------------------------+
  @version $Id$
 */
@@ -23,8 +23,8 @@ $labels['filteradd'] = 'Filter toevoegen';
 $labels['filterdel'] = 'Verwijder filter';
 $labels['moveup'] = 'Verplaats omhoog';
 $labels['movedown'] = 'Verplaats omlaag';
-$labels['filterallof'] = 'die voldoen aan alle volgende regels';
-$labels['filteranyof'] = 'die voldoen aan een van de volgende regels';
+$labels['filterallof'] = 'die voldoet aan alle volgende regels';
+$labels['filteranyof'] = 'die voldoet aan één van de volgende regels';
 $labels['filterany'] = 'alle berichten';
 $labels['filtercontains'] = 'bevat';
 $labels['filternotcontains'] = 'bevat niet';
@@ -101,7 +101,7 @@ $labels['advancedopts'] = 'Geavanceerde opties';
 $labels['body'] = 'Inhoud';
 $labels['address'] = 'adres';
 $labels['envelope'] = 'envelope';
-$labels['modifier'] = 'wijziger';
+$labels['modifier'] = 'toets op:';
 $labels['text'] = 'tekst';
 $labels['undecoded'] = 'undecoded (raw)';
 $labels['contenttype'] = 'content type';
@@ -111,7 +111,7 @@ $labels['domain'] = 'domein';
 $labels['localpart'] = 'lokaal gedeelte';
 $labels['user'] = 'gebruiker';
 $labels['detail'] = 'detail';
-$labels['comparator'] = 'vergelijker:';
+$labels['comparator'] = 'vergelijkingswijze:';
 $labels['default'] = 'standaard';
 $labels['octet'] = 'strikt (octet)';
 $labels['asciicasemap'] = 'hoofdletterongevoelig (ascii-casemap)';
@@ -139,8 +139,8 @@ $labels['setcreateerror'] = 'Filterverzameling kon niet aangemaakt worden. Er tr
 $labels['setcreated'] = 'Filterverzameling succesvol aangemaakt.';
 $labels['activateerror'] = 'Geselecteerde filter(s) konden niet ingeschakeld worden. Er trad een serverfout op.';
 $labels['deactivateerror'] = 'Geselecteerde filter(s) konden niet uitgeschakeld worden. Er trad een serverfout op.';
-$labels['activated'] = 'Filter(s) succesvol uitgeschakeld.';
-$labels['deactivated'] = 'Filter(s) succesvol ingeschakeld.';
+$labels['deactivated'] = 'Filter(s) succesvol uitgeschakeld.';
+$labels['activated'] = 'Filter(s) succesvol ingeschakeld.';
 $labels['moved'] = 'Filter succesvol verplaatst.';
 $labels['moveerror'] = 'Geselecteerde filter(s) konden niet verplaatst worden. Er trad een serverfout op.';
 $labels['nametoolong'] = 'Naam is te lang.';

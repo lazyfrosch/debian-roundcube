@@ -6,7 +6,10 @@
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2005-2011, The Roundcube Dev Team                       |
- | Licensed under the GNU GPL                                            |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
  |                                                                       |
  | PURPOSE:                                                              |
  |   Save a contact entry or to add a new one                            |
@@ -15,7 +18,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: save.inc 5873 2012-02-11 13:50:04Z thomasb $
+ $Id$
 
 */
 
@@ -82,7 +85,7 @@ if (empty($a_record['name'])) {
 // do input checks (delegated to $CONTACTS instance)
 if (!$CONTACTS->validate($a_record)) {
     $err = (array)$CONTACTS->get_error();
-    $OUTPUT->show_message($err['message'] ? $err['message'] : 'formincomplete', 'warning');
+    $OUTPUT->show_message($err['message'] ? Q($err['message']) : 'formincomplete', 'warning');
     $GLOBALS['EDIT_RECORD'] = $a_record;  // store submitted data to be used in edit form
     rcmail_overwrite_action($return_action);
     return;
@@ -180,18 +183,24 @@ else {
     $insert_id = $plugin['result'];
 
   if ($insert_id) {
+    $CONTACTS->reset();
+
     // add new contact to the specified group
     if ($CONTACTS->groups && $CONTACTS->group_id) {
       $plugin = $RCMAIL->plugins->exec_hook('group_addmembers', array(
         'group_id' => $CONTACTS->group_id, 'ids' => $insert_id, 'source' => $source));
 
+      $counts = $CONTACTS->count();
+
       if (!$plugin['abort']) {
-        if (($maxnum = $RCMAIL->config->get('max_group_members', 0)) && ($CONTACTS->count()->count + 1 > $maxnum))
+        if (($maxnum = $RCMAIL->config->get('max_group_members', 0)) && ($counts->count + 1 > $maxnum))
           $OUTPUT->show_message('maxgroupmembersreached', 'warning', array('max' => $maxnum));
 
         $CONTACTS->add_to_group($gid, $plugin['ids']);
       }
     }
+    else
+      $counts = $CONTACTS->count();
 
     if ((string)$source === (string)$orig_source) {
       // add contact row or jump to the page where it should appear
@@ -203,7 +212,7 @@ else {
 
       // update record count display
       $CONTACTS->reset();
-      $OUTPUT->command('parent.set_rowcount', rcmail_get_rowcount_text());
+      $OUTPUT->command('parent.set_rowcount', rcmail_get_rowcount_text($counts));
     }
     else {
       // re-set iframe

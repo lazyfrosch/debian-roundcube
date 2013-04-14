@@ -5,8 +5,11 @@
  | program/include/rcube_addressbook.php                                 |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2006-2011, The Roundcube Dev Team                       |
- | Licensed under the GNU GPL                                            |
+ | Copyright (C) 2006-2012, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
  |                                                                       |
  | PURPOSE:                                                              |
  |   Interface to the local address book database                        |
@@ -15,7 +18,7 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
 
- $Id: rcube_addressbook.php 5873 2012-02-11 13:50:04Z thomasb $
+ $Id$
 
 */
 
@@ -479,7 +482,7 @@ abstract class rcube_addressbook
         $fn = $contact['name'];
 
         if (!$fn)  // default display name composition according to vcard standard
-            $fn = join(' ', array_filter(array($contact['prefix'], $contact['firstname'], $contact['middlename'], $contact['surname'], $contact['suffix'])));
+            $fn = trim(join(' ', array_filter(array($contact['prefix'], $contact['firstname'], $contact['middlename'], $contact['surname'], $contact['suffix']))));
 
         // use email address part for name
         $email = is_array($contact['email']) ? $contact['email'][0] : $contact['email'];

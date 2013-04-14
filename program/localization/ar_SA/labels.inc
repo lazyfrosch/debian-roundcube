@@ -1,20 +1,16 @@
 <?php
 
 /*
-
-+-----------------------------------------------------------------------+
-| language/ar_SA/labels.inc                                             |
-|                                                                       |
-| Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
-| Licensed under the GNU GPL                                            |
-|                                                                       |
-+-----------------------------------------------------------------------+
-| Author: Ossama Khayat <okhayat@yahoo.com>                             |
-+-----------------------------------------------------------------------+
-
-@version $Id: labels.inc 5569 2011-12-07 14:47:32Z thomasb $
-
+ +-----------------------------------------------------------------------+
+ | localization/ar_SA/labels.inc                                         |
+ |                                                                       |
+ | Language file of the Roundcube Webmail client                         |
+ | Copyright (C) 2012, The Roundcube Dev Team                            |
+ | Licensed under the GNU General Public License                         |
+ |                                                                       |
+ +-----------------------------------------------------------------------+
+ | Author: Thomas                                                        |
+ +-----------------------------------------------------------------------+
 */
 
 $labels = array();
@@ -44,7 +40,8 @@ $labels['size'] = 'الحجم';
 $labels['priority'] = 'الأولوية';
 $labels['organization'] = 'المنظمة';
 $labels['readstatus'] = 'حالة القراءة';
-$labels['mailboxlist'] = 'المجلدات';
+$labels['mailboxlist'] = 'مجلدات';
+$labels['folders'] = 'مجلدات';
 $labels['messagesfromto'] = 'الرسالة $from إلى $to من مجموع $count';
 $labels['threadsfromto'] = 'جهات الإتصال $from إلى $to من مجموع $count';
 $labels['messagenrof'] = 'الرسالة $nr من $count';
@@ -74,6 +71,7 @@ $labels['feb'] = 'فبراير';
 $labels['mar'] = 'مارس';
 $labels['apr'] = 'أبريل';
 $labels['may'] = 'مايو';
+$labels['longmay'] = 'مايو';
 $labels['jun'] = 'يونيو';
 $labels['jul'] = 'يوليو';
 $labels['aug'] = 'أغسطس';
@@ -85,7 +83,6 @@ $labels['longjan'] = 'يناير';
 $labels['longfeb'] = 'فبراير';
 $labels['longmar'] = 'مارس';
 $labels['longapr'] = 'إبريل';
-$labels['longmay'] = 'مايو';
 $labels['longjun'] = 'يونيو';
 $labels['longjul'] = 'يوليو';
 $labels['longaug'] = 'أغسطس';
@@ -95,6 +92,7 @@ $labels['longnov'] = 'نوفمبر';
 $labels['longdec'] = 'ديسمبر';
 $labels['today'] = 'اليوم';
 $labels['checkmail'] = 'التحقق من وجود رسائل جديدة';
+$labels['compose'] = 'إنشاء رسالة';
 $labels['writenewmessage'] = 'إنشاء رسالة جديدة';
 $labels['replytomessage'] = 'الرد على الرسالة';
 $labels['replytoallmessage'] = 'الرد على المرسل وجميع مستقبلي الرسالة';
@@ -120,7 +118,8 @@ $labels['markunflagged'] = 'كغير موْسومة';
 $labels['moreactions'] = 'إجراءات إضافية...';
 $labels['select'] = 'تحديد';
 $labels['all'] = 'الكل';
-$labels['none'] = 'لا شيء';
+$labels['none'] = 'لاشيء';
+$labels['nonesort'] = 'لاشيء';
 $labels['currpage'] = 'الصفحة الحالية';
 $labels['unread'] = 'غير المقروءة';
 $labels['flagged'] = 'موسوم';
@@ -140,7 +139,6 @@ $labels['expand_only_unread'] = 'فقط مع الرسائل الغير مقرو�
 $labels['fromto'] = 'المرسل/المستلم';
 $labels['flag'] = 'وسم';
 $labels['attachment'] = 'مرفق';
-$labels['nonesort'] = 'لاشيء';
 $labels['sentdate'] = 'تاريخ إرسالها';
 $labels['arrival'] = 'تاريخ وصولها';
 $labels['asc'] = 'تصاعدي';
@@ -161,7 +159,6 @@ $labels['searchmod'] = 'أماكن البحث';
 $labels['msgtext'] = 'كامل الرسالة';
 $labels['openinextwin'] = 'افتح في نافذة جديدة';
 $labels['emlsave'] = 'تنزيل (.eml)';
-$labels['compose'] = 'إنشاء رسالة';
 $labels['editasnew'] = 'تعديل كجديد';
 $labels['savemessage'] = 'حفظ هذه المسودة';
 $labels['sendmessage'] = 'إرسال الرسالة الآن';
@@ -230,15 +227,16 @@ $labels['notes'] = 'ملاحظات';
 $labels['male'] = 'ذكر';
 $labels['female'] = 'أنثى';
 $labels['manager'] = 'مدير';
-$labels['assistant'] = 'مساعد';
+$labels['assistant'] = 'المساعد';
+$labels['typeassistant'] = 'المساعد';
 $labels['spouse'] = 'زوجة';
 $labels['allfields'] = 'جميع الحقول';
 $labels['search'] = 'بحث';
 $labels['advsearch'] = 'بحث متقدم';
-$labels['other'] = 'أخرى';
+$labels['other'] = 'آخر';
+$labels['typeother'] = 'آخر';
 $labels['typehome'] = 'المنزل';
 $labels['typework'] = 'العمل';
-$labels['typeother'] = 'آخر';
 $labels['typemobile'] = 'المحمول';
 $labels['typemain'] = 'الرئيسي';
 $labels['typehomefax'] = 'فاكس المنزل';
@@ -246,7 +244,6 @@ $labels['typeworkfax'] = 'فاكس العمل';
 $labels['typecar'] = 'السيارة';
 $labels['typepager'] = 'الرنان';
 $labels['typevideo'] = 'الفيديو';
-$labels['typeassistant'] = 'المساعد';
 $labels['typehomepage'] = 'الرئيسية';
 $labels['typeblog'] = 'المدوّنة';
 $labels['typeprofile'] = 'الملف الشخصي';
@@ -356,7 +353,6 @@ $labels['mainoptions'] = 'الخيارات الأساسية';
 $labels['section'] = 'قسم';
 $labels['maintenance'] = 'الصيانة';
 $labels['newmessage'] = 'رسالة جديدة';
-$labels['listoptions'] = 'خيارات السرد';
 $labels['signatureoptions'] = 'خيارات التوقيع';
 $labels['whenreplying'] = 'عند الرد';
 $labels['replytopposting'] = 'بدء رسالة جديدة ووضع النص أعلى الأصلية';
@@ -383,7 +379,6 @@ $labels['spellcheckignorenums'] = 'تجاهل الكلمات التي تحتوي
 $labels['spellcheckignorecaps'] = 'تجاهل الكلمات التي بها أحرف كبيرة';
 $labels['addtodict'] = 'إضافة إلى القامس';
 $labels['folder'] = 'مجلد';
-$labels['folders'] = 'مجلدات';
 $labels['foldername'] = 'اسم المجلد';
 $labels['subscribed'] = 'مشترك';
 $labels['messagecount'] = 'الرسائل';
@@ -434,4 +429,3 @@ $labels['japanese'] = 'اليابانية';
 $labels['korean'] = 'الكورية';
 $labels['chinese'] = 'الصينية';
 
-?>
