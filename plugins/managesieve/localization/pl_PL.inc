@@ -9,7 +9,7 @@
  | Licensed under the GNU General Public License                         |
  |                                                                       |
  +-----------------------------------------------------------------------+
- | Author: Thomas <Unknown>                                              |
+ | Author: Aleksander Machniak <alec@alec.pl>                            |
  +-----------------------------------------------------------------------+
  @version $Id$
 */
@@ -93,7 +93,17 @@ $labels['flagdeleted'] = 'Usunięta';
 $labels['flaganswered'] = 'Z odpowiedzią';
 $labels['flagflagged'] = 'Oflagowana';
 $labels['flagdraft'] = 'Szkic';
-$labels['filtercreate'] = 'Utwóż filtr';
+$labels['setvariable'] = 'Ustaw zmienną';
+$labels['setvarname'] = 'Nazwa zmiennej:';
+$labels['setvarvalue'] = 'Wartość zmiennej:';
+$labels['setvarmodifiers'] = 'Modyfikatory:';
+$labels['varlower'] = 'małe litery (:lower)';
+$labels['varupper'] = 'duże litery (:upper)';
+$labels['varlowerfirst'] = 'pierwsza litera mała (:lowerfirst)';
+$labels['varupperfirst'] = 'pierwsza litera duża (:upperfirst)';
+$labels['varquotewildcard'] = 'anulowane znaki specjalne (:quotewildcard)';
+$labels['varlength'] = 'długość (:length)';
+$labels['filtercreate'] = 'Utwórz filtr';
 $labels['usedata'] = 'Użyj następujących danych do utworzenia filtra:';
 $labels['nextstep'] = 'Następny krok';
 $labels['...'] = '...';
@@ -139,8 +149,8 @@ $labels['setcreateerror'] = 'Nie można utworzyć zbioru filtrów. Błąd serwer
 $labels['setcreated'] = 'Zbiór filtrów został utworzony pomyślnie.';
 $labels['activateerror'] = 'Nie można włączyć wybranych filtrów. Błąd serwera.';
 $labels['deactivateerror'] = 'Nie można wyłączyć wybranych filtrów. Błąd serwera.';
-$labels['activated'] = 'Filtr(y) wyłączono pomyślnie.';
-$labels['deactivated'] = 'Filtr(y) włączono pomyślnie.';
+$labels['deactivated'] = 'Filtr(y) wyłączono pomyślnie.';
+$labels['activated'] = 'Filtr(y) włączono pomyślnie.';
 $labels['moved'] = 'Filter został przeniesiony pomyślnie.';
 $labels['moveerror'] = 'Nie można przenieść wybranego filtra. Błąd serwera.';
 $labels['nametoolong'] = 'Zbyt długa nazwa.';

@@ -1,22 +1,16 @@
-a<?php
+<?php
 
 /*
-
-+-----------------------------------------------------------------------+
-| language/sv_SE/labels.inc                                             |
-|                                                                       |
-| Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
-| Licensed under the GNU GPL                                            |
-|                                                                       |
-+-----------------------------------------------------------------------+
-| Author: Jonas Nasholm <rcm@bitfuse.net>                               |
-|         Fredrik Nygren <f.nygren@gmail.com>                           |
-|         Andreas Henriksson <andreas@fatal.se>                         |
-+-----------------------------------------------------------------------+
-
-@version $Id: labels.inc 5290 2011-09-28 17:09:50Z thomasb $
-
+ +-----------------------------------------------------------------------+
+ | localization/sv_SE/labels.inc                                         |
+ |                                                                       |
+ | Language file of the Roundcube Webmail client                         |
+ | Copyright (C) 2012, The Roundcube Dev Team                            |
+ | Licensed under the GNU General Public License                         |
+ |                                                                       |
+ +-----------------------------------------------------------------------+
+ | Author: Anders Wallenquist <anders.wallenquist@vertel.se>             |
+ +-----------------------------------------------------------------------+
 */
 
 $labels = array();
@@ -46,10 +40,13 @@ $labels['size'] = 'Storlek';
 $labels['priority'] = 'Prioritet';
 $labels['organization'] = 'Organisation';
 $labels['readstatus'] = 'Lässtatus';
+$labels['listoptions'] = 'Listalternativ...';
 $labels['mailboxlist'] = 'Kataloger';
+$labels['folders'] = 'Kataloger';
 $labels['messagesfromto'] = 'Meddelande $from till $to av $count';
 $labels['threadsfromto'] = 'Tråd $from till $to av $count';
 $labels['messagenrof'] = 'Meddelande $nr av $count';
+$labels['fromtoshort'] = '$from – $to av $count';
 $labels['copy'] = 'Kopiera';
 $labels['move'] = 'Flytta';
 $labels['moveto'] = 'Flytta till:';
@@ -57,51 +54,55 @@ $labels['download'] = 'Ladda ner';
 $labels['filename'] = 'Filnamn';
 $labels['filesize'] = 'Filstorlek';
 $labels['addtoaddressbook'] = 'Lägg till i adressbok';
-$labels['sun'] = 'Sön';
-$labels['mon'] = 'Mån';
-$labels['tue'] = 'Tis';
-$labels['wed'] = 'Ons';
-$labels['thu'] = 'Tor';
-$labels['fri'] = 'Fre';
-$labels['sat'] = 'Lör';
-$labels['sunday'] = 'Söndag';
-$labels['monday'] = 'Måndag';
-$labels['tuesday'] = 'Tisdag';
-$labels['wednesday'] = 'Onsdag';
-$labels['thursday'] = 'Torsdag';
-$labels['friday'] = 'Fredag';
-$labels['saturday'] = 'Lördag';
-$labels['jan'] = 'Jan';
-$labels['feb'] = 'Feb';
-$labels['mar'] = 'Mar';
-$labels['apr'] = 'Apr';
-$labels['may'] = 'Maj';
-$labels['jun'] = 'Jun';
-$labels['jul'] = 'Jul';
-$labels['aug'] = 'Aug';
-$labels['sep'] = 'Sep';
-$labels['oct'] = 'Okt';
-$labels['nov'] = 'Nov';
-$labels['dec'] = 'Dec';
-$labels['longjan'] = 'Januari';
-$labels['longfeb'] = 'Februari';
-$labels['longmar'] = 'Mars';
-$labels['longapr'] = 'April';
-$labels['longmay'] = 'Maj';
-$labels['longjun'] = 'Juni';
-$labels['longjul'] = 'Juli';
-$labels['longaug'] = 'Augusti';
-$labels['longsep'] = 'September';
-$labels['longoct'] = 'Oktober';
-$labels['longnov'] = 'November';
-$labels['longdec'] = 'December';
+$labels['sun'] = 'sön';
+$labels['mon'] = 'mån';
+$labels['tue'] = 'tis';
+$labels['wed'] = 'ons';
+$labels['thu'] = 'tor';
+$labels['fri'] = 'fre';
+$labels['sat'] = 'lör';
+$labels['sunday'] = 'söndag';
+$labels['monday'] = 'måndag';
+$labels['tuesday'] = 'tisdag';
+$labels['wednesday'] = 'onsdag';
+$labels['thursday'] = 'torsdag';
+$labels['friday'] = 'fredag';
+$labels['saturday'] = 'lördag';
+$labels['jan'] = 'jan';
+$labels['feb'] = 'feb';
+$labels['mar'] = 'mar';
+$labels['apr'] = 'apr';
+$labels['may'] = 'maj';
+$labels['longmay'] = 'maj';
+$labels['jun'] = 'jun';
+$labels['jul'] = 'jul';
+$labels['aug'] = 'aug';
+$labels['sep'] = 'sep';
+$labels['oct'] = 'okt';
+$labels['nov'] = 'nov';
+$labels['dec'] = 'dec';
+$labels['longjan'] = 'januari';
+$labels['longfeb'] = 'februari';
+$labels['longmar'] = 'mars';
+$labels['longapr'] = 'april';
+$labels['longjun'] = 'juni';
+$labels['longjul'] = 'juli';
+$labels['longaug'] = 'augusti';
+$labels['longsep'] = 'september';
+$labels['longoct'] = 'oktober';
+$labels['longnov'] = 'november';
+$labels['longdec'] = 'december';
 $labels['today'] = 'Idag';
+$labels['refresh'] = 'Uppdatera';
 $labels['checkmail'] = 'Hämta nya meddelanden';
+$labels['compose'] = 'Nytt meddelande';
 $labels['writenewmessage'] = 'Nytt meddelande';
+$labels['reply'] = 'Svara';
 $labels['replytomessage'] = 'Svara avsändaren';
 $labels['replytoallmessage'] = 'Svara avsändaren och alla mottagare';
 $labels['replyall'] = 'Svara alla';
 $labels['replylist'] = 'Svara lista';
+$labels['forward'] = 'Vidarebefordra';
 $labels['forwardinline'] = 'Vidarebefordra infogat';
 $labels['forwardattachment'] = 'Vidarebefordra som bilaga';
 $labels['forwardmessage'] = 'Vidarebefordra meddelande';
@@ -114,15 +115,20 @@ $labels['nextmessage'] = 'Visa nästa meddelande';
 $labels['lastmessage'] = 'Visa sista meddelandet';
 $labels['backtolist'] = 'Tillbaka till meddelandelistan';
 $labels['viewsource'] = 'Visa källkod';
+$labels['mark'] = 'Märk';
 $labels['markmessages'] = 'Märk meddelande';
 $labels['markread'] = 'Läst';
 $labels['markunread'] = 'Oläst';
 $labels['markflagged'] = 'Flaggat';
 $labels['markunflagged'] = 'Oflaggat';
 $labels['moreactions'] = 'Ytterligare hantering...';
+$labels['more'] = 'Fler';
+$labels['back'] = 'Tillbaka';
+$labels['options'] = 'Alternativ';
 $labels['select'] = 'Välj';
 $labels['all'] = 'Alla';
 $labels['none'] = 'Ingen';
+$labels['nonesort'] = 'Ingen';
 $labels['currpage'] = 'Sida';
 $labels['unread'] = 'Olästa';
 $labels['flagged'] = 'Flaggade';
@@ -142,7 +148,6 @@ $labels['expand_only_unread'] = 'Trådar med olästa meddelanden';
 $labels['fromto'] = 'Avsändare/Mottagare';
 $labels['flag'] = 'Flagga';
 $labels['attachment'] = 'Bilaga';
-$labels['nonesort'] = 'Ingen';
 $labels['sentdate'] = 'Datum skickat';
 $labels['arrival'] = 'Datum mottaget';
 $labels['asc'] = 'Stigande';
@@ -163,7 +168,6 @@ $labels['searchmod'] = 'Sökalternativ';
 $labels['msgtext'] = 'Hela meddelandet';
 $labels['openinextwin'] = 'Öppna i nytt fönster';
 $labels['emlsave'] = 'Spara (.eml)';
-$labels['compose'] = 'Nytt meddelande';
 $labels['editasnew'] = 'Redigera som nytt';
 $labels['savemessage'] = 'Spara utkast';
 $labels['sendmessage'] = 'Skicka meddelande';
@@ -175,9 +179,11 @@ $labels['dsn'] = 'Leveransstatusmeddelande';
 $labels['mailreplyintro'] = '$date skrev $sender:';
 $labels['originalmessage'] = 'Ursprungligt meddelande';
 $labels['editidents'] = 'Ändra identiteter';
+$labels['spellcheck'] = 'Rättstava';
 $labels['checkspelling'] = 'Kontrollera stavning';
 $labels['resumeediting'] = 'Återuppta redigering';
 $labels['revertto'] = 'Återgå till';
+$labels['attach'] = 'Bifoga';
 $labels['attachments'] = 'Bilagor';
 $labels['upload'] = 'Bifoga';
 $labels['uploadprogress'] = '$percent ($current av $total)';
@@ -191,6 +197,7 @@ $labels['highest'] = 'Högst';
 $labels['nosubject'] = '(inget ämne)';
 $labels['showimages'] = 'Visa bilder';
 $labels['alwaysshow'] = 'Visa alltid bilder från $sender';
+$labels['isdraft'] = 'Detta meddelande är ett utkast.';
 $labels['htmltoggle'] = 'HTML';
 $labels['plaintoggle'] = 'Text';
 $labels['savesentmessagein'] = 'Spara kopia i';
@@ -232,14 +239,16 @@ $labels['male'] = 'Man';
 $labels['female'] = 'Kvinna';
 $labels['manager'] = 'Chef';
 $labels['assistant'] = 'Assistent';
+$labels['typeassistant'] = 'Assistent';
 $labels['spouse'] = 'Make/Maka';
 $labels['allfields'] = 'Alla fält';
 $labels['search'] = 'Sök';
-$labels['advsearch'] = 'Sök avancerat';
-$labels['other'] = 'Annan';
+$labels['advsearch'] = 'Avancerad sökning';
+$labels['advanced'] = 'Avancerad';
+$labels['other'] = 'Annat';
+$labels['typeother'] = 'Annat';
 $labels['typehome'] = 'Hem';
 $labels['typework'] = 'Arbete';
-$labels['typeother'] = 'Annat';
 $labels['typemobile'] = 'Mobil';
 $labels['typemain'] = 'Huvudsakligt';
 $labels['typehomefax'] = 'Fax hem';
@@ -247,7 +256,6 @@ $labels['typeworkfax'] = 'Fax arbete';
 $labels['typecar'] = 'Bil';
 $labels['typepager'] = 'Personsökare';
 $labels['typevideo'] = 'Video';
-$labels['typeassistant'] = 'Assistent';
 $labels['typehomepage'] = 'Webbsida';
 $labels['typeblog'] = 'Blog';
 $labels['typeprofile'] = 'Profil';
@@ -264,6 +272,7 @@ $labels['delete'] = 'Ta bort';
 $labels['rename'] = 'Ändra namn';
 $labels['addphoto'] = 'Lägg till';
 $labels['replacephoto'] = 'Ersätt';
+$labels['uploadphoto'] = 'Ladda upp foto';
 $labels['newcontact'] = 'Ny kontakt';
 $labels['deletecontact'] = 'Ta bort vald kontakt';
 $labels['composeto'] = 'Nytt meddelande till vald kontakt';
@@ -274,6 +283,7 @@ $labels['exportvcards'] = 'Exportera kontakter';
 $labels['newcontactgroup'] = 'Ny kontaktgrupp';
 $labels['grouprename'] = 'Ändra gruppnamn';
 $labels['groupdelete'] = 'Ta bort grupp';
+$labels['groupremoveselected'] = 'Ta bort markerade kontakter från gruppen';
 $labels['previouspage'] = 'Visa föregående sida';
 $labels['firstpage'] = 'Visa första sidan';
 $labels['nextpage'] = 'Visa nästa sida';
@@ -291,6 +301,7 @@ $labels['importreplace'] = 'Ersätt samtliga kontakter i adressboken';
 $labels['importtext'] = 'Kontakter kan importeras från en befintlig adressbok.<br/>För närvarande stöds import av adresser i <a href="http://en.wikipedia.org/wiki/VCard">vCard</a>-format.';
 $labels['done'] = 'Klart';
 $labels['settingsfor'] = 'Inställningar för';
+$labels['about'] = 'Om';
 $labels['preferences'] = 'Inställningar';
 $labels['userpreferences'] = 'Användarinställningar';
 $labels['editpreferences'] = 'Ändra användarinställningar';
@@ -332,6 +343,7 @@ $labels['readwhendeleted'] = 'Märk meddelande som läst vid borttagning';
 $labels['flagfordeletion'] = 'Flagga meddelande för borttagning istället för att ta bort direkt';
 $labels['skipdeleted'] = 'Visa inte borttagna meddelanden';
 $labels['deletealways'] = 'Ta bort meddelande om flyttning till Papperskorg misslyckas';
+$labels['deletejunk'] = 'Radera automatiskt meddelanden i skräpmappen';
 $labels['showremoteimages'] = 'Visa externt länkade bilder i meddelande';
 $labels['fromknownsenders'] = 'Från kända avsändare';
 $labels['always'] = 'Alltid';
@@ -352,13 +364,14 @@ $labels['advancedoptions'] = 'Avancerade inställningar';
 $labels['focusonnewmessage'] = 'Fokusera webbläsarens fönster vid nytt meddelande';
 $labels['checkallfolders'] = 'Genomsök samtliga kataloger efter nya meddelanden';
 $labels['displaynext'] = 'Visa nästa meddelande efter borttagning/flyttning av meddelande';
+$labels['defaultfont'] = 'Standardtypsnitt i HTML-meddelande';
 $labels['mainoptions'] = 'Huvudalternativ';
+$labels['browseroptions'] = 'Webbläsaralternativ';
 $labels['section'] = 'Avdelning';
 $labels['maintenance'] = 'Underhåll';
 $labels['newmessage'] = 'Nytt meddelande';
-$labels['listoptions'] = 'Listalternativ';
 $labels['signatureoptions'] = 'Signaturalternativ';
-$labels['whenreplying'] = 'Vid svar';
+$labels['whenreplying'] = 'Vid svar fortsätt skriv';
 $labels['replytopposting'] = 'Ovanför befintligt meddelande';
 $labels['replybottomposting'] = 'Nedanför befintligt meddelande';
 $labels['replyremovesignature'] = 'Ta bort befintlig signatur från meddelandet vid svar';
@@ -375,14 +388,16 @@ $labels['reqmdn'] = 'Begär alltid mottagarkvitto';
 $labels['reqdsn'] = 'Begär alltid leveransstatusmeddelande';
 $labels['replysamefolder'] = 'Placera svar i samma katalog som besvarat meddelande';
 $labels['defaultaddressbook'] = 'Lägg till nya kontakter i vald adressbok';
+$labels['autocompletesingle'] = 'Hoppa över alternativa adresser vid automatisk komplettering';
+$labels['listnamedisplay'] = 'Lista kontakter som';
 $labels['spellcheckbeforesend'] = 'Kontrollera stavning innan meddelanden skickas';
 $labels['spellcheckoptions'] = 'Rättstavningsalternativ';
 $labels['spellcheckignoresyms'] = 'Ignorera ord med symboler';
 $labels['spellcheckignorenums'] = 'Ignorera ord med siffror';
 $labels['spellcheckignorecaps'] = 'Ignorera ord med enbart stora bokstäver';
 $labels['addtodict'] = 'Lägg till i ordlista';
+$labels['mailtoprotohandler'] = 'Ange program för hantering av mailto-länkar';
 $labels['folder'] = 'Katalog';
-$labels['folders'] = 'Kataloger';
 $labels['foldername'] = 'Katalognamn';
 $labels['subscribed'] = 'Prenumererad';
 $labels['messagecount'] = 'Meddelanden';
@@ -395,7 +410,7 @@ $labels['folderproperties'] = 'Katalogegenskaper';
 $labels['parentfolder'] = 'Överliggande katalog';
 $labels['location'] = 'Plats';
 $labels['info'] = 'Information';
-$labels['getfoldersize'] = 'Klicka för katalogstorlek';
+$labels['getfoldersize'] = 'Beräkna katalogstorlek';
 $labels['changesubscription'] = 'Klicka för att ändra prenumeration';
 $labels['foldertype'] = 'Katalogtyp';
 $labels['personalfolder'] = 'Privat katalog';
@@ -405,6 +420,11 @@ $labels['sortby'] = 'Sortera på';
 $labels['sortasc'] = 'Sortera stigande';
 $labels['sortdesc'] = 'Sortera fallande';
 $labels['undo'] = 'Ångra';
+$labels['plugin'] = 'Plugin';
+$labels['version'] = 'Version';
+$labels['source'] = 'Källkod';
+$labels['license'] = 'Licens';
+$labels['support'] = 'Hjälp';
 $labels['B'] = 'B';
 $labels['KB'] = 'KB';
 $labels['MB'] = 'MB';
@@ -428,4 +448,3 @@ $labels['japanese'] = 'Japansk';
 $labels['korean'] = 'Koreansk';
 $labels['chinese'] = 'Kinesisk';
 
-?>

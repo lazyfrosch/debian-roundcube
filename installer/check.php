@@ -1,3 +1,10 @@
+<?php
+
+if (!class_exists('rcube_install') || !is_object($RCI)) {
+    die("Not allowed! Please open installer/index.php instead.");
+}
+
+?>
 <form action="index.php" method="get">
 <?php
 
@@ -16,6 +23,7 @@ $optional_php_exts = array(
     'OpenSSL'   => 'openssl',
     'Mcrypt'    => 'mcrypt',
     'Intl'      => 'intl',
+    'Exif'      => 'exif',
 );
 
 $required_libs = array(
@@ -39,10 +47,14 @@ $ini_checks = array(
     'zend.ze1_compatibility_mode'   => 0,
     'mbstring.func_overload'        => 0,
     'suhosin.session.encrypt'       => 0,
+    'magic_quotes_runtime'          => 0,
+    'magic_quotes_sybase'           => 0,
+    'date.timezone'                 => '-NOTEMPTY-',
 );
 
 $optional_checks = array(
-    'date.timezone' => '-NOTEMPTY-',
+    // required for utils/modcss.inc, should we require this?
+    'allow_url_fopen'  => 1,
 );
 
 $source_urls = array(
@@ -57,10 +69,12 @@ $source_urls = array(
     'JSON'      => 'http://www.php.net/manual/en/book.json.php',
     'DOM'       => 'http://www.php.net/manual/en/book.dom.php',
     'Intl'      => 'http://www.php.net/manual/en/book.intl.php',
+    'Exif'      => 'http://www.php.net/manual/en/book.exif.php',
     'PEAR'      => 'http://pear.php.net',
     'MDB2'      => 'http://pear.php.net/package/MDB2',
     'Net_SMTP'  => 'http://pear.php.net/package/Net_SMTP',
     'Mail_mime' => 'http://pear.php.net/package/Mail_mime',
+    'Net_IDNA2' => 'http://pear.php.net/package/Net_IDNA2',
 );
 
 echo '<input type="hidden" name="_step" value="' . ($RCI->configured ? 3 : 2) . '" />';
@@ -165,7 +179,15 @@ foreach ($ini_checks as $var => $val) {
     $status = ini_get($var);
     if ($val === '-NOTEMPTY-') {
         if (empty($status)) {
-            $RCI->fail($var, "cannot be empty and needs to be set");
+            $RCI->fail($var, "empty value detected");
+        } else if ($var == 'date.timezone') {
+            try {
+                $tz = new DateTimeZone($status);
+                $RCI->pass($var);
+            }
+            catch (Exception $e) {
+                $RCI->fail($var, "invalid value detected");
+            }
         } else {
             $RCI->pass($var);
         }
