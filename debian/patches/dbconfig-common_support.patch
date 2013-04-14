@@ -2,9 +2,9 @@ The default db.inc.php is modified to adapt it to the use of dbconfig-common pac
 
 Index: roundcube/config/db.inc.php.dist
 ===================================================================
---- roundcube.orig/config/db.inc.php.dist	2012-09-29 11:31:38.219918435 +0200
-+++ roundcube/config/db.inc.php.dist	2012-09-29 11:31:42.800010013 +0200
-@@ -14,15 +14,20 @@
+--- roundcube.orig/config/db.inc.php.dist	2013-04-14 11:57:22.788350614 +0200
++++ roundcube/config/db.inc.php.dist	2013-04-14 11:57:22.784350531 +0200
+@@ -17,15 +17,20 @@
  
  $rcmail_config = array();
  
