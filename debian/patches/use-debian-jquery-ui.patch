@@ -4,7 +4,7 @@ Index: roundcube/plugins/jqueryui/jqueryui.php
 ===================================================================
 --- roundcube.orig/plugins/jqueryui/jqueryui.php	2012-09-29 11:30:56.195077966 +0200
 +++ roundcube/plugins/jqueryui/jqueryui.php	2012-09-29 11:31:49.528144533 +0200
-@@ -21,18 +21,18 @@
+@@ -21,7 +21,7 @@
      $this->load_config();
  
      // include UI scripts
@@ -13,18 +13,3 @@ Index: roundcube/plugins/jqueryui/jqueryui.php
  
      // include UI stylesheet
      $skin = $rcmail->config->get('skin', 'default');
-     $ui_map = $rcmail->config->get('jquery_ui_skin_map', array());
--    $ui_theme = $ui_map[$skin] ? $ui_map[$skin] : 'default';
-+    $ui_theme = $ui_map[$skin] ? $ui_map[$skin] : 'smoothness';
- 
--    if (file_exists($this->home . "/themes/$ui_theme/jquery-ui-$version.custom.css")) {
--      $this->include_stylesheet("themes/$ui_theme/jquery-ui-$version.custom.css");
-+    if (file_exists($this->home . "/css/$ui_theme/jquery-ui.custom.css")) {
-+      $this->include_stylesheet("css/$ui_theme/jquery-ui.min.css");
-     }
-     else {
--      $this->include_stylesheet("themes/default/jquery-ui-$version.custom.css");
-+      $this->include_stylesheet("css/smoothness/jquery-ui.min.css");
-     }
- 
-     // jquery UI localization

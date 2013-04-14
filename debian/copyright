@@ -4,10 +4,11 @@ Upstream-Contact: http://roundcube.net/support
 Source: http://roundcube.net/download
 
 Files: *
-Copyright: 2005-2011, Roundcube Dev. - Switzerland
-License: GPL-2
+Copyright: Copyright (C) 2005-2011, The Roundcube Dev Team
+           Copyright (C) 2011, Kolab Systems AG
+License: GPL-3+
 
-Files: skins/default/*
+Files: skins/*/*
 Copyright: 2005-2011, Roundcube Dev. - Switzerland
 License: CC-BY-SA-3
 
@@ -54,12 +55,29 @@ Copyright: 2002-2003 Richard Heyes
            2006-2008 Anish Mistry
 License: BSD-2-clause
 
+Files: plugins/managesieve/lib/*.php
+Copyright: 2008-2011, The Roundcube Dev team
+           2011, Kolab Systems AG
+License: GPL-2
+
 Files: plugins/enigma/lib/Crypt/*
 Copyright: 2005-2010 silverorange
 License: LGPL-2.1
 
 Files: plugins/acl/acl.php
 Copyright: Copyright (C) 2011, Kolab Systems AG
+License: GPL-2
+
+Files: plugins/enigma/*.php
+Copyright: Copyright (C) 2009-2010, Roundcube Dev.
+License: GPL-2
+
+Files: plugins/newmail_notifier/newmail_notifier.php
+Copyright: Copyright (C) 2011, Kolab Systems AG
+License: GPL-2
+
+Files: plugins/password/password.php
+Copyright: Copyright (C) 2009-2010, Roundcube Dev.
 License: GPL-2
 
 Files: plugins/redundant_attachments/redundant_attachments.php
@@ -540,3 +558,21 @@ License: GPL-2+
  On Debian systems, the full text of the GNU General Public
  License version 2 can be found in the file
  `/usr/share/common-licenses/GPL-2'.
+
+License: GPL-3+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ .
+ On Debian systems, the full text of the GNU General Public License
+ version 3 can be found in the file
+ `/usr/share/common-licenses/GPL-3`.
