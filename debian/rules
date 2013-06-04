@@ -32,7 +32,7 @@ binary-install/roundcube-core::
 	find $(CURDIR)/debian/roundcube-core/usr/share/roundcube -type f -print0 | xargs -r0 chmod -x
 	# Remove useless file
 	rm -rf $(CURDIR)/debian/roundcube-core/usr/share/roundcube/bin
-	find $(CURDIR)/debian/roundcube-core -name '._*' -print0 | xargs -r0 rm
+	find $(CURDIR)/debian/roundcube-core -name '._*' -name -o '.gitignore' -print0 | xargs -r0 rm
 	# Convert .js.src back to js
 	for js in $$(find $(CURDIR)/debian/roundcube-core -name '*.js.src' -print); do \
 		yui-compressor --type js "$$js" -o "$${js%.*}" ; \
@@ -64,6 +64,9 @@ binary-install/roundcube-plugins::
 		dh_link -proundcube-plugins etc/roundcube/plugins/$${plugin##*/}/config.inc.php \
 			usr/share/roundcube/plugins/$${plugin##*/}/config.inc.php ; \
 	done
+
+	# Some files are executable while not being scripts or binary...
+	find $(CURDIR)/debian/roundcube-plugins/usr/share/roundcube -type f -print0 | xargs -r0 chmod -x
 
 $(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/% :
 	install -d $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/bug/$(cdbs_curpkg)
