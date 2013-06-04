@@ -22,3 +22,4 @@ plugins/userinfo/ usr/share/roundcube/plugins
 plugins/vcard_attachments/ usr/share/roundcube/plugins
 plugins/virtuser_file/ usr/share/roundcube/plugins
 plugins/virtuser_query/ usr/share/roundcube/plugins
+plugins/zipdownload/ usr/share/roundcube/plugins
