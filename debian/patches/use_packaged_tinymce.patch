@@ -2,9 +2,9 @@ Use tinymce from tinycme package instead of the shipped one.
 
 Index: roundcube/program/steps/mail/sendmail.inc
 ===================================================================
---- roundcube.orig/program/steps/mail/sendmail.inc	2013-04-14 11:57:30.284506098 +0200
-+++ roundcube/program/steps/mail/sendmail.inc	2013-04-14 11:57:30.280506016 +0200
-@@ -126,7 +126,7 @@
+--- roundcube.orig/program/steps/mail/sendmail.inc	2013-06-04 22:55:09.173050163 +0200
++++ roundcube/program/steps/mail/sendmail.inc	2013-06-04 22:55:09.165050135 +0200
+@@ -123,7 +123,7 @@
  
          // sanitize image name so resulting attachment doesn't leave images dir
          $image_name = preg_replace('/[^a-zA-Z0-9_\.\-]/i', '', $image_name);

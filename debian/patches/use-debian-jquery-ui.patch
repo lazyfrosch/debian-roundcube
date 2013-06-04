@@ -2,8 +2,8 @@ Use packaged libjs-jquery-ui.
 
 Index: roundcube/plugins/jqueryui/jqueryui.php
 ===================================================================
---- roundcube.orig/plugins/jqueryui/jqueryui.php	2013-04-14 12:31:53.963310467 +0200
-+++ roundcube/plugins/jqueryui/jqueryui.php	2013-04-14 12:31:53.959310388 +0200
+--- roundcube.orig/plugins/jqueryui/jqueryui.php	2013-06-04 22:55:57.757216447 +0200
++++ roundcube/plugins/jqueryui/jqueryui.php	2013-06-04 22:55:57.749216420 +0200
 @@ -21,7 +21,7 @@
          $this->load_config();
  

@@ -2,9 +2,9 @@ Install path is /var/lib/roundcube for Debian. Don't try to guess it.
 
 Index: roundcube/program/include/iniset.php
 ===================================================================
---- roundcube.orig/program/include/iniset.php	2013-04-14 11:57:27.972458142 +0200
-+++ roundcube/program/include/iniset.php	2013-04-14 11:57:27.964457978 +0200
-@@ -48,7 +48,7 @@
+--- roundcube.orig/program/include/iniset.php	2013-06-04 22:55:03.709031462 +0200
++++ roundcube/program/include/iniset.php	2013-06-04 22:55:03.701031434 +0200
+@@ -25,7 +25,7 @@
  define('RCMAIL_START', microtime(true));
  
  if (!defined('INSTALL_PATH')) {
