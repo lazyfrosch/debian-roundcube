@@ -64,6 +64,14 @@ Description: metapackage providing PostgreSQL dependencies for RoundCube
  a skinnable AJAX based webmail solution for IMAP servers. Install
  this one if you want to use a PostgreSQL database with RoundCube.
 
+Package: roundcube-sqlite3
+Architecture: all
+Depends: php5-sqlite3, sqlite3, ${misc:Depends}
+Description: metapackage providing SQLite dependencies for RoundCube
+ This package provides SQLite dependencies for RoundCube Webmail,
+ a skinnable AJAX based webmail solution for IMAP servers. Install
+ this one if you want to use a SQLite database with RoundCube.
+
 Package: roundcube-plugins
 Architecture: all
 Depends: roundcube-core (= ${source:Version}), ${misc:Depends}
