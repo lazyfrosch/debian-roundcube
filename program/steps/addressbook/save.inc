@@ -17,9 +17,6 @@
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
-
- $Id$
-
 */
 
 $CONTACTS = rcmail_contact_source(null, true, true);
@@ -164,7 +161,6 @@ else {
     $source = $orig_source;
 
   // show notice if existing contacts with same e-mail are found
-  $existing = false;
   foreach ($CONTACTS->get_col_values('email', $a_record, true) as $email) {
       if ($email && ($res = $CONTACTS->search('email', $email, 1, false, true)) && $res->count) {
           $OUTPUT->show_message('contactexists', 'notice', null, false);
@@ -196,7 +192,7 @@ else {
         if (($maxnum = $RCMAIL->config->get('max_group_members', 0)) && ($counts->count + 1 > $maxnum))
           $OUTPUT->show_message('maxgroupmembersreached', 'warning', array('max' => $maxnum));
 
-        $CONTACTS->add_to_group($gid, $plugin['ids']);
+        $CONTACTS->add_to_group($plugin['group_id'], $plugin['ids']);
       }
     }
     else
