@@ -4,6 +4,7 @@ roundcube (0.9.1-1) unstable; urgency=low
      + Add new zipdownload plugin.
      + Switch from MDB2 to PDO for database handling.
      + Add support for SQLite 3.
+  * Bumps Standards-Version.
 
  -- Vincent Bernat <bernat@debian.org>  Tue, 04 Jun 2013 22:53:45 +0200
 
