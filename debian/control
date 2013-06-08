@@ -12,14 +12,15 @@ Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-roundcube/roundcube.git
 Package: roundcube-core
 Architecture: all
 Depends: dbconfig-common, debconf | debconf-2.0, ucf,
- apache2 | lighttpd | httpd,
- php5, php5-mcrypt, php5-gd, php5-intl,
+ libapache2-mod-php5 | php5-cgi | php5-fpm,
+ php5-mcrypt, php5-gd, php5-intl,
  php-auth, php-net-smtp (>= 1.4.2),
  php-net-socket, php-mail-mime (>= 1.8.2), php5-pspell,
  tinymce (>= 3), libjs-jquery (>= 1.6.4), libjs-jquery-ui (>= 1.8),
  libmagic1,
  roundcube-mysql (= ${source:Version}) | roundcube-pgsql (= ${source:Version}),
  ${misc:Depends}
+Recommends: apache2 | lighttpd | httpd-cgi,
 Suggests: php-auth-sasl (>= 1.0.3), php-crypt-gpg, roundcube-plugins
 Conflicts: roundcube-plugins-extra (<= 0.6-20111030)
 Description: skinnable AJAX based webmail solution for IMAP servers
