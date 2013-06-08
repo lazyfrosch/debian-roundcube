@@ -22,9 +22,10 @@ lighttpd_remove() {
 	fi
 }
 
+[ ! -e /usr/share/apache2/apache2-maintscript-helper ] || \
+    . /usr/share/apache2/apache2-maintscript-helper
 apache_remove() {
         if [ -e /usr/share/apache2/apache2-maintscript-helper ] ; then
-            . /usr/share/apache2/apache2-maintscript-helper
             apache2_invoke disconf roundcube.conf
 	    if [ -d /etc/apache2/conf-available ] && [ -e /etc/apache2/conf-available/roundcube.conf ]; then
                 rm /etc/apache2/conf-available/roundcube.conf
