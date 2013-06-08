@@ -65,10 +65,11 @@ binary-install/roundcube-plugins::
 $(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/% :
 	install -d $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/bug/$(cdbs_curpkg)
 	install -m 644 $(CURDIR)/debian/bug.control $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/bug/$(cdbs_curpkg)/control
-	[ ! -d $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube ] || \
-		find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube -type f -print0 | xargs -r0 chmod -x
-	find $(CURDIR)/debian/$(cdbs_curpkg) -name '._*' -o -name '.gitignore' -delete
-	find $(CURDIR)/debian/$(cdbs_curpkg) -type d -empty -delete
+	if [ -d $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube ]; then \
+		find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube -type f -print0 | xargs -r0 chmod -x ; \
+		find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube -name '._*' -o -name '.gitignore' -delete ; \
+		find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube -type d -empty -delete ; \
+	fi
 
 clean::
 	debconf-updatepo
