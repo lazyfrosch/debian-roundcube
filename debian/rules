@@ -28,11 +28,8 @@ binary-install/roundcube-core::
 	# Old database upgrades
 	cp -r $(CURDIR)/debian/sql/* $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/upgrade/.
 
-	# Some files are executable while not being scripts or binary...
-	find $(CURDIR)/debian/roundcube-core/usr/share/roundcube -type f -print0 | xargs -r0 chmod -x
 	# Remove useless file
 	rm -rf $(CURDIR)/debian/roundcube-core/usr/share/roundcube/bin
-	find $(CURDIR)/debian/roundcube-core -name '._*' -name -o '.gitignore' -print0 | xargs -r0 rm
 	# Convert .js.src back to js
 	for js in $$(find $(CURDIR)/debian/roundcube-core -name '*.js.src' -print); do \
 		yui-compressor --type js "$$js" -o "$${js%.*}" ; \
@@ -65,13 +62,13 @@ binary-install/roundcube-plugins::
 			usr/share/roundcube/plugins/$${plugin##*/}/config.inc.php ; \
 	done
 
-	# Some files are executable while not being scripts or binary...
-	find $(CURDIR)/debian/roundcube-plugins/usr/share/roundcube -type f -print0 | xargs -r0 chmod -x
-	find $(CURDIR)/debian/roundcube-plugins -name '._*' -name -o '.gitignore' -print0 | xargs -r0 rm
-
 $(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/% :
 	install -d $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/bug/$(cdbs_curpkg)
 	install -m 644 $(CURDIR)/debian/bug.control $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/bug/$(cdbs_curpkg)/control
+	[ ! -d $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube ] || \
+		find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube -type f -print0 | xargs -r0 chmod -x
+	find $(CURDIR)/debian/$(cdbs_curpkg) -name '._*' -o -name '.gitignore' -delete
+	find $(CURDIR)/debian/$(cdbs_curpkg) -type d -empty -delete
 
 clean::
 	debconf-updatepo
