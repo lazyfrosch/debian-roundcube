@@ -67,6 +67,7 @@ binary-install/roundcube-plugins::
 
 	# Some files are executable while not being scripts or binary...
 	find $(CURDIR)/debian/roundcube-plugins/usr/share/roundcube -type f -print0 | xargs -r0 chmod -x
+	find $(CURDIR)/debian/roundcube-plugins -name '._*' -name -o '.gitignore' -print0 | xargs -r0 rm
 
 $(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/% :
 	install -d $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/bug/$(cdbs_curpkg)
