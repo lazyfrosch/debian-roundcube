@@ -6,7 +6,10 @@
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2005-2007, The Roundcube Dev Team                       |
- | Licensed under the GNU GPL                                            |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
  |                                                                       |
  | PURPOSE:                                                              |
  |   Manage identities of a user account                                 |
@@ -14,15 +17,11 @@
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
-
- $Id: identities.inc 4410 2011-01-12 18:25:02Z thomasb $
-
 */
 
 define('IDENTITIES_LEVEL', intval($RCMAIL->config->get('identities_level', 0)));
 
 $OUTPUT->set_pagetitle(rcube_label('identities'));
-
 $OUTPUT->include_script('list.js');
 
 
@@ -34,14 +33,11 @@ function rcmail_identity_frame($attrib)
   if (!$attrib['id'])
     $attrib['id'] = 'rcmIdentityFrame';
 
-  $attrib['name'] = $attrib['id'];
-
-  $OUTPUT->set_env('contentframe', $attrib['name']);
-
-  return html::iframe($attrib);
+  return $OUTPUT->frame($attrib, true);
   }
 
 $OUTPUT->add_handler('identityframe', 'rcmail_identity_frame');
 $OUTPUT->set_env('identities_level', IDENTITIES_LEVEL);
+$OUTPUT->add_label('deleteidentityconfirm');
 
 $OUTPUT->send('identities');

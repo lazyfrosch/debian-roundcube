@@ -7,7 +7,10 @@
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2005-2011, The Roundcube Dev Team                       |
  | Copyright (C) 2011, Kolab Systems AG                                  |
- | Licensed under the GNU GPL                                            |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
  |                                                                       |
  | PURPOSE:                                                              |
  |   Search action (and form) for address book contacts                  |
@@ -16,9 +19,6 @@
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  | Author: Aleksander Machniak <machniak@kolabsys.com>                   |
  +-----------------------------------------------------------------------+
-
- $Id: search.inc 456 2007-01-10 12:34:33Z thomasb $
-
 */
 
 if ($RCMAIL->action == 'search-create') {
@@ -88,7 +88,7 @@ $OUTPUT->send('contactsearch');
 
 function rcmail_contact_search()
 {
-    global $RCMAIL, $OUTPUT, $CONFIG, $SEARCH_MODS_DEFAULT;
+    global $RCMAIL, $OUTPUT, $SEARCH_MODS_DEFAULT, $PAGE_SIZE;
 
     $adv = isset($_POST['_adv']);
     $sid = get_input_value('_sid', RCUBE_INPUT_GET);
@@ -145,6 +145,7 @@ function rcmail_contact_search()
     $search_set = array();
     $records    = array();
     $sort_col   = $RCMAIL->config->get('addressbook_sort_col', 'name');
+    $afields = $RCMAIL->config->get('contactlist_fields');
 
     foreach ($sources as $s) {
         $source = $RCMAIL->get_address_book($s['id']);
@@ -179,11 +180,11 @@ function rcmail_contact_search()
         }
 
         // get records
-        $result = $source->list_records(array('name', 'email'));
+        $result = $source->list_records($afields);
 
         while ($row = $result->next()) {
             $row['sourceid'] = $s['id'];
-            $key = rcmail_contact_key($row, $sort_col);
+            $key = rcube_addressbook::compose_contact_key($row, $sort_col);
             $records[$key] = $row;
         }
 
@@ -199,8 +200,8 @@ function rcmail_contact_search()
     $result = new rcube_result_set($count);
 
     // cut first-page records
-    if ($CONFIG['pagesize'] < $count) {
-        $records = array_slice($records, 0, $CONFIG['pagesize']);
+    if ($PAGE_SIZE < $count) {
+        $records = array_slice($records, 0, $PAGE_SIZE);
     }
 
     $result->records = array_values($records);
@@ -229,16 +230,19 @@ function rcmail_contact_search()
 
     // update message count display
     $OUTPUT->command('set_env', 'search_request', $search_request);
-    $OUTPUT->command('set_env', 'pagecount', ceil($result->count / $CONFIG['pagesize']));
+    $OUTPUT->command('set_env', 'pagecount', ceil($result->count / $PAGE_SIZE));
     $OUTPUT->command('set_rowcount', rcmail_get_rowcount_text($result));
     // Re-set current source
     $OUTPUT->command('set_env', 'search_id', $sid);
     $OUTPUT->command('set_env', 'source', '');
     $OUTPUT->command('set_env', 'group', '');
 
-    // unselect currently selected directory/group
-    if (!$sid)
+    if (!$sid) {
+        // unselect currently selected directory/group
         $OUTPUT->command('unselect_directory');
+        // enable "Save search" command
+        $OUTPUT->command('enable_command', 'search-create', true);
+    }
     $OUTPUT->command('update_group_commands');
 
     // send response
@@ -296,8 +300,12 @@ function rcmail_contact_search_form($attrib)
             $label    = isset($colprop['label']) ? $colprop['label'] : rcube_label($col);
             $category = $colprop['category'] ? $colprop['category'] : 'other';
 
-            if ($ftype == 'text')
+            // load jquery UI datepicker for date fields 
+            if ($colprop['type'] == 'date')
+                $colprop['class'] .= ($colprop['class'] ? ' ' : '') . 'datepicker';
+            else if ($ftype == 'text')
                 $colprop['size'] = $i_size;
+
 
             $content  = html::div('row', html::div('contactfieldlabel label', Q($label))
                 . html::div('contactfieldcontent', rcmail_get_edit_field('search_'.$col, '', $colprop, $ftype)));

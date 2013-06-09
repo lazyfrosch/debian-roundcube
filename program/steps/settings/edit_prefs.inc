@@ -6,7 +6,10 @@
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2005-2007, The Roundcube Dev Team                       |
- | Licensed under the GNU GPL                                            |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
  |                                                                       |
  | PURPOSE:                                                              |
  |   Provide functionality for user's settings & preferences             |
@@ -14,9 +17,6 @@
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
-
- $Id: func.inc 2822 2009-07-31 09:07:54Z alec $
-
 */
 
 if (!$OUTPUT->ajax_call)
@@ -48,8 +48,13 @@ function rcmail_user_prefs_form($attrib)
         if ($option['advanced'])
 	      $table->set_row_attribs('advanced');
 
-        $table->add('title', $option['title']);
-	    $table->add(null, $option['content']);
+        if (isset($option['title'])) {
+          $table->add('title', $option['title']);
+  	      $table->add(null, $option['content']);
+        }
+        else {
+          $table->add(array('colspan' => 2), $option['content']);
+        }
       }
 
       $out .= html::tag('fieldset', null, html::tag('legend', null, $block['name']) . $table->show($attrib));

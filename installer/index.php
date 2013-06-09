@@ -3,46 +3,56 @@
 /*
  +-------------------------------------------------------------------------+
  | Roundcube Webmail setup tool                                            |
- | Version 0.6                                                             |
+ | Version 0.9-git                                                         |
  |                                                                         |
- | Copyright (C) 2009-2011, The Roundcube Dev Team                         |
+ | Copyright (C) 2009-2012, The Roundcube Dev Team                         |
  |                                                                         |
- | This program is free software; you can redistribute it and/or modify    |
- | it under the terms of the GNU General Public License version 2          |
- | as published by the Free Software Foundation.                           |
+ | This program is free software: you can redistribute it and/or modify    |
+ | it under the terms of the GNU General Public License (with exceptions   |
+ | for skins & plugins) as published by the Free Software Foundation,      |
+ | either version 3 of the License, or (at your option) any later version. |
+ |                                                                         |
+ | This file forms part of the Roundcube Webmail Software for which the    |
+ | following exception is added: Plugins and Skins which merely make       |
+ | function calls to the Roundcube Webmail Software, and for that purpose  |
+ | include it by reference shall not be considered modifications of        |
+ | the software.                                                           |
+ |                                                                         |
+ | If you wish to use this file in another project or create a modified    |
+ | version that will not be part of the Roundcube Webmail Software, you    |
+ | may remove the exception above and use this source code under the       |
+ | original version of the license.                                        |
  |                                                                         |
  | This program is distributed in the hope that it will be useful,         |
  | but WITHOUT ANY WARRANTY; without even the implied warranty of          |
- | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           |
+ | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the            |
  | GNU General Public License for more details.                            |
  |                                                                         |
- | You should have received a copy of the GNU General Public License along |
- | with this program; if not, write to the Free Software Foundation, Inc., |
- | 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.             |
+ | You should have received a copy of the GNU General Public License       |
+ | along with this program.  If not, see http://www.gnu.org/licenses/.     |
  |                                                                         |
  +-------------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                          |
  +-------------------------------------------------------------------------+
-
- $Id$
-
 */
 
-ini_set('error_reporting', E_ALL&~E_NOTICE);
+ini_set('error_reporting', E_ALL &~ (E_NOTICE | E_STRICT));
 ini_set('display_errors', 1);
 
 define('INSTALL_PATH', realpath(dirname(__FILE__) . '/../').'/');
-define('RCMAIL_CONFIG_DIR', INSTALL_PATH . 'config');
+define('RCUBE_INSTALL_PATH', INSTALL_PATH);
+define('RCUBE_CONFIG_DIR', INSTALL_PATH . 'config/');
 
 $include_path  = INSTALL_PATH . 'program/lib' . PATH_SEPARATOR;
-$include_path .= INSTALL_PATH . 'program' . PATH_SEPARATOR;
 $include_path .= INSTALL_PATH . 'program/include' . PATH_SEPARATOR;
 $include_path .= ini_get('include_path');
 
 set_include_path($include_path);
 
-require_once 'utils.php';
-require_once 'main.inc';
+require_once 'Roundcube/bootstrap.php';
+require_once 'rcube_install.php';
+// deprecated aliases (to be removed)
+require_once 'bc.php';
 
 session_start();
 
@@ -97,7 +107,7 @@ if ($RCI->configured && empty($_REQUEST['_step'])) {
 
 <div id="banner">
   <div class="banner-bg"></div>
-  <div class="banner-logo"><a href="http://roundcube.net"><img src="images/rcube_logo.gif" width="210" height="55" border="0" alt="Roundcube - Open source webmail project" /></a></div>
+  <div class="banner-logo"><a href="http://roundcube.net"><img src="images/roundcube_logo.png" width="210" height="55" border="0" alt="Roundcube - open source webmail software" /></a></div>
 </div>
 
 <div id="topnav">
@@ -112,18 +122,27 @@ if ($RCI->configured && empty($_REQUEST['_step'])) {
   if ($RCI->configured && !$RCI->getprop('enable_installer') && !$_SESSION['allowinstaller']) {
     // header("HTTP/1.0 404 Not Found");
     echo '<h2 class="error">The installer is disabled!</h2>';
-    echo '<p>To enable it again, set <tt>$rcmail_config[\'enable_installer\'] = true;</tt> in RCMAIL_CONFIG_DIR/main.inc.php</p>';
+    echo '<p>To enable it again, set <tt>$rcmail_config[\'enable_installer\'] = true;</tt> in RCUBE_CONFIG_DIR/main.inc.php</p>';
     echo '</div></body></html>';
     exit;
   }
-  
+
 ?>
 
 <h1>Roundcube Webmail Installer</h1>
 
 <ol id="progress">
 <?php
-  
+  $include_steps = array(
+    1 => './check.php',
+    2 => './config.php',
+    3 => './test.php',
+  );
+
+  if (!in_array($RCI->step, array_keys($include_steps))) {
+    $RCI->step = 1;
+  }
+
   foreach (array('Check environment', 'Create config', 'Test config') as $i => $item) {
     $j = $i + 1;
     $link = ($RCI->step >= $j || $RCI->configured) ? '<a href="./index.php?_step='.$j.'">' . Q($item) . '</a>' : Q($item);
@@ -133,21 +152,14 @@ if ($RCI->configured && empty($_REQUEST['_step'])) {
 </ol>
 
 <?php
-$include_steps = array('./welcome.html', './check.php', './config.php', './test.php');
 
-if ($include_steps[$RCI->step]) {
-  include $include_steps[$RCI->step];
-}
-else {
-  header("HTTP/1.0 404 Not Found");
-  echo '<h2 class="error">Invalid step</h2>';
-}
+include $include_steps[$RCI->step];
 
 ?>
 </div>
 
 <div id="footer">
-  Installer by the Roundcube Dev Team. Copyright &copy; 2008-2011 - Published under the GNU Public License;&nbsp;
+  Installer by the Roundcube Dev Team. Copyright &copy; 2008-2012 – Published under the GNU Public License;&nbsp;
   Icons by <a href="http://famfamfam.com">famfamfam</a>
 </div>
 </body>

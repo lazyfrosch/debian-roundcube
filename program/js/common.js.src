@@ -3,14 +3,15 @@
  | Roundcube common js library                                           |
  |                                                                       |
  | This file is part of the Roundcube web development suite              |
- | Copyright (C) 2005-2007, The Roundcube Dev Team                       |
- | Licensed under the GNU GPL                                            |
+ | Copyright (C) 2005-2012, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
- 
- $Id: common.js 5481 2011-11-24 07:53:00Z alec $
 */
 
 // Constants
@@ -52,14 +53,15 @@ function roundcube_browser()
   this.ie4 = (this.ie && !this.dom);
   this.ie5 = (this.dom && this.appver.indexOf('MSIE 5')>0);
   this.ie8 = (this.dom && this.appver.indexOf('MSIE 8')>0);
+  this.ie9 = (this.dom && this.appver.indexOf('MSIE 9')>0);
   this.ie7 = (this.dom && this.appver.indexOf('MSIE 7')>0);
   this.ie6 = (this.dom && !this.ie8 && !this.ie7 && this.appver.indexOf('MSIE 6')>0);
 
   this.ns = ((this.ver < 5 && this.name == 'Netscape') || (this.ver >= 5 && this.vendor.indexOf('Netscape') >= 0));
   this.chrome = (this.agent_lc.indexOf('chrome') > 0);
   this.safari = (!this.chrome && (this.agent_lc.indexOf('safari') > 0 || this.agent_lc.indexOf('applewebkit') > 0));
-  this.mz = (this.dom && !this.ie && !this.ns && !this.chrome && !this.safari && this.agent.indexOf('Mozilla') >= 0);
-  this.konq   = (this.agent_lc.indexOf('konqueror') > 0);
+  this.konq = (this.agent_lc.indexOf('konqueror') > 0);
+  this.mz = (this.dom && !this.ie && !this.ns && !this.chrome && !this.safari && !this.konq && this.agent.indexOf('Mozilla') >= 0);
   this.iphone = (this.safari && this.agent_lc.indexOf('iphone') > 0);
   this.ipad = (this.safari && this.agent_lc.indexOf('ipad') > 0);
   this.opera = window.opera ? true : false;
@@ -81,6 +83,7 @@ function roundcube_browser()
   if (this.safari && (/;\s+([a-z]{2})-[a-z]{2}\)/.test(this.agent_lc)))
     this.lang = RegExp.$1;
 
+  this.mobile = this.agent_lc.match(/iphone|ipad|ipod|android|blackberry|iemobile|opera mini|opera mobi/);
   this.dhtml = ((this.ie4 && this.win) || this.ie5 || this.ie6 || this.ns4 || this.mz);
   this.vml = (this.win && this.ie && this.dom && !this.opera);
   this.pngalpha = (this.mz || (this.opera && this.vendver >= 6) || (this.ie && this.mac && this.vendver >= 5) ||
@@ -102,30 +105,28 @@ function roundcube_browser()
   {
     var classname = ' js';
 
-    if (this.ie) {
-      classname += ' ie';
-      if (this.ie5)
-        classname += ' ie5';
-      else if (this.ie6)
-        classname += ' ie6';
-      else if (this.ie7)
-        classname += ' ie7';
-      else if (this.ie8)
-        classname += ' ie8';
-    }
+    if (this.ie)
+      classname += ' ie ie'+parseInt(this.vendver);
     else if (this.opera)
       classname += ' opera';
     else if (this.konq)
       classname += ' konqueror';
     else if (this.safari)
-      classname += ' safari';
-
-    if (this.chrome)
       classname += ' chrome';
-    else if (this.iphone)
+    else if (this.chrome)
+      classname += ' chrome';
+    else if (this.mz)
+      classname += ' mozilla';
+
+    if (this.iphone)
       classname += ' iphone';
     else if (this.ipad)
       classname += ' ipad';
+    else if (this.safari || this.chrome)
+      classname += ' webkit';
+
+    if (this.mobile)
+      classname += ' mobile';
 
     if (document.documentElement)
       document.documentElement.className += classname;
@@ -493,12 +494,15 @@ function rcube_check_email(input, inline)
       atom = '[^\\x00-\\x20\\x22\\x28\\x29\\x2c\\x2e\\x3a-\\x3c\\x3e\\x40\\x5b-\\x5d\\x7f-\\xff]+',
       quoted_pair = '\\x5c[\\x00-\\x7f]',
       quoted_string = '\\x22('+qtext+'|'+quoted_pair+')*\\x22',
+      ipv4 = '\\[(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])(\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])){3}\\]',
+      ipv6 = '\\[IPv6:[0-9a-f:.]+\\]',
+      ip_addr = '(' + ipv4 + ')|(' + ipv6 + ')',
       // Use simplified domain matching, because we need to allow Unicode characters here
       // So, e-mail address should be validated also on server side after idn_to_ascii() use
       //domain_literal = '\\x5b('+dtext+'|'+quoted_pair+')*\\x5d',
       //sub_domain = '('+atom+'|'+domain_literal+')',
       // allow punycode/unicode top-level domain
-      domain = '([^@\\x2e]+\\x2e)+([^\\x00-\\x40\\x5b-\\x60\\x7b-\\x7f]{2,}|xn--[a-z0-9]{2,})',
+      domain = '(('+ip_addr+')|(([^@\\x2e]+\\x2e)+([^\\x00-\\x40\\x5b-\\x60\\x7b-\\x7f]{2,}|xn--[a-z0-9]{2,})))',
       // ICANN e-mail test (http://idn.icann.org/E-mail_test)
       icann_domains = [
         '\\u0645\\u062b\\u0627\\u0644\\x2e\\u0625\\u062e\\u062a\\u0628\\u0627\\u0631',
@@ -525,7 +529,6 @@ function rcube_check_email(input, inline)
 
   return false;
 };
-
 
 // recursively copy an object
 function rcube_clone_object(obj)
@@ -634,6 +637,7 @@ function getCookie(name)
   return unescape(dc.substring(begin + prefix.length, end));
 };
 
+// deprecated aliases, to be removed, use rcmail.set_cookie/rcmail.get_cookie
 roundcube_browser.prototype.set_cookie = setCookie;
 roundcube_browser.prototype.get_cookie = getCookie;
 
@@ -697,11 +701,9 @@ Date.prototype.getStdTimezoneOffset = function()
 }
 
 // Make getElementById() case-sensitive on IE
-if (bw.ie)
-{
+if (bw.ie) {
   document._getElementById = document.getElementById;
-  document.getElementById = function(id)
-  {
+  document.getElementById = function(id) {
     var i = 0, obj = document._getElementById(id);
 
     if (obj && obj.id != id)
@@ -711,6 +713,43 @@ if (bw.ie)
     return obj;
   }
 }
+
+// jQuery plugin to emulate HTML5 placeholder attributes on input elements
+jQuery.fn.placeholder = function(text) {
+  return this.each(function() {
+    var active = false, elem = $(this);
+    this.title = text;
+
+    // Try HTML5 placeholder attribute first
+    if ('placeholder' in this) {
+      elem.attr('placeholder', text);
+    }
+    // Fallback to Javascript emulation of placeholder
+    else {
+      this._placeholder = text;
+      elem.blur(function(e) {
+        if ($.trim(elem.val()) == "")
+          elem.val(text);
+        elem.triggerHandler('change');
+      })
+      .focus(function(e) {
+        if ($.trim(elem.val()) == text)
+          elem.val("");
+        elem.triggerHandler('change');
+      })
+      .change(function(e) {
+        var active = elem.val() == text;
+        elem[(active ? 'addClass' : 'removeClass')]('placeholder').attr('spellcheck', active);
+      });
+
+      // Do not blur currently focused element (catch exception: #1489008)
+      try { active = this == document.activeElement; } catch(e) {}
+      if (!active)
+        elem.blur();
+    }
+  });
+};
+
 
 // This code was written by Tyler Akins and has been placed in the
 // public domain.  It would be nice if you left this header intact.

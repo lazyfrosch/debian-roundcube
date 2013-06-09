@@ -17,22 +17,25 @@ lighttpd_remove() {
 	if [ -f /etc/lighttpd/conf-available/50-roundcube.conf ] ; then
 		rm -f /etc/lighttpd/conf-available/50-roundcube.conf
 		if [ ! -x /usr/sbin/lighty-disable-mod ] ; then
-			echo "Lighttpd not installed, skipping"
-		else
 			lighty-disable-mod roundcube
-		fi
-		# See bug #448682
-		if [ -h /etc/lighttpd/conf-enabled/50-roundcube.conf ] ; then
-		    echo 'Manually deleting lighttpd/roundcube configuration link'
-		    rm /etc/lighttpd/conf-enabled/50-roundcube.conf
 		fi
 	fi
 }
 
+[ ! -e /usr/share/apache2/apache2-maintscript-helper ] || \
+    . /usr/share/apache2/apache2-maintscript-helper
 apache_remove() {
-	if [ -d /etc/$webserver/conf.d ] && [ -L /etc/$webserver/conf.d/roundcube ]; then
-		rm -f /etc/$webserver/conf.d/roundcube
-	fi
+        if [ -e /usr/share/apache2/apache2-maintscript-helper ] ; then
+            apache2_invoke disconf roundcube.conf
+	    if [ -d /etc/apache2/conf-available ] && [ -e /etc/apache2/conf-available/roundcube.conf ]; then
+                rm /etc/apache2/conf-available/roundcube.conf
+	    fi
+        elif  dpkg-query -f '${Version}'  -W 'apache2.2-common' > /dev/null 2>&1 ; then
+            # Old Apache
+	    if [ -d /etc/apache2/conf.d ] && [ -e /etc/apache2/conf.d/roundcube.conf ]; then
+                rm /etc/apache2/conf.d/roundcube.conf
+	    fi
+        fi
 }
 
 
@@ -51,15 +54,12 @@ case "$1" in
             webserver=${webserver%,}
         
             case "$webserver" in
-                apache*)
-		    apache_remove $webserver
+                apache2)
+		    apache_remove
 		    ;;
 		lighttpd)
 		    lighttpd_remove
 		    ;;
-                *)
-		    echo "Unknown webserver $webserver"
-                    ;;
             esac
 
             test -x /usr/sbin/$webserver || continue

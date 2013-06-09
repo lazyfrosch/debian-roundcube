@@ -6,7 +6,10 @@
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2010, The Roundcube Dev Team                            |
- | Licensed under the GNU GPL                                            |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
  |                                                                       |
  | PURPOSE:                                                              |
  |   Create/delete/rename contact groups and assign/remove contacts      |
@@ -14,13 +17,10 @@
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
-
- $Id: groups.inc 4850 2011-06-14 13:45:26Z alec $
-
 */
 
 $source = get_input_value('_source', RCUBE_INPUT_GPC);
-$CONTACTS = rcmail_contact_source($source, true);
+$CONTACTS = rcmail_contact_source($source);
 
 if ($CONTACTS->readonly || !$CONTACTS->groups) {
   $OUTPUT->show_message('sourceisreadonly', 'warning');
@@ -28,11 +28,11 @@ if ($CONTACTS->readonly || !$CONTACTS->groups) {
 }
 
 if ($RCMAIL->action == 'group-addmembers') {
-  if (($gid = get_input_value('_gid', RCUBE_INPUT_POST)) && ($ids = get_input_value('_cid', RCUBE_INPUT_POST))) {
+  if (($gid = get_input_value('_gid', RCUBE_INPUT_POST)) && ($ids = rcmail_get_cids($source))) {
     $plugin = $RCMAIL->plugins->exec_hook('group_addmembers', array('group_id' => $gid, 'ids' => $ids, 'source' => $source));
 
     $CONTACTS->set_group($gid);
-    $num2add = count(explode(',', $plugin['ids']));
+    $num2add = count($plugin['ids']);
 
     if (!$plugin['abort']) {
       if (($maxnum = $RCMAIL->config->get('max_group_members', 0)) && ($CONTACTS->count()->count + $num2add > $maxnum)) {
@@ -47,13 +47,15 @@ if ($RCMAIL->action == 'group-addmembers') {
 
     if ($result)
       $OUTPUT->show_message('contactaddedtogroup');
-    else
+    else if ($plugin['abort'] || $CONTACTS->get_error())
       $OUTPUT->show_message($plugin['message'] ? $plugin['message'] : 'errorsaving', 'error');
+    else
+      $OUTPUT->show_message($plugin['message'] ? $plugin['message'] : 'nogroupassignmentschanged');
   }
 }
 
 else if ($RCMAIL->action == 'group-delmembers') {
-  if (($gid = get_input_value('_gid', RCUBE_INPUT_POST)) && ($ids = get_input_value('_cid', RCUBE_INPUT_POST))) {
+  if (($gid = get_input_value('_gid', RCUBE_INPUT_POST)) && ($ids = rcmail_get_cids($source))) {
     $plugin = $RCMAIL->plugins->exec_hook('group_delmembers', array('group_id' => $gid, 'ids' => $ids, 'source' => $source));
 
     if (!$plugin['abort'])
@@ -61,10 +63,13 @@ else if ($RCMAIL->action == 'group-delmembers') {
     else
       $result = $plugin['result'];
 
-    if ($result)
+    if ($result) {
       $OUTPUT->show_message('contactremovedfromgroup');
-    else
+      $OUTPUT->command('remove_group_contacts',array('source' => $source, 'gid' => $gid));
+    }
+    else {
       $OUTPUT->show_message($plugin['message'] ? $plugin['message'] : 'errorsaving', 'error');
+    }
   }
 }
 

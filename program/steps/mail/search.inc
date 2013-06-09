@@ -4,22 +4,22 @@
  | steps/mail/search.inc                                                 |
  |                                                                       |
  | Search functions for rc webmail                                       |
- | Licensed under the GNU GPL                                            |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Benjamin Smith <defitro@gmail.com>                            |
  |         Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
-
- $Id: search.inc 5527 2011-12-02 09:58:03Z alec $
-
 */
 
 $REMOTE_REQUEST = TRUE;
 
 // reset list_page and old search results
-$IMAP->set_page(1);
-$IMAP->set_search_set(NULL);
+$RCMAIL->storage->set_page(1);
+$RCMAIL->storage->set_search_set(NULL);
 $_SESSION['page'] = 1;
 
 // using encodeURI with javascript "should" give us
@@ -69,7 +69,7 @@ else if (preg_match("/^subject:.*/i", $str))
 else if (preg_match("/^body:.*/i", $str))
 {
   list(,$srch) = explode(":", $str);
-  $subject['text'] = "TEXT";
+  $subject['body'] = "BODY";
 }
 else if (strlen(trim($str)))
 {
@@ -81,7 +81,7 @@ else if (strlen(trim($str)))
         break;
       }
       else {
-        $subject[$header] = 'HEADER '.strtoupper($header);
+        $subject[$header] = ($header != 'body' ? 'HEADER ' : '') . strtoupper($header);
       }
     }
 
@@ -89,7 +89,8 @@ else if (strlen(trim($str)))
     $search_mods = $RCMAIL->config->get('search_mods', $SEARCH_MODS_DEFAULT);
     $search_mods[$mbox] = array_fill_keys(array_keys($subject), 1);
     $RCMAIL->user->save_prefs(array('search_mods' => $search_mods));
-  } else {
+  }
+  else {
     // search in subject by default
     $subject['subject'] = 'HEADER SUBJECT';
   }
@@ -100,37 +101,39 @@ $search = isset($srch) ? trim($srch) : trim($str);
 if (!empty($subject)) {
   $search_str .= str_repeat(' OR', count($subject)-1);
   foreach ($subject as $sub)
-    $search_str .= sprintf(" %s {%d}\r\n%s", $sub, strlen($search), $search);
+    $search_str .= ' ' . $sub . ' ' . rcube_imap_generic::escape($search);
 }
 
-$search_str = trim($search_str);
+$search_str  = trim($search_str);
+$sort_column = rcmail_sort_column();
 
 // execute IMAP search
 if ($search_str)
-  $IMAP->search($mbox, $search_str, $imap_charset, $_SESSION['sort_col']);
-
-// Get the headers
-$result_h = $IMAP->list_headers($mbox, 1, $_SESSION['sort_col'], $_SESSION['sort_order']);
-$count = $IMAP->messagecount(NULL, $IMAP->threading ? 'THREADS' : 'ALL');
+  $RCMAIL->storage->search($mbox, $search_str, $imap_charset, $sort_column);
 
 // save search results in session
 if (!is_array($_SESSION['search']))
   $_SESSION['search'] = array();
 
 if ($search_str) {
-  $_SESSION['search'] = $IMAP->get_search_set();
+  $_SESSION['search'] = $RCMAIL->storage->get_search_set();
   $_SESSION['last_text_search'] = $str;
 }
 $_SESSION['search_request'] = $search_request;
+
+
+// Get the headers
+$result_h = $RCMAIL->storage->list_messages($mbox, 1, $sort_column, rcmail_sort_order());
+$count = $RCMAIL->storage->count($mbox, $RCMAIL->storage->get_threading() ? 'THREADS' : 'ALL');
 
 // Make sure we got the headers
 if (!empty($result_h)) {
   rcmail_js_message_list($result_h);
   if ($search_str)
-    $OUTPUT->show_message('searchsuccessful', 'confirmation', array('nr' => $IMAP->messagecount(NULL, 'ALL')));
+    $OUTPUT->show_message('searchsuccessful', 'confirmation', array('nr' => $RCMAIL->storage->count(NULL, 'ALL')));
 }
 // handle IMAP errors (e.g. #1486905)
-else  if ($err_code = $IMAP->get_error_code()) {
+else  if ($err_code = $RCMAIL->storage->get_error_code()) {
   rcmail_display_server_error();
 }
 else {
@@ -140,8 +143,7 @@ else {
 // update message count display
 $OUTPUT->set_env('search_request', $search_str ? $search_request : '');
 $OUTPUT->set_env('messagecount', $count);
-$OUTPUT->set_env('pagecount', ceil($count/$IMAP->page_size));
+$OUTPUT->set_env('pagecount', ceil($count/$RCMAIL->storage->get_pagesize()));
+$OUTPUT->set_env('exists', $RCMAIL->storage->count($mbox_name, 'EXISTS'));
 $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($count, 1), $mbox);
 $OUTPUT->send();
-
-

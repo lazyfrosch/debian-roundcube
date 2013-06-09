@@ -1,6 +1,20 @@
 <?php
 
-//  EN-Revision: 3891
+/*
+ +-----------------------------------------------------------------------+
+ | plugins/password/localization/<lang>.inc                              |
+ |                                                                       |
+ | Localization file of the Roundcube Webmail Password plugin            |
+ | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
+ |                                                                       |
+ +-----------------------------------------------------------------------+
+
+ For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-password/
+*/
 
 $labels = array();
 $labels['changepasswd']  = 'パスワードの変更';
@@ -17,7 +31,7 @@ $messages['crypterror'] = 'パスワードを保存できませんでした。�
 $messages['connecterror'] = '新しいパスワードを保存できませんでした。接続エラーです。';
 $messages['internalerror'] = '新しいパスワードを保存できませんでした。';
 $messages['passwordshort'] = 'パスワードは少なくとも $length 文字の長さが必要です。';
-$messages['passwordweak'] = 'パスワードは少なくとも数字を 1 文字と記号が 1 文字含んでなければなりません。';
+$messages['passwordweak'] = 'パスワードは少なくとも数字の 1 文字と記号の 1 文字を含んでいなければなりません。';
 $messages['passwordforbidden'] = 'パスワードに禁止された文字が含まれています。';
 
 ?>

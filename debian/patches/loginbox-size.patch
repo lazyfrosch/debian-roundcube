@@ -1,10 +1,10 @@
 Fix size of login box to accommodate sk_SK locale
 
-Index: roundcube/skins/default/common.css
+Index: roundcube/skins/classic/common.css
 ===================================================================
---- roundcube.orig/skins/default/common.css	2012-09-29 11:30:57.427102611 +0200
-+++ roundcube/skins/default/common.css	2012-09-29 11:31:47.080095589 +0200
-@@ -731,7 +731,7 @@
+--- roundcube.orig/skins/classic/common.css	2013-06-04 22:55:18.633082541 +0200
++++ roundcube/skins/classic/common.css	2013-06-04 22:55:18.621082500 +0200
+@@ -760,7 +760,7 @@
    margin-left: auto;
    margin-right: auto;
    margin-top: 50px;

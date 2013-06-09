@@ -1,5 +1,21 @@
 <?php
 
+/*
+ +-----------------------------------------------------------------------+
+ | plugins/acl/localization/<lang>.inc                                   |
+ |                                                                       |
+ | Localization file of the Roundcube Webmail ACL plugin                 |
+ | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
+ |                                                                       |
+ +-----------------------------------------------------------------------+
+
+ For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-acl/
+*/
+
 $labels['sharing'] = 'Udostępnianie';
 $labels['myrights'] = 'Prawa dostępu';
 $labels['username'] = 'Użytkownik:';
@@ -10,22 +26,22 @@ $labels['anyone'] = 'Wszyscy (anyone)';
 $labels['anonymous'] = 'Goście (anonymous)';
 $labels['identifier'] = 'Identyfikator';
 
-$labels['acll'] = 'Podgląd (Lookup)';
+$labels['acll'] = 'Podgląd';
 $labels['aclr'] = 'Odczyt (Read)';
 $labels['acls'] = 'Zmiana stanu wiadomości (Keep)';
 $labels['aclw'] = 'Zmiana flag wiadomości (Write)';
 $labels['acli'] = 'Dodawanie/Kopiowanie do (Insert)';
-$labels['aclp'] = 'Wysyłanie (Post)';
+$labels['aclp'] = 'Wysyłanie';
 $labels['aclc'] = 'Tworzenie podfolderów (Create)';
 $labels['aclk'] = 'Tworzenie podfolderów (Create)';
 $labels['acld'] = 'Usuwanie wiadomości (Delete)';
 $labels['aclt'] = 'Usuwanie wiadomości (Delete)';
-$labels['acle'] = 'Porządkowanie folderu (Expunge)';
+$labels['acle'] = 'Porządkowanie';
 $labels['aclx'] = 'Usuwanie folderu (Delete)';
-$labels['acla'] = 'Administracja (Administer)';
+$labels['acla'] = 'Administracja';
 
 $labels['aclfull'] = 'Wszystkie';
-$labels['aclother'] = 'Inne';
+$labels['aclother'] = 'Pozostałe';
 $labels['aclread'] = 'Odczyt';
 $labels['aclwrite'] = 'Zapis';
 $labels['acldelete'] = 'Usuwanie';
@@ -33,7 +49,7 @@ $labels['acldelete'] = 'Usuwanie';
 $labels['shortacll'] = 'Podgląd';
 $labels['shortaclr'] = 'Odczyt';
 $labels['shortacls'] = 'Zmiana';
-$labels['shortaclw'] = 'Zmiana flag';
+$labels['shortaclw'] = 'Zapis';
 $labels['shortacli'] = 'Dodawanie';
 $labels['shortaclp'] = 'Wysyłanie';
 $labels['shortaclc'] = 'Tworzenie';
@@ -50,9 +66,9 @@ $labels['shortaclwrite'] = 'Zapis';
 $labels['shortacldelete'] = 'Usuwanie';
 
 $labels['longacll'] = 'Pozwala na subskrybowanie folderu i powoduje, że jest on widoczny na liście';
-$labels['longaclr'] = 'Pozwala na otwarcie folderu w trybie do odczytu';
+$labels['longaclr'] = 'Folder może być otwarty w trybie do odczytu';
 $labels['longacls'] = 'Pozwala na zmienę stanu wiadomości';
-$labels['longaclw'] = 'Pozwala zmieniać wszystkie flagi wiadomości, oprócz "Przeczytano" i "Usunięto"';
+$labels['longaclw'] = 'Pozwala zmieniać wszystkie flagi wiadomości, oprócz "Przeczytano" i "Usunięto';
 $labels['longacli'] = 'Pozwala zapisywać wiadomości i kopiować do folderu';
 $labels['longaclp'] = 'Pozwala wysyłać wiadomości do folderu';
 $labels['longaclc'] = 'Pozwala tworzyć (lub zmieniać nazwę) podfoldery';

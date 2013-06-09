@@ -5,8 +5,11 @@
  | program/steps/settings/edit_identity.inc                              |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2007, The Roundcube Dev Team                       |
- | Licensed under the GNU GPL                                            |
+ | Copyright (C) 2005-2011, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
  |                                                                       |
  | PURPOSE:                                                              |
  |   Show edit form for a identity record or to add a new one            |
@@ -14,16 +17,13 @@
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
-
- $Id: edit_identity.inc 5139 2011-08-28 09:47:15Z alec $
-
 */
 
 define('IDENTITIES_LEVEL', intval($RCMAIL->config->get('identities_level', 0)));
 
 // edit-identity
 if (($_GET['_iid'] || $_POST['_iid']) && $RCMAIL->action=='edit-identity') {
-  $IDENTITY_RECORD = $USER->get_identity(get_input_value('_iid', RCUBE_INPUT_GPC));
+  $IDENTITY_RECORD = $RCMAIL->user->get_identity(get_input_value('_iid', RCUBE_INPUT_GPC));
 
   if (is_array($IDENTITY_RECORD))
     $OUTPUT->set_env('iid', $IDENTITY_RECORD['identity_id']);
@@ -42,8 +42,9 @@ else {
     rcmail_overwrite_action('identities');
     return;
   }
-  else if (IDENTITIES_LEVEL == 1)
-    $IDENTITY_RECORD['email'] = $RCMAIL->user->get_username();
+  else if (IDENTITIES_LEVEL == 1) {
+    $IDENTITY_RECORD['email'] = $RCMAIL->get_user_email();
+  }
 }
 
 
@@ -85,7 +86,11 @@ function rcube_identity_form($attrib)
 
   // Enable TinyMCE editor
   if ($IDENTITY_RECORD['html_signature']) {
-    $form['signature']['content']['signature']['class'] = 'mce_editor';
+    $form['signature']['content']['signature']['class']      = 'mce_editor';
+    $form['signature']['content']['signature']['is_escaped'] = true;
+
+    // Correctly handle HTML entities in HTML editor (#1488483)
+    $IDENTITY_RECORD['signature'] = htmlspecialchars($IDENTITY_RECORD['signature'], ENT_NOQUOTES, RCMAIL_CHARSET);
   }
 
   // disable some field according to access level
@@ -94,9 +99,14 @@ function rcube_identity_form($attrib)
     $form['addressing']['content']['email']['class'] = 'disabled';
   }
 
-  $IDENTITY_RECORD['email']    = rcube_idn_to_utf8($IDENTITY_RECORD['email']);
-  $IDENTITY_RECORD['reply-to'] = rcube_idn_to_utf8($IDENTITY_RECORD['reply-to']);
-  $IDENTITY_RECORD['bcc']      = rcube_idn_to_utf8($IDENTITY_RECORD['bcc']);
+  if (IDENTITIES_LEVEL == 4) {
+    foreach($form['addressing']['content'] as $formfield => $value){
+      $form['addressing']['content'][$formfield]['disabled'] = true;
+      $form['addressing']['content'][$formfield]['class'] = 'disabled';
+    }
+  }
+
+  $IDENTITY_RECORD['email'] = rcube_idn_to_utf8($IDENTITY_RECORD['email']);
 
   // Allow plugins to modify identity form content
   $plugin = $RCMAIL->plugins->exec_hook('identity_form', array(
@@ -111,7 +121,7 @@ function rcube_identity_form($attrib)
     array('name' => '_iid', 'value' => $IDENTITY_RECORD['identity_id']));
 
   unset($plugin);
-  unset($attrib['form']);
+  unset($attrib['form'], $attrib['id']);
 
   // return the complete edit form as table
   $out = "$form_start\n";
@@ -131,10 +141,10 @@ function rcube_identity_form($attrib)
         $value = !empty($colprop['value']) ? $colprop['value'] :
             rcmail_get_edit_field($col, $IDENTITY_RECORD[$col], $colprop, $colprop['type']);
 
-        $table->add('title', sprintf('<label for="%s">%s</label>', $colprop['id'], Q($label)));
+        $table->add('title', html::label($colprop['id'], Q($label)));
         $table->add(null, $value);
       }
-      $content = $table->show();
+      $content = $table->show($attrib);
     }
     else {
       $content = $fieldset['content'];
@@ -151,6 +161,7 @@ function rcube_identity_form($attrib)
 $OUTPUT->include_script('list.js');
 $OUTPUT->add_handler('identityform', 'rcube_identity_form');
 $OUTPUT->set_env('identities_level', IDENTITIES_LEVEL);
+$OUTPUT->add_label('deleteidentityconfirm');
 
 $OUTPUT->set_pagetitle(rcube_label(($RCMAIL->action=='add-identity' ? 'newidentity' : 'edititem')));
 

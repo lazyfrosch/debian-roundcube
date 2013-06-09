@@ -1,13 +1,15 @@
 #!/usr/bin/env php
 <?php
 /*
-
  +-----------------------------------------------------------------------+
  | bin/decrypt.sh                                                        |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2005-2009, The Roundcube Dev Team                       |
- | Licensed under the GNU GPL                                            |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
  |                                                                       |
  | PURPOSE:                                                              |
  |   Decrypt the encrypted parts of the HTTP Received: headers           |
@@ -15,11 +17,9 @@
  +-----------------------------------------------------------------------+
  | Author: Tomas Tevesz <ice@extreme.hu>                                 |
  +-----------------------------------------------------------------------+
-
- $Id: decrypt.sh 4677 2011-04-20 13:10:45Z alec $
 */
 
-/*-
+/**
  * If http_received_header_encrypt is configured, the IP address and the
  * host name of the added Received: header is encrypted with 3DES, to
  * protect information that some could consider sensitve, yet their
@@ -28,8 +28,8 @@
  * Such an encrypted Received: header might look like:
  *
  * Received: from DzgkvJBO5+bw+oje5JACeNIa/uSI4mRw2cy5YoPBba73eyBmjtyHnQ==
- * 	[my0nUbjZXKtl7KVBZcsvWOxxtyVFxza4]
- *	with HTTP/1.1 (POST); Thu, 14 May 2009 19:17:28 +0200
+ *  [my0nUbjZXKtl7KVBZcsvWOxxtyVFxza4]
+ *  with HTTP/1.1 (POST); Thu, 14 May 2009 19:17:28 +0200
  *
  * In this example, the two encrypted components are the sender host name
  * (DzgkvJBO5+bw+oje5JACeNIa/uSI4mRw2cy5YoPBba73eyBmjtyHnQ==) and the IP
@@ -48,7 +48,7 @@
  *
  * If (most likely binary) junk is shown, then
  *  - either the encryption password has, between the time the mail was sent
- *    and `now', changed, or
+ *    and 'now', changed, or
  *  - you are dealing with counterfeit header data.
  */
 

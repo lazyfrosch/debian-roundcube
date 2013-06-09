@@ -5,12 +5,12 @@
  | rcube_install.php                                                     |
  |                                                                       |
  | This file is part of the Roundcube Webmail package                    |
- | Copyright (C) 2008-2011, The Roundcube Dev Team                       |
- | Licensed under the GNU Public License                                 |
+ | Copyright (C) 2008-2012, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
  +-----------------------------------------------------------------------+
-
- $Id:  $
-
 */
 
 
@@ -29,47 +29,59 @@ class rcube_install
   var $config = array();
   var $configured = false;
   var $last_error = null;
-  var $db_map = array('pgsql' => 'postgres', 'mysqli' => 'mysql', 'sqlsrv' => 'mssql');
   var $email_pattern = '([a-z0-9][a-z0-9\-\.\+\_]*@[a-z0-9]([a-z0-9\-][.]?)*[a-z0-9])';
   var $bool_config_props = array();
 
   var $obsolete_config = array('db_backend', 'double_auth');
   var $replaced_config = array(
-    'skin_path' => 'skin',
-    'locale_string' => 'language',
-    'multiple_identities' => 'identities_level',
+    'skin_path'            => 'skin',
+    'locale_string'        => 'language',
+    'multiple_identities'  => 'identities_level',
     'addrbook_show_images' => 'show_images',
-    'imap_root' => 'imap_ns_personal',
+    'imap_root'            => 'imap_ns_personal',
+    'pagesize'             => 'mail_pagesize',
+    'default_imap_folders' => 'default_folders',
+    'top_posting'          => 'reply_mode',
   );
-  
+
   // these config options are required for a working system
   var $required_config = array(
-    'db_dsnw', 'db_table_contactgroups', 'db_table_contactgroupmembers',
-    'des_key', 'session_lifetime',
+    'db_dsnw', 'des_key', 'session_lifetime',
   );
-  
+
+  // list of supported database drivers
+  var $supported_dbs = array(
+    'MySQL'               => 'pdo_mysql',
+    'PostgreSQL'          => 'pdo_pgsql',
+    'SQLite'              => 'pdo_sqlite',
+    'SQLite (v2)'         => 'pdo_sqlite2',
+    'SQL Server (SQLSRV)' => 'pdo_sqlsrv',
+    'SQL Server (DBLIB)'  => 'pdo_dblib',
+  );
+
+
   /**
    * Constructor
    */
-  function rcube_install()
+  function __construct()
   {
     $this->step = intval($_REQUEST['_step']);
     $this->is_post = $_SERVER['REQUEST_METHOD'] == 'POST';
   }
-  
+
   /**
    * Singleton getter
    */
-  function get_instance()
+  static function get_instance()
   {
     static $inst;
-    
+
     if (!$inst)
       $inst = new rcube_install();
-    
+
     return $inst;
   }
-  
+
   /**
    * Read the default config files and store properties
    */
@@ -95,19 +107,19 @@ class rcube_install
    */
   function _load_config($suffix)
   {
-    if (is_readable($main_inc = RCMAIL_CONFIG_DIR . '/main.inc' . $suffix)) {
+    if (is_readable($main_inc = RCUBE_CONFIG_DIR . 'main.inc' . $suffix)) {
       include($main_inc);
       if (is_array($rcmail_config))
         $this->config += $rcmail_config;
     }
-    if (is_readable($db_inc = RCMAIL_CONFIG_DIR . '/db.inc'. $suffix)) {
+    if (is_readable($db_inc = RCUBE_CONFIG_DIR . 'db.inc'. $suffix)) {
       include($db_inc);
       if (is_array($rcmail_config))
         $this->config += $rcmail_config;
     }
   }
-  
-  
+
+
   /**
    * Getter for a certain config property
    *
@@ -118,10 +130,10 @@ class rcube_install
   function getprop($name, $default = '')
   {
     $value = $this->config[$name];
-    
+
     if ($name == 'des_key' && !$this->configured && !isset($_REQUEST["_$name"]))
       $value = rcube_install::random_key(24);
-    
+
     return $value !== null && $value !== '' ? $value : $default;
   }
 
@@ -135,7 +147,7 @@ class rcube_install
    */
   function create_config($which, $force = false)
   {
-    $out = @file_get_contents(RCMAIL_CONFIG_DIR . "/{$which}.inc.php.dist");
+    $out = @file_get_contents(RCUBE_CONFIG_DIR . $which . '.inc.php.dist');
 
     if (!$out)
       return '[Warning: could not read the config template file]';
@@ -169,7 +181,7 @@ class rcube_install
         if (count($value) <= 1)
           $value = $value[0];
       }
-      else if ($prop == 'pagesize') {
+      else if ($prop == 'mail_pagesize' || $prop == 'addressbook_pagesize') {
         $value = max(2, intval($value));
       }
       else if ($prop == 'smtp_user' && !empty($_POST['_smtp_user_u'])) {
@@ -178,17 +190,17 @@ class rcube_install
       else if ($prop == 'smtp_pass' && !empty($_POST['_smtp_user_u'])) {
         $value = '%p';
       }
-      else if ($prop == 'default_imap_folders') {
-	    $value = array();
-	    foreach ($this->config['default_imap_folders'] as $_folder) {
-	      switch ($_folder) {
-	      case 'Drafts': $_folder = $this->config['drafts_mbox']; break;
-	      case 'Sent':   $_folder = $this->config['sent_mbox']; break;
-	      case 'Junk':   $_folder = $this->config['junk_mbox']; break;
-	      case 'Trash':  $_folder = $this->config['trash_mbox']; break;
+      else if ($prop == 'default_folders') {
+        $value = array();
+        foreach ($this->config['default_folders'] as $_folder) {
+          switch ($_folder) {
+          case 'Drafts': $_folder = $this->config['drafts_mbox']; break;
+          case 'Sent':   $_folder = $this->config['sent_mbox']; break;
+          case 'Junk':   $_folder = $this->config['junk_mbox']; break;
+          case 'Trash':  $_folder = $this->config['trash_mbox']; break;
           }
-	    if (!in_array($_folder, $value))
-	      $value[] = $_folder;
+        if (!in_array($_folder, $value))
+          $value[] = $_folder;
         }
       }
       else if (is_bool($default)) {
@@ -227,14 +239,14 @@ class rcube_install
     $this->config = array();
     $this->load_defaults();
     $defaults = $this->config;
-    
+
     $this->load_config();
     if (!$this->configured)
       return null;
-    
+
     $out = $seen = array();
     $required = array_flip($this->required_config);
-    
+
     // iterate over the current configuration
     foreach ($this->config as $prop => $value) {
       if ($replacement = $this->replaced_config[$prop]) {
@@ -246,10 +258,15 @@ class rcube_install
         $seen[$prop] = true;
       }
     }
-    
+
+    // the old default mime_magic reference is obsolete
+    if ($this->config['mime_magic'] == '/usr/share/misc/magic') {
+        $out['obsolete'][] = array('prop' => 'mime_magic', 'explain' => "Set value to null in order to use system default");
+    }
+
     // iterate over default config
     foreach ($defaults as $prop => $value) {
-      if (!isset($seen[$prop]) && !isset($this->config[$prop]) && isset($required[$prop]))
+      if (!isset($seen[$prop]) && isset($required[$prop]) && !(is_bool($this->config[$prop]) || strlen($this->config[$prop])))
         $out['missing'][] = array('prop' => $prop);
     }
 
@@ -261,23 +278,23 @@ class rcube_install
       }
       else if (!empty($this->config['spellcheck_languages'])) {
         foreach ($this->config['spellcheck_languages'] as $lang => $descr)
-          if (!pspell_new($lang))
+          if (!@pspell_new($lang))
             $out['dependencies'][] = array('prop' => 'spellcheck_languages',
               'explain' => "You are missing pspell support for language $lang ($descr)");
       }
     }
-    
+
     if ($this->config['log_driver'] == 'syslog') {
       if (!function_exists('openlog')) {
         $out['dependencies'][] = array('prop' => 'log_driver',
-          'explain' => 'This requires the <tt>sylog</tt> extension which could not be loaded.');
+          'explain' => 'This requires the <tt>syslog</tt> extension which could not be loaded.');
       }
       if (empty($this->config['syslog_id'])) {
         $out['dependencies'][] = array('prop' => 'syslog_id',
           'explain' => 'Using <tt>syslog</tt> for logging requires a syslog ID to be configured');
       }
     }
-    
+
     // check ldap_public sources having global_search enabled
     if (is_array($this->config['ldap_public']) && !is_array($this->config['autocomplete_addressbooks'])) {
       foreach ($this->config['ldap_public'] as $ldap_public) {
@@ -287,11 +304,11 @@ class rcube_install
         }
       }
     }
-    
+
     return $out;
   }
-  
-  
+
+
   /**
    * Merge the current configuration with the defaults
    * and copy replaced values to the new options.
@@ -313,11 +330,11 @@ class rcube_install
       }
       unset($current[$prop]);
     }
-    
+
     foreach ($this->obsolete_config as $prop) {
       unset($current[$prop]);
     }
-    
+
     // add all ldap_public sources having global_search enabled to autocomplete_addressbooks
     if (is_array($current['ldap_public'])) {
       foreach ($current['ldap_public'] as $key => $ldap_public) {
@@ -327,9 +344,6 @@ class rcube_install
         }
       }
     }
-    
-    if ($current['keep_alive'] && $current['session_lifetime'] < $current['keep_alive'])
-      $current['session_lifetime'] = max(10, ceil($current['keep_alive'] / 60) * 2);
 
     $this->config  = array_merge($this->config, $current);
 
@@ -337,7 +351,7 @@ class rcube_install
       $this->config['ldap_public'][$key] = $current['ldap_public'][$key];
     }
   }
-  
+
   /**
    * Compare the local database schema with the reference schema
    * required for this version of Roundcube
@@ -349,11 +363,11 @@ class rcube_install
   {
     if (!$this->configured)
       return false;
-    
+
     // read reference schema from mysql.initial.sql
     $db_schema = $this->db_read_schema(INSTALL_PATH . 'SQL/mysql.initial.sql');
     $errors = array();
-    
+
     // check list of tables
     $existing_tables = $DB->list_tables();
 
@@ -369,7 +383,7 @@ class rcube_install
           $errors[] = "Missing columns in table '$table': " . join(',', $diff);
       }
     }
-    
+
     return !empty($errors) ? $errors : false;
   }
 
@@ -392,90 +406,11 @@ class rcube_install
         }
       }
     }
-    
+
     return $schema;
   }
-  
-  
-  /**
-   * Compare the local database schema with the reference schema
-   * required for this version of Roundcube
-   *
-   * @param boolean True if the schema schould be updated
-   * @return boolean True if the schema is up-to-date, false if not or an error occured
-   */
-  function mdb2_schema_check($update = false)
-  {
-    if (!$this->configured)
-      return false;
-    
-    $options = array(
-      'use_transactions' => false,
-      'log_line_break' => "\n",
-      'idxname_format' => '%s',
-      'debug' => false,
-      'quote_identifier' => true,
-      'force_defaults' => false,
-      'portability' => true
-    );
-    
-    $dsnw = $this->config['db_dsnw'];
-    $schema = MDB2_Schema::factory($dsnw, $options);
-    $schema->db->supported['transactions'] = false;
-    
-    if (PEAR::isError($schema)) {
-      $this->raise_error(array('code' => $schema->getCode(), 'message' => $schema->getMessage() . ' ' . $schema->getUserInfo()));
-      return false;
-    }
-    else {
-      $definition = $schema->getDefinitionFromDatabase();
-      $definition['charset'] = 'utf8';
-      
-      if (PEAR::isError($definition)) {
-        $this->raise_error(array('code' => $definition->getCode(), 'message' => $definition->getMessage() . ' ' . $definition->getUserInfo()));
-        return false;
-      }
-      
-      // load reference schema
-      $dsn_arr = MDB2::parseDSN($this->config['db_dsnw']);
 
-      $ref_schema = INSTALL_PATH . 'SQL/' . $dsn_arr['phptype'] . '.schema.xml';
-      
-      if (is_readable($ref_schema)) {
-        $reference = $schema->parseDatabaseDefinition($ref_schema, false, array(), $schema->options['fail_on_invalid_names']);
-        
-        if (PEAR::isError($reference)) {
-          $this->raise_error(array('code' => $reference->getCode(), 'message' => $reference->getMessage() . ' ' . $reference->getUserInfo()));
-        }
-        else {
-          $diff = $schema->compareDefinitions($reference, $definition);
-          
-          if (empty($diff)) {
-            return true;
-          }
-          else if ($update) {
-            // update database schema with the diff from the above check
-            $success = $schema->alterDatabase($reference, $definition, $diff);
-            
-            if (PEAR::isError($success)) {
-              $this->raise_error(array('code' => $success->getCode(), 'message' => $success->getMessage() . ' ' . $success->getUserInfo()));
-            }
-            else
-              return true;
-          }
-          echo '<pre>'; var_dump($diff); echo '</pre>';
-          return false;
-        }
-      }
-      else
-        $this->raise_error(array('message' => "Could not find reference schema file ($ref_schema)"));
-        return false;
-    }
-    
-    return false;
-  }
-  
-  
+
   /**
    * Getter for the last error message
    *
@@ -485,8 +420,8 @@ class rcube_install
   {
       return $this->last_error['message'];
   }
-  
-  
+
+
   /**
    * Return a list with all imap hosts configured
    *
@@ -496,12 +431,12 @@ class rcube_install
   {
     $default_hosts = (array)$this->getprop('default_host');
     $out = array();
-    
+
     foreach ($default_hosts as $key => $name) {
       if (!empty($name))
         $out[] = rcube_parse_host(is_numeric($key) ? $name : $key);
     }
-    
+
     return $out;
   }
 
@@ -516,9 +451,11 @@ class rcube_install
         '0.2-alpha', '0.2-beta', '0.2-stable',
         '0.3-stable', '0.3.1',
         '0.4-beta', '0.4.2',
-        '0.5-beta', '0.5', '0.5.1',
+        '0.5-beta', '0.5', '0.5.1', '0.5.2', '0.5.3', '0.5.4',
         '0.6-beta', '0.6',
-        '0.7-beta', '0.7', '0.7.1'
+        '0.7-beta', '0.7', '0.7.1', '0.7.2', '0.7.3', '0.7.4',
+        '0.8-beta', '0.8-rc', '0.8.0', '0.8.1', '0.8.2', '0.8.3', '0.8.4', '0.8.5', '0.8.6',
+        '0.9-beta', '0.9-rc', '0.9-rc2', '0.9.0',
     ));
     return $select;
   }
@@ -537,7 +474,7 @@ class rcube_install
     }
     return $skins;
   }
-  
+
   /**
    * Display OK status
    *
@@ -549,8 +486,8 @@ class rcube_install
     echo Q($name) . ':&nbsp; <span class="success">OK</span>';
     $this->_showhint($message);
   }
-  
-  
+
+
   /**
    * Display an error status and increase failure count
    *
@@ -561,7 +498,7 @@ class rcube_install
   function fail($name, $message = '', $url = '')
   {
     $this->failures++;
-    
+
     echo Q($name) . ':&nbsp; <span class="fail">NOT OK</span>';
     $this->_showhint($message, $url);
   }
@@ -579,8 +516,8 @@ class rcube_install
     echo Q($name) . ':&nbsp; <span class="na">NOT OK</span>';
     $this->_showhint($message, $url);
   }
-  
-  
+
+
   /**
    * Display warning status
    *
@@ -593,24 +530,24 @@ class rcube_install
     echo Q($name) . ':&nbsp; <span class="na">NOT AVAILABLE</span>';
     $this->_showhint($message, $url);
   }
-  
-  
+
+
   function _showhint($message, $url = '')
   {
     $hint = Q($message);
-    
+
     if ($url)
       $hint .= ($hint ? '; ' : '') . 'See <a href="' . Q($url) . '" target="_blank">' . Q($url) . '</a>';
-      
+
     if ($hint)
       echo '<span class="indent">(' . $hint . ')</span>';
   }
-  
-  
+
+
   static function _clean_array($arr)
   {
     $out = array();
-    
+
     foreach (array_unique($arr) as $k => $val) {
       if (!empty($val)) {
         if (is_numeric($k))
@@ -619,11 +556,11 @@ class rcube_install
           $out[$k] = $val;
       }
     }
-    
+
     return $out;
   }
-  
-  
+
+
   static function _dump_var($var, $name=null) {
     // special values
     switch ($name) {
@@ -652,16 +589,16 @@ class rcube_install
             break;
           }
         }
-        
+
         if ($isnum)
           return 'array(' . join(', ', array_map(array('rcube_install', '_dump_var'), $var)) . ')';
       }
     }
-    
+
     return var_export($var, true);
   }
-  
-  
+
+
   /**
    * Initialize the database with the according schema
    *
@@ -670,8 +607,8 @@ class rcube_install
    */
   function init_db($DB)
   {
-    $engine = isset($this->db_map[$DB->db_provider]) ? $this->db_map[$DB->db_provider] : $DB->db_provider;
-    
+    $engine = $DB->db_provider;
+
     // read schema file from /SQL/*
     $fname = INSTALL_PATH . "SQL/$engine.initial.sql";
     if ($sql = @file_get_contents($fname)) {
@@ -681,7 +618,7 @@ class rcube_install
       $this->fail('DB Schema', "Cannot read the schema file: $fname");
       return false;
     }
-    
+
     if ($err = $this->get_error()) {
       $this->fail('DB Schema', "Error creating database schema: $err");
       return false;
@@ -689,52 +626,26 @@ class rcube_install
 
     return true;
   }
-  
-  
+
+
   /**
-   * Update database with SQL statements from SQL/*.update.sql
+   * Update database schema
    *
-   * @param object rcube_db Database connection
    * @param string Version to update from
+   *
    * @return boolen True on success, False on error
    */
-  function update_db($DB, $version)
+  function update_db($version)
   {
-    $version = strtolower($version);
-    $engine = isset($this->db_map[$DB->db_provider]) ? $this->db_map[$DB->db_provider] : $DB->db_provider;
-    
-    // read schema file from /SQL/*
-    $fname = INSTALL_PATH . "SQL/$engine.update.sql";
-    if ($lines = @file($fname, FILE_SKIP_EMPTY_LINES)) {
-      $from = false; $sql = '';
-      foreach ($lines as $line) {
-        $is_comment = preg_match('/^--/', $line);
-        if (!$from && $is_comment && preg_match('/from version\s([0-9.]+[a-z-]*)/', $line, $m)) {
-          $v = strtolower($m[1]);
-          if ($v == $version || version_compare($version, $v, '<='))
-            $from = true;
-        }
-        if ($from && !$is_comment)
-          $sql .= $line. "\n";
-      }
-      
-      if ($sql)
-        $this->exec_sql($sql, $DB);
-    }
-    else {
-      $this->fail('DB Schema', "Cannot read the update file: $fname");
-      return false;
-    }
-    
-    if ($err = $this->get_error()) {
-      $this->fail('DB Schema', "Error updating database: $err");
-      return false;
-    }
+    system(INSTALL_PATH . "bin/updatedb.sh --package=roundcube"
+      . " --version=" . escapeshellarg($version)
+      . " --dir=" . INSTALL_PATH . "SQL"
+      . " 2>&1", $result);
 
-    return true;
+    return !$result;
   }
-  
-  
+
+
   /**
    * Execute the given SQL queries on the database connection
    *
@@ -748,7 +659,7 @@ class rcube_install
     foreach (explode("\n", $sql) as $line) {
       if (preg_match('/^--/', $line) || trim($line) == '')
         continue;
-        
+
       $buff .= $line . "\n";
       if (preg_match('/(;|^GO)$/', trim($line))) {
         $DB->query($buff);
@@ -757,11 +668,11 @@ class rcube_install
           break;
       }
     }
-    
+
     return !$DB->is_error();
   }
-  
-  
+
+
   /**
    * Handler for Roundcube errors
    */
@@ -769,8 +680,8 @@ class rcube_install
   {
       $this->last_error = $p;
   }
-  
-  
+
+
   /**
    * Generarte a ramdom string to be used as encryption key
    *
@@ -782,12 +693,12 @@ class rcube_install
   {
     $alpha = 'ABCDEFGHIJKLMNOPQERSTUVXYZabcdefghijklmnopqrtsuvwxyz0123456789+*%&?!$-_=';
     $out = '';
-    
+
     for ($i=0; $i < $length; $i++)
       $out .= $alpha{rand(0, strlen($alpha)-1)};
-    
+
     return $out;
   }
-  
+
 }
 

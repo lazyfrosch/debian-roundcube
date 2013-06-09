@@ -23,16 +23,13 @@ binary-install/roundcube-core::
 	# Install empty tables and updates for each db type
 	install -m 0644 $(CURDIR)/SQL/mysql.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/mysql
 	install -m 0644 $(CURDIR)/SQL/postgres.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/pgsql
-	install -m 0644 $(CURDIR)/SQL/sqlite.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/sqlite
+	install -m 0644 $(CURDIR)/SQL/sqlite.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/sqlite3
 
 	# Old database upgrades
 	cp -r $(CURDIR)/debian/sql/* $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/upgrade/.
 
-	# Some files are executable while not being scripts or binary...
-	find $(CURDIR)/debian/roundcube-core/usr/share/roundcube -type f -print0 | xargs -r0 chmod -x
 	# Remove useless file
 	rm -rf $(CURDIR)/debian/roundcube-core/usr/share/roundcube/bin
-	find $(CURDIR)/debian/roundcube-core -name '._*' -print0 | xargs -r0 rm
 	# Convert .js.src back to js
 	for js in $$(find $(CURDIR)/debian/roundcube-core -name '*.js.src' -print); do \
 		yui-compressor --type js "$$js" -o "$${js%.*}" ; \
@@ -68,6 +65,11 @@ binary-install/roundcube-plugins::
 $(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/% :
 	install -d $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/bug/$(cdbs_curpkg)
 	install -m 644 $(CURDIR)/debian/bug.control $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/bug/$(cdbs_curpkg)/control
+	if [ -d $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube ]; then \
+		find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube -type f -print0 | xargs -r0 chmod -x ; \
+		find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube -name '._*' -o -name '.gitignore' -delete ; \
+		find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube -type d -empty -delete ; \
+	fi
 
 clean::
 	debconf-updatepo

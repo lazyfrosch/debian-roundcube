@@ -1,37 +1,41 @@
 <?php
 
 /*
+ +-----------------------------------------------------------------------+
+ | localization/<lang>/messages.inc                                      |
+ |                                                                       |
+ | Localization file of the Roundcube Webmail client                     |
+ | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
+ |                                                                       |
+ +-----------------------------------------------------------------------+
 
-+-----------------------------------------------------------------------+
-| language/lt_LT/messages.inc                                           |
-|                                                                       |
-| Language file of the Roundcube Webmail client                         |
-| Copyright (C) 2005-2010, The Roundcube Dev Team                       |
-| Licensed under the GNU GPL                                            |
-|                                                                       |
-+-----------------------------------------------------------------------+
-| Authors: Martynas Bendorius <martynas@evanet.lt>                      |
-|          Rimas Kudelis <rq@akl.lt>                                    |
-+-----------------------------------------------------------------------+
-
-@version $Id: messages.inc 5569 2011-12-07 14:47:32Z thomasb $
-
+ For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/messages/
 */
 
 $messages = array();
-$messages['loginfailed'] = 'Prisijungti nepavyko.';
+$messages['errortitle']  = 'Įvyko klaida!';
+$messages['loginfailed']  = 'Prisijungti nepavyko.';
 $messages['cookiesdisabled'] = 'Jūsų naršyklė nepriima slapukų.';
 $messages['sessionerror'] = 'Jūsų sesija negaliojanti.';
-$messages['imaperror'] = 'Nepavyko prisijungti prie IMAP serverio.';
+$messages['storageerror'] = 'Nepavyko prisijungti prie IMAP serverio.';
 $messages['servererror'] = 'Serverio klaida!';
 $messages['servererrormsg'] = 'Serverio klaida: $msg';
 $messages['dberror'] = 'Duomenų bazės klaida!';
+$messages['requesttimedout'] = 'Baigėsi užklausai skirtas laikas';
 $messages['errorreadonly'] = 'Nepavyko atlikti veiksmo – aplankas prieinamas tik skaitymui.';
 $messages['errornoperm'] = 'Nepavyko atlikti veiksmo – nepakanka teisių.';
+$messages['erroroverquota'] = 'Nepavyko atlikti veiksmo. Diske trūksta laisvos vietos.';
+$messages['erroroverquotadelete'] = 'Diske trūksta laisvos vietos. Laiškui pašalinti naudokite Lyg2+Šal (Shift+Del) klavišų kombinaciją.';
 $messages['invalidrequest'] = 'Netinkama užklausa! Duomenys neišsaugoti.';
+$messages['invalidhost'] = 'Negalimas serverio vardas.';
 $messages['nomessagesfound'] = 'Šioje pašto dėžutėje laiškų nėra.';
 $messages['loggedout'] = 'Jūs sėkmingai atsijungėte. Iki kito karto!';
 $messages['mailboxempty'] = 'Pašto dėžutė tuščia.';
+$messages['refreshing'] = 'Atnaujinama…';
 $messages['loading'] = 'Įkeliama…';
 $messages['uploading'] = 'Įkeliamas failas…';
 $messages['uploadingmany'] = 'Įkeliami failai…';
@@ -58,11 +62,11 @@ $messages['errormoving'] = 'Laiško(-ų) perkelti nepavyko.';
 $messages['errorcopying'] = 'Laiško(-ų) nukopijuoti nepavyko.';
 $messages['errordeleting'] = 'Laiško(-ų) pašalinti nepavyko.';
 $messages['errormarking'] = 'Laiško(-ų) pažymėti nepavyko.';
-$messages['deletecontactconfirm'] = 'Ar tikrai pašalinti pažymėtą(-us) adresatą(-us)?';
-$messages['deletegroupconfirm'] = 'Ar tikrai pašalinti pažymėtą grupę?';
+$messages['deletecontactconfirm']  = 'Ar tikrai pašalinti pažymėtą(-us) adresatą(-us)?';
+$messages['deletegroupconfirm']  = 'Ar tikrai pašalinti pažymėtą grupę?';
 $messages['deletemessagesconfirm'] = 'Ar tikrai pašalinti pažymėtą(-us) laišką(-us)?';
-$messages['deletefolderconfirm'] = 'Ar tikrai pašalinti šį aplanką?';
-$messages['purgefolderconfirm'] = 'Ar tikrai pašalinti visus šiame aplanke esančius laiškus?';
+$messages['deletefolderconfirm']  = 'Ar tikrai pašalinti šį aplanką?';
+$messages['purgefolderconfirm']  = 'Ar tikrai pašalinti visus šiame aplanke esančius laiškus?';
 $messages['contactdeleting'] = 'Adresatas(-ai) šalinamas(-i)…';
 $messages['groupdeleting'] = 'Grupė šalinama…';
 $messages['folderdeleting'] = 'Aplankas šalinamas…';
@@ -71,11 +75,11 @@ $messages['foldersubscribing'] = 'Aplankas prenumeruojamas…';
 $messages['folderunsubscribing'] = 'Atsisakoma aplanko prenumeratos…';
 $messages['formincomplete'] = 'Forma nepilnai užpildyta.';
 $messages['noemailwarning'] = 'Prašom įvesti teisingą el. pašto adresą.';
-$messages['nonamewarning'] = 'Prašom įvesti vardą.';
+$messages['nonamewarning']  = 'Prašom įvesti vardą.';
 $messages['nopagesizewarning'] = 'Prašom įvesti puslapio dydį.';
 $messages['nosenderwarning'] = 'Prašom įvesti siuntėjo el. pašto adresą.';
 $messages['norecipientwarning'] = 'Prašom įvesti bent vieną gavėją.';
-$messages['nosubjectwarning'] = 'Temos laukelis tuščias. Ar norite temą įvesti dabar?';
+$messages['nosubjectwarning']  = 'Temos laukelis tuščias. Ar norite temą įvesti dabar?';
 $messages['nobodywarning'] = 'Išsiųsti šį laišką be teksto?';
 $messages['notsentwarning'] = 'Laiškas neišsiųstas. Ar jūs tikrai norite jo atsikratyti?';
 $messages['noldapserver'] = 'Prašome pasirinkti LDAP serverį paieškai.';
@@ -110,14 +114,16 @@ $messages['addingmember'] = 'Adresatas(-ai) įtraukiamas(-i) į grupę…';
 $messages['removingmember'] = 'Adresatas(-ai) šalinamas(-i) iš grupės…';
 $messages['receiptsent'] = 'Laiško perskaitymo pažyma sėkmingai išsiųsta.';
 $messages['errorsendingreceipt'] = 'Laiško perskaitymo pažymos išsiųsti nepavyko.';
-$messages['nodeletelastidentity'] = 'Jūs negalite ištrinti šios tapatybės, nes ji yra vienintelė likusi.';
-$messages['forbiddencharacter'] = 'Aplanko varde rasta neleistinų simbolių.';
-$messages['selectimportfile'] = 'Parinkite įkelti norimą failą.';
+$messages['deleteidentityconfirm'] = 'Ar tikrai norite pašalinti šią tapatybę?';
+$messages['nodeletelastidentity'] = 'Šios tapatybės šalinti negalima, nes ji vienintelė likusi.';
+$messages['forbiddencharacter'] = 'Aplanko varde aptikta neleistinų simbolių.';
+$messages['selectimportfile'] = 'Parinkite norimą įkelti failą.';
 $messages['addresswriterror'] = 'Pasirinktoji adresų knyga prieinama tik skaitymui.';
 $messages['contactaddedtogroup'] = 'Adresatai sėkmingai įtraukti į šią grupę.';
 $messages['contactremovedfromgroup'] = 'Adresatai sėkmingai pašalinti iš šios grupės.';
+$messages['nogroupassignmentschanged'] = 'Grupių priskyrimai nepakeisti.';
 $messages['importwait'] = 'Importuojama, prašome palaukti…';
-$messages['importerror'] = 'Importavimas nepavyko! Įkeltasis failas nėra „vCard“ formato.';
+$messages['importformaterror'] = 'Importas nepavyko! Įkeltasis failas nėra tinkamas importavimui duomenų failas.';
 $messages['importconfirm'] = '<b>Sėkmingai importuoti $inserted adresatai(-ų)</b>';
 $messages['importconfirmskipped'] = '<b>Praleisti $skipped jau egzistuojantys adresatai(-ų)</b>';
 $messages['opnotpermitted'] = 'Veiksmas neleistinas!';
@@ -159,5 +165,7 @@ $messages['invalidimageformat'] = 'Paveikslo formatas netinkamas.';
 $messages['mispellingsfound'] = 'Laiške rasta rašybos klaidų.';
 $messages['parentnotwritable'] = 'Nepavyko sukurti arba perkelti aplanko į parinktą tėvinį aplanką. Trūksta prieigos teisių.';
 $messages['messagetoobig'] = 'Laiško dalis yra per didelė, kad galėtų būti apdorota.';
+$messages['attachmentvalidationerror'] = 'Dėmesio! Šis priedas yra įtartinas, nes jo tipas nesutampa su deklaruotu laiške. Jeigu nepasitikite šiuo siuntėju, šio priedo atverti naršyklėje nepatartina, nes jis gali būti kenksmingas.<br/><br/><em>Tikėtasi: $expected; aptikta: $detected</em>';
+$messages['noscriptwarning'] = 'Dėmesio: šiai saityno el. pašto sistemai veikti būtini „JavaScript“ scenarijai! Norėdami ja naudotis, įjunkite „JavaScript“ savo naršyklės nuostatose.';
 
 ?>

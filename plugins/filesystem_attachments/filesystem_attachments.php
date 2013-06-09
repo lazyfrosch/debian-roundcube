@@ -1,7 +1,7 @@
 <?php
 /**
  * Filesystem Attachments
- * 
+ *
  * This is a core plugin which provides basic, filesystem based
  * attachment temporary file handling.  This includes storing
  * attachments of messages currently being composed, writing attachments
@@ -15,7 +15,7 @@
  *
  * @author Ziba Scott <ziba@umich.edu>
  * @author Thomas Bruederli <roundcube@gmail.com>
- * 
+ *
  */
 class filesystem_attachments extends rcube_plugin
 {
@@ -60,6 +60,7 @@ class filesystem_attachments extends rcube_plugin
             $args['id'] = $this->file_id();
             $args['path'] = $tmpfname;
             $args['status'] = true;
+            @chmod($tmpfname, 0600);  // set correct permissions (#1488996)
 
             // Note the file for later cleanup
             $_SESSION['plugins']['filesystem_attachments'][$group][] = $tmpfname;

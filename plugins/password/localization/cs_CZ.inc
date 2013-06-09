@@ -1,13 +1,20 @@
 <?php
 
-/**
- * Czech translation for Roundcube password plugin
- *
- * @version 1.0 (2009-08-29)
- * @author Milan Kozak <hodza@hodza.net>
- * @author Tomáš Šafařík <safarik@server.cz>
- *
- */
+/*
+ +-----------------------------------------------------------------------+
+ | plugins/password/localization/<lang>.inc                              |
+ |                                                                       |
+ | Localization file of the Roundcube Webmail Password plugin            |
+ | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
+ |                                                                       |
+ +-----------------------------------------------------------------------+
+
+ For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-password/
+*/
 
 $labels = array();
 $labels['changepasswd']  = 'Změna hesla';

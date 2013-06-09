@@ -6,7 +6,10 @@
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2005-2010, The Roundcube Dev Team                       |
- | Licensed under the GNU GPL                                            |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
  |                                                                       |
  | PURPOSE:                                                              |
  |   Copy the submitted messages to a specific mailbox                   |
@@ -14,9 +17,6 @@
  +-----------------------------------------------------------------------+
  | Author: Aleksander Machniak <alec@alec.pl>                            |
  +-----------------------------------------------------------------------+
-
- $Id: copy.inc 4410 2011-01-12 18:25:02Z thomasb $
-
 */
 
 // only process ajax requests
@@ -24,12 +24,12 @@ if (!$OUTPUT->ajax_call)
   return;
 
 // move messages
-if (!empty($_POST['_uid']) && !empty($_POST['_target_mbox'])) {
-    $uids = get_input_value('_uid', RCUBE_INPUT_POST);
+if (!empty($_POST['_uid']) && strlen($_POST['_target_mbox'])) {
+    $uids   = get_input_value('_uid', RCUBE_INPUT_POST);
     $target = get_input_value('_target_mbox', RCUBE_INPUT_POST, true);
-    $mbox = get_input_value('_mbox', RCUBE_INPUT_POST, true);
+    $mbox   = get_input_value('_mbox', RCUBE_INPUT_POST, true);
 
-    $copied = $IMAP->copy_message($uids, $target, $mbox);
+    $copied = $RCMAIL->storage->copy_message($uids, $target, $mbox);
 
     if (!$copied) {
         // send error message
@@ -47,7 +47,7 @@ if (!empty($_POST['_uid']) && !empty($_POST['_target_mbox'])) {
 }
 // unknown action or missing query param
 else {
-    exit;
+    $OUTPUT->show_message('internalerror', 'error');
 }
 
 // send response

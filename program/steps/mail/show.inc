@@ -6,7 +6,10 @@
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2005-2009, The Roundcube Dev Team                       |
- | Licensed under the GNU GPL                                            |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
  |                                                                       |
  | PURPOSE:                                                              |
  |   Display a mail message similar as a usual mail application does     |
@@ -14,12 +17,19 @@
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
-
- $Id: show.inc 5801 2012-01-19 07:32:08Z alec $
-
 */
 
 $PRINT_MODE = $RCMAIL->action=='print' ? TRUE : FALSE;
+
+// Read browser capabilities and store them in session
+if ($caps = get_input_value('_caps', RCUBE_INPUT_GET)) {
+  $browser_caps = array();
+  foreach (explode(',', $caps) as $cap) {
+    $cap = explode('=', $cap);
+    $browser_caps[$cap[0]] = $cap[1];
+  }
+  $_SESSION['browser_caps'] = $browser_caps;
+}
 
 // similar code as in program/steps/mail/get.inc
 if ($uid = get_input_value('_uid', RCUBE_INPUT_GET)) {
@@ -30,14 +40,14 @@ if ($uid = get_input_value('_uid', RCUBE_INPUT_GET)) {
     rcmail_message_error($uid);
   }
 
-  $mbox_name = $IMAP->get_mailbox_name();
+  $mbox_name = $RCMAIL->storage->get_folder();
 
   // show images?
   rcmail_check_safe($MESSAGE);
 
   // set message charset as default
   if (!empty($MESSAGE->headers->charset))
-    $IMAP->set_charset($MESSAGE->headers->charset);
+    $RCMAIL->storage->set_charset($MESSAGE->headers->charset);
 
   $OUTPUT->set_pagetitle(abbreviate_string($MESSAGE->subject, 128, '...', true));
 
@@ -47,18 +57,38 @@ if ($uid = get_input_value('_uid', RCUBE_INPUT_GET)) {
   $OUTPUT->set_env('safemode', $MESSAGE->is_safe);
   $OUTPUT->set_env('sender', $MESSAGE->sender['string']);
   $OUTPUT->set_env('permaurl', rcmail_url('show', array('_uid' => $MESSAGE->uid, '_mbox' => $mbox_name)));
-  $OUTPUT->set_env('delimiter', $IMAP->get_hierarchy_delimiter());
+  $OUTPUT->set_env('delimiter', $RCMAIL->storage->get_hierarchy_delimiter());
   $OUTPUT->set_env('mailbox', $mbox_name);
-  if ($CONFIG['drafts_mbox']) {
-    $OUTPUT->set_env('drafts_mailbox', $CONFIG['drafts_mbox']);
-  }
+  $OUTPUT->set_env('compose_extwin', $RCMAIL->config->get('compose_extwin',false));
 
   // mimetypes supported by the browser (default settings)
-  $mimetypes = $RCMAIL->config->get('client_mimetypes', 'text/plain,text/html,text/xml,image/jpeg,image/gif,image/png,application/x-javascript,application/pdf,application/x-shockwave-flash');
-  $OUTPUT->set_env('mimetypes', is_string($mimetypes) ? explode(',', $mimetypes) : (array)$mimetypes);
+  $mimetypes = (array)$RCMAIL->config->get('client_mimetypes');
 
+  // Remove unsupported types, which makes that attachment which cannot be
+  // displayed in a browser will be downloaded directly without displaying an overlay page
+  if (empty($_SESSION['browser_caps']['pdf']) && ($key = array_search('application/pdf', $mimetypes)) !== false) {
+    unset($mimetypes[$key]);
+  }
+  if (empty($_SESSION['browser_caps']['flash']) && ($key = array_search('application/x-shockwave-flash', $mimetypes)) !== false) {
+    unset($mimetypes[$key]);
+  }
+  if (empty($_SESSION['browser_caps']['tif']) && ($key = array_search('image/tiff', $mimetypes)) !== false) {
+    // we can convert tiff to jpeg
+    if (!$RCMAIL->config->get('im_convert_path')) {
+      unset($mimetypes[$key]);
+    }
+  }
+
+  $OUTPUT->set_env('mimetypes', array_values($mimetypes));
+
+  if ($CONFIG['drafts_mbox'])
+    $OUTPUT->set_env('drafts_mailbox', $CONFIG['drafts_mbox']);
   if ($CONFIG['trash_mbox'])
     $OUTPUT->set_env('trash_mailbox', $CONFIG['trash_mbox']);
+  if ($CONFIG['junk_mbox'])
+    $OUTPUT->set_env('junk_mailbox', $CONFIG['junk_mbox']);
+  if ($CONFIG['delete_junk'])
+    $OUTPUT->set_env('delete_junk', true);
   if ($CONFIG['flag_for_deletion'])
     $OUTPUT->set_env('flag_for_deletion', true);
   if ($CONFIG['read_when_deleted'])
@@ -67,20 +97,20 @@ if ($uid = get_input_value('_uid', RCUBE_INPUT_GET)) {
     $OUTPUT->set_env('skip_deleted', true);
   if ($CONFIG['display_next'])
     $OUTPUT->set_env('display_next', true);
-  if ($MESSAGE->headers->others['list-post'])
+  if ($MESSAGE->headers->get('list-post', false))
     $OUTPUT->set_env('list_post', true);
   if ($CONFIG['forward_attachment'])
     $OUTPUT->set_env('forward_attachment', true);
 
   if (!$OUTPUT->ajax_call)
     $OUTPUT->add_label('checkingmail', 'deletemessage', 'movemessagetotrash',
-      'movingmessage', 'deletingmessage');
+      'movingmessage', 'deletingmessage', 'markingmessage');
 
   // check for unset disposition notification
   if ($MESSAGE->headers->mdn_to
       && empty($MESSAGE->headers->flags['MDNSENT'])
       && empty($MESSAGE->headers->flags['SEEN'])
-      && ($IMAP->check_permflag('MDNSENT') || $IMAP->check_permflag('*'))
+      && ($RCMAIL->storage->check_permflag('MDNSENT') || $RCMAIL->storage->check_permflag('*'))
       && $mbox_name != $CONFIG['drafts_mbox']
       && $mbox_name != $CONFIG['sent_mbox']
   ) {
@@ -114,26 +144,28 @@ if ($uid = get_input_value('_uid', RCUBE_INPUT_GET)) {
 
 function rcmail_message_attachments($attrib)
 {
-  global $PRINT_MODE, $MESSAGE;
+  global $PRINT_MODE, $MESSAGE, $RCMAIL;
 
   $out = $ol = '';
 
   if (sizeof($MESSAGE->attachments)) {
     foreach ($MESSAGE->attachments as $attach_prop) {
-      if ($PRINT_MODE) {
-        $ol .= html::tag('li', null, sprintf("%s (%s)", Q($attach_prop->filename), Q(show_bytes($attach_prop->size))));
-      }
-      else {
-        if (mb_strlen($attach_prop->filename) > 50) {
-          $filename = abbreviate_string($attach_prop->filename, 50);
-          $title = $attach_prop->filename;
-      }
-      else {
-        $filename = $attach_prop->filename;
-        $title = '';
-      }
+      $filename = rcmail_attachment_name($attach_prop, true);
 
-        $ol .= html::tag('li', null,
+      if ($PRINT_MODE) {
+        $size = $RCMAIL->message_part_size($attach_prop);
+        $ol .= html::tag('li', null, Q(sprintf("%s (%s)", $filename, $size)));
+      }
+      else {
+        if (mb_strlen($filename) > 50) {
+          $title    = $filename;
+          $filename = abbreviate_string($filename, 50);
+        }
+        else {
+          $title = '';
+        }
+
+        $ol .= html::tag('li', rcmail_filetype2classname($attach_prop->mimetype, $filename),
           html::a(array(
             'href' => $MESSAGE->get_part_url($attach_prop->mime_id, false),
             'onclick' => sprintf(
@@ -178,8 +210,8 @@ function rcmail_message_buttons()
 {
   global $MESSAGE, $RCMAIL, $CONFIG;
 
-  $mbox  = $RCMAIL->imap->get_mailbox_name();
-  $delim = $RCMAIL->imap->get_hierarchy_delimiter();
+  $mbox  = $RCMAIL->storage->get_folder();
+  $delim = $RCMAIL->storage->get_hierarchy_delimiter();
   $dbox  = $CONFIG['drafts_mbox'];
 
   // the message is not a draft
@@ -222,7 +254,7 @@ function rcmail_contact_exists($email)
 
   if ($email) {
     // @TODO: search in all address books?
-    $CONTACTS = $RCMAIL->get_address_book(null, true);
+    $CONTACTS = $RCMAIL->get_address_book(-1, true);
     $existing = $CONTACTS->search('email', $email, true, false);
     if ($existing->count)
       return true;
@@ -231,11 +263,25 @@ function rcmail_contact_exists($email)
   return false;
 }
 
+function rcmail_message_contactphoto($attrib)
+{
+  global $RCMAIL, $MESSAGE;
+
+  $placeholder = $attrib['placeholder'] ? $RCMAIL->config->get('skin_path') . $attrib['placeholder'] : null;
+  if ($MESSAGE->sender)
+    $photo_img = $RCMAIL->url(array('_task' => 'addressbook', '_action' => 'photo', '_email' => $MESSAGE->sender['mailto'], '_alt' => $placeholder));
+  else
+    $photo_img = $placeholder ? $placeholder : 'program/resources/blank.gif';
+
+  return html::img(array('src' => $photo_img) + $attrib);
+}
+
 
 $OUTPUT->add_handlers(array(
   'messageattachments' => 'rcmail_message_attachments',
   'mailboxname' => 'rcmail_mailbox_name_display',
   'messageobjects' => 'rcmail_message_objects',
+  'contactphoto' => 'rcmail_message_contactphoto',
 ));
 
 
@@ -251,7 +297,7 @@ else
 if ($MESSAGE && $MESSAGE->headers && empty($MESSAGE->headers->flags['SEEN']) &&
   ($RCMAIL->action == 'show' || ($RCMAIL->action == 'preview' && intval($CONFIG['preview_pane_mark_read']) == 0)))
 {
-  if ($IMAP->set_flag($MESSAGE->uid, 'SEEN')) {
+  if ($RCMAIL->storage->set_flag($MESSAGE->uid, 'SEEN')) {
     if ($count = rcmail_get_unseen_count($mbox_name)) {
       rcmail_set_unseen_count($mbox_name, $count - 1);
     }

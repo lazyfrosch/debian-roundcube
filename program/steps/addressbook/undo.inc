@@ -6,7 +6,10 @@
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2011, Kolab Systems AG                                  |
- | Licensed under the GNU GPL                                            |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
  |                                                                       |
  | PURPOSE:                                                              |
  |   Undelete contacts (CIDs) from last delete action                    |
@@ -14,9 +17,6 @@
  +-----------------------------------------------------------------------+
  | Author: Aleksander Machniak <machniak@kolabsys.com>                   |
  +-----------------------------------------------------------------------+
-
- $Id: undo.inc 5967 2012-03-05 19:59:07Z alec $
-
 */
 
 // process ajax requests only

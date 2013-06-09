@@ -1,3 +1,29 @@
+roundcube (0.9.1-1~bpo60+1) squeeze-backports-sloppy; urgency=low
+
+  * Backport to Squeeze.
+
+ -- Vincent Bernat <bernat@debian.org>  Sun, 09 Jun 2013 14:55:42 +0200
+
+roundcube (0.9.1-1) unstable; urgency=low
+
+  * New upstream version. Closes: #707809.
+     + Add new zipdownload plugin.
+     + Switch from MDB2 to PDO for database handling.
+     + Add support for SQLite 3.
+  * Bumps Standards-Version.
+  * Depends on php5 but only recommends a web server. The web server can
+    be installed on another host.
+  * Transition towards Apache 2.4. Closes: #669804.
+     + Also drop some old cruft (Apache configuration).
+
+ -- Vincent Bernat <bernat@debian.org>  Tue, 04 Jun 2013 22:53:45 +0200
+
+roundcube (0.8.6-1) experimental; urgency=low
+
+  * New upstream version. Closes: #684769.
+
+ -- Vincent Bernat <bernat@debian.org>  Sun, 14 Apr 2013 11:21:32 +0200
+
 roundcube (0.7.2-9~bpo60+1) squeeze-backports; urgency=low
 
   * Backport to Squeeze.

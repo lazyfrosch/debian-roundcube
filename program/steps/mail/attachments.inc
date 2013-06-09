@@ -6,7 +6,10 @@
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2005-2009, The Roundcube Dev Team                       |
- | Licensed under the GNU GPL                                            |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
  |                                                                       |
  | PURPOSE:                                                              |
  |   Upload, remove, display attachments in compose form                 |
@@ -14,9 +17,6 @@
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
-
- $Id: attachments.inc 5543 2011-12-05 07:24:36Z alec $
-
 */
 
 // Upload progress update
@@ -27,8 +27,10 @@ if (!empty($_GET['_progress'])) {
 $COMPOSE_ID = get_input_value('_id', RCUBE_INPUT_GPC);
 $COMPOSE    = null;
 
-if ($COMPOSE_ID && $_SESSION['compose_data_'.$COMPOSE_ID])
-  $COMPOSE =& $_SESSION['compose_data_'.$COMPOSE_ID];
+if ($COMPOSE_ID && $_SESSION['compose_data_' . $COMPOSE_ID]) {
+  $SESSION_KEY = 'compose_data_' . $COMPOSE_ID;
+  $COMPOSE =& $_SESSION[$SESSION_KEY];
+}
 
 if (!$COMPOSE) {
   die("Invalid session var!");
@@ -45,7 +47,7 @@ if ($RCMAIL->action=='remove-attachment')
     $attachment = $RCMAIL->plugins->exec_hook('attachment_delete', $attachment);
   if ($attachment['status']) {
     if (is_array($COMPOSE['attachments'][$id])) {
-      unset($COMPOSE['attachments'][$id]);
+      $RCMAIL->session->remove($SESSION_KEY.'.attachments.'.$id);
       $OUTPUT->command('remove_from_attachment_list', "rcmfile$id");
     }
   }
@@ -77,11 +79,7 @@ if ($RCMAIL->action=='display-attachment')
   exit;
 }
 
-// attachment upload action
-
-if (!is_array($COMPOSE['attachments'])) {
-  $COMPOSE['attachments'] = array();
-}
+/*****  attachment upload action  *****/
 
 // clear all stored output properties (like scripts and env vars)
 $OUTPUT->reset();
@@ -89,6 +87,8 @@ $OUTPUT->reset();
 $uploadid = get_input_value('_uploadid', RCUBE_INPUT_GET);
 
 if (is_array($_FILES['_attachments']['tmp_name'])) {
+  $multiple = count($_FILES['_attachments']['tmp_name']) > 1;
+
   foreach ($_FILES['_attachments']['tmp_name'] as $i => $filepath) {
     // Process uploaded attachment if there is no error
     $err = $_FILES['_attachments']['error'][$i];
@@ -110,7 +110,7 @@ if (is_array($_FILES['_attachments']['tmp_name'])) {
 
       // store new attachment in session
       unset($attachment['status'], $attachment['abort']);
-      $COMPOSE['attachments'][$id] = $attachment;
+      $RCMAIL->session->append($SESSION_KEY.'.attachments', $id, $attachment);
 
       if (($icon = $COMPOSE['deleteicon']) && is_file($icon)) {
         $button = html::img(array(
@@ -126,6 +126,7 @@ if (is_array($_FILES['_attachments']['tmp_name'])) {
         'href' => "#delete",
         'onclick' => sprintf("return %s.command('remove-attachment','rcmfile%s', this)", JS_OBJECT_NAME, $id),
         'title' => rcube_label('delete'),
+        'class' => 'delete',
       ), $button);
 
       $content .= Q($attachment['name']);
@@ -134,6 +135,7 @@ if (is_array($_FILES['_attachments']['tmp_name'])) {
         'html' => $content,
         'name' => $attachment['name'],
         'mimetype' => $attachment['mimetype'],
+        'classname' => rcmail_filetype2classname($attachment['mimetype'], $attachment['name']),
         'complete' => true), $uploadid);
     }
     else {  // upload failed
@@ -147,8 +149,10 @@ if (is_array($_FILES['_attachments']['tmp_name'])) {
         $msg = rcube_label('fileuploaderror');
       }
 
-      $OUTPUT->command('display_message', $msg, 'error');
-      $OUTPUT->command('remove_from_attachment_list', $uploadid);
+      if ($attachment['error'] || $err != UPLOAD_ERR_NO_FILE) {
+        $OUTPUT->command('display_message', $msg, 'error');
+        $OUTPUT->command('remove_from_attachment_list', $uploadid);
+      }
     }
   }
 }

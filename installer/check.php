@@ -1,3 +1,10 @@
+<?php
+
+if (!class_exists('rcube_install') || !is_object($RCI)) {
+    die("Not allowed! Please open installer/index.php instead.");
+}
+
+?>
 <form action="index.php" method="get">
 <?php
 
@@ -6,7 +13,8 @@ $required_php_exts = array(
     'DOM'       => 'dom',
     'Session'   => 'session',
     'XML'       => 'xml',
-    'JSON'      => 'json'
+    'JSON'      => 'json',
+    'PDO'       => 'PDO',
 );
 
 $optional_php_exts = array(
@@ -16,21 +24,14 @@ $optional_php_exts = array(
     'OpenSSL'   => 'openssl',
     'Mcrypt'    => 'mcrypt',
     'Intl'      => 'intl',
+    'Exif'      => 'exif',
 );
 
 $required_libs = array(
     'PEAR'      => 'PEAR.php',
-    'MDB2'      => 'MDB2.php',
     'Net_SMTP'  => 'Net/SMTP.php',
     'Net_IDNA2' => 'Net/IDNA2.php',
     'Mail_mime' => 'Mail/mime.php',
-);
-
-$supported_dbs = array(
-    'MySQL'         => 'mysql',
-    'MySQLi'        => 'mysqli',
-    'PostgreSQL'    => 'pgsql',
-    'SQLite (v2)'   => 'sqlite',
 );
 
 $ini_checks = array(
@@ -39,10 +40,14 @@ $ini_checks = array(
     'zend.ze1_compatibility_mode'   => 0,
     'mbstring.func_overload'        => 0,
     'suhosin.session.encrypt'       => 0,
+    'magic_quotes_runtime'          => 0,
+    'magic_quotes_sybase'           => 0,
+    'date.timezone'                 => '-NOTEMPTY-',
 );
 
 $optional_checks = array(
-    'date.timezone' => '-NOTEMPTY-',
+    // required for utils/modcss.inc, should we require this?
+    'allow_url_fopen'  => 1,
 );
 
 $source_urls = array(
@@ -57,10 +62,18 @@ $source_urls = array(
     'JSON'      => 'http://www.php.net/manual/en/book.json.php',
     'DOM'       => 'http://www.php.net/manual/en/book.dom.php',
     'Intl'      => 'http://www.php.net/manual/en/book.intl.php',
+    'Exif'      => 'http://www.php.net/manual/en/book.exif.php',
+    'PDO'       => 'http://www.php.net/manual/en/book.pdo.php',
+    'pdo_mysql'   => 'http://www.php.net/manual/en/ref.pdo-mysql.php',
+    'pdo_pgsql'   => 'http://www.php.net/manual/en/ref.pdo-pgsql.php',
+    'pdo_sqlite'  => 'http://www.php.net/manual/en/ref.pdo-sqlite.php',
+    'pdo_sqlite2' => 'http://www.php.net/manual/en/ref.pdo-sqlite.php',
+    'pdo_sqlsrv'  => 'http://www.php.net/manual/en/ref.pdo-sqlsrv.php',
+    'pdo_dblib'   => 'http://www.php.net/manual/en/ref.pdo-dblib.php',
     'PEAR'      => 'http://pear.php.net',
-    'MDB2'      => 'http://pear.php.net/package/MDB2',
     'Net_SMTP'  => 'http://pear.php.net/package/Net_SMTP',
     'Mail_mime' => 'http://pear.php.net/package/Mail_mime',
+    'Net_IDNA2' => 'http://pear.php.net/package/Net_IDNA2',
 );
 
 echo '<input type="hidden" name="_step" value="' . ($RCI->configured ? 3 : 2) . '" />';
@@ -122,14 +135,20 @@ foreach ($optional_php_exts as $name => $ext) {
 <?php
 
 $prefix = (PHP_SHLIB_SUFFIX === 'dll') ? 'php_' : '';
-foreach ($supported_dbs as $database => $ext) {
+foreach ($RCI->supported_dbs as $database => $ext) {
     if (extension_loaded($ext)) {
-        $RCI->pass($database);
+        // MySQL driver requires PHP >= 5.3 (#1488875)
+        if ($ext == 'pdo_mysql' && version_compare(PHP_VERSION, '5.3.0', '<')) {
+            $RCI->fail($database, 'PHP >= 5.3 required');
+        }
+        else {
+            $RCI->pass($database);
+        }
     }
     else {
         $_ext = $ext_dir . '/' . $prefix . $ext . '.' . PHP_SHLIB_SUFFIX;
-        $msg = @is_readable($_ext) ? 'Could be loaded. Please add in php.ini' : 'Not installed';
-        $RCI->na($database, $msg, $source_urls[$database]);
+        $msg = @is_readable($_ext) ? 'Could be loaded. Please add in php.ini' : '';
+        $RCI->na($database, $msg, $source_urls[$ext]);
     }
     echo '<br />';
 }
@@ -165,7 +184,15 @@ foreach ($ini_checks as $var => $val) {
     $status = ini_get($var);
     if ($val === '-NOTEMPTY-') {
         if (empty($status)) {
-            $RCI->fail($var, "cannot be empty and needs to be set");
+            $RCI->fail($var, "empty value detected");
+        } else if ($var == 'date.timezone') {
+            try {
+                $tz = new DateTimeZone($status);
+                $RCI->pass($var);
+            }
+            catch (Exception $e) {
+                $RCI->fail($var, "invalid value detected: $status");
+            }
         } else {
             $RCI->pass($var);
         }

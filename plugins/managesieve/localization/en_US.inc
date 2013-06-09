@@ -1,5 +1,22 @@
 <?php
 
+/*
+ +-----------------------------------------------------------------------+
+ | plugins/managesieve/localization/<lang>.inc                            |
+ |                                                                       |
+ | Localization file of the Roundcube Webmail Managesieve plugin         |
+ | Copyright (C) 2012, The Roundcube Dev Team                            |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
+ |                                                                       |
+ +-----------------------------------------------------------------------+
+
+ For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-managesieve/
+*/
+
+
 $labels['filters'] = 'Filters';
 $labels['managefilters'] = 'Manage incoming mail filters';
 $labels['filtername'] = 'Filter name';
@@ -38,7 +55,7 @@ $labels['add'] = 'Add';
 $labels['del'] = 'Delete';
 $labels['sender'] = 'Sender';
 $labels['recipient'] = 'Recipient';
-$labels['vacationaddresses'] = 'Additional list of recipient e-mails (comma separated):';
+$labels['vacationaddresses'] = 'My additional e-mail addresse(s) (comma-separated):';
 $labels['vacationdays'] = 'How often send messages (in days):';
 $labels['vacationreason'] = 'Message body (vacation reason):';
 $labels['vacationsubject'] = 'Message subject:';
@@ -78,6 +95,25 @@ $labels['flagdeleted'] = 'Deleted';
 $labels['flaganswered'] = 'Answered';
 $labels['flagflagged'] = 'Flagged';
 $labels['flagdraft'] = 'Draft';
+$labels['setvariable'] = 'Set variable';
+$labels['setvarname'] = 'Variable name:';
+$labels['setvarvalue'] = 'Variable value:';
+$labels['setvarmodifiers'] = 'Modifiers:';
+$labels['varlower'] = 'lower-case';
+$labels['varupper'] = 'upper-case';
+$labels['varlowerfirst'] = 'first character lower-case';
+$labels['varupperfirst'] = 'first character upper-case';
+$labels['varquotewildcard'] = 'quote special characters';
+$labels['varlength'] = 'length';
+$labels['notify'] = 'Send notification';
+$labels['notifyaddress'] = 'To e-mail address:';
+$labels['notifybody'] = 'Notification body:';
+$labels['notifysubject'] = 'Notification subject:';
+$labels['notifyfrom'] = 'Notification sender:';
+$labels['notifyimportance'] = 'Importance:';
+$labels['notifyimportancelow'] = 'low';
+$labels['notifyimportancenormal'] = 'normal';
+$labels['notifyimportancehigh'] = 'high';
 $labels['filtercreate'] = 'Create filter';
 $labels['usedata'] = 'Use following data in the filter:';
 $labels['nextstep'] = 'Next Step';
@@ -126,8 +162,8 @@ $messages['setcreateerror'] = 'Unable to create filters set. Server error occure
 $messages['setcreated'] = 'Filters set created successfully.';
 $messages['activateerror'] = 'Unable to enable selected filter(s). Server error occured.';
 $messages['deactivateerror'] = 'Unable to disable selected filter(s). Server error occured.';
-$messages['activated'] = 'Filter(s) disabled successfully.';
-$messages['deactivated'] = 'Filter(s) enabled successfully.';
+$messages['deactivated'] = 'Filter(s) disabled successfully.';
+$messages['activated'] = 'Filter(s) enabled successfully.';
 $messages['moved'] = 'Filter moved successfully.';
 $messages['moveerror'] = 'Unable to move selected filter. Server error occured.';
 $messages['nametoolong'] = 'Name too long.';

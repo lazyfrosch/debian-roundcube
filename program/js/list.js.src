@@ -4,7 +4,10 @@
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2006-2009, The Roundcube Dev Team                       |
- | Licensed under the GNU GPL                                            |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
  |                                                                       |
  +-----------------------------------------------------------------------+
  | Authors: Thomas Bruederli <roundcube@gmail.com>                       |
@@ -12,8 +15,6 @@
  +-----------------------------------------------------------------------+
  | Requires: common.js                                                   |
  +-----------------------------------------------------------------------+
-
-  $Id: list.js 5757 2012-01-12 07:29:48Z alec $
 */
 
 
@@ -87,10 +88,8 @@ init: function()
     this.frame = this.list.parentNode;
 
     // set body events
-    if (this.keyboard) {
-      rcube_event.add_listener({event:bw.opera?'keypress':'keydown', object:this, method:'key_press'});
-      rcube_event.add_listener({event:'keydown', object:this, method:'key_down'});
-    }
+    if (this.keyboard)
+      rcube_event.add_listener({event:'keydown', object:this, method:'key_press'});
   }
 },
 
@@ -111,7 +110,7 @@ init_row: function(row)
     row.onmousedown = function(e){ return self.drag_row(e, this.uid); };
     row.onmouseup = function(e){ return self.click_row(e, this.uid); };
 
-    if (bw.iphone || bw.ipad) {
+    if (bw.mobile) {
       row.addEventListener('touchstart', function(e) {
         if (e.touches.length == 1) {
           if (!self.drag_row(rcube_event.touchevent(e.touches[0]), this.uid))
@@ -230,9 +229,10 @@ focus: function(e)
     }
   }
 
-  // Un-focus already focused elements
-  $('*:focus', window).blur();
-  $('iframe').each(function() { this.blur(); });
+  // Un-focus already focused elements (#1487123, #1487316, #1488600, #1488620)
+  // It looks that window.focus() does the job for all browsers, but not Firefox (#1489058)
+  $(':focus:not(body)').blur();
+  window.focus();
 
   if (e || (e = window.event))
     rcube_event.cancel(e);
@@ -249,7 +249,7 @@ blur: function()
   for (n in this.selection) {
     id = this.selection[n];
     if (this.rows[id] && this.rows[id].obj) {
-      $(this.rows[id].obj).removeClass('selected').addClass('unfocused');
+      $(this.rows[id].obj).removeClass('selected focused').addClass('unfocused');
     }
   }
 },
@@ -312,7 +312,7 @@ drag_row: function(e, id)
     this.drag_mouse_start = rcube_event.get_mouse_pos(e);
     rcube_event.add_listener({event:'mousemove', object:this, method:'drag_mouse_move'});
     rcube_event.add_listener({event:'mouseup', object:this, method:'drag_mouse_up'});
-    if (bw.iphone || bw.ipad) {
+    if (bw.mobile) {
       rcube_event.add_listener({event:'touchmove', object:this, method:'drag_mouse_move'});
       rcube_event.add_listener({event:'touchend', object:this, method:'drag_mouse_up'});
     }
@@ -354,8 +354,10 @@ click_row: function(e, id)
   this.in_selection_before = false;
 
   // row was double clicked
-  if (this.rows && dblclicked && this.in_selection(id))
+  if (this.rows && dblclicked && this.in_selection(id)) {
     this.triggerEvent('dblclick');
+    now = 0;
+  }
   else
     this.triggerEvent('click');
 
@@ -414,7 +416,7 @@ expand_row: function(e, id)
 collapse: function(row)
 {
   row.expanded = false;
-  this.triggerEvent('expandcollapse', { uid:row.uid, expanded:row.expanded });
+  this.triggerEvent('expandcollapse', { uid:row.uid, expanded:row.expanded, obj:row.obj });
   var depth = row.depth;
   var new_row = row ? row.obj.nextSibling : null;
   var r;
@@ -427,7 +429,7 @@ collapse: function(row)
       $(new_row).css('display', 'none');
       if (r.expanded) {
         r.expanded = false;
-        this.triggerEvent('expandcollapse', { uid:r.uid, expanded:r.expanded });
+        this.triggerEvent('expandcollapse', { uid:r.uid, expanded:r.expanded, obj:new_row });
       }
     }
     new_row = new_row.nextSibling;
@@ -445,7 +447,7 @@ expand: function(row)
     depth = row.depth;
     new_row = row.obj.nextSibling;
     this.update_expando(row.uid, true);
-    this.triggerEvent('expandcollapse', { uid:row.uid, expanded:row.expanded });
+    this.triggerEvent('expandcollapse', { uid:row.uid, expanded:row.expanded, obj:row.obj });
   }
   else {
     var tbody = this.list.tBodies[0];
@@ -468,7 +470,7 @@ expand: function(row)
               last_expanded_parent_depth = p.depth;
               $(new_row).css('display', '');
               r.expanded = true;
-              this.triggerEvent('expandcollapse', { uid:r.uid, expanded:r.expanded });
+              this.triggerEvent('expandcollapse', { uid:r.uid, expanded:r.expanded, obj:new_row });
             }
           }
           else
@@ -493,7 +495,7 @@ collapse_all: function(row)
     depth = row.depth;
     new_row = row.obj.nextSibling;
     this.update_expando(row.uid);
-    this.triggerEvent('expandcollapse', { uid:row.uid, expanded:row.expanded });
+    this.triggerEvent('expandcollapse', { uid:row.uid, expanded:row.expanded, obj:row.obj });
 
     // don't collapse sub-root tree in multiexpand mode 
     if (depth && this.multiexpand)
@@ -515,7 +517,7 @@ collapse_all: function(row)
         if (r.has_children && r.expanded) {
           r.expanded = false;
           this.update_expando(r.uid, false);
-          this.triggerEvent('expandcollapse', { uid:r.uid, expanded:r.expanded });
+          this.triggerEvent('expandcollapse', { uid:r.uid, expanded:r.expanded, obj:new_row });
         }
       }
     }
@@ -524,6 +526,7 @@ collapse_all: function(row)
 
   return false;
 },
+
 
 expand_all: function(row)
 {
@@ -534,7 +537,7 @@ expand_all: function(row)
     depth = row.depth;
     new_row = row.obj.nextSibling;
     this.update_expando(row.uid, true);
-    this.triggerEvent('expandcollapse', { uid:row.uid, expanded:row.expanded });
+    this.triggerEvent('expandcollapse', { uid:row.uid, expanded:row.expanded, obj:row.obj });
   }
   else {
     new_row = this.list.tBodies[0].firstChild;
@@ -551,7 +554,7 @@ expand_all: function(row)
         if (r.has_children && !r.expanded) {
           r.expanded = true;
           this.update_expando(r.uid, true);
-          this.triggerEvent('expandcollapse', { uid:r.uid, expanded:r.expanded });
+          this.triggerEvent('expandcollapse', { uid:r.uid, expanded:r.expanded, obj:new_row });
         }
       }
     }
@@ -559,6 +562,7 @@ expand_all: function(row)
   }
   return false;
 },
+
 
 update_expando: function(uid, expanded)
 {
@@ -606,7 +610,7 @@ get_first_row: function()
 
     for (i=0, len=rows.length-1; i<len; i++)
       if (rows[i].id && String(rows[i].id).match(/^rcmrow([a-z0-9\-_=\+\/]+)/i) && this.rows[RegExp.$1] != null)
-	    return RegExp.$1;
+        return RegExp.$1;
   }
 
   return null;
@@ -732,7 +736,7 @@ select_first: function(mod_key)
 
 
 /**
- * Select last row 
+ * Select last row
  */
 select_last: function(mod_key)
 {
@@ -753,25 +757,13 @@ select_last: function(mod_key)
 /**
  * Add all childs of the given row to selection
  */
-select_childs: function(uid)
+select_children: function(uid)
 {
-  if (!this.rows[uid] || !this.rows[uid].has_children)
-    return;
+  var i, children = this.row_children(uid), len = children.length;
 
-  var depth = this.rows[uid].depth,
-    row = this.rows[uid].obj.nextSibling;
-
-  while (row) {
-    if (row.nodeType == 1) {
-      if ((r = this.rows[row.uid])) {
-        if (!r.depth || r.depth <= depth)
-          break;
-        if (!this.in_selection(r.uid))
-          this.select_row(r.uid, CONTROL_KEY);
-      }
-    }
-    row = row.nextSibling;
-  }
+  for (i=0; i<len; i++)
+    if (!this.in_selection(children[i]))
+      this.select_row(children[i], CONTROL_KEY);
 },
 
 
@@ -783,10 +775,16 @@ shift_select: function(id, control)
   if (!this.rows[this.shift_start] || !this.selection.length)
     this.shift_start = id;
 
-  var n, from_rowIndex = this.rows[this.shift_start].obj.rowIndex,
-    to_rowIndex = this.rows[id].obj.rowIndex,
-    i = ((from_rowIndex < to_rowIndex)? from_rowIndex : to_rowIndex),
-    j = ((from_rowIndex > to_rowIndex)? from_rowIndex : to_rowIndex);
+  var n, i, j, to_row = this.rows[id],
+    from_rowIndex = this.rows[this.shift_start].obj.rowIndex,
+    to_rowIndex = to_row.obj.rowIndex;
+
+  if (!to_row.expanded && to_row.has_children)
+    if (to_row = this.rows[(this.row_children(id)).pop()])
+      to_rowIndex = to_row.obj.rowIndex;
+
+  i = ((from_rowIndex < to_rowIndex) ? from_rowIndex : to_rowIndex),
+  j = ((from_rowIndex > to_rowIndex) ? from_rowIndex : to_rowIndex);
 
   // iterate through the entire message list
   for (n in this.rows) {
@@ -832,7 +830,7 @@ select_all: function(filter)
   for (n in this.rows) {
     if (!filter || this.rows[n][filter] == true) {
       this.last_selected = n;
-      this.highlight_row(n, true);
+      this.highlight_row(n, true, true);
     }
     else {
       $(this.rows[n].obj).removeClass('selected').removeClass('unfocused');
@@ -927,19 +925,24 @@ get_single_selection: function()
 /**
  * Highlight/unhighlight a row
  */
-highlight_row: function(id, multiple)
+highlight_row: function(id, multiple, norecur)
 {
-  if (this.rows[id] && !multiple) {
+  if (!this.rows[id])
+    return;
+
+  if (!multiple) {
     if (this.selection.length > 1 || !this.in_selection(id)) {
       this.clear_selection();
       this.selection[0] = id;
       $(this.rows[id].obj).addClass('selected');
     }
   }
-  else if (this.rows[id]) {
+  else {
     if (!this.in_selection(id)) { // select row
-      this.selection[this.selection.length] = id;
+      this.selection.push(id);
       $(this.rows[id].obj).addClass('selected');
+      if (!norecur && !this.rows[id].expanded)
+        this.highlight_children(id, true);
     }
     else { // unselect row
       var p = $.inArray(id, this.selection),
@@ -948,7 +951,25 @@ highlight_row: function(id, multiple)
 
       this.selection = a_pre.concat(a_post);
       $(this.rows[id].obj).removeClass('selected').removeClass('unfocused');
+      if (!norecur && !this.rows[id].expanded)
+        this.highlight_children(id, false);
     }
+  }
+},
+
+
+/**
+ * Highlight/unhighlight all childs of the given row
+ */
+highlight_children: function(id, status)
+{
+  var i, selected,
+    children = this.row_children(id), len = children.length;
+
+  for (i=0; i<len; i++) {
+    selected = this.in_selection(children[i]);
+    if ((status && !selected) || (!status && selected))
+      this.highlight_row(children[i], true, true);
   }
 },
 
@@ -991,6 +1012,14 @@ key_press: function(e)
     case 35: // End
       this.select_last(mod_key);
       return rcube_event.cancel(e);
+    case 27:
+      if (this.drag_active)
+        return this.drag_mouse_up(e);
+      if (this.col_drag_active) {
+        this.selected_column = null;
+        return this.column_drag_mouse_up(e);
+      }
+      return rcube_event.cancel(e);
     default:
       this.key_pressed = keyCode;
       this.modkey = mod_key;
@@ -999,41 +1028,6 @@ key_press: function(e)
 
       if (this.key_pressed == this.BACKSPACE_KEY)
         return rcube_event.cancel(e);
-  }
-
-  return true;
-},
-
-/**
- * Handler for keydown events
- */
-key_down: function(e)
-{
-  var target = e.target || {};
-  if (this.focused != true || target.nodeName == 'INPUT' || target.nodeName == 'TEXTAREA' || target.nodeName == 'SELECT')
-    return true;
-  
-  switch (rcube_event.get_keycode(e)) {
-    case 27:
-      if (this.drag_active)
-      return this.drag_mouse_up(e);
-      if (this.col_drag_active) {
-        this.selected_column = null;
-        return this.column_drag_mouse_up(e);
-      }
-
-    case 40:
-    case 38: 
-    case 63233:
-    case 63232:
-    case 61:
-    case 107:
-    case 109:
-    case 32:
-      if (!rcube_event.get_modifier(e) && this.focused)
-        return rcube_event.cancel(e);
-
-    default:
   }
 
   return true;
@@ -1126,7 +1120,7 @@ drag_mouse_move: function(e)
     else
       return rcube_event.cancel(e);
   }
-  
+
   if (this.drag_start) {
     // check mouse movement, of less than 3 pixels, don't start dragging
     var m = rcube_event.get_mouse_pos(e);
@@ -1143,8 +1137,8 @@ drag_mouse_move: function(e)
     var n, uid, selection = $.merge([], this.selection);
     for (n in selection) {
       uid = selection[n];
-      if (this.rows[uid].has_children && !this.rows[uid].expanded)
-        this.select_childs(uid);
+      if (!this.rows[uid].expanded)
+        this.select_children(uid);
     }
 
     // reset content
@@ -1217,7 +1211,7 @@ drag_mouse_move: function(e)
 drag_mouse_up: function(e)
 {
   document.onmousemove = null;
-  
+
   if (e.type == 'touchend') {
     if (e.changedTouches.length != 1)
       return rcube_event.cancel(e);
@@ -1236,8 +1230,8 @@ drag_mouse_up: function(e)
 
   rcube_event.remove_listener({event:'mousemove', object:this, method:'drag_mouse_move'});
   rcube_event.remove_listener({event:'mouseup', object:this, method:'drag_mouse_up'});
-  
-  if (bw.iphone || bw.ipad) {
+
+  if (bw.mobile) {
     rcube_event.remove_listener({event:'touchmove', object:this, method:'drag_mouse_move'});
     rcube_event.remove_listener({event:'touchend', object:this, method:'drag_mouse_up'});
   }
@@ -1361,6 +1355,32 @@ column_drag_mouse_up: function(e)
   this.triggerEvent('column_dragend');
 
   return rcube_event.cancel(e);
+},
+
+
+/**
+ * Returns IDs of all rows in a thread (except root) for specified root
+ */
+row_children: function(uid)
+{
+  if (!this.rows[uid] || !this.rows[uid].has_children)
+    return [];
+
+  var res = [], depth = this.rows[uid].depth,
+    row = this.rows[uid].obj.nextSibling;
+
+  while (row) {
+    if (row.nodeType == 1) {
+      if ((r = this.rows[row.uid])) {
+        if (!r.depth || r.depth <= depth)
+          break;
+        res.push(r.uid);
+      }
+    }
+    row = row.nextSibling;
+  }
+
+  return res;
 },
 
 

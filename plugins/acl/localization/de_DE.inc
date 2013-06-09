@@ -1,5 +1,21 @@
 <?php
 
+/*
+ +-----------------------------------------------------------------------+
+ | plugins/acl/localization/<lang>.inc                                   |
+ |                                                                       |
+ | Localization file of the Roundcube Webmail ACL plugin                 |
+ | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
+ |                                                                       |
+ +-----------------------------------------------------------------------+
+
+ For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-acl/
+*/
+
 $labels['sharing'] = 'Freigabe';
 $labels['myrights'] = 'Zugriffsrechte';
 $labels['username'] = 'Benutzer:';
@@ -10,19 +26,19 @@ $labels['anyone'] = 'Alle Benutzer (anyone)';
 $labels['anonymous'] = 'Gäste (anonymous)';
 $labels['identifier'] = 'Bezeichnung';
 
-$labels['acll'] = 'Ordner sichtbar';
+$labels['acll'] = 'Sichtbar';
 $labels['aclr'] = 'Nachrichten lesen';
 $labels['acls'] = 'Lesestatus ändern';
 $labels['aclw'] = 'Flags schreiben';
-$labels['acli'] = 'Nachrichten Hinzufügen';
-$labels['aclp'] = 'Nachrichten Senden an';
+$labels['acli'] = 'Nachrichten hinzufügen';
+$labels['aclp'] = 'Senden an';
 $labels['aclc'] = 'Unterordner erstellen';
 $labels['aclk'] = 'Unterordner erstellen';
 $labels['acld'] = 'Nachrichten als gelöscht markieren';
 $labels['aclt'] = 'Nachrichten als gelöscht markieren';
-$labels['acle'] = 'Nachrichten endgültig Löschen';
+$labels['acle'] = 'Endgültig löschen';
 $labels['aclx'] = 'Ordner löschen';
-$labels['acla'] = 'Zugriffsrechte Verwalten';
+$labels['acla'] = 'Verwalten';
 
 $labels['aclfull'] = 'Vollzugriff';
 $labels['aclother'] = 'Andere';
@@ -33,14 +49,14 @@ $labels['acldelete'] = 'Löschen';
 $labels['shortacll'] = 'Sichtbar';
 $labels['shortaclr'] = 'Lesen';
 $labels['shortacls'] = 'Lesestatus';
-$labels['shortaclw'] = 'Flags ändern';
+$labels['shortaclw'] = 'Schreiben';
 $labels['shortacli'] = 'Hinzufügen';
 $labels['shortaclp'] = 'Senden an';
 $labels['shortaclc'] = 'Erstellen';
 $labels['shortaclk'] = 'Erstellen';
 $labels['shortacld'] = 'Löschen';
 $labels['shortaclt'] = 'Löschen';
-$labels['shortacle'] = 'endgültig löschen';
+$labels['shortacle'] = 'Endgültig löschen';
 $labels['shortaclx'] = 'Ordner löschen';
 $labels['shortacla'] = 'Verwalten';
 
@@ -50,7 +66,7 @@ $labels['shortaclwrite'] = 'Schreiben';
 $labels['shortacldelete'] = 'Löschen';
 
 $labels['longacll'] = 'Der Ordner ist sichtbar und kann abonniert werden';
-$labels['longaclr'] = 'Nachrichten im Ordner können gelesen werden';
+$labels['longaclr'] = 'Der Ordnerinhalt kann gelesen werden';
 $labels['longacls'] = 'Der Lesestatus von Nachrichten kann geändert werden';
 $labels['longaclw'] = 'Alle Nachrichten-Flags und Schlüsselwörter außer "Gelesen" und "Gelöscht" können geändert werden';
 $labels['longacli'] = 'Nachrichten können in diesen Ordner kopiert oder verschoben werden';

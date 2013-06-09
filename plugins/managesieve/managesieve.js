@@ -11,7 +11,7 @@ if (window.rcmail) {
         rcmail.enable_command('managesieve-create', true);
     }
     else {
-      var tab = $('<span>').attr('id', 'settingstabpluginmanagesieve').addClass('tablink'),
+      var tab = $('<span>').attr('id', 'settingstabpluginmanagesieve').addClass('tablink filter'),
         button = $('<a>').attr('href', rcmail.env.comm_path+'&_action=plugin.managesieve')
           .attr('title', rcmail.gettext('managesieve.managefilters'))
           .html(rcmail.gettext('managesieve.filters'))
@@ -231,24 +231,31 @@ rcube_webmail.prototype.managesieve_updatelist = function(action, o)
 
     // Delete filter row
     case 'del':
-      var i, list = this.filters_list, rows = list.rows;
+      var i = 0, list = this.filters_list;
 
       list.remove_row(this.managesieve_rowid(o.id));
       list.clear_selection();
       this.show_contentframe(false);
       this.enable_command('plugin.managesieve-del', 'plugin.managesieve-act', false);
 
-      // re-numbering filters
-      for (i=0; i<rows.length; i++) {
-        if (rows[i] != null && rows[i].uid > o.id)
-          rows[i].uid = rows[i].uid-1;
-      }
+      // filter identifiers changed, fix the list
+      $('tr', this.filters_list.list).each(function() {
+        // remove hidden (deleted) rows
+        if (this.style.display == 'none') {
+          $(this).detach();
+          return;
+        }
+
+        // modify ID and remove all attached events
+        $(this).attr('id', 'rcmrow'+(i++)).unbind();
+      });
+      list.init();
 
       break;
 
     // Update filter row
     case 'update':
-      var i, row = $('#rcmrow'+o.id);
+      var i, row = $('#rcmrow'+this.managesieve_rowid(o.id));
 
       if (o.name)
         $('td', row).html(o.name);
@@ -373,7 +380,7 @@ rcube_webmail.prototype.load_managesieveframe = function(id)
     target = window.frames[this.env.contentframe];
     var msgid = this.set_busy(true, 'loading');
     target.location.href = this.env.comm_path+'&_action=plugin.managesieve&_framed=1'
-      +(id ? '&_fid='+id : '')+'&_unlock='+msgid;
+      +(has_id ? '&_fid='+id : '')+'&_unlock='+msgid;
   }
 };
 
@@ -638,7 +645,9 @@ function action_type_select(id)
       target: document.getElementById('action_target' + id),
       target_area: document.getElementById('action_target_area' + id),
       flags: document.getElementById('action_flags' + id),
-      vacation: document.getElementById('action_vacation' + id)
+      vacation: document.getElementById('action_vacation' + id),
+      set: document.getElementById('action_set' + id),
+      notify: document.getElementById('action_notify' + id)
     };
 
   if (obj.value == 'fileinto' || obj.value == 'fileinto_copy') {
@@ -655,6 +664,12 @@ function action_type_select(id)
   }
   else if (obj.value == 'vacation') {
     enabled.vacation = 1;
+  }
+  else if (obj.value == 'set') {
+    enabled.set = 1;
+  }
+  else if (obj.value == 'notify') {
+    enabled.notify = 1;
   }
 
   for (var x in elems) {
@@ -674,7 +689,8 @@ rcube_webmail.prototype.managesieve_tip_register = function(tips)
         function(e) {
           var offset = $(this).offset(),
             left = offset.left,
-            top = offset.top - 12;
+            top = offset.top - 12,
+            minwidth = $(this).width();
 
           if (framed) {
             offset = $((rcmail.env.task == 'mail'  ? '#sievefilterform > iframe' : '#filter-box'), parent.document).offset();
@@ -685,7 +701,7 @@ rcube_webmail.prototype.managesieve_tip_register = function(tips)
           tip.html(e.data.str)
           top -= tip.height();
 
-          tip.css({left: left, top: top}).show();
+          tip.css({left: left, top: top, minWidth: (minwidth-2) + 'px'}).show();
         })
       .bind('mouseleave', function(e) { tip.hide(); });
   }
@@ -738,7 +754,7 @@ rcube_webmail.prototype.managesieve_create = function()
 
     // load form in the iframe
     var frame = $('<iframe>').attr({src: url, frameborder: 0})
-    dialog.empty().append(frame).dialog('dialog').resize();
+    dialog.empty().append(frame).dialog('widget').resize();
 
     // Change [Next Step] button with [Save] button
     buttons = {};
@@ -778,9 +794,10 @@ rcube_webmail.prototype.managesieve_dialog_resize = function(o)
 {
   var dialog = this.env.managesieve_dialog,
     win = $(window), form = $(o);
-    width = form.width(), height = form.height(),
+    width = $('fieldset:first', o).width(), // fieldset width is more appropriate here
+    height = form.height(),
     w = win.width(), h = win.height();
 
   dialog.dialog('option', { height: Math.min(h-20, height+120), width: Math.min(w-20, width+65) })
-    .dialog('option', 'position', ['center', 'center']);  // only works in a separate call (!?)
+    .dialog('option', 'position', ['center', 'center']);  // works in a separate call only (!?)
 }

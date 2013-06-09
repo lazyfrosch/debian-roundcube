@@ -7,7 +7,10 @@
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2008-2011, Roundcube Dev Team                           |
  | Copyright (C) 2011, Kolab Systems AG                                  |
- | Licensed under the GNU GPL                                            |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
  |                                                                       |
  | PURPOSE:                                                              |
  |   Perform a search on configured address books for the address        |
@@ -15,9 +18,6 @@
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
-
- $Id: autocomplete.inc 5635 2011-12-21 10:07:42Z alec $
-
 */
 
 if ($RCMAIL->action == 'group-expand') {
@@ -26,10 +26,10 @@ if ($RCMAIL->action == 'group-expand') {
     $members = array();
     $abook->set_group($gid);
     $abook->set_pagesize(1000);  // TODO: limit number of group members by config
-    $result = $abook->list_records(array('email','name'));
+    $result = $abook->list_records($RCMAIL->config->get('contactlist_fields'));
     while ($result && ($sql_arr = $result->iterate())) {
       foreach ((array)$sql_arr['email'] as $email) {
-        $members[] = format_email_recipient($email, $sql_arr['name']);
+        $members[] = format_email_recipient($email, rcube_addressbook::compose_list_name($sql_arr));
         break;  // only expand one email per contact
       }
     }
@@ -64,7 +64,7 @@ if (!empty($book_types) && strlen($search)) {
     $abook = $RCMAIL->get_address_book($id);
     $abook->set_pagesize($MAXNUM);
 
-    if ($result = $abook->search(array('email','name'), $search, $mode, true, true, 'email')) {
+    if ($result = $abook->search($RCMAIL->config->get('contactlist_fields'), $search, $mode, true, true, 'email')) {
       while ($sql_arr = $result->iterate()) {
         // Contact can have more than one e-mail address
         $email_arr = (array)$abook->get_col_values('email', $sql_arr, true);
@@ -75,6 +75,7 @@ if (!empty($book_types) && strlen($search)) {
             continue;
           }
 
+          $sql_arr['name'] = rcube_addressbook::compose_list_name($sql_arr);
           $contact = format_email_recipient($email, $sql_arr['name']);
 
           // skip entries that don't match
@@ -101,7 +102,7 @@ if (!empty($book_types) && strlen($search)) {
 
     // also list matching contact groups
     if ($abook->groups && count($contacts) < $MAXNUM) {
-      foreach ($abook->list_groups($search) as $group) {
+      foreach ($abook->list_groups($search, $mode) as $group) {
         $abook->reset();
         $abook->set_group($group['ID']);
         $group_prop = $abook->get_group($group['ID']);

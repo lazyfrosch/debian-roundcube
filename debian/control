@@ -5,21 +5,22 @@ Maintainer: Debian Roundcube Maintainers <pkg-roundcube-maintainers@lists.alioth
 Uploaders: Vincent Bernat <bernat@debian.org>, Romain Beauxis <toots@rastageeks.org>
 Build-Depends: cdbs, debhelper (>= 5), dh-buildinfo, po-debconf, yui-compressor
 Homepage: http://www.roundcube.net/
-Standards-Version: 3.9.3
+Standards-Version: 3.9.4
 Vcs-Git: git://anonscm.debian.org/pkg-roundcube/roundcube.git
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-roundcube/roundcube.git
 
 Package: roundcube-core
 Architecture: all
 Depends: dbconfig-common, debconf | debconf-2.0, ucf,
- apache2 | lighttpd | httpd,
- php5, php5-mcrypt, php5-gd, php5-intl,
- php-mdb2 (>= 2.5.0), php-auth, php-net-smtp (>= 1.4.2),
+ libapache2-mod-php5 | php5-cgi | php5-fpm,
+ php5-mcrypt, php5-gd, php5-intl, php5-json | php5-common (<< 5.5),
+ php-auth, php-net-smtp (>= 1.4.2),
  php-net-socket, php-mail-mime (>= 1.8.0), php5-pspell,
  tinymce (>= 3), libjs-jquery (>= 1.6.4), libjs-jquery-ui (>= 1.8),
  libmagic1,
- roundcube-mysql (= ${source:Version}) | roundcube-sqlite (= ${source:Version}) | roundcube-pgsql (= ${source:Version}),
+ roundcube-mysql (= ${source:Version}) | roundcube-sqlite3 (= ${source:Version}) | roundcube-pgsql (= ${source:Version}),
  ${misc:Depends}
+Recommends: apache2 | lighttpd | httpd-cgi,
 Suggests: php-auth-sasl (>= 1.0.3), php-crypt-gpg, roundcube-plugins
 Conflicts: roundcube-plugins-extra (<= 0.6-20111030)
 Description: skinnable AJAX based webmail solution for IMAP servers
@@ -46,17 +47,9 @@ Description: skinnable AJAX based webmail solution for IMAP servers - metapackag
  .
  This package will install a full roundcube application.
 
-Package: roundcube-sqlite
-Architecture: all
-Depends: php-mdb2-driver-sqlite (>= 1.5.0b2), sqlite, ${misc:Depends}
-Description: metapackage providing sqlite dependencies for RoundCube
- This package provides sqlite dependencies for RoundCube Webmail, a
- skinnable AJAX based webmail solution for IMAP servers. Install this
- one if you want to use a sqlite database with RoundCube.
-
 Package: roundcube-mysql
 Architecture: all
-Depends: php-mdb2-driver-mysql (>= 1.5.0b2), mysql-client | virtual-mysql-client, ${misc:Depends}
+Depends: php5-mysqlnd | php5-mysql, mysql-client | virtual-mysql-client, ${misc:Depends}
 Suggests: mysql-server
 Description: metapackage providing MySQL dependencies for RoundCube
  This package provides MySQL dependencies for RoundCube Webmail, a
@@ -65,12 +58,20 @@ Description: metapackage providing MySQL dependencies for RoundCube
 
 Package: roundcube-pgsql
 Architecture: all
-Depends: php-mdb2-driver-pgsql (>= 1.5.0b2), postgresql-client-9.1 | postgresql-client, ${misc:Depends}
+Depends: php5-pgsql, postgresql-client-9.1 | postgresql-client, ${misc:Depends}
 Suggests: postgresql
 Description: metapackage providing PostgreSQL dependencies for RoundCube
  This package provides PostgreSQL dependencies for RoundCube Webmail,
  a skinnable AJAX based webmail solution for IMAP servers. Install
  this one if you want to use a PostgreSQL database with RoundCube.
+
+Package: roundcube-sqlite3
+Architecture: all
+Depends: php5-sqlite3, sqlite3, ${misc:Depends}
+Description: metapackage providing SQLite dependencies for RoundCube
+ This package provides SQLite dependencies for RoundCube Webmail,
+ a skinnable AJAX based webmail solution for IMAP servers. Install
+ this one if you want to use a SQLite database with RoundCube.
 
 Package: roundcube-plugins
 Architecture: all

@@ -6,7 +6,7 @@
 set -e
 
 . /usr/share/debconf/confmodule
-. /usr/share/dbconfig-common/dpkg/postinst 
+. /usr/share/dbconfig-common/dpkg/postinst
 dbc_generate_include=php:/etc/roundcube/debian-db.php
 dbc_generate_include_owner="root:www-data"
 dbc_generate_include_perms="640"
@@ -19,20 +19,32 @@ dbc_go roundcube $@
 
 lighttpd_install() {
 	if [ ! -f /etc/lighttpd/conf-available/50-roundcube.conf ] ; then
-		if [ ! -x /usr/sbin/lighty-enable-mod ] ; then
-			echo "Lighttpd not installed, skipping"
-		else
+		if [ -x /usr/sbin/lighty-enable-mod ] ; then
 			ln -s /etc/roundcube/lighttpd.conf /etc/lighttpd/conf-available/50-roundcube.conf
-			lighty-enable-mod roundcube
+			lighty-enable-mod roundcube fastcgi fastcgi-php
 		fi
 	fi
 }
 
+[ ! -e /usr/share/apache2/apache2-maintscript-helper ] || \
+    . /usr/share/apache2/apache2-maintscript-helper
 apache_install() {
-	webserver=$1
-	if [ -d /etc/$webserver/conf.d ] && [ ! -e /etc/$webserver/conf.d/roundcube ]; then
-               ln -s /etc/roundcube/apache.conf /etc/$webserver/conf.d/roundcube
-	fi
+        if [ -e /usr/share/apache2/apache2-maintscript-helper ] ; then
+	    if [ -d /etc/apache2/conf-available ] && [ ! -e /etc/apache2/conf-available/roundcube.conf ]; then
+                ln -s /etc/roundcube/apache.conf /etc/apache2/conf-available/roundcube.conf
+	    fi
+            # Remove old symlink if present
+            if [ -d /etc/apache2/conf.d ] && [ -h /etc/apache2/conf.d/roundcube ]; then
+                rm /etc/apache2/conf.d/roundcube
+            fi
+            # Enable the configuration
+            apache2_invoke enconf roundcube.conf
+        elif  dpkg-query -f '${Version}'  -W 'apache2.2-common' > /dev/null 2>&1 ; then
+            # Old Apache
+	    if [ -d /etc/apache2/conf.d ] && [ ! -e /etc/apache2/conf.d/roundcube.conf ]; then
+                ln -s /etc/roundcube/apache.conf /etc/apache2/conf.d/roundcube.conf
+	    fi
+        fi
 }
 
 fix_symlinks() {
@@ -198,11 +210,14 @@ EOF
 
 	for webserver in $webservers; do
             webserver=${webserver%,}
-	    if [ "$webserver" = "lighttpd" ] ; then
-		lighttpd_install
-	    else
-		apache_install $webserver
-	    fi
+            case "$webserver" in
+                lighttpd)
+		    lighttpd_install
+                    ;;
+                apache2)
+		    apache_install
+                    ;;
+            esac
             test -x /usr/sbin/$webserver || continue
             restart="$restart $webserver"
         done
