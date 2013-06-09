@@ -18,7 +18,7 @@ Depends: dbconfig-common, debconf | debconf-2.0, ucf,
  php-net-socket, php-mail-mime (>= 1.8.2), php5-pspell,
  tinymce (>= 3), libjs-jquery (>= 1.6.4), libjs-jquery-ui (>= 1.8),
  libmagic1,
- roundcube-mysql (= ${source:Version}) | roundcube-pgsql (= ${source:Version}),
+ roundcube-mysql (= ${source:Version}) | roundcube-sqlite3 (= ${source:Version}) | roundcube-pgsql (= ${source:Version}),
  ${misc:Depends}
 Recommends: apache2 | lighttpd | httpd-cgi,
 Suggests: php-auth-sasl (>= 1.0.3), php-crypt-gpg, roundcube-plugins
