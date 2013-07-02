@@ -1,6 +1,6 @@
 roundcube (0.9.2-2) UNRELEASED; urgency=low
 
-  * Depends on php5-sqlite instead of php5-sqlite3.
+  * Depends on php5-sqlite instead of php5-sqlite3. Closes: #714727.
   * Breaks/replaces older versions of roundcube-plugins-extra (zipdownload
     plugin is now part of roundcube-plugins). Closes: #714135.
   * Downgrade php5-gd and php5-pspell to Recommends. Closes: #714448.
