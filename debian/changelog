@@ -5,8 +5,9 @@ roundcube (0.9.2-2) UNRELEASED; urgency=low
   * Breaks/replaces older versions of roundcube-plugins-extra (zipdownload
     plugin is now part of roundcube-plugins). Closes: #714135.
   * Downgrade php5-gd and php5-pspell to Recommends. Closes: #714448.
+  * Depends on libapache2-mod-php5 | php5 to allow support of PHP FPM.
 
- -- Vincent Bernat <bernat@debian.org>  Fri, 12 Jul 2013 23:09:24 +0200
+ -- Vincent Bernat <bernat@debian.org>  Tue, 16 Jul 2013 20:17:26 +0200
 
 roundcube (0.9.2-1) unstable; urgency=low
 

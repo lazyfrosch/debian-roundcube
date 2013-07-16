@@ -12,7 +12,7 @@ Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-roundcube/roundcube.git
 Package: roundcube-core
 Architecture: all
 Depends: dbconfig-common, debconf | debconf-2.0, ucf,
- libapache2-mod-php5 | php5-cgi | php5-fpm,
+ libapache2-mod-php5 | php5,
  php5-mcrypt, php5-intl, php5-json | php5-common (<< 5.5),
  php-auth, php-net-smtp (>= 1.4.2),
  php-net-socket, php-mail-mime (>= 1.8.2),
