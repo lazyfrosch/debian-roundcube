@@ -4,7 +4,7 @@ Index: roundcube/config/db.inc.php.dist
 ===================================================================
 --- roundcube.orig/config/db.inc.php.dist	2013-04-14 11:57:22.788350614 +0200
 +++ roundcube/config/db.inc.php.dist	2013-04-14 11:57:22.784350531 +0200
-@@ -17,15 +17,20 @@
+@@ -17,15 +17,21 @@
  
  $rcmail_config = array();
  
@@ -22,6 +22,7 @@ Index: roundcube/config/db.inc.php.dist
 +
 +switch ($dbtype) {
 + case "sqlite":
++ case "sqlite3":
 +   $rcmail_config['db_dsnw'] = "sqlite:///$basepath/$dbname?mode=0640";
 +   break;
 + default:
