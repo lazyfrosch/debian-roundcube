@@ -1748,7 +1748,7 @@ function rcmail_identity_select($MESSAGE, $identities = null, $compose_mode = 'r
         $a_to = rcube_mime::decode_address_list($MESSAGE->headers->to, null, true, $MESSAGE->headers->charset);
         foreach ($a_to as $addr) {
             if (!empty($addr['mailto'])) {
-                $a_recipients[] = format_email($addr['mailto']);
+                $a_recipients[] = strtolower($addr['mailto']);
                 $a_names[]      = $addr['name'];
             }
         }
@@ -1757,7 +1757,7 @@ function rcmail_identity_select($MESSAGE, $identities = null, $compose_mode = 'r
             $a_cc = rcube_mime::decode_address_list($MESSAGE->headers->cc, null, true, $MESSAGE->headers->charset);
             foreach ($a_cc as $addr) {
                 if (!empty($addr['mailto'])) {
-                    $a_recipients[] = format_email($addr['mailto']);
+                    $a_recipients[] = strtolower($addr['mailto']);
                     $a_names[]      = $addr['name'];
                 }
             }
@@ -1783,7 +1783,7 @@ function rcmail_identity_select($MESSAGE, $identities = null, $compose_mode = 'r
             break;
         }
         // use replied message recipients
-        else if (($found = array_search($ident['email_ascii'], $a_recipients)) !== false) {
+        else if (($found = array_search(strtolower($ident['email_ascii']), $a_recipients)) !== false) {
             if ($found_idx === null) {
                 $found_idx = $idx;
             }
@@ -1803,9 +1803,14 @@ function rcmail_identity_select($MESSAGE, $identities = null, $compose_mode = 'r
     // Try Return-Path
     if ($from_idx === null && ($return_path = $MESSAGE->headers->others['return-path'])) {
         foreach ($identities as $idx => $ident) {
-            $ident = str_replace('@', '=', $ident['email_ascii']) . '@';
+            // Return-Path header contains an email address, but on some mailing list
+            // it can be e.g. <pear-dev-return-55250-local=domain.tld@lists.php.net>
+            // where local@domain.tld is the address we're looking for (#1489241)
+            $ident1 = $ident['email_ascii'];
+            $ident2 = str_replace('@', '=', $ident1);
+
             foreach ((array)$return_path as $path) {
-                if (strpos($path, $ident) !== false) {
+                if (stripos($path, $ident1) !== false || stripos($path, $ident2)) {
                     $from_idx = $idx;
                     break 2;
                 }

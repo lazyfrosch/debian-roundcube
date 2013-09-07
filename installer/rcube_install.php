@@ -217,10 +217,12 @@ class rcube_install
       // save change
       $this->config[$prop] = $value;
 
+      $dump = self::_dump_var($value, $prop);
+
       // replace the matching line in config file
       $out = preg_replace(
-        '/(\$rcmail_config\[\''.preg_quote($prop).'\'\])\s+=\s+(.+);/Uie',
-        "'\\1 = ' . rcube_install::_dump_var(\$value, \$prop) . ';'",
+        '/(\$rcmail_config\[\''.preg_quote($prop).'\'\])\s+=\s+(.+);/Ui',
+        "\\1 = $dump;",
         $out);
     }
 
@@ -495,10 +497,13 @@ class rcube_install
    * @param string Test name
    * @param string Error message
    * @param string URL for details
+   * @param bool   Do not count this failure
    */
-  function fail($name, $message = '', $url = '')
+  function fail($name, $message = '', $url = '', $optional=false)
   {
-    $this->failures++;
+    if (!$optional) {
+      $this->failures++;
+    }
 
     echo Q($name) . ':&nbsp; <span class="fail">NOT OK</span>';
     $this->_showhint($message, $url);
