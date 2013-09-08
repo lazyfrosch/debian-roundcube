@@ -5,7 +5,6 @@ plugins/autologon/ usr/share/roundcube/plugins
 plugins/database_attachments/ usr/share/roundcube/plugins
 plugins/debug_logger/ usr/share/roundcube/plugins
 plugins/emoticons/ usr/share/roundcube/plugins
-plugins/enigma/ usr/share/roundcube/plugins
 plugins/help/ usr/share/roundcube/plugins
 plugins/hide_blockquote/ usr/share/roundcube/plugins
 plugins/http_authentication/ usr/share/roundcube/plugins

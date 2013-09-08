@@ -2,8 +2,9 @@ roundcube (0.9.4-1) unstable; urgency=low
 
   * New upstream version.
      + Fix CVE-2013-5645 (Closes: #721592)
+     + "Enigma" plugin has been removed.
 
- -- Vincent Bernat <bernat@debian.org>  Sat, 07 Sep 2013 14:49:11 +0200
+ -- Vincent Bernat <bernat@debian.org>  Sun, 08 Sep 2013 13:52:46 +0200
 
 roundcube (0.9.2-2) unstable; urgency=low
 
