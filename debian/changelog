@@ -1,8 +1,33 @@
-roundcube (0.9.1-1~bpo60+1) squeeze-backports-sloppy; urgency=low
+roundcube (0.9.4-1~bpo60+1) squeeze-backports-sloppy; urgency=low
 
   * Backport to Squeeze.
 
  -- Vincent Bernat <bernat@debian.org>  Sun, 09 Jun 2013 14:55:42 +0200
+
+roundcube (0.9.4-1) unstable; urgency=low
+
+  * New upstream version.
+     + Fix CVE-2013-5645 (Closes: #721592)
+     + "Enigma" plugin has been removed.
+
+ -- Vincent Bernat <bernat@debian.org>  Sun, 08 Sep 2013 13:52:46 +0200
+
+roundcube (0.9.2-2) unstable; urgency=low
+
+  * Depends on php5-sqlite instead of php5-sqlite3. Closes: #714727.
+  * Add a patch to map "sqlite3" driver to "sqlite".
+  * Breaks/replaces older versions of roundcube-plugins-extra (zipdownload
+    plugin is now part of roundcube-plugins). Closes: #714135.
+  * Downgrade php5-gd and php5-pspell to Recommends. Closes: #714448.
+  * Depends on libapache2-mod-php5 | php5 to allow support of PHP FPM.
+
+ -- Vincent Bernat <bernat@debian.org>  Wed, 31 Jul 2013 21:12:05 +0200
+
+roundcube (0.9.2-1) unstable; urgency=low
+
+  * New upstream version.
+
+ -- Vincent Bernat <bernat@debian.org>  Sat, 22 Jun 2013 20:41:48 +0200
 
 roundcube (0.9.1-1) unstable; urgency=low
 

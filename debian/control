@@ -12,17 +12,18 @@ Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-roundcube/roundcube.git
 Package: roundcube-core
 Architecture: all
 Depends: dbconfig-common, debconf | debconf-2.0, ucf,
- libapache2-mod-php5 | php5-cgi | php5-fpm,
- php5-mcrypt, php5-gd, php5-intl, php5-json | php5-common (<< 5.5),
+ libapache2-mod-php5 | php5,
+ php5-mcrypt, php5-intl, php5-json | php5-common (<< 5.5),
  php-auth, php-net-smtp (>= 1.4.2),
- php-net-socket, php-mail-mime (>= 1.8.0), php5-pspell,
+ php-net-socket, php-mail-mime (>= 1.8.0),
  tinymce (>= 3), libjs-jquery (>= 1.6.4), libjs-jquery-ui (>= 1.8),
  libmagic1,
  roundcube-mysql (= ${source:Version}) | roundcube-sqlite3 (= ${source:Version}) | roundcube-pgsql (= ${source:Version}),
  ${misc:Depends}
-Recommends: apache2 | lighttpd | httpd-cgi,
+Recommends: apache2 | lighttpd | httpd-cgi, php5-gd, php5-pspell
 Suggests: php-auth-sasl (>= 1.0.3), php-crypt-gpg, roundcube-plugins
-Conflicts: roundcube-plugins-extra (<= 0.6-20111030)
+Breaks: roundcube-plugins-extra (<= 0.6-20111030)
+Replaces: roundcube-plugins-extra (<= 0.6-20111030)
 Description: skinnable AJAX based webmail solution for IMAP servers
  RoundCube Webmail is a browser-based multilingual IMAP client with an
  application-like user interface. It provides full functionality
@@ -67,7 +68,7 @@ Description: metapackage providing PostgreSQL dependencies for RoundCube
 
 Package: roundcube-sqlite3
 Architecture: all
-Depends: php5-sqlite3, sqlite3, ${misc:Depends}
+Depends: php5-sqlite, sqlite3, ${misc:Depends}
 Description: metapackage providing SQLite dependencies for RoundCube
  This package provides SQLite dependencies for RoundCube Webmail,
  a skinnable AJAX based webmail solution for IMAP servers. Install
@@ -76,6 +77,8 @@ Description: metapackage providing SQLite dependencies for RoundCube
 Package: roundcube-plugins
 Architecture: all
 Depends: roundcube-core (= ${source:Version}), ${misc:Depends}
+Breaks: roundcube-plugins-extra (<= 0.7-20120110)
+Replaces: roundcube-plugins-extra (<= 0.7-20120110)
 Description: skinnable AJAX based webmail solution for IMAP servers - plugins
  RoundCube Webmail is a browser-based multilingual IMAP client with an
  application-like user interface. It provides full functionality
