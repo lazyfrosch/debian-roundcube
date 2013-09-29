@@ -1,3 +1,9 @@
+roundcube (0.9.4-1~bpo70+1) wheezy-backports; urgency=low
+
+  * Backport to Wheezy. No changes.
+
+ -- Vincent Bernat <bernat@debian.org>  Sun, 29 Sep 2013 10:13:46 +0200
+
 roundcube (0.9.4-1) unstable; urgency=low
 
   * New upstream version.
