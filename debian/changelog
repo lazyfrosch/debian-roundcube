@@ -2,7 +2,7 @@ roundcube (0.9.4-1~bpo60+1) squeeze-backports-sloppy; urgency=low
 
   * Backport to Squeeze.
 
- -- Vincent Bernat <bernat@debian.org>  Sun, 09 Jun 2013 14:55:42 +0200
+ -- Vincent Bernat <bernat@debian.org>  Sun, 29 Sep 2013 10:07:00 +0200
 
 roundcube (0.9.4-1) unstable; urgency=low
 
