@@ -1,3 +1,13 @@
+roundcube (0.9.4-1.1) unstable; urgency=high
+
+  * Non-maintainer upload.
+  * Add CVE-2013-6172.patch patch.
+    CVE-2013-6172: An attacker can overwrite configuration settings using
+    user preferences. This can result in random file access and manipulated
+    SQL queries. (Closes: #727668)
+
+ -- Salvatore Bonaccorso <carnil@debian.org>  Sat, 26 Oct 2013 21:47:22 +0200
+
 roundcube (0.9.4-1) unstable; urgency=low
 
   * New upstream version.

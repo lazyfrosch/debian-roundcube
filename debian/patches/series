@@ -7,3 +7,4 @@ default-charset-utf8.patch
 debianize_password_plugin.patch
 use-debian-jquery-ui.patch
 map-sqlite3-to-sqlite.patch
+CVE-2013-6172.patch
