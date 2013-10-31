@@ -1,3 +1,10 @@
+roundcube (0.9.5-1) unstable; urgency=low
+
+  * Acknowledge NMU from Salvatore. Thanks!
+  * New upstream release. Drop CVE patch since this is fixed upstream.
+
+ -- Vincent Bernat <bernat@debian.org>  Thu, 31 Oct 2013 22:33:51 +0100
+
 roundcube (0.9.4-1.1) unstable; urgency=high
 
   * Non-maintainer upload.
