@@ -1,4 +1,4 @@
-roundcube (0.9.5-2) UNRELEASED; urgency=low
+roundcube (0.9.5-2) unstable; urgency=low
 
   * Add Polish debconf translation, thanks to Magdalena Zofia Kubot
     (Closes: #728929).
