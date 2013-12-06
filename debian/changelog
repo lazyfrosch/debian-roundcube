@@ -1,3 +1,11 @@
+roundcube (0.9.5-3) unstable; urgency=low
+
+  * Remove jquery-ui symlinks in preinst to avoid jquery-ui files to be
+    modified. Thanks Andreas Beckman for raising the issue.
+    Closes: #731499.
+
+ -- Vincent Bernat <bernat@debian.org>  Fri, 06 Dec 2013 08:21:34 +0100
+
 roundcube (0.9.5-2) unstable; urgency=low
 
   * Add Polish debconf translation, thanks to Magdalena Zofia Kubot
