@@ -59,7 +59,7 @@ Description: metapackage providing MySQL dependencies for RoundCube
 
 Package: roundcube-pgsql
 Architecture: all
-Depends: php5-pgsql, postgresql-client-9.1 | postgresql-client, ${misc:Depends}
+Depends: php5-pgsql, postgresql-client, ${misc:Depends}
 Suggests: postgresql
 Description: metapackage providing PostgreSQL dependencies for RoundCube
  This package provides PostgreSQL dependencies for RoundCube Webmail,
