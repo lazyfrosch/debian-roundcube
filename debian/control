@@ -50,8 +50,8 @@ Description: skinnable AJAX based webmail solution for IMAP servers - metapackag
 
 Package: roundcube-mysql
 Architecture: all
-Depends: php5-mysqlnd | php5-mysql, mysql-client | virtual-mysql-client, ${misc:Depends}
-Suggests: mysql-server
+Depends: php5-mysqlnd | php5-mysql, mariadb-client | mysql-client | virtual-mysql-client, ${misc:Depends}
+Suggests: mariadb-server | mysql-server
 Description: metapackage providing MySQL dependencies for RoundCube
  This package provides MySQL dependencies for RoundCube Webmail, a
  skinnable AJAX based webmail solution for IMAP servers. Install this
