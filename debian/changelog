@@ -4,6 +4,7 @@ roundcube (0.9.5-4) unstable; urgency=low
     sometimes outdated) version. Closes: #732369.
   * Add mariadb-client/mariadb-server as possible alternatives for
     mysql-client/mysql-server. Closes: #732909.
+  * Bump Standards-Version.
 
  -- Vincent Bernat <bernat@debian.org>  Mon, 20 Jan 2014 20:01:25 +0100
 
