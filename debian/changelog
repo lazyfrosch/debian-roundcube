@@ -1,11 +1,11 @@
-roundcube (0.9.5-4) UNRELEASED; urgency=low
+roundcube (0.9.5-4) unstable; urgency=low
 
   * Depends directly on postgresql-client instead of a particular (and
     sometimes outdated) version. Closes: #732369.
   * Add mariadb-client/mariadb-server as possible alternatives for
     mysql-client/mysql-server. Closes: #732909.
 
- -- Vincent Bernat <bernat@debian.org>  Tue, 24 Dec 2013 09:41:02 +0100
+ -- Vincent Bernat <bernat@debian.org>  Mon, 20 Jan 2014 20:01:25 +0100
 
 roundcube (0.9.5-3) unstable; urgency=low
 
