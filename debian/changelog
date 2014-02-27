@@ -1,3 +1,9 @@
+roundcube (0.9.5-5) UNRELEASED; urgency=low
+
+  * Depends on php-mail-mimedecode. Closes: #740242.
+
+ -- Vincent Bernat <bernat@debian.org>  Thu, 27 Feb 2014 20:32:57 +0100
+
 roundcube (0.9.5-4) unstable; urgency=low
 
   * Depends directly on postgresql-client instead of a particular (and
