@@ -1,5 +1,6 @@
 roundcube (1.0.0-1) UNRELEASED; urgency=low
 
+  * New upstream release.
   * Depends on php-mail-mimedecode. Closes: #740242.
 
  -- Vincent Bernat <bernat@debian.org>  Sat, 12 Apr 2014 09:44:39 +0200
