@@ -3,6 +3,19 @@ roundcube (1.0.0-1) UNRELEASED; urgency=low
   * New upstream release.
   * Depends on php-mail-mimedecode. Closes: #740242.
 
+  * TODO for the next release:
+  * Test and enable the installer (but let it disabled by default in the
+    configuration). Notably, does it play well with respect to the "system"
+    table? It seems that the system table is kept up-to-date by Roundcube
+    itself. But better check this applies to new versions as well.
+  * Handle merging the configuration files. In fact, main.inc.php will be
+    renamed to config.inc.php and most of its content will be removed,
+    db.inc.php will be zeroed out and we will still patch the
+    defaults.inc.php to point to the appropriate DB data (or
+    config.inc.php?).
+  * Handle those sourceless files. That's a pain.
+  * Check changes to update debian/copyright.
+
  -- Vincent Bernat <bernat@debian.org>  Sat, 12 Apr 2014 09:44:39 +0200
 
 roundcube (0.9.5-4) unstable; urgency=low
