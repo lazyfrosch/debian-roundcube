@@ -22,6 +22,8 @@ roundcube (1.0.0+dfsg.1-1) UNRELEASED; urgency=low
       non-source files.
   * debian/watch:
     + Handle a “+dfsg.N” suffix for the Debian upstream version string.
+    + Re-pack the pristine upstream source as the “action” after download.
+      (Closes: bug#736782)
 
  --
 
