@@ -1,4 +1,4 @@
-roundcube (1.0.0-1) UNRELEASED; urgency=low
+roundcube (1.0.0+dfsg.1-1) UNRELEASED; urgency=low
 
   * New upstream release.
   * Depends on php-mail-mimedecode. Closes: #740242.
@@ -20,6 +20,8 @@ roundcube (1.0.0-1) UNRELEASED; urgency=low
   * debian/repack, debian/source_package_build.bash:
     + Add program for re-pack of the Debian source package, to omit
       non-source files.
+  * debian/watch:
+    + Handle a “+dfsg.N” suffix for the Debian upstream version string.
 
  --
 

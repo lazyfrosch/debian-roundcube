@@ -1,2 +1,9 @@
+# debian/watch
+# Debian uscan file for ‘roundcube’ package.
+# Manpage: ‘uscan(1)’
+
+# Compulsory line, this is a version 3 file.
 version=3
-opts="uversionmangle=s/-(rc|alpha|beta)/~$1/,dversionmangle=s/\+dfsg//" http://sf.net/roundcubemail/roundcubemail-([\d\.]+.*)-dep\.tar\.gz
+
+opts="uversionmangle=s/-(rc|alpha|beta)/~$1/,dversionmangle=s/\+dfsg\.\d+$//" \
+    http://sf.net/roundcubemail/roundcubemail-([\d\.]+.*)-dep\.tar\.gz
