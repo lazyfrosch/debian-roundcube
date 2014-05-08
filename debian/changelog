@@ -13,10 +13,15 @@ roundcube (1.0.0-1) UNRELEASED; urgency=low
     db.inc.php will be zeroed out and we will still patch the
     defaults.inc.php to point to the appropriate DB data (or
     config.inc.php?).
-  * Handle those sourceless files. That's a pain.
   * Check changes to update debian/copyright.
 
- -- Vincent Bernat <bernat@debian.org>  Sat, 12 Apr 2014 09:44:39 +0200
+  [ Ben Finney ]
+
+  * debian/repack, debian/source_package_build.bash:
+    + Add program for re-pack of the Debian source package, to omit
+      non-source files.
+
+ --
 
 roundcube (0.9.5-4) unstable; urgency=low
 
