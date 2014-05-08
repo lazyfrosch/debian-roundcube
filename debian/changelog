@@ -13,6 +13,8 @@ roundcube (1.0.0+dfsg.1-1) UNRELEASED; urgency=low
     db.inc.php will be zeroed out and we will still patch the
     defaults.inc.php to point to the appropriate DB data (or
     config.inc.php?).
+  * Add back jstz.min.js with sources. Handle the problem
+    with #731499 (jquery-ui incompatibility).
   * Check changes to update debian/copyright.
 
   [ Ben Finney ]
