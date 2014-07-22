@@ -27,7 +27,7 @@ roundcube (1.0.0+dfsg.1-1) UNRELEASED; urgency=low
     + Re-pack the pristine upstream source as the “action” after download.
       (Closes: bug#736782)
 
- --
+ -- Vincent Bernat <bernat@debian.org>  Thu, 08 May 2014 08:40:00 +0200
 
 roundcube (0.9.5-4) unstable; urgency=low
 
