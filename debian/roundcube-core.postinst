@@ -202,7 +202,7 @@ EOF
 	chown root:www-data $CONFFILE
 	[ ! -f $CONFFILE.dpkg-dist ] || chown root:www-data $CONFFILE.dpkg-dist
 	rm -f $CONFFILE.ucftmp
-	
+
 	# Handle webserver reconfiguration/restart ; stolen from zabbix package
 	db_get roundcube/reconfigure-webserver || true
 	webservers="$RET"
