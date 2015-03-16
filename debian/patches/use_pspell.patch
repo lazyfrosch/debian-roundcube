@@ -1,15 +1,15 @@
 Instead of using Google by default, we use pspell to avoid to send each mail to Google...
 
-Index: roundcube/config/main.inc.php.dist
+Index: roundcube/config/defaults.inc.php
 ===================================================================
---- roundcube.orig/config/main.inc.php.dist	2013-06-04 22:55:13.853066181 +0200
-+++ roundcube/config/main.inc.php.dist	2013-06-04 22:55:13.845066153 +0200
-@@ -489,7 +489,7 @@
+--- roundcube.orig/config/defaults.inc.php	2015-03-12 22:48:46.871008756 +0100
++++ roundcube/config/defaults.inc.php	2015-03-16 23:01:16.344835937 +0100
+@@ -594,7 +594,7 @@
+ // - 'atd'     - install your own After the Deadline server or check with the people at http://www.afterthedeadline.com before using their API
+ // Since Google shut down their public spell checking service, you need to 
+ // connect to a Nox Spell Server when using 'googie' here. Therefore specify the 'spellcheck_uri'
+-$config['spellcheck_engine'] = 'googie';
++$config['spellcheck_engine'] = 'pspell';
  
- // Set the spell checking engine. 'googie' is the default. 'pspell' is also available,
- // but requires the Pspell extensions. When using Nox Spell Server, also set 'googie' here.
--$rcmail_config['spellcheck_engine'] = 'googie';
-+$rcmail_config['spellcheck_engine'] = 'pspell';
- 
- // For a locally installed Nox Spell Server, please specify the URI to call it.
- // Get Nox Spell Server from http://orangoo.com/labs/?page_id=72
+ // For locally installed Nox Spell Server or After the Deadline services,
+ // please specify the URI to call it.

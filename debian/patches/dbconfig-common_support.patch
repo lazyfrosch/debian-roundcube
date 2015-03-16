@@ -1,36 +1,21 @@
 The default db.inc.php is modified to adapt it to the use of dbconfig-common package.
 
-Index: roundcube/config/db.inc.php.dist
+Index: roundcube/config/config.inc.php.sample
 ===================================================================
---- roundcube.orig/config/db.inc.php.dist	2013-04-14 11:57:22.788350614 +0200
-+++ roundcube/config/db.inc.php.dist	2013-04-14 11:57:22.784350531 +0200
-@@ -17,15 +17,21 @@
+--- roundcube.orig/config/config.inc.php.sample	2015-03-12 22:48:46.871008756 +0100
++++ roundcube/config/config.inc.php.sample	2015-03-16 22:58:25.184423103 +0100
+@@ -19,12 +19,8 @@
  
- $rcmail_config = array();
+ $config = array();
  
--// PEAR database DSN for read/write operations
--// format is db_provider://user:password@host/database 
+-// Database connection string (DSN) for read+write operations
+-// Format (compatible with PEAR MDB2): db_provider://user:password@host/database
+-// Currently supported db_providers: mysql, pgsql, sqlite, mssql or sqlsrv
 -// For examples see http://pear.php.net/manual/en/package.database.mdb2.intro-dsn.php
--// currently supported db_providers: mysql, mysqli, pgsql, sqlite, mssql or sqlsrv
+-// NOTE: for SQLite use absolute path: 'sqlite:////full/path/to/sqlite.db?mode=0646'
+-$config['db_dsnw'] = 'mysql://roundcube:pass@localhost/roundcubemail';
 +/* Do not set db_dsnw here, use dpkg-reconfigure roundcube-core to configure database ! */
++include_once("/etc/roundcube/debian-db-roundcube.php");
  
--$rcmail_config['db_dsnw'] = 'mysql://roundcube:pass@localhost/roundcubemail';
--// postgres example: 'pgsql://roundcube:pass@localhost/roundcubemail';
--// Warning: for SQLite use absolute path in DSN:
--// sqlite example: 'sqlite:////full/path/to/sqlite.db?mode=0646';
-+include_once("/etc/roundcube/debian-db.php");
-+
-+switch ($dbtype) {
-+ case "sqlite":
-+ case "sqlite3":
-+   $rcmail_config['db_dsnw'] = "sqlite:///$basepath/$dbname?mode=0640";
-+   break;
-+ default:
-+   if ($dbport != '') $dbport=":$dbport";
-+   if ($dbserver == '') $dbserver="localhost";
-+   $rcmail_config['db_dsnw'] = "$dbtype://$dbuser:$dbpass@$dbserver$dbport/$dbname";
-+   break;
-+ }
- 
- // PEAR database DSN for read only operations (if empty write database will be used)
- // useful for database replication
+ // The mail host chosen to perform the log-in.
+ // Leave blank to show a textbox at login, give a list of hosts

@@ -1,15 +1,15 @@
 Switch to UTF-8 as default charset
 
-Index: roundcube/config/main.inc.php.dist
+Index: roundcube/config/defaults.inc.php
 ===================================================================
---- roundcube.orig/config/main.inc.php.dist	2013-06-04 22:55:28.045114754 +0200
-+++ roundcube/config/main.inc.php.dist	2013-06-04 22:55:28.037114727 +0200
-@@ -718,7 +718,7 @@
+--- roundcube.orig/config/defaults.inc.php	2015-03-16 23:01:16.344835937 +0100
++++ roundcube/config/defaults.inc.php	2015-03-16 23:02:57.229185128 +0100
+@@ -861,7 +861,7 @@
  // ----------------------------------
  
  // Use this charset as fallback for message decoding
--$rcmail_config['default_charset'] = 'ISO-8859-1';
-+$rcmail_config['default_charset'] = 'UTF-8';
+-$config['default_charset'] = 'ISO-8859-1';
++$config['default_charset'] = 'UTF-8';
  
  // skin name: folder from skins/
- $rcmail_config['skin'] = 'larry';
+ $config['skin'] = 'larry';
