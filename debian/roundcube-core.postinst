@@ -113,49 +113,37 @@ fix_symlinks() {
 case "$1" in
     configure)
 
-	# We try to fix an incomplete upgrade (see #610725 and #613586)
-	if [ -n "$2" ] && dpkg --compare-versions "$2" le 0.5.1+dfsg-5; then
-	    db_get roundcube/dbconfig-upgrade || true
-	    if [ x"$RET" = x"true" ]; then
-		if [ x"$dbc_dbtype" = x"mysql" ]; then
-		    # Ok, we may need to do some upgrade steps.
-		    echo "Fixing MySQL installation..."
-		    if dpkg --compare-versions "$2" ge 0.5; then
-			# Hack (ugly) to replace "mysql" by "mysql -f"
-			real_mysql="$(which mysql)"
-			workdir="$(mktemp -d)"
-			oldpath="$PATH"
-			cat <<EOF > "$workdir/mysql"
-#!/bin/sh
-"$real_mysql" "\$@" -f
-EOF
-			chmod +x "$workdir/mysql"
-			PATH="$workdir:$PATH"
-			dbc_mysql_exec_file \
-			    /usr/share/dbconfig-common/data/roundcube/upgrade/mysql/0.5-1 || true
-			PATH="$oldpath"
-			rm -rf "$workdir"
-                    fi
-		    cat <<EOF | while read command; do dbc_mysql_exec_command "$command" || true ; done
-ALTER TABLE \`messages\` ADD INDEX \`index_index\` (\`user_id\`, \`cache_key\`, \`idx\`);
-ALTER TABLE \`contacts\`ADD INDEX \`user_contacts_index\` (\`user_id\`,\`email\`);
-ALTER TABLE \`identities\` ADD \`changed\` datetime NOT NULL DEFAULT '1000-01-01 00:00:00' AFTER \`user_id\`;
-ALTER TABLE \`identities\` ADD INDEX \`user_identities_index\` (\`user_id\`, \`del\`);
-EOF
+	OLD_UPSTREAM_VERSION=$(echo "$2" | sed -n 's/^\([0-9.]\+\).*/\1/p')
+
+	#FILE to save the configuration
+	CONFFILE=/etc/roundcube/config.inc.php
+
+	#file to read the base configuration
+	BASEFILE=/usr/share/roundcube/config.inc.php.sample
+
+	if [ -n "$2" ]; then
+		# Fix bug 680917
+		if dpkg --compare-versions "$2" lt 0.7.2-6; then
+		    fix_symlinks
 		fi
-	    fi
+
+		# Update config / merge old config
+		# it will create a config.inc.php.dpkg-new file with the updated configuration.
+		DEBIAN_PKG=TRUE RCMAIL_CONFIG_DIR=/etc/roundcube /usr/bin/php /usr/share/roundcube/bin/update.sh --version=${OLD_UPSTREAM_VERSION} --accept=true
+
+		# forget old configuration file
+		# until this point we needed the old configuration file for the update script
+		dpkg-maintscript-helper rm_conffile /etc/roundcube/main.inc.php 1.0.0-0 roundcube-core -- "$@"
+
+		# update script was successfull
+		if [ -f /etc/roundcube/config.inc.php.dpkg-new ]; then
+			BASEFILE=/etc/roundcube/config.inc.php.dpkg-new
+			deskey=$(sed -n "s+^\$config\['des_key'\] = '\(.*\)';\$+\1+p" \
+				/etc/roundcube/config.inc.php.dpkg-new)
+		fi
 	fi
 
-        # Fix bug 680917
-	if [ -n "$2" ] && dpkg --compare-versions "$2" lt 0.7.2-6; then
-            fix_symlinks
-        fi
-
- 	CONFFILE=/etc/roundcube/main.inc.php
- 	touch $CONFFILE.ucftmp
- 	chmod 640 $CONFFILE.ucftmp
-	chown root:www-data $CONFFILE.ucftmp
-
+	#read config values
 	db_get roundcube/hosts || true
 	hosts="$RET"
 	if [ "$hosts" != "" ]; then
@@ -167,10 +155,10 @@ EOF
 	db_get roundcube/language || true
 	language="$RET"
 
-	# Get current 3DES key from /etc/roundcube/main.inc.php
-	[ -f /etc/roundcube/main.inc.php ] && {
-	    deskey=$(sed -n "s+^\$rcmail_config\['des_key'\] = '\(.*\)';\$+\1+p" \
-		/etc/roundcube/main.inc.php)
+	# Get current 3DES key from config file
+	[ -f /etc/roundcube/config.inc.php ] && {
+	    deskey=$(sed -n "s+^\$config\['des_key'\] = '\(.*\)';\$+\1+p" \
+		/etc/roundcube/config.inc.php)
 	}
 	# If this is the default key, forget it !
 	[ "$deskey" = "rcmail-!24ByteDESkey*Str" ] && unset deskey
@@ -180,17 +168,23 @@ EOF
 		tr -c -d '[A-Za-z0-9]' | sed -n 's/\(.\{24\}\).*/\1/p')
 	done
 
-	# Put hosts, language and key in main.inc.php
-	cat /usr/share/roundcube/main.inc.php.dist | while read line; do
+	#create config.inc.php
+
+	touch $CONFFILE.ucftmp
+	chmod 640 $CONFFILE.ucftmp
+	chown root:www-data $CONFFILE.ucftmp
+
+	# Put hosts, language and key in config file
+	cat $BASEFILE | while read line; do
 	    case "$line" in
-		"\$rcmail_config['default_host'] = "*)
-		    printf "\$rcmail_config['default_host'] = %s;\n" "${hosts}"
+		"\$config['default_host'] = "*)
+		    printf "\$config['default_host'] = %s;\n" "${hosts}"
 		    ;;
-		"\$rcmail_config['des_key'] = "*)
-		    printf "\$rcmail_config['des_key'] = '%s';\n" "${deskey}"
+		"\$config['des_key'] = "*)
+		    printf "\$config['des_key'] = '%s';\n" "${deskey}"
 		    ;;
-		"\$rcmail_config['language'] = "*)
-		    printf "\$rcmail_config['language'] = '%s';\n" "${language}"
+		"\$config['language'] = "*)
+		    printf "\$config['language'] = '%s';\n" "${language}"
 		    ;;
 		*)
 		    printf "%s\n" "$line"
@@ -198,10 +192,17 @@ EOF
 	    esac
 	done >> $CONFFILE.ucftmp
 
-	ucf --debconf-ok $CONFFILE.ucftmp $CONFFILE
+	# Register new config file
+	if  [ ! -f /etc/roundcube/config.inc.php ]; then
+		cp $CONFFILE.ucftmp $CONFFILE
+		ucfr roundcube-core $CONFFILE
+	else
+		ucf --debconf-ok $CONFFILE.ucftmp $CONFFILE
+	fi
 	chown root:www-data $CONFFILE
 	[ ! -f $CONFFILE.dpkg-dist ] || chown root:www-data $CONFFILE.dpkg-dist
 	rm -f $CONFFILE.ucftmp
+	rm -f $CONFFILE.dpkg-new
 
 	# Handle webserver reconfiguration/restart ; stolen from zabbix package
 	db_get roundcube/reconfigure-webserver || true
