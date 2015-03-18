@@ -18,28 +18,27 @@ binary-install/roundcube-core::
 	done
 	dh_link -proundcube-core etc/roundcube/htaccess var/lib/roundcube/.htaccess
 
-	# Database related files
-	# Install empty tables and updates for each db type
 	install -m 0644 $(CURDIR)/SQL/mysql.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/mysql
 	install -m 0644 $(CURDIR)/SQL/postgres.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/pgsql
 	install -m 0644 $(CURDIR)/SQL/sqlite.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/sqlite3
 
-	# Old database upgrades
-	cp -r $(CURDIR)/debian/sql/* $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/upgrade/.
+	# database upgrades
+	cp -r $(CURDIR)/debian/sql/* $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/upgrade/
 
-	# Remove useless file
-	rm -rf $(CURDIR)/debian/roundcube-core/usr/share/roundcube/bin
 	# Convert .js.src back to js
 	for js in $$(find $(CURDIR)/debian/roundcube-core -name '*.js.src' -print); do \
 		yui-compressor --type js "$$js" -o "$${js%.*}" ; \
 		rm "$$js" ; \
 	done
+
 	# Remove files shipped in tinymce package
 	rm -rf $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/js/tiny_mce
 	dh_link -proundcube-core usr/share/tinymce/www usr/share/roundcube/program/js/tiny_mce
+
 	# Remove jquery as well
 	rm $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/js/jquery.min.js
 	dh_link -proundcube-core usr/share/javascript/jquery/jquery.min.js usr/share/roundcube/program/js/jquery.min.js
+
 	# Remove GnuPG PEAR module
 	rm -rf $(CURDIR)/debian/roundcube-plugins/usr/share/roundcube/plugins/enigma/lib/Crypt
 
