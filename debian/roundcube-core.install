@@ -1,4 +1,4 @@
-robots.txt index.php .htaccess program/ bin/ usr/share/roundcube
+robots.txt index.php .htaccess program/ bin/ SQL/ installer/ usr/share/roundcube
 skins/classic/ usr/share/roundcube/skins
 skins/larry/ usr/share/roundcube/skins
 
