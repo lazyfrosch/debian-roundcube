@@ -1,3 +1,4 @@
+/* 2013042700 */
 ALTER SEQUENCE user_ids RENAME TO users_seq;
 ALTER TABLE users ALTER COLUMN user_id SET DEFAULT nextval('users_seq'::text);
 
@@ -12,6 +13,9 @@ ALTER TABLE contactgroups ALTER COLUMN contactgroup_id SET DEFAULT nextval('cont
 
 ALTER SEQUENCE search_ids RENAME TO searches_seq;
 ALTER TABLE searches ALTER COLUMN search_id SET DEFAULT nextval('searches_seq'::text);
+
+
+/* 2013052500 */
 CREATE TABLE "cache_shared" (
     cache_key varchar(255) NOT NULL,
     created timestamp with time zone DEFAULT now() NOT NULL,
@@ -20,6 +24,9 @@ CREATE TABLE "cache_shared" (
 
 CREATE INDEX cache_shared_cache_key_idx ON "cache_shared" (cache_key);
 CREATE INDEX cache_shared_created_idx ON "cache_shared" (created);
+
+
+/* 2013061000 */
 ALTER TABLE "cache" ADD expires timestamp with time zone DEFAULT NULL;
 ALTER TABLE "cache_shared" ADD expires timestamp with time zone DEFAULT NULL;
 ALTER TABLE "cache_index" ADD expires timestamp with time zone DEFAULT NULL;
@@ -44,3 +51,7 @@ CREATE INDEX cache_shared_expires_idx ON "cache_shared" (expires);
 CREATE INDEX cache_index_expires_idx ON "cache_index" (expires);
 CREATE INDEX cache_thread_expires_idx ON "cache_thread" (expires);
 CREATE INDEX cache_messages_expires_idx ON "cache_messages" (expires);
+
+
+/* update system table */
+UPDATE system SET value='2013061000' WHERE name='roundcube-version';

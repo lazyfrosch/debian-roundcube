@@ -1,5 +1,11 @@
 -- drop temp table created in 2012080700.sql
 DROP TABLE IF EXISTS tmp_users;
+
+
+/* 2013042700 */
+-- empty
+
+/* 2013052500 */
 CREATE TABLE cache_shared (
   cache_key varchar(255) NOT NULL,
   created datetime NOT NULL default '0000-00-00 00:00:00',
@@ -8,6 +14,9 @@ CREATE TABLE cache_shared (
 
 CREATE INDEX ix_cache_shared_cache_key ON cache_shared(cache_key);
 CREATE INDEX ix_cache_shared_created ON cache_shared(created);
+
+
+/* 2013061000 */
 DROP TABLE cache_index;
 DROP TABLE cache_thread;
 DROP TABLE cache_messages;
@@ -56,3 +65,7 @@ CREATE TABLE cache_messages (
 );
 
 CREATE INDEX ix_cache_messages_expires ON cache_messages (expires);
+
+
+/* update system table */
+UPDATE system SET value='2013061000' WHERE name='roundcube-version';

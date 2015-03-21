@@ -1,3 +1,9 @@
+/* update from 2013011700 -> 2013061000 */
+
+/* 2013042700 */
+-- empty
+
+/* 2013052500 */
 CREATE TABLE `cache_shared` (
  `cache_key` varchar(255) /*!40101 CHARACTER SET ascii COLLATE ascii_general_ci */ NOT NULL,
  `created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
@@ -5,6 +11,8 @@ CREATE TABLE `cache_shared` (
  INDEX `created_index` (`created`),
  INDEX `cache_key_index` (`cache_key`)
 ) /*!40000 ENGINE=INNODB */ /*!40101 CHARACTER SET utf8 COLLATE utf8_general_ci */;
+
+/* 2013061000 */
 ALTER TABLE `cache` ADD `expires` datetime DEFAULT NULL;
 ALTER TABLE `cache_shared` ADD `expires` datetime DEFAULT NULL;
 ALTER TABLE `cache_index` ADD `expires` datetime DEFAULT NULL;
@@ -29,3 +37,6 @@ ALTER TABLE `cache_shared` ADD INDEX `expires_index` (`expires`);
 ALTER TABLE `cache_index` ADD INDEX `expires_index` (`expires`);
 ALTER TABLE `cache_thread` ADD INDEX `expires_index` (`expires`);
 ALTER TABLE `cache_messages` ADD INDEX `expires_index` (`expires`);
+
+/* update system table */
+UPDATE system SET value="2013061000" WHERE name="roundcube-version";
