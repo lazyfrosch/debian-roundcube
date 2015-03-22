@@ -4,18 +4,8 @@ roundcube (1.0.0+dfsg.1-1) UNRELEASED; urgency=low
   * Depends on php-mail-mimedecode. Closes: #740242.
 
   * TODO for the next release:
-  * Test and enable the installer (but let it disabled by default in the
-    configuration). Notably, does it play well with respect to the "system"
-    table? It seems that the system table is kept up-to-date by Roundcube
-    itself. But better check this applies to new versions as well.
-  * Handle merging the configuration files. In fact, main.inc.php will be
-    renamed to config.inc.php and most of its content will be removed,
-    db.inc.php will be zeroed out and we will still patch the
-    defaults.inc.php to point to the appropriate DB data (or
-    config.inc.php?).
   * Add back jstz.min.js with sources. Handle the problem
     with #731499 (jquery-ui incompatibility).
-  * Check changes to update debian/copyright.
 
   [ Ben Finney ]
 
@@ -26,6 +16,22 @@ roundcube (1.0.0+dfsg.1-1) UNRELEASED; urgency=low
     + Handle a “+dfsg.N” suffix for the Debian upstream version string.
     + Re-pack the pristine upstream source as the “action” after download.
       (Closes: bug#736782)
+
+  [ Richard Laager ]
+  * Add a debian/.gitignore file
+  * Refresh patch offsets
+  * Refresh use_packaged_tinymce.patch to apply
+
+  [ Sandro Knauß ]
+  * Updated patches to use config.inc.php.
+  * Updated: copyright file
+  * Added patch to handle the upgrade from 0.9.5 -> 1.0.0.
+  * Use update script from package
+  * Cleanup debian/rules.
+  * Added current version system table.
+  * Move deletion of configfile to maintscript.
+  * Added SQL and installer to be install
+  * Added NEWS entry about changing configuration
 
  -- Vincent Bernat <bernat@debian.org>  Thu, 08 May 2014 08:40:00 +0200
 
