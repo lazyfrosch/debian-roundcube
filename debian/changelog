@@ -1,4 +1,4 @@
-roundcube (1.0.0+dfsg.1-1) UNRELEASED; urgency=low
+roundcube (1.0.5+dfsg.1-1) UNRELEASED; urgency=low
 
   * New upstream release.
   * Depends on php-mail-mimedecode. Closes: #740242.
