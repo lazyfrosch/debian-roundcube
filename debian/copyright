@@ -1,7 +1,33 @@
-Format: http://dep.debian.net/deps/dep5/
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Roundcube Dev. - Switzerland
 Upstream-Contact: http://roundcube.net/support
 Source: http://roundcube.net/download
+Files-Excluded:
+    plugins/acl/*.min.js
+    plugins/archive/*.min.js
+    plugins/attachment_reminder/*.min.js
+    plugins/enigma/*.min.js
+    plugins/help/*.min.js
+    plugins/hide_blockquote/*.min.js
+    plugins/jqueryui
+    plugins/legacy_browser/js/*.min.js
+    plugins/managesieve/*.min.js
+    plugins/markasjunk/*.min.js
+    plugins/newmail_notifier/*.min.js
+    plugins/password/*.min.js
+    plugins/userinfo/*.min.js
+    plugins/vcard_attachments/*.min.js
+    plugins/zipdownload/*.min.js
+    program/js/a*.min.js
+    program/js/c*.min.js
+    program/js/e*.min.js
+    program/js/g*.min.js
+    program/js/j*.min.js
+    program/js/l*.min.js
+    program/js/tinymce
+    program/js/tr*.min.js
+    skins/classic/*.min.js
+    skins/larry/*.min.js
 
 Files: *
 Copyright: Copyright (C) 2005-2015, The Roundcube Dev Team
