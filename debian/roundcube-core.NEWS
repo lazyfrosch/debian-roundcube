@@ -1,3 +1,17 @@
+roundcube (1.0.0+dfsg.1-1) UNRELEASED; urgency=medium
+
+    Roundcube changes it configuration schema.
+    The old main.inc.php and db.inc.php are merged into config.inc.php by the
+    deb update process. There is a migration script, that should transform the
+    files automatically, also if there are changes made in the files.
+    The old configuration files are left in place, they can removed afterwards.
+
+    If you want to start the migration step on you own:
+    DEBIAN_PKG=TRUE RCMAIL_CONFIG_DIR=/etc/roundcube /usr/bin/php \
+        /usr/share/roundcube/bin/update.sh --version=0.9.5 --accept=true
+
+ -- Sandro Knauß <bugs@sandroknauss.de>  Thu, 08 May 2014 08:40:00 +0200
+
 roundcube (0.7.2-7) unstable; urgency=low
 
     Roundcube SQLite support is limited to SQLite 2.x. No support for
