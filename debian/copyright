@@ -4,83 +4,43 @@ Upstream-Contact: http://roundcube.net/support
 Source: http://roundcube.net/download
 
 Files: *
-Copyright: Copyright (C) 2005-2011, The Roundcube Dev Team
-           Copyright (C) 2011, Kolab Systems AG
+Copyright: Copyright (C) 2005-2015, The Roundcube Dev Team
+           Copyright (C) 2011-2015, Kolab Systems AG
+           2013 Thomas Yu - Sian, Liu
+           2000 Edmund Grimley Evans <edmundo@rano.org>
+           2005-2007, Jon Abernathy <jon@chuggnutt.com>
 License: GPL-3+
 
-Files: skins/*/*
+Files: skins/*
 Copyright: 2005-2011, Roundcube Dev. - Switzerland
 License: CC-BY-SA-3
 
-Files: program/js/googiespell.js*
+Files: program/js/googiespell.js
 Copyright: 2006 Amir Salihefendic
-           2009 Aleksander Machniak
-License: GPL-2
+           2009 The Roundcube Dev Team
+           2011 Kolab Systems AG
+License: GPL-2+
 
-Files: program/js/jquery*.js
-Copyright: 2010 John Resig
-           2010 The Dojo Foundation
-License: GPL-2 or Expat
-Comment:
- Also includes sizzle.js, licensed under Expat, BSD-3-clause and
- GPL-2. This file is not shipped in the resulting Debian packages. We
- use system-included jQuery.
+Files: plugins/jqueryui/*
+Copyright: 2005, 2014 jQuery Foundation, Inc.
+License: MIT
 
 Files: program/js/tiny_mce/*
 Copyright: 2003-2006 Moxiecode Systems AB
 License: LGPL-2.1
 
-Files: program/lib/enriched.inc
-Copyright: 2000-2003 Ryo Chijiiwa <Ryo@IlohaMail.org>
-License: GPL-2
-
-Files: program/lib/html2text.php
-Copyright: 2005-2007 Jon Abernathy <jon@chuggnutt.com>
-License: GPL-2+
-
 Files: program/lib/tnef_decoder.php
 Copyright: 2002-2010 The Horde Project (http://www.horde.org/)
 License: LGPL-2.1
 
-Files: program/lib/utf7.inc
-Copyright: 2000 Edmund Grimley Evans <edmundo@rano.org>
-License: GPL-2+
-
-Files: program/lib/washtml.php
-Copyright: 2007 Frederic Motte <fmotte@ubixis.com>
+Files: program/lib/Roundcube/rcube_washtml.php
+Copyright: 2008-2012, The Roundcube Dev Team
+           2007 Frederic Motte <fmotte@ubixis.com>
 License: BSD-2-clause
 
-Files: plugins/managesieve/lib/Net/Sieve.php
-Copyright: 2002-2003 Richard Heyes
-           2006-2008 Anish Mistry
-License: BSD-2-clause
-
-Files: plugins/managesieve/lib/*.php
-Copyright: 2008-2011, The Roundcube Dev team
-           2011, Kolab Systems AG
-License: GPL-2
-
-Files: plugins/enigma/lib/Crypt/*
-Copyright: 2005-2010 silverorange
-License: LGPL-2.1
-
-Files: plugins/acl/acl.php
-Copyright: Copyright (C) 2011, Kolab Systems AG
-License: GPL-2
-
-Files: plugins/enigma/*.php
-Copyright: Copyright (C) 2009-2010, Roundcube Dev.
-License: GPL-2
-
-Files: plugins/newmail_notifier/newmail_notifier.php
-Copyright: Copyright (C) 2011, Kolab Systems AG
-License: GPL-2
-
-Files: plugins/password/password.php
-Copyright: Copyright (C) 2009-2010, Roundcube Dev.
-License: GPL-2
-
-Files: plugins/redundant_attachments/redundant_attachments.php
+Files: plugins/enigma/enigma.php
+       plugins/enigma/lib/*
+       plugins/redundant_attachments/redundant_attachments.php
 Copyright: Copyright (C) 2011, The Roundcube Dev Team
            Copyright (C) 2011, Kolab Systems AG
 License: GPL-2
@@ -576,3 +536,23 @@ License: GPL-3+
  On Debian systems, the full text of the GNU General Public License
  version 3 can be found in the file
  `/usr/share/common-licenses/GPL-3`.
+
+Licence: MIT
+ Permission is hereby granted, free of charge, to any person obtaining
+ a copy of this software and associated documentation files
+ (the "Software"), to deal in the Software without restriction, including
+ without limitation the rights to use, copy, modify, merge, publish,
+ distribute, sublicense, and/or sell copies of the Software, and to permit
+ persons to whom the Software is furnished to do so, subject to the following
+ conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
