@@ -39,9 +39,6 @@ binary-install/roundcube-core::
 	rm $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/js/jquery.min.js
 	dh_link -proundcube-core usr/share/javascript/jquery/jquery.min.js usr/share/roundcube/program/js/jquery.min.js
 
-	# Remove GnuPG PEAR module
-	rm -rf $(CURDIR)/debian/roundcube-plugins/usr/share/roundcube/plugins/enigma/lib/Crypt
-
 binary-install/roundcube-plugins::
 	# Plugins are in usr/share/roundcube/plugins, for each plugin
 	# if there is config.inc.php.dist, we symlink a config.inc.php
