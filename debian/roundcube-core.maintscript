@@ -1,0 +1,2 @@
+rm_conffile /etc/roundcube/main.inc.php 1.0.0+dfsg.1-1~
+rm_conffile /etc/roundcube/db.inc.php 1.0.0+dfsg.1-1~
