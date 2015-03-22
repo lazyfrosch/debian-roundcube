@@ -93,7 +93,7 @@ function roundcube_browser()
   this.xmlhttp_test = function()
   {
     var activeX_test = new Function("try{var o=new ActiveXObject('Microsoft.XMLHTTP');return true;}catch(err){return false;}");
-    this.xmlhttp = (window.XMLHttpRequest || (window.ActiveXObject && activeX_test()));
+    this.xmlhttp = window.XMLHttpRequest || (('ActiveXObject' in window) && activeX_test());
     return this.xmlhttp;
   };
 
@@ -327,13 +327,17 @@ removeEventListener: function(evt, func, obj)
 triggerEvent: function(evt, e)
 {
   var ret, h;
+
   if (e === undefined)
     e = this;
   else if (typeof e === 'object')
     e.event = evt;
 
-  if (this._events && this._events[evt] && !this._event_exec) {
-    this._event_exec = true;
+  if (!this._event_exec)
+    this._event_exec = {};
+
+  if (this._events && this._events[evt] && !this._event_exec[evt]) {
+    this._event_exec[evt] = true;
     for (var i=0; i < this._events[evt].length; i++) {
       if ((h = this._events[evt][i])) {
         if (typeof h.func === 'function')
@@ -356,7 +360,8 @@ triggerEvent: function(evt, e)
     }
   }
 
-  this._event_exec = false;
+  delete this._event_exec[evt];
+
   if (e.event) {
     try {
       delete e.event;

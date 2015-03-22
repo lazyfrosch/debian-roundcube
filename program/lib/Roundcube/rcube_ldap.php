@@ -116,13 +116,14 @@ class rcube_ldap extends rcube_addressbook
 
         // fieldmap property is given
         if (is_array($p['fieldmap'])) {
+            $p['fieldmap'] = array_filter($p['fieldmap']);
             foreach ($p['fieldmap'] as $rf => $lf)
                 $this->fieldmap[$rf] = $this->_attr_name(strtolower($lf));
         }
         else if (!empty($p)) {
             // read deprecated *_field properties to remain backwards compatible
             foreach ($p as $prop => $value)
-                if (preg_match('/^(.+)_field$/', $prop, $matches))
+                if (!empty($value) && preg_match('/^(.+)_field$/', $prop, $matches))
                     $this->fieldmap[$matches[1]] = $this->_attr_name(strtolower($value));
         }
 
@@ -377,10 +378,11 @@ class rcube_ldap extends rcube_addressbook
                 // replace placeholders in filter settings
                 if (!empty($this->prop['filter']))
                     $this->prop['filter'] = strtr($this->prop['filter'], $replaces);
-                if (!empty($this->prop['groups']['filter']))
-                    $this->prop['groups']['filter'] = strtr($this->prop['groups']['filter'], $replaces);
-                if (!empty($this->prop['groups']['member_filter']))
-                    $this->prop['groups']['member_filter'] = strtr($this->prop['groups']['member_filter'], $replaces);
+
+                foreach (array('base_dn','filter','member_filter') as $k) {
+                    if (!empty($this->prop['groups'][$k]))
+                        $this->prop['groups'][$k] = strtr($this->prop['groups'][$k], $replaces);
+                }
 
                 if (!empty($this->prop['group_filters'])) {
                     foreach ($this->prop['group_filters'] as $i => $gf) {

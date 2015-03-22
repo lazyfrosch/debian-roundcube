@@ -77,7 +77,7 @@ $mailto  = rcmail_email_input_format(rcube_utils::get_input_value('_to', rcube_u
 $mailcc  = rcmail_email_input_format(rcube_utils::get_input_value('_cc', rcube_utils::INPUT_POST, TRUE, $message_charset), true);
 $mailbcc = rcmail_email_input_format(rcube_utils::get_input_value('_bcc', rcube_utils::INPUT_POST, TRUE, $message_charset), true);
 
-if ($EMAIL_FORMAT_ERROR) {
+if ($EMAIL_FORMAT_ERROR && !$savedraft) {
     $OUTPUT->show_message('emailformaterror', 'error', array('email' => $EMAIL_FORMAT_ERROR));
     $OUTPUT->send('iframe');
 }
@@ -201,7 +201,7 @@ if (!empty($headers['Reply-To'])) {
     $headers['Mail-Reply-To'] = $headers['Reply-To'];
 }
 if ($hdr = rcube_utils::get_input_value('_followupto', rcube_utils::INPUT_POST, TRUE, $message_charset)) {
-    $headers['Mail-Followup-To'] = rcmail_email_input_format();
+    $headers['Mail-Followup-To'] = rcmail_email_input_format($hdr);
 }
 
 // remember reply/forward UIDs in special headers
@@ -467,15 +467,11 @@ if (preg_match('/[^\x00-\x7F]/', $MAIL_MIME->getTXTBody())) {
     $transfer_encoding = $RCMAIL->config->get('force_7bit') ? 'quoted-printable' : '8bit';
 }
 else {
-    $text_charset      = '';
+    $text_charset      = 'US-ASCII';
     $transfer_encoding = '7bit';
 }
 
 if ($flowed) {
-    if (!$text_charset) {
-        $text_charset = 'US-ASCII';
-    }
-
     $text_charset .= ";\r\n format=flowed";
 }
 
@@ -545,9 +541,11 @@ if ($savedraft) {
     $store_target = $drafts_mbox;
 }
 else if (!$RCMAIL->config->get('no_save_sent_messages')) {
-    $store_target = rcube_utils::get_input_value('_store_target', rcube_utils::INPUT_POST);
-    if (!strlen($store_target)) {
-        $sore_target = $RCMAIL->config->get('sent_mbox');
+    if (isset($_POST['_store_target'])) {
+        $store_target = rcube_utils::get_input_value('_store_target', rcube_utils::INPUT_POST);
+    }
+    else {
+        $store_target = $RCMAIL->config->get('sent_mbox');
     }
 }
 
