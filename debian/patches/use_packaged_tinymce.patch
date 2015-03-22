@@ -2,9 +2,9 @@ Use tinymce from tinycme package instead of the shipped one.
 
 Index: roundcube/program/steps/mail/sendmail.inc
 ===================================================================
---- roundcube.orig/program/steps/mail/sendmail.inc	2014-07-01 13:42:37.000000000 -0500
-+++ roundcube/program/steps/mail/sendmail.inc	2014-07-01 14:07:04.095658831 -0500
-@@ -751,7 +751,7 @@ function rcmail_fix_emoticon_paths($mime
+--- roundcube.orig/program/steps/mail/sendmail.inc	2015-03-22 20:09:21.167198296 +0100
++++ roundcube/program/steps/mail/sendmail.inc	2015-03-22 20:09:21.160531563 +0100
+@@ -749,7 +749,7 @@
  
                  // sanitize image name so resulting attachment doesn't leave images dir
                  $image_name = preg_replace('/[^a-zA-Z0-9_\.\-]/i', '', $image_name);

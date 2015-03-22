@@ -2,9 +2,9 @@ Instead of using Google by default, we use pspell to avoid to send each mail to 
 
 Index: roundcube/config/defaults.inc.php
 ===================================================================
---- roundcube.orig/config/defaults.inc.php	2015-03-12 22:48:46.871008756 +0100
-+++ roundcube/config/defaults.inc.php	2015-03-16 23:01:16.344835937 +0100
-@@ -594,7 +594,7 @@
+--- roundcube.orig/config/defaults.inc.php	2015-03-22 20:09:27.457260802 +0100
++++ roundcube/config/defaults.inc.php	2015-03-22 20:09:27.453927436 +0100
+@@ -614,7 +614,7 @@
  // - 'atd'     - install your own After the Deadline server or check with the people at http://www.afterthedeadline.com before using their API
  // Since Google shut down their public spell checking service, you need to 
  // connect to a Nox Spell Server when using 'googie' here. Therefore specify the 'spellcheck_uri'
