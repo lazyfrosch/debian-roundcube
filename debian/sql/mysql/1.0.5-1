@@ -38,5 +38,8 @@ ALTER TABLE `cache_index` ADD INDEX `expires_index` (`expires`);
 ALTER TABLE `cache_thread` ADD INDEX `expires_index` (`expires`);
 ALTER TABLE `cache_messages` ADD INDEX `expires_index` (`expires`);
 
+/* 2014042900 */
+ALTER TABLE `users` CHANGE `preferences` `preferences` longtext;
+
 /* update system table */
-UPDATE system SET value="2013061000" WHERE name="roundcube-version";
+UPDATE system SET value="2014042900" WHERE name="roundcube-version";

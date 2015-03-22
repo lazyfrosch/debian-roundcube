@@ -52,6 +52,8 @@ CREATE INDEX cache_index_expires_idx ON "cache_index" (expires);
 CREATE INDEX cache_thread_expires_idx ON "cache_thread" (expires);
 CREATE INDEX cache_messages_expires_idx ON "cache_messages" (expires);
 
+/* 2014042900 */
+-- empty
 
 /* update system table */
-UPDATE system SET value='2013061000' WHERE name='roundcube-version';
+UPDATE system SET value='2014042900' WHERE name='roundcube-version';

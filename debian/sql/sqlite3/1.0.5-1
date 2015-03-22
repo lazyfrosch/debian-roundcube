@@ -66,6 +66,8 @@ CREATE TABLE cache_messages (
 
 CREATE INDEX ix_cache_messages_expires ON cache_messages (expires);
 
+/* 2014042900 */
+-- empty
 
 /* update system table */
-UPDATE system SET value='2013061000' WHERE name='roundcube-version';
+UPDATE system SET value='2014042900' WHERE name='roundcube-version';
