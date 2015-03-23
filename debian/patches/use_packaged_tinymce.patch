@@ -2,14 +2,17 @@ Use tinymce from tinycme package instead of the shipped one.
 
 Index: roundcube/program/steps/mail/sendmail.inc
 ===================================================================
---- roundcube.orig/program/steps/mail/sendmail.inc	2015-03-22 20:09:21.167198296 +0100
-+++ roundcube/program/steps/mail/sendmail.inc	2015-03-22 20:09:21.160531563 +0100
-@@ -749,7 +749,7 @@
+--- roundcube.orig/program/steps/mail/sendmail.inc	2015-03-23 22:17:31.281231329 +0100
++++ roundcube/program/steps/mail/sendmail.inc	2015-03-23 22:22:57.054338485 +0100
+@@ -772,9 +772,8 @@
+     // remove any null-byte characters before parsing
+     $body = preg_replace('/\x00/', '', $body);
  
-                 // sanitize image name so resulting attachment doesn't leave images dir
-                 $image_name = preg_replace('/[^a-zA-Z0-9_\.\-]/i', '', $image_name);
--                $img_file   = INSTALL_PATH . '/' . $searchstr . $image_name;
-+                $img_file   = '/usr/share/tinymce/www/plugins/emotions/img/' . $image_name;
+-    $searchstr  = 'program/js/tinymce/plugins/emoticons/img/';
+-    $assets_dir = $RCMAIL->config->get('assets_dir');
+-    $path       = ($assets_dir ?: INSTALL_PATH) . '/' . $searchstr;
++    $searchstr  = '/usr/share/tinymce/www/plugins/emotions/img/';
++    $path       = '/usr/share/tinymce/www/plugins/emotions/img/';
+     $offset     = 0;
  
-                 if (! in_array($image_name, $included_images)) {
-                     // add the image to the MIME message
+     // keep track of added images, so they're only added once
