@@ -41,5 +41,9 @@ ALTER TABLE `cache_messages` ADD INDEX `expires_index` (`expires`);
 /* 2014042900 */
 ALTER TABLE `users` CHANGE `preferences` `preferences` longtext;
 
+/* 2015030800 */
+ALTER TABLE `identities` CHANGE `signature` `signature` longtext;
+
 /* update system table */
-UPDATE system SET value="2014042900" WHERE name="roundcube-version";
+UPDATE system SET value="2015030800" WHERE name="roundcube-version";
+
