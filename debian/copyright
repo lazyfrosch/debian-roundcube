@@ -76,6 +76,10 @@ Copyright: 2007-2011, Vincent Bernat <bernat@debian.org>
            2007-2011, Romain Beauxis <toots@rastageeks.org>
 License: GPL-2
 
+Files: debian/*
+Copyright: 2015, Sandro Knauß <bugs@sandroknauss.de>
+License: GPL-2+
+
 License: BSD-2-clause
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
