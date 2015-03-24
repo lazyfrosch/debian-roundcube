@@ -12,7 +12,6 @@ DEB_DH_INSTALL_ARGS = \
 pre-build::
 	>plugins/jqueryui/js/jquery-ui-1.9.1.custom.min.js debian/create-jquery-ui-custom.sh debian/missing-sources/jquery-ui-1.9.1.zip
 	>program/js/jstz.min.js tar xzf debian/missing-sources/*-jstimezonedetect-*.tar.gz --wildcards --to-stdout '*/jstz.js'
-	>program/js/jquery.min.js
 
 clean::
 	rm -f program/js/jquery.min.js
@@ -35,10 +34,9 @@ binary-install/roundcube-core::
 	# database upgrades
 	cp -r $(CURDIR)/debian/sql/* $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/upgrade/
 
-	# Convert .js.src back to js
-	for js in $$(find $(CURDIR)/debian/roundcube-core -name '*.js.src' -print); do \
-		yui-compressor --type js "$$js" -o "$${js%.*}" ; \
-		rm "$$js" ; \
+	# Convert .js back to min.js
+	for js in $$(find $(CURDIR)/debian/roundcube-core -name '*.js' ! -not -name '*.min.js' -print); do \
+		yui-compressor --type js "$$js" -o "$${js%.*}.min.js" ; \
 	done
 
 	# Remove files shipped in tinymce package
