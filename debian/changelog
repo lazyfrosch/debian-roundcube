@@ -1,11 +1,8 @@
 roundcube (1.1.1+dfsg.1-1) UNRELEASED; urgency=low
 
-  * New upstream release.
+  [ Vincent Bernat ]
   * Depends on php-mail-mimedecode. Closes: #740242.
-
-  * TODO for the next release:
-  * Add back jstz.min.js with sources. Handle the problem
-    with #731499 (jquery-ui incompatibility).
+  * Update jstz.js with the version specified in the header.
 
   [ Ben Finney ]
   * debian/watch:
@@ -17,6 +14,7 @@ roundcube (1.1.1+dfsg.1-1) UNRELEASED; urgency=low
   * Refresh use_packaged_tinymce.patch to apply
 
   [ Sandro Knauß ]
+  * New upstream release.
   * Updated patches to use config.inc.php.
   * Updated: copyright file
   * Added patch to handle the upgrade from 0.9.5 -> 1.0.0.
