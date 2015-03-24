@@ -8,10 +8,6 @@ roundcube (1.1.1+dfsg.1-1) UNRELEASED; urgency=low
     with #731499 (jquery-ui incompatibility).
 
   [ Ben Finney ]
-
-  * debian/repack, debian/source_package_build.bash:
-    + Add program for re-pack of the Debian source package, to omit
-      non-source files.
   * debian/watch:
     + Handle a “+dfsg.N” suffix for the Debian upstream version string.
     + Re-pack the pristine upstream source as the “action” after download.
@@ -32,7 +28,6 @@ roundcube (1.1.1+dfsg.1-1) UNRELEASED; urgency=low
   * Move deletion of configfile to maintscript.
   * Added SQL and installer to be install
   * Added NEWS entry about changing configuration
-  * 
 
  -- Sandro Knauß <bugs@sandroknauss.de>  Sun, 22 Mar 2015 23:59:00 +0100
 
