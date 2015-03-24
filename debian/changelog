@@ -29,6 +29,23 @@ roundcube (1.1.1+dfsg.1-1) UNRELEASED; urgency=low
 
  -- Sandro Knauß <bugs@sandroknauss.de>  Sun, 22 Mar 2015 23:59:00 +0100
 
+roundcube (0.9.5+dfsg1-4.1) unstable; urgency=low
+
+  * NMU - rc bug preventing roundcube from being included in jessie.
+  * Changed debian/watch & debian/copyright so uscan repackage
+    upstream tarball to remove files without source.
+    Closes: #736782.
+  * Added sources for jquery-ui and jstz.js to debian/missing-sources.
+  * Modified debian/copyright to acknowledge copyrights of
+    files in debian/missing-sources.
+  * Added debian/create-jquery-ui-custom.sh that creates the
+    jquery-ui-1.9.1.custom.min.js from upstream source.
+  * Modified debian/rules to create jstz.min.js and
+    jquery-ui-1.9.1.custom.min.js form the versions we have
+    sources for.
+
+ -- Russell Stuart <russell-debian@stuart.id.au>  Wed, 15 Oct 2014 09:51:17 +1000
+
 roundcube (0.9.5-4) unstable; urgency=low
 
   * Depends directly on postgresql-client instead of a particular (and

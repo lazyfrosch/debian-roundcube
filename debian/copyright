@@ -41,6 +41,16 @@ Files: skins/*
 Copyright: 2005-2011, Roundcube Dev. - Switzerland
 License: CC-BY-SA-3
 
+Files: debian/missing-sources/jquery-ui*
+Copyright: 2012 jQuery Foundation and other contributors
+License: Expat
+Comment: Source - http://jqueryui.com/download/all/
+
+Files: debian/missing-sources/*-jstimezonedetect-*
+Copyright: 2013 Jon Nylander
+License: Expat
+Comment: Source - https://bitbucket.org/pellepim/jstimezonedetect/downloads
+
 Files: program/js/googiespell.js
 Copyright: 2006 Amir Salihefendic
            2009 The Roundcube Dev Team
