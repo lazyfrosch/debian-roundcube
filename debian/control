@@ -3,7 +3,12 @@ Section: web
 Priority: extra
 Maintainer: Debian Roundcube Maintainers <pkg-roundcube-maintainers@lists.alioth.debian.org>
 Uploaders: Vincent Bernat <bernat@debian.org>, Romain Beauxis <toots@rastageeks.org>
-Build-Depends: cdbs, debhelper (>= 5), dh-buildinfo, po-debconf, yui-compressor
+Build-Depends: cdbs,
+               debhelper (>= 5),
+               dh-buildinfo,
+               po-debconf,
+               yui-compressor,
+               libjs-jquery-ui (>= 1.10)
 Homepage: http://www.roundcube.net/
 Standards-Version: 3.9.5
 Vcs-Git: git://anonscm.debian.org/pkg-roundcube/roundcube.git
@@ -17,7 +22,8 @@ Depends: dbconfig-common, debconf | debconf-2.0, ucf,
  php-auth, php-net-smtp (>= 1.4.2),
  php-net-socket, php-mail-mime (>= 1.8.2),
  php-mail-mimedecode,
- tinymce (>= 3), libjs-jquery (>= 1.6.4),
+ tinymce (>= 3),
+ libjs-jquery (>= 1.6.4),
  libmagic1,
  roundcube-mysql (= ${source:Version}) | roundcube-sqlite3 (= ${source:Version}) | roundcube-pgsql (= ${source:Version}),
  ${misc:Depends}

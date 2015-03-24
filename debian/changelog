@@ -3,6 +3,7 @@ roundcube (1.1.1+dfsg.1-1) UNRELEASED; urgency=low
   [ Vincent Bernat ]
   * Depends on php-mail-mimedecode. Closes: #740242.
   * Update jstz.js with the version specified in the header.
+  * Build jquery-ui.custom.js from libjs-jquery-ui.
 
   [ Ben Finney ]
   * debian/watch:

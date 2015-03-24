@@ -10,13 +10,13 @@ DEB_DH_INSTALL_ARGS = \
 	--exclude=chpass-wrapper.py
 
 pre-build::
-	>plugins/jqueryui/js/jquery-ui-1.9.1.custom.min.js debian/create-jquery-ui-custom.sh debian/missing-sources/jquery-ui-1.9.1.zip
+	>plugins/jqueryui/js/jquery-ui-1.10.4.custom.min.js debian/create-jquery-ui-custom.sh debian/missing-sources/jquery-ui-1.10.4.zip
 	>program/js/jstz.min.js tar xzf debian/missing-sources/*-jstimezonedetect-*.tar.gz --wildcards --to-stdout '*/jstz.js'
 
 clean::
 	rm -f program/js/jquery.min.js
 	rm -f program/js/jstz.min.js
-	rm -f plugins/jqueryui/js/jquery-ui-1.9.1.custom.min.js
+	rm -f plugins/jqueryui/js/jquery-ui-1.10.4.custom.min.js
 
 binary-install/roundcube-core::
 	# Install config files
