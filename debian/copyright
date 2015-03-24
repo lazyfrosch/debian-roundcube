@@ -9,7 +9,7 @@ Files-Excluded:
     plugins/enigma/*.min.js
     plugins/help/*.min.js
     plugins/hide_blockquote/*.min.js
-    plugins/jqueryui
+    plugins/jqueryui/js/*.min.js
     plugins/legacy_browser/js/*.min.js
     plugins/managesieve/*.min.js
     plugins/markasjunk/*.min.js
