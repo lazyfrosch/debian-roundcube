@@ -39,12 +39,8 @@ binary-install/roundcube-core::
 		yui-compressor --type js "$$js" -o "$${js%.*}.min.js" ; \
 	done
 
-	# Remove files shipped in tinymce package
-	rm -rf $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/js/tiny_mce
-	dh_link -proundcube-core usr/share/tinymce/www usr/share/roundcube/program/js/tiny_mce
+	dh_link -proundcube-core usr/share/tinymce/www usr/share/roundcube/program/js/tinymce
 
-	# Remove jquery as well
-	rm $(CURDIR)/debian/roundcube-core/usr/share/roundcube/program/js/jquery.min.js
 	dh_link -proundcube-core usr/share/javascript/jquery/jquery.min.js usr/share/roundcube/program/js/jquery.min.js
 
 binary-install/roundcube-plugins::
