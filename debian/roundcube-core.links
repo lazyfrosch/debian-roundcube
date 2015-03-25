@@ -1,4 +1,4 @@
-etc/roundcube/main.inc.php var/lib/roundcube/config/main.inc.php
+etc/roundcube/config.inc.php var/lib/roundcube/config/config.inc.php
 usr/share/roundcube/index.php var/lib/roundcube/index.php
 usr/share/roundcube/robots.txt var/lib/roundcube/robots.txt
 usr/share/roundcube/program var/lib/roundcube/program
@@ -10,4 +10,4 @@ usr/share/roundcube/plugins/jqueryui var/lib/roundcube/plugins/jqueryui
 etc/roundcube/plugins/jqueryui/config.inc.php usr/share/roundcube/plugins/jqueryui/config.inc.php
 
 var/log/roundcube var/lib/roundcube/logs
-usr/share/roundcube/main.inc.php.dist usr/share/doc/roundcube/main.inc.php.dist
+usr/share/roundcube/config.inc.php.dist usr/share/doc/roundcube/config.inc.php.dist
