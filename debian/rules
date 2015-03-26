@@ -40,7 +40,6 @@ binary-install/roundcube-core::
 	done
 
 	dh_link -proundcube-core usr/share/tinymce/www usr/share/roundcube/program/js/tinymce
-
 	dh_link -proundcube-core usr/share/javascript/jquery/jquery.min.js usr/share/roundcube/program/js/jquery.min.js
 
 binary-install/roundcube-plugins::
@@ -68,6 +67,7 @@ $(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/% :
 		find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube -type f -print0 | xargs -r0 chmod -x ; \
 		find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube -name '._*' -o -name '.gitignore' -delete ; \
 		find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube -type d -empty -delete ; \
+		find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube/bin -type f -print0 | xargs -r0 chmod +x ; \
 	fi
 
 clean::
