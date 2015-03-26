@@ -1,4 +1,4 @@
-roundcube (1.1.1+dfsg.1-1) UNRELEASED; urgency=low
+roundcube (1.1.1+dfsg.1-1) UNRELEASED; urgency=medium
 
   [ Vincent Bernat ]
   * Depends on php-mail-mimedecode. Closes: #740242.
@@ -30,6 +30,8 @@ roundcube (1.1.1+dfsg.1-1) UNRELEASED; urgency=low
   * Relicensing all work of dedian mantainers with GPL-2+.
   * Bump Standards-Version to 3.9.6 (no changes needed).
   * Removed patch for CVE-2015-1433 (is part of upstream).
+  * Ship bin and installer in package.
+  * Added php-cli as dep, to rund the scripts in bin.
 
  -- Sandro Knauß <bugs@sandroknauss.de>  Sun, 22 Mar 2015 23:59:00 +0100
 
