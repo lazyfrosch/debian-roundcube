@@ -23,14 +23,15 @@ Copyright: Copyright (C) 2005-2015, The Roundcube Dev Team
            2005-2007, Jon Abernathy <jon@chuggnutt.com>
 License: GPL-3+
 
+Files: debian/*
+Copyright: 2007-2011, Vincent Bernat <bernat@debian.org>
+           2007-2011, Romain Beauxis <toots@rastageeks.org>
+           2015, Sandro Knauß <bugs@sandroknauss.de>
+License: GPL-2+
+
 Files: skins/*
 Copyright: 2005-2011, Roundcube Dev. - Switzerland
 License: CC-BY-SA-3
-
-Files: debian/missing-sources/jquery-ui*
-Copyright: 2012 jQuery Foundation and other contributors
-License: Expat
-Comment: Source - http://jqueryui.com/download/all/
 
 Files: debian/missing-sources/*-jstimezonedetect-*
 Copyright: 2013 Jon Nylander
@@ -47,11 +48,7 @@ Files: plugins/jqueryui/*
 Copyright: 2005, 2014 jQuery Foundation, Inc.
 License: MIT
 
-Files: program/js/tiny_mce/*
-Copyright: 2003-2006 Moxiecode Systems AB
-License: LGPL-2.1
-
-Files: program/lib/tnef_decoder.php
+Files: program/lib/Roundcube/rcube_tnef_decoder.php
 Copyright: 2002-2010 The Horde Project (http://www.horde.org/)
 License: LGPL-2.1
 
@@ -66,15 +63,6 @@ Files: plugins/enigma/enigma.php
 Copyright: Copyright (C) 2011, The Roundcube Dev Team
            Copyright (C) 2011, Kolab Systems AG
 License: GPL-2
-
-Files: debian/*
-Copyright: 2007-2011, Vincent Bernat <bernat@debian.org>
-           2007-2011, Romain Beauxis <toots@rastageeks.org>
-License: GPL-2
-
-Files: debian/*
-Copyright: 2015, Sandro Knauß <bugs@sandroknauss.de>
-License: GPL-2+
 
 License: BSD-2-clause
  Redistribution and use in source and binary forms, with or without
@@ -563,7 +551,7 @@ License: GPL-3+
  version 3 can be found in the file
  `/usr/share/common-licenses/GPL-3`.
 
-Licence: MIT
+License: MIT
  Permission is hereby granted, free of charge, to any person obtaining
  a copy of this software and associated documentation files
  (the "Software"), to deal in the Software without restriction, including
@@ -571,10 +559,10 @@ Licence: MIT
  distribute, sublicense, and/or sell copies of the Software, and to permit
  persons to whom the Software is furnished to do so, subject to the following
  conditions:
- 
+ .
  The above copyright notice and this permission notice shall be included in all
  copies or substantial portions of the Software.
- 
+ .
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
