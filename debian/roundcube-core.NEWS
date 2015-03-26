@@ -1,4 +1,4 @@
-roundcube (1.0.0+dfsg.1-1) UNRELEASED; urgency=medium
+roundcube (1.1.1+dfsg.1-1) experimental; urgency=medium
 
     Roundcube changes it configuration schema.
     The old main.inc.php and db.inc.php are merged into config.inc.php by the
