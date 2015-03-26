@@ -29,8 +29,17 @@ roundcube (1.1.1+dfsg.1-1) UNRELEASED; urgency=low
   * Added jstz source zip to debian/source/include-binaries.
   * Relicensing all work of dedian mantainers with GPL-2+.
   * Bump Standards-Version to 3.9.6 (no changes needed).
+  * Removed patch for CVE-2015-1433 (is part of upstream).
 
  -- Sandro Knauß <bugs@sandroknauss.de>  Sun, 22 Mar 2015 23:59:00 +0100
+
+roundcube (0.9.5+dfsg1-4.2) unstable; urgency=medium
+
+  * NMU.
+  * Add a patch to fix XSS vulnerability. CVE-2015-1433.
+    Closes: #776700.
+
+ -- Vincent Bernat <bernat@debian.org>  Sat, 31 Jan 2015 16:32:11 +0100
 
 roundcube (0.9.5+dfsg1-4.1) unstable; urgency=low
 
