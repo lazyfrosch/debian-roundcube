@@ -18,13 +18,17 @@ roundcube (1.1.1+dfsg.1-1) UNRELEASED; urgency=low
   * New upstream release.
   * Updated patches to use config.inc.php.
   * Updated: copyright file
-  * Added patch to handle the upgrade from 0.9.5 -> 1.0.0.
-  * Use update script from package
+  * Added patch to handle the upgrade from 0.9.5 -> 1.X.X
+  * Use update script from upstream.
   * Cleanup debian/rules.
   * Added current version system table.
   * Move deletion of configfile to maintscript.
-  * Added SQL and installer to be install
-  * Added NEWS entry about changing configuration
+  * Added SQL and installer to be install.
+  * Added NEWS entry about changing configuration.
+  * Updated links to other packages.
+  * Added jstz source zip to debian/source/include-binaries.
+  * Relicensing all work of dedian mantainers with GPL-2+.
+  * Bump Standards-Version to 3.9.6 (no changes needed).
 
  -- Sandro Knauß <bugs@sandroknauss.de>  Sun, 22 Mar 2015 23:59:00 +0100
 
