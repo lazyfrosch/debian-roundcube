@@ -1,4 +1,4 @@
-roundcube (1.1.1+dfsg.1-1) UNRELEASED; urgency=medium
+roundcube (1.1.1+dfsg.1-1) experimental; urgency=medium
 
   [ Vincent Bernat ]
   * Depends on php-mail-mimedecode. Closes: #740242.
@@ -15,7 +15,7 @@ roundcube (1.1.1+dfsg.1-1) UNRELEASED; urgency=medium
   * Refresh use_packaged_tinymce.patch to apply
 
   [ Sandro Knauß ]
-  * New upstream release.
+  * New upstream release. Closes: #752479.
   * Updated patches to use config.inc.php.
   * Updated: copyright file
   * Added patch to handle the upgrade from 0.9.5 -> 1.X.X
@@ -33,7 +33,7 @@ roundcube (1.1.1+dfsg.1-1) UNRELEASED; urgency=medium
   * Ship bin and installer in package.
   * Added php-cli as dep, to rund the scripts in bin.
 
- -- Sandro Knauß <bugs@sandroknauss.de>  Sun, 22 Mar 2015 23:59:00 +0100
+ -- Sandro Knauß <bugs@sandroknauss.de>  Thu, 26 Mar 2015 22:10:55 +0100
 
 roundcube (0.9.5+dfsg1-4.2) unstable; urgency=medium
 
