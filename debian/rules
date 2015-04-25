@@ -1,37 +1,33 @@
 #!/usr/bin/make -f
 
-include /usr/share/cdbs/1/rules/debhelper.mk
-
-DEB_INSTALL_CHANGELOGS_ALL=CHANGELOG
-
-DEB_DH_INSTALL_ARGS = \
-	--exclude=chgsaslpasswd.c \
-	--exclude=chgvirtualminpasswd.c \
-	--exclude=chpass-wrapper.py
+%:
+	dh $@
 
 pre-build::
 	>plugins/jqueryui/js/jquery-ui-1.10.4.custom.min.js debian/create-jquery-ui-custom.sh debian/missing-sources/jquery-ui-1.10.4.zip
 	>program/js/jstz.min.js tar xzf debian/missing-sources/*-jstimezonedetect-*.tar.gz --wildcards --to-stdout '*/jstz.js'
 
-clean::
+override_dh_auto_clean:
 	rm -f program/js/jquery.min.js
 	rm -f program/js/jstz.min.js
 	rm -f plugins/jqueryui/js/jquery-ui-1.10.4.custom.min.js
 
-binary-install/roundcube-core::
-	# Install config files
-	install -m 0640 $(CURDIR)/config/config.inc.php.sample $(CURDIR)/debian/roundcube-core/usr/share/roundcube
-	install -m 0640 $(CURDIR)/.htaccess $(CURDIR)/debian/roundcube-core/etc/roundcube/htaccess
+	debconf-updatepo
+
+override_dh_install:
+	dh_install
+	
+	#link config files to var/lib/roundcube/config/
 	for c in $(CURDIR)/debian/roundcube-core/etc/roundcube/*.php; do \
 		dh_link -proundcube-core etc/roundcube/$$(basename $$c) var/lib/roundcube/config/$$(basename $$c) ; \
 	done
-	dh_link -proundcube-core etc/roundcube/htaccess var/lib/roundcube/.htaccess
 
+	# database intial
 	install -m 0644 $(CURDIR)/SQL/mysql.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/mysql
 	install -m 0644 $(CURDIR)/SQL/postgres.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/pgsql
 	install -m 0644 $(CURDIR)/SQL/sqlite.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/sqlite3
 
-	# database upgrades
+	#database update
 	cp -r $(CURDIR)/debian/sql/* $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/upgrade/
 
 	# Convert .js back to min.js
@@ -39,10 +35,6 @@ binary-install/roundcube-core::
 		yui-compressor --type js "$$js" -o "$${js%.*}.min.js" ; \
 	done
 
-	dh_link -proundcube-core usr/share/tinymce/www usr/share/roundcube/program/js/tinymce
-	dh_link -proundcube-core usr/share/javascript/jquery/jquery.min.js usr/share/roundcube/program/js/jquery.min.js
-
-binary-install/roundcube-plugins::
 	# Plugins are in usr/share/roundcube/plugins, for each plugin
 	# if there is config.inc.php.dist, we symlink a config.inc.php
 	# in /etc/roundcube/plugins with some dummy content.
@@ -60,15 +52,21 @@ binary-install/roundcube-plugins::
 			usr/share/roundcube/plugins/$${plugin##*/}/config.inc.php ; \
 	done
 
-$(patsubst %,binary-install/%,$(DEB_PACKAGES)) :: binary-install/% :
-	install -d $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/bug/$(cdbs_curpkg)
-	install -m 644 $(CURDIR)/debian/bug.control $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/bug/$(cdbs_curpkg)/control
-	if [ -d $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube ]; then \
-		find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube -type f -print0 | xargs -r0 chmod -x ; \
-		find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube -name '._*' -o -name '.gitignore' -delete ; \
-		find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube -type d -empty -delete ; \
-		find $(CURDIR)/debian/$(cdbs_curpkg)/usr/share/roundcube/bin -type f -print0 | xargs -r0 chmod +x ; \
-	fi
+	#get rid of randomly '.gitignore' files
+	find $(CURDIR)/debian/roundcube-plugins/usr/share/roundcube -name '._*' -o -name '.gitignore' -delete ;
 
-clean::
-	debconf-updatepo
+override_dh_fixperms:
+	dh_fixperms --
+
+	#only make scripts in bin dir executeable
+	find $(CURDIR)/debian/roundcube-core/usr/share/roundcube -type f -print0 | xargs -r0 chmod -x ;
+	find $(CURDIR)/debian/roundcube-core/usr/share/roundcube/bin -type f -print0 | xargs -r0 chmod +x ;
+
+	#make everything non executable
+	find $(CURDIR)/debian/roundcube-plugins/usr/share/roundcube -type f -print0 | xargs -r0 chmod -x ;
+	find $(CURDIR)/debian/roundcube-plugins/usr/share/roundcube -type d -empty -delete ;
+	
+
+override_dh_installdocs:
+	dh_installdocs --link-doc=roundcube-core
+	mv $(CURDIR)/debian/roundcube-core/usr/share/doc/roundcube-core/CHANGELOG $(CURDIR)/debian/roundcube-core/usr/share/doc/roundcube-core/changelog

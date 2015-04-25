@@ -7,3 +7,5 @@ plugins/jqueryui/ usr/share/roundcube/plugins
 
 debian/conf/* etc/roundcube
 config/*.php etc/roundcube
+config/config.inc.php.sample usr/share/roundcube
+.htaccess etc/roundcube/htaccess

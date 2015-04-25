@@ -4,8 +4,7 @@ Priority: extra
 Maintainer: Debian Roundcube Maintainers <pkg-roundcube-maintainers@lists.alioth.debian.org>
 Uploaders: Vincent Bernat <bernat@debian.org>,
            Sandro Knauß <bugs@sandroknauss.de>
-Build-Depends: cdbs,
-               debhelper (>= 5),
+Build-Depends: debhelper (>= 5),
                dh-buildinfo,
                po-debconf,
                yui-compressor,
