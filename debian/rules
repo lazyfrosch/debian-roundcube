@@ -56,6 +56,12 @@ override_dh_install:
 		done \
 	done
 
+	#setup /usr/share/bug/$(package)/control files
+	for package in roundcube roundcube-core roundcube-mysql roundcube-sqlite3 roundcube-pgsql roundcube-plugins roundcube-sqlite3; do \
+		install -d $(CURDIR)/debian/$${package}/usr/share/bug/$${package} ;\
+		install -m 644 $(CURDIR)/debian/bug.control $(CURDIR)/debian/$${package}/usr/share/bug/$${package}/control ;\
+	done
+
 	#get rid of randomly '.gitignore' files
 	find $(CURDIR)/debian/roundcube-plugins/usr/share/roundcube -name '._*' -o -name '.gitignore' -delete ;
 
