@@ -65,6 +65,11 @@ override_dh_install:
 	#get rid of randomly '.gitignore' files
 	find $(CURDIR)/debian/roundcube-plugins/usr/share/roundcube -name '._*' -o -name '.gitignore' -delete ;
 
+	# password helpers is a experimental
+	rm $(CURDIR)/debian/roundcube-plugins/usr/share/roundcube/plugins/password/helpers/chgsaslpasswd.c
+	rm $(CURDIR)/debian/roundcube-plugins/usr/share/roundcube/plugins/password/helpers/chgvirtualminpasswd.c
+	rm $(CURDIR)/debian/roundcube-plugins/usr/share/roundcube/plugins/password/helpers/chpass-wrapper.py
+
 override_dh_fixperms:
 	dh_fixperms --
 
