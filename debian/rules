@@ -33,7 +33,7 @@ override_dh_install:
 	cp -r $(CURDIR)/debian/sql/* $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/upgrade/
 
 	# Convert .js back to min.js
-	for js in $$(find $(CURDIR)/debian/roundcube-core -name '*.js' ! -not -name '*.min.js' -print); do \
+	for js in $$(find $(CURDIR)/debian/roundcube-core -type f -name '*.js' ! -not -name '*.min.js' -print); do \
 		yui-compressor --type js "$$js" -o "$${js%.*}.min.js" ; \
 	done
 
