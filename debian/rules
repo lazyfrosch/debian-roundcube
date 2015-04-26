@@ -40,18 +40,20 @@ override_dh_install:
 	# Plugins are in usr/share/roundcube/plugins, for each plugin
 	# if there is config.inc.php.dist, we symlink a config.inc.php
 	# in /etc/roundcube/plugins with some dummy content.
-	for plugin in $(CURDIR)/debian/roundcube-plugins/usr/share/roundcube/plugins/*; do \
-		dh_link -proundcube-plugins usr/share/roundcube/plugins/$${plugin##*/} \
-			var/lib/roundcube/plugins/$${plugin##*/} ; \
-		if [ ! -f $${plugin}/config.inc.php.dist ]; then continue; fi ; \
-		dh_installdirs -proundcube-plugins etc/roundcube/plugins/$${plugin##*/} ; \
-		(echo "<?php" ; \
-		 echo "// Empty configuration for $${plugin##*/}" ; \
-		 echo "// See /usr/share/roundcube/plugins/$${plugin##*/}/config.inc.php.dist for instructions" ; \
-		 echo "?>") > \
-			$(CURDIR)/debian/roundcube-plugins/etc/roundcube/plugins/$${plugin##*/}/config.inc.php ; \
-		dh_link -proundcube-plugins etc/roundcube/plugins/$${plugin##*/}/config.inc.php \
-			usr/share/roundcube/plugins/$${plugin##*/}/config.inc.php ; \
+	for package in roundcube-core roundcube-plugins; do \
+		for plugin in $(CURDIR)/debian/$${package}/usr/share/roundcube/plugins/*; do \
+			dh_link -p$${package} usr/share/roundcube/plugins/$${plugin##*/} \
+				var/lib/roundcube/plugins/$${plugin##*/} ; \
+			if [ ! -f $${plugin}/config.inc.php.dist ]; then continue; fi ; \
+			dh_installdirs -p$${package} etc/roundcube/plugins/$${plugin##*/} ; \
+			(echo "<?php" ; \
+			 echo "// Empty configuration for $${plugin##*/}" ; \
+			 echo "// See /usr/share/roundcube/plugins/$${plugin##*/}/config.inc.php.dist for instructions" ; \
+			 echo "?>") > \
+				$(CURDIR)/debian/$${package}/etc/roundcube/plugins/$${plugin##*/}/config.inc.php ; \
+			dh_link -p$${package} etc/roundcube/plugins/$${plugin##*/}/config.inc.php \
+				usr/share/roundcube/plugins/$${plugin##*/}/config.inc.php ; \
+		done \
 	done
 
 	#get rid of randomly '.gitignore' files
