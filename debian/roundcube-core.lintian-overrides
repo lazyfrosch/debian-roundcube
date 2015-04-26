@@ -2,4 +2,6 @@
 roundcube-core: package-contains-upstream-install-documentation usr/share/doc/roundcube-core/INSTALL.gz
 # link to external package
 roundcube-core: package-contains-broken-symlink usr/share/roundcube/program/js/tinymce ../../../tinymce/www
+# etc/roundcube/config.inc.php is created postinst script
+roundcube-core: package-contains-broken-symlink var/lib/roundcube/config/config.inc.php etc/roundcube/config.inc.php
 
