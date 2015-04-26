@@ -1,1 +1,2 @@
-roundcube-core binary: package-contains-upstream-install-documentation
+# because it is a webapp, you may wanna look at the installation process
+roundcube-core: package-contains-upstream-install-documentation usr/share/doc/roundcube-core/INSTALL.gz
