@@ -6,8 +6,12 @@ usr/share/roundcube/skins/larry var/lib/roundcube/skins/larry
 
 usr/share/roundcube/plugins/filesystem_attachments var/lib/roundcube/plugins/filesystem_attachments
 usr/share/roundcube/plugins/jqueryui var/lib/roundcube/plugins/jqueryui
-etc/roundcube/htaccess var/lib/roundcube/.htaccess
 
 var/log/roundcube var/lib/roundcube/logs
 usr/share/roundcube/config.inc.php.sample usr/share/doc/roundcube-core/config.inc.php.sample
+
 usr/share/tinymce/www usr/share/roundcube/program/js/tinymce
+
+etc/roundcube/htaccess var/lib/roundcube/.htaccess
+etc/roundcube/config.inc.php var/lib/roundcube/config/config.inc.php
+etc/roundcube/plugins/jqueryui/config.inc.php usr/share/roundcube/plugins/jqueryui/config.inc.php
