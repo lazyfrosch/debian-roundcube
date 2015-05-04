@@ -1,3 +1,28 @@
+roundcube (1.1.1+dfsg.1-2) unstable; urgency=medium
+
+  [ Sandro Knauß ]
+  * release to unstable (freeze is over)
+  * Updated lintian-overrides
+    + config is created by postinst, so it is missing for lintian
+  * move from cdbs -> debhelper
+    + install & rename htaccess in /usr/share
+    + Added link to external jquery.min.js
+    + make tinymce link to exp repo the right way around
+    + correct links from /var/lib -> /etc
+    + Only minify js for own javascript and not linked ones
+    + Create config.inc.php also for plugins in roundcube-core
+    + Create /usr/share/bug/$(package)/control for every package
+  * link all docs dirs to roundcube-core instead of coping doc files
+    + move examples from roundcube-plugins -> roundcube-core
+  * d/watch file:  Be able to match rc, alpha, beta tarballs
+
+  [ Vincent Bernat ]
+  * d/watch: don't match "-complete" tarball
+
+  [ Sandro Knauß ]
+
+ -- Sandro Knauß <bugs@sandroknauss.de>  Tue, 05 May 2015 00:11:01 +0200
+
 roundcube (1.1.1+dfsg.1-1) experimental; urgency=medium
 
   [ Vincent Bernat ]
