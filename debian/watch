@@ -5,5 +5,5 @@
 # Compulsory line, this is a version 3 file.
 version=3
 
-opts="dversionmangle=s/\+dfsg\.\d+$//,repacksuffix=+dfsg.1" \
-    http://sf.net/roundcubemail/roundcubemail-([\d\.]+)\.tar\.gz
+opts="uversionmangle=s/^([\d\.]*\d(-[^.]+)?)\..*/$1/;s/-/~/,dversionmangle=s/\+dfsg\.\d+$//,repacksuffix=+dfsg.1" \
+    http://sf.net/roundcubemail/roundcubemail-([\d\.]+(-(rc|alpha|beta))?)\.tar\.gz
