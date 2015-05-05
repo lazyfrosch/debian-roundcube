@@ -80,8 +80,8 @@ override_dh_fixperms:
 	#make everything non executable
 	find $(CURDIR)/debian/roundcube-plugins/usr/share/roundcube -type f -print0 | xargs -r0 chmod -x ;
 	find $(CURDIR)/debian/roundcube-plugins/usr/share/roundcube -type d -empty -delete ;
-	
 
 override_dh_installdocs:
-	dh_installdocs --link-doc=roundcube-core
+	dh_installdocs --link-doc=roundcube-core -proundcube -proundcube-plugins -proundcube-core
+	dh_installdocs -proundcube-mysql -proundcube-pgsql -proundcube-sqlite3
 	mv $(CURDIR)/debian/roundcube-core/usr/share/doc/roundcube-core/CHANGELOG $(CURDIR)/debian/roundcube-core/usr/share/doc/roundcube-core/changelog
