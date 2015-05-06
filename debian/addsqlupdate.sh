@@ -25,5 +25,5 @@ for DB in mysql pgsql sqlite3; do
 	echo "/* $V */" >> $to
 	cat $from >> $to
 	echo "\n/* update system table */" >> $to
-	echo "UPDATE system SET value=\"$V\" WHERE name=\"roundcube-version\";\n" >> $to
+	echo "UPDATE system SET value='$V' WHERE name='roundcube-version';\n" >> $to
 done

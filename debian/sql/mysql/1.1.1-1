@@ -45,5 +45,5 @@ ALTER TABLE `users` CHANGE `preferences` `preferences` longtext;
 ALTER TABLE `identities` CHANGE `signature` `signature` longtext;
 
 /* update system table */
-UPDATE system SET value="2015030800" WHERE name="roundcube-version";
+UPDATE system SET value='2015030800' WHERE name='roundcube-version';
 
