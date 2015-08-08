@@ -1,6 +1,10 @@
 roundcube (1.1.1+dfsg.1-3) UNRELEASED; urgency=medium
 
+  [ Vincent Bernat ]
   * Fix quotes in last SQL request for upgrades. Closes: #784573.
+
+  [ Sandro Knauß ]
+  * Use internal tinymce and jquery copy
 
  -- Vincent Bernat <bernat@debian.org>  Wed, 06 May 2015 22:17:31 +0200
 
