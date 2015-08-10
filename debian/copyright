@@ -44,11 +44,6 @@ Files: skins/*
 Copyright: 2005-2011, Roundcube Dev. - Switzerland
 License: CC-BY-SA-3
 
-Files: debian/missing-sources/*-jstimezonedetect-*
-Copyright: 2013 Jon Nylander
-License: Expat
-Comment: Source - https://bitbucket.org/pellepim/jstimezonedetect/downloads
-
 Files: program/js/googiespell.js
 Copyright: 2006 Amir Salihefendic
            2009 The Roundcube Dev Team
@@ -56,12 +51,28 @@ Copyright: 2006 Amir Salihefendic
 License: GPL-2+
 
 Files: plugins/jqueryui/*
+       plugins/legacy_browser/js/jquery.min.js
+       program/js/jquery.min.js
+       debian/missing-sources/jquery*.js
 Copyright: 2005, 2014 jQuery Foundation, Inc.
-License: MIT
+License: Expat
+Comment: Source - see debian/missing-sources/README
+
+Files: debian/missing-sources/*-jstimezonedetect-*
+       program/js/jstz.min.js
+Copyright: 2013 Jon Nylander
+License: Expat
+Comment: Source - see debian/missing-sources/README
 
 Files: program/lib/Roundcube/rcube_tnef_decoder.php
 Copyright: 2002-2010 The Horde Project (http://www.horde.org/)
 License: LGPL-2.1
+
+Files: program/js/tinymce/*
+       debian/missing-sources/tinymce*
+Copyright: Moxiecode Systems AB
+License: LGPL-2.1
+Comment: Source - see debian/missing-sources/README
 
 Files: program/lib/Roundcube/rcube_washtml.php
 Copyright: 2008-2012, The Roundcube Dev Team
@@ -74,6 +85,7 @@ Files: plugins/enigma/enigma.php
 Copyright: Copyright (C) 2011, The Roundcube Dev Team
            Copyright (C) 2011, Kolab Systems AG
 License: GPL-2
+
 
 License: BSD-2-clause
  Redistribution and use in source and binary forms, with or without
