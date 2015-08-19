@@ -6,6 +6,10 @@ roundcube (1.1.2+dfsg.1-1) UNRELEASED; urgency=medium
   [ Sandro Knauß ]
   * Use internal tinymce and jquery copy. Closes: #784351. Closes: #785333.
   * New upstream release.
+  * Fixes for CVE-2015-5381 are included in upstream.
+  * Fixes for CVE-2015-5382 are included in upstream.
+  * Added missing sources
+  * Updated copyright file
 
  -- Sandro Knauß <bugs@sandroknauss.de>  Sat, 08 Aug 2015 15:05:44 +0200
 
