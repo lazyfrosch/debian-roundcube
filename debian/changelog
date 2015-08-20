@@ -6,6 +6,7 @@ roundcube (1.1.2+dfsg.1-1) unstable; urgency=medium
     TinyMCE.
   * Fix postrm for Lighttpd.
   * Use pathfind to check for a tool existence.
+  * Add lintian overrides for embedded stuff.
 
   [ Sandro Knauß ]
   * Use internal tinymce and jquery copy. Closes: #784351. Closes: #785333.
