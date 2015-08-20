@@ -5,6 +5,7 @@ roundcube (1.1.2+dfsg.1-1) unstable; urgency=medium
   * Update Apache/Lighttpd configuration files to not use out-of-tree
     TinyMCE.
   * Fix postrm for Lighttpd.
+  * Use pathfind to check for a tool existence.
 
   [ Sandro Knauß ]
   * Use internal tinymce and jquery copy. Closes: #784351. Closes: #785333.
