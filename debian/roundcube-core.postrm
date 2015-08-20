@@ -16,7 +16,7 @@ fi
 lighttpd_remove() {
 	if [ -f /etc/lighttpd/conf-available/50-roundcube.conf ] ; then
 		rm -f /etc/lighttpd/conf-available/50-roundcube.conf
-		if [ ! -x /usr/sbin/lighty-disable-mod ] ; then
+		if [ -x /usr/sbin/lighty-disable-mod ] ; then
 			lighty-disable-mod roundcube
 		fi
 	fi
