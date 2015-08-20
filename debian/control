@@ -7,7 +7,8 @@ Uploaders: Vincent Bernat <bernat@debian.org>,
 Build-Depends: debhelper (>= 7.0.50~),
                dh-buildinfo,
                po-debconf,
-               yui-compressor
+               yui-compressor,
+               libjs-jquery-ui (>= 1.10)
 Homepage: http://www.roundcube.net/
 Standards-Version: 3.9.6
 Vcs-Git: git://anonscm.debian.org/pkg-roundcube/roundcube.git
