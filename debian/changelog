@@ -2,6 +2,9 @@ roundcube (1.1.2+dfsg.1-1) unstable; urgency=medium
 
   [ Vincent Bernat ]
   * Fix quotes in last SQL request for upgrades. Closes: #784573.
+  * Update Apache/Lighttpd configuration files to not use out-of-tree
+    TinyMCE.
+  * Fix postrm for Lighttpd.
 
   [ Sandro Knauß ]
   * Use internal tinymce and jquery copy. Closes: #784351. Closes: #785333.
