@@ -1,4 +1,4 @@
-roundcube (1.1.2+dfsg.1-1) UNRELEASED; urgency=medium
+roundcube (1.1.2+dfsg.1-1) unstable; urgency=medium
 
   [ Vincent Bernat ]
   * Fix quotes in last SQL request for upgrades. Closes: #784573.
