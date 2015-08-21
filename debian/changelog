@@ -1,3 +1,10 @@
+roundcube (1.1.2+dfsg.1-2) unstable; urgency=medium
+
+  * Remove old symlinks for TinyMCE and jQuery on preinst.
+    Closes: #796318.
+
+ -- Vincent Bernat <bernat@debian.org>  Fri, 21 Aug 2015 13:52:19 +0200
+
 roundcube (1.1.2+dfsg.1-1) unstable; urgency=medium
 
   [ Vincent Bernat ]
