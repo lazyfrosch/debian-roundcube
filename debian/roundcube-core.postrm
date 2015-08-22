@@ -102,6 +102,7 @@ case "$1" in
         if which ucf >/dev/null 2>&1; then
                 ucf --purge /etc/roundcube/debian-db.php
 		ucf --purge /etc/roundcube/main.inc.php
+		ucf --purge /etc/roundcube/config.inc.php
         fi
 	rm -f /etc/roundcube/main.inc.php
 	rm -rf /var/log/roundcube
