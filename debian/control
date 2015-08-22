@@ -82,7 +82,7 @@ Description: metapackage providing SQLite dependencies for RoundCube
 
 Package: roundcube-plugins
 Architecture: all
-Depends: roundcube-core (= ${source:Version}), ${misc:Depends}
+Depends: roundcube-core (= ${source:Version}), ${misc:Depends}, php5-pspell
 Breaks: roundcube-plugins-extra (<= 0.7-20120110)
 Replaces: roundcube-plugins-extra (<= 0.7-20120110)
 Description: skinnable AJAX based webmail solution for IMAP servers - plugins
