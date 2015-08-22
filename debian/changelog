@@ -1,4 +1,4 @@
-roundcube (1.1.2+dfsg.1-3) UNRELEASED; urgency=medium
+roundcube (1.1.2+dfsg.1-3) unstable; urgency=medium
 
   * Handle dir to symlink migration for /usr/share/doc/roundcube{,-plugins}.
     Closes: #788448
@@ -8,7 +8,7 @@ roundcube (1.1.2+dfsg.1-3) UNRELEASED; urgency=medium
   * Remove /etc/roundcube/config.inc.php on purge. Closes: #793858
   * Add back Enigma plugin. Closes: #771659
 
- -- Vincent Bernat <bernat@debian.org>  Sat, 22 Aug 2015 18:23:30 +0200
+ -- Sandro Knauß <bugs@sandroknauss.de>  Sat, 22 Aug 2015 18:23:30 +0200
 
 roundcube (1.1.2+dfsg.1-2) unstable; urgency=medium
 
