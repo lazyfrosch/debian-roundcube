@@ -59,7 +59,6 @@ License: Expat
 Comment: Source - see debian/missing-sources/README
 
 Files: debian/missing-sources/*-jstimezonedetect-*
-       program/js/jstz.min.js
 Copyright: 2013 Jon Nylander
 License: Expat
 Comment: Source - see debian/missing-sources/README
