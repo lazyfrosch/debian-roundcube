@@ -20,11 +20,6 @@ override_dh_install:
 
 	install -m 0644 $(CURDIR)/.htaccess $(CURDIR)/debian/roundcube-core/etc/roundcube/htaccess
 
-	#link config files to var/lib/roundcube/config/
-	for c in $(CURDIR)/debian/roundcube-core/etc/roundcube/*.php; do \
-		dh_link -proundcube-core etc/roundcube/$$(basename $$c) var/lib/roundcube/config/$$(basename $$c) ; \
-	done
-
 	# database intial
 	install -m 0644 $(CURDIR)/SQL/mysql.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/mysql
 	install -m 0644 $(CURDIR)/SQL/postgres.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/pgsql

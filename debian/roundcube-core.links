@@ -8,8 +8,8 @@ usr/share/roundcube/plugins/filesystem_attachments var/lib/roundcube/plugins/fil
 usr/share/roundcube/plugins/jqueryui var/lib/roundcube/plugins/jqueryui
 
 var/log/roundcube var/lib/roundcube/logs
+etc/roundcube var/lib/roundcube/config
 usr/share/roundcube/config.inc.php.sample usr/share/doc/roundcube-core/config.inc.php.sample
 
 etc/roundcube/htaccess var/lib/roundcube/.htaccess
-etc/roundcube/config.inc.php var/lib/roundcube/config/config.inc.php
 etc/roundcube/plugins/jqueryui/config.inc.php usr/share/roundcube/plugins/jqueryui/config.inc.php
