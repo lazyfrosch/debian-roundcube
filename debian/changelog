@@ -1,3 +1,10 @@
+roundcube (1.1.2+dfsg.1-4) UNRELEASED; urgency=medium
+
+  * Also recommends php5-fpm and spawn-fcgi since they don't provide
+    httpd-cgi. Closes: #731705.
+
+ -- Vincent Bernat <bernat@debian.org>  Sun, 23 Aug 2015 10:17:28 +0200
+
 roundcube (1.1.2+dfsg.1-3) unstable; urgency=medium
 
   * Handle dir to symlink migration for /usr/share/doc/roundcube{,-plugins}.
