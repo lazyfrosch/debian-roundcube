@@ -3,6 +3,7 @@ roundcube (1.1.2+dfsg.1-4) UNRELEASED; urgency=medium
   * Also recommends php5-fpm and spawn-fcgi since they don't provide
     httpd-cgi. Closes: #731705.
   * Replace /var/lib/roundcube/config with a symlink. Closes: #629032.
+  * Require php-net-ldap3 for LDAP. Closes: #785056.
 
  -- Vincent Bernat <bernat@debian.org>  Sun, 23 Aug 2015 10:17:28 +0200
 
