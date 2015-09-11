@@ -55,6 +55,7 @@ override_dh_install:
 
 	# Remove
 	rm debian/roundcube-core/usr/share/roundcube/program/js/tinymce/license.txt
+	rmdir debian/roundcube-core/var/lib/roundcube/config
 
 	#setup /usr/share/bug/$(package)/control files
 	for package in roundcube roundcube-core roundcube-mysql roundcube-sqlite3 roundcube-pgsql roundcube-plugins roundcube-sqlite3; do \
