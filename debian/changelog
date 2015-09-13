@@ -1,3 +1,9 @@
+roundcube (1.1.2+dfsg.1-5) UNRELEASED; urgency=medium
+
+  * Demote php-net-ldap3 to Recommends.
+
+ -- Vincent Bernat <bernat@debian.org>  Sun, 13 Sep 2015 23:55:23 +0200
+
 roundcube (1.1.2+dfsg.1-4) unstable; urgency=medium
 
   * Also recommends php5-fpm and spawn-fcgi since they don't provide
