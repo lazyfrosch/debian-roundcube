@@ -1,3 +1,9 @@
+roundcube (1.1.2+dfsg.1-4~bpo8+1) jessie-backports; urgency=low
+
+  * Rebuild for jessie-backports.  No changes.  Closes: #799807.
+
+ -- Guilhem Moulin <guilhem@guilhem.org>  Tue, 22 Sep 2015 22:32:22 +0200
+
 roundcube (1.1.2+dfsg.1-4) unstable; urgency=medium
 
   * Also recommends php5-fpm and spawn-fcgi since they don't provide

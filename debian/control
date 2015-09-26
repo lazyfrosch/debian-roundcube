@@ -3,7 +3,8 @@ Section: web
 Priority: extra
 Maintainer: Debian Roundcube Maintainers <pkg-roundcube-maintainers@lists.alioth.debian.org>
 Uploaders: Vincent Bernat <bernat@debian.org>,
-           Sandro Knauß <bugs@sandroknauss.de>
+           Sandro Knauß <bugs@sandroknauss.de>,
+           Guilhem Moulin <guilhem@guilhem.org>
 Build-Depends: debhelper (>= 7.0.50~),
                dh-buildinfo,
                po-debconf,
