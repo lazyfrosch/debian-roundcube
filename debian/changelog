@@ -1,3 +1,10 @@
+roundcube (1.1.2+dfsg.1-4~bpo8+2) jessie-backports; urgency=low
+
+  * Roundcube: Add 'Breaks: roundcube-core (<< 1.1.1+dfsg.1-1)' to enable
+    smooth upgrade from Wheezy and its backports.  Closes: #800659.
+
+ -- Guilhem Moulin <guilhem@guilhem.org>  Mon, 05 Oct 2015 13:13:30 +0200
+
 roundcube (1.1.2+dfsg.1-4~bpo8+1) jessie-backports; urgency=low
 
   * Rebuild for jessie-backports.  No changes.  Closes: #799807.
