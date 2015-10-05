@@ -1,6 +1,11 @@
 roundcube (1.1.2+dfsg.1-5) UNRELEASED; urgency=medium
 
+  [ Vincent Bernat ]
   * Demote php-net-ldap3 to Recommends.
+
+  [ Guilhem Moulin ]
+  * Roundcube: Add 'Breaks: roundcube-core (<< 1.1.1+dfsg.1-1)' to enable
+    smooth upgrade from Wheezy and its backports.  Closes: #800659.
 
  -- Vincent Bernat <bernat@debian.org>  Sun, 13 Sep 2015 23:55:23 +0200
 
