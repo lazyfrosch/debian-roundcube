@@ -248,9 +248,10 @@ init_fixed_header: function()
     $(window).resize(function() { me.resize(); });
     $(window).scroll(function() {
       var w = $(window);
-      me.fixed_header.css('marginLeft', (-w.scrollLeft()) + 'px');
-      if (!bw.webkit)
-        me.fixed_header.css('marginTop', (-w.scrollTop()) + 'px');
+      me.fixed_header.css({
+        marginLeft: -w.scrollLeft() + 'px',
+        marginTop: -w.scrollTop() + 'px'
+      });
     });
   }
   else {
@@ -564,6 +565,10 @@ drag_row: function(e, id)
  */
 click_row: function(e, id)
 {
+  // sanity check
+  if (!id || !this.rows[id])
+    return false;
+
   // don't do anything (another action processed before)
   if (!this.is_event_target(e))
     return true;
