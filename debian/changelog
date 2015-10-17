@@ -1,3 +1,10 @@
+roundcube (1.1.3+dfsg.1-1) UNRELEASED; urgency=medium
+
+  [ Guilhem Moulin ]
+  * Add self to Uploaders.
+
+ -- Guilhem Moulin <guilhem@guilhem.org>  Sat, 17 Oct 2015 23:28:44 +0200
+
 roundcube (1.1.2+dfsg.1-5) unstable; urgency=medium
 
   [ Vincent Bernat ]
