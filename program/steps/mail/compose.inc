@@ -47,9 +47,11 @@ while ($COMPOSE_ID && !is_array($COMPOSE) && $RCMAIL->db->is_replicated() && $re
 if (!is_array($COMPOSE)) {
     // Infinite redirect prevention in case of broken session (#1487028)
     if ($COMPOSE_ID) {
-        rcube::raise_error(array('code' => 500, 'type' => 'php',
-            'file' => __FILE__, 'line' => __LINE__,
-            'message' => "Invalid compose ID"), true, true);
+        // if we know the message with specified ID was already sent
+        // we can ignore the error and compose a new message (#1490009)
+        if ($COMPOSE_ID != $_SESSION['last_compose_session']) {
+            rcube::raise_error(array('code' => 450), false, true);
+        }
     }
 
     $COMPOSE_ID = uniqid(mt_rand());
@@ -332,12 +334,17 @@ foreach ($parts as $header) {
             else if (!empty($MESSAGE->headers->from))
                 $fvalue = $MESSAGE->headers->from;
 
-            // Reply to message sent by yourself (#1487074, #1489230)
+            // Reply to message sent by yourself (#1487074, #1489230, #1490439)
             // Reply-To address need to be unset (#1490233)
-            if (!empty($ident) && empty($replyto)
-                && in_array($ident['ident'], array($fvalue, $MESSAGE->headers->from))
-            ) {
-                $fvalue = $MESSAGE->headers->to;
+            if (!empty($ident) && empty($replyto)) {
+                foreach (array($fvalue, $MESSAGE->headers->from) as $sender) {
+                    $senders = rcube_mime::decode_address_list($sender, null, false, $charset, true);
+
+                    if (in_array($ident['email_ascii'], $senders)) {
+                        $fvalue = $MESSAGE->headers->to;
+                        break;
+                    }
+                }
             }
         }
         // add recipient of original message if reply to all
@@ -347,8 +354,12 @@ foreach ($parts as $header) {
             if ($v = $MESSAGE->headers->cc)
                 $fvalue .= (!empty($fvalue) ? $separator : '') . $v;
             // Use Sender header (#1489011)
-            if (($v = $MESSAGE->headers->get('Sender', false)) && strpos($v, '-bounces@') === false)
-                $fvalue .= (!empty($fvalue) ? $separator : '') . $v;
+            if ($v = $MESSAGE->headers->get('Sender', false)) {
+                // Skip common mailing lists addresses: *-bounces@ and *-request@ (#1490452)
+                if (empty($MESSAGE->headers->others['list-post']) || !preg_match('/-(bounces|request)@/', $v)) {
+                    $fvalue .= (!empty($fvalue) ? $separator : '') . $v;
+                }
+            }
 
             // When To: and Reply-To: are the same we add From: address to the list (#1489037)
             if ($v = $MESSAGE->headers->from) {
@@ -450,7 +461,8 @@ function rcmail_process_compose_params(&$COMPOSE)
         // #1486037: remove "mailto:" prefix
         $COMPOSE['param']['to'] = preg_replace('/^mailto:/i', '', $mailto[0]);
         // #1490346: decode the recipient address
-        $COMPOSE['param']['to'] = urldecode($COMPOSE['param']['to']);
+        // #1490510: use raw encoding for correct "+" character handling as specified in RFC6068
+        $COMPOSE['param']['to'] = rawurldecode($COMPOSE['param']['to']);
 
         // Supported case-insensitive tokens in mailto URL
         $url_tokens = array('to', 'cc', 'bcc', 'reply-to', 'in-reply-to', 'references', 'subject', 'body');
@@ -672,7 +684,6 @@ function rcmail_compose_header_from($attrib)
 
     return $out;
 }
-
 
 function rcmail_compose_editor_mode()
 {
