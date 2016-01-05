@@ -1,9 +1,17 @@
-roundcube (1.1.2+dfsg.1-5~bpo8+1) jessie-backports; urgency=low
+roundcube (1.1.4+dfsg.1-1~bpo8+1) jessie-backports; urgency=medium
+
+  [ Guilhem Moulin ]
+  * Rebuild for jessie-backports.
+  * debian/copyright: Add program/js/tinymce/plugins/media/moxieplayer.swf
+    to Files-Excluded.
+  * Remove unused lintian overide:
+    package-contains-broken-symlink var/lib/roundcube/config/config.inc.php
+    etc/roundcube/config.inc.php .
 
   [ Vincent Bernat ]
   * Demote php-net-ldap3 to Recommends.
 
- -- Guilhem Moulin <guilhem@guilhem.org>  Tue, 13 Oct 2015 21:59:48 +0200
+ -- Guilhem Moulin <guilhem@guilhem.org>  Tue, 05 Jan 2016 21:29:43 +0100
 
 roundcube (1.1.2+dfsg.1-4~bpo8+2) jessie-backports; urgency=low
 

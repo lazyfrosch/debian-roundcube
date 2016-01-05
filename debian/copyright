@@ -10,6 +10,7 @@ Files-Excluded:
     program/js/jstz.min.js
     program/js/l*.min.js
     program/js/tr*.min.js
+    program/js/tinymce/plugins/media/moxieplayer.swf
     skins/classic/*.min.js
     skins/larry/*.min.js
     plugins/zipdownload/*.min.js
