@@ -46,6 +46,7 @@ override_dh_install:
 			 echo "// Empty configuration for $${plugin##*/}" ; \
 			 echo "// See /usr/share/roundcube/plugins/$${plugin##*/}/config.inc.php.dist for instructions" ; \
 			 echo "// Check the access right of the file if you put sensitive information in it." ; \
+			 echo '$$config=array();' ; \
 			 echo "?>") > \
 				$(CURDIR)/debian/$${package}/etc/roundcube/plugins/$${plugin##*/}/config.inc.php ; \
 			dh_link -p$${package} etc/roundcube/plugins/$${plugin##*/}/config.inc.php \
