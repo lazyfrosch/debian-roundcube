@@ -17,6 +17,7 @@ Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-roundcube/roundcube.git
 
 Package: roundcube-core
 Architecture: all
+Pre-Depends: dpkg (>= 1.17.14)
 Depends: dbconfig-common, debconf | debconf-2.0, ucf,
  libapache2-mod-php5 | php5,
  php5-mcrypt, php5-intl, php5-json | php5-common (<< 5.5),
@@ -50,6 +51,7 @@ Description: skinnable AJAX based webmail solution for IMAP servers
 
 Package: roundcube
 Architecture: all
+Pre-Depends: dpkg (>= 1.17.14)
 Depends: roundcube-core (= ${source:Version}), ${misc:Depends}
 Breaks: roundcube-core (<< 1.1.1+dfsg.1-1)
 Description: skinnable AJAX based webmail solution for IMAP servers - metapackage
@@ -90,6 +92,7 @@ Description: metapackage providing SQLite dependencies for RoundCube
 
 Package: roundcube-plugins
 Architecture: all
+Pre-Depends: dpkg (>= 1.17.14)
 Depends: roundcube-core (= ${source:Version}), ${misc:Depends}, php5-pspell
 Breaks: roundcube-plugins-extra (<= 0.7-20120110)
 Replaces: roundcube-plugins-extra (<= 0.7-20120110)
