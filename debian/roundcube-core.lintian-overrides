@@ -3,3 +3,4 @@ roundcube-core: package-contains-upstream-install-documentation usr/share/doc/ro
 
 # Sorry, can't do better
 roundcube-core: embedded-javascript-library usr/share/roundcube/program/js/jquery*
+roundcube-core: font-in-non-font-package usr/share/roundcube/program/js/tinymce/skins/lightgray/fonts/*
