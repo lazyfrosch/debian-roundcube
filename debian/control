@@ -13,8 +13,8 @@ Build-Depends: debhelper (>= 7.0.50~),
                yui-compressor
 Homepage: http://www.roundcube.net/
 Standards-Version: 3.9.6
-Vcs-Git: git://anonscm.debian.org/pkg-roundcube/roundcube.git
-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-roundcube/roundcube.git
+Vcs-Git: https://anonscm.debian.org/git/pkg-roundcube/roundcube.git
+Vcs-Browser: https://anonscm.debian.org/cgit/pkg-roundcube/roundcube.git
 
 Package: roundcube-core
 Architecture: all
