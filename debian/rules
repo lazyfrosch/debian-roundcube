@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 %:
-	dh $@
+	dh $@ --with phpcomposer
 
 override_dh_auto_build:
 	>plugins/jqueryui/js/jquery-ui-1.10.4.custom.min.js debian/create-jquery-ui-custom.sh debian/missing-sources/jquery-ui-1.10.4.zip
@@ -20,6 +20,7 @@ override_dh_install:
 	dh_install
 
 	install -m 0644 $(CURDIR)/.htaccess $(CURDIR)/debian/roundcube-core/etc/roundcube/htaccess
+	install -m 0644 $(CURDIR)/composer.json-dist $(CURDIR)/debian/roundcube-core/usr/share/roundcube/composer.json
 
 	# database intial
 	install -m 0644 $(CURDIR)/SQL/mysql.initial.sql $(CURDIR)/debian/roundcube-core/usr/share/dbconfig-common/data/roundcube/install/mysql
@@ -88,3 +89,7 @@ override_dh_installdocs:
 	dh_installdocs --link-doc=roundcube-core -proundcube -proundcube-plugins -proundcube-core
 	dh_installdocs -proundcube-mysql -proundcube-pgsql -proundcube-sqlite3
 	mv $(CURDIR)/debian/roundcube-core/usr/share/doc/roundcube-core/CHANGELOG $(CURDIR)/debian/roundcube-core/usr/share/doc/roundcube-core/changelog
+
+override_dh_phpcomposer:
+	dh_phpcomposer --sourcedirectory=$(CURDIR)/debian/roundcube-core/usr/share/roundcube
+
