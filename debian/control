@@ -5,7 +5,7 @@ Maintainer: Debian Roundcube Maintainers <pkg-roundcube-maintainers@lists.alioth
 Uploaders: Vincent Bernat <bernat@debian.org>,
            Sandro Knauß <bugs@sandroknauss.de>,
            Guilhem Moulin <guilhem@guilhem.org>
-Build-Depends: debhelper (>= 7.0.50~),
+Build-Depends: debhelper (>= 9),
                dh-buildinfo,
                libjs-jquery-ui (>= 1.10),
                pkg-php-tools,
