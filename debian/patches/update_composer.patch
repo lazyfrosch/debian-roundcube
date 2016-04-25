@@ -12,12 +12,12 @@ Last-Update: 2016-03-10
 This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
 Index: roundcube/composer.json-dist
 ===================================================================
---- roundcube.orig/composer.json-dist	2015-12-27 21:50:53.961972360 +0100
-+++ roundcube/composer.json-dist	2016-03-08 23:46:09.521822127 +0100
-@@ -19,19 +19,18 @@
-     "require": {
+--- a/composer.json-dist
++++ b/composer.json-dist
+@@ -20,19 +20,18 @@
          "php": ">=5.3.7",
          "roundcube/plugin-installer": "~0.1.6",
+         "pear-pear.php.net/net_socket": "~1.0.12",
 -        "pear-pear.php.net/auth_sasl": "~1.0.6",
 -        "pear-pear.php.net/net_idna2": "~0.1.1",
 -        "pear-pear.php.net/net_sieve": "~1.3.4",
