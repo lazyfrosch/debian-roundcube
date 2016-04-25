@@ -1,9 +1,11 @@
 roundcube (1.1.5+dfsg.1-1) unstable; urgency=medium
 
   * New upstream release.
-  * debian/watch
-      + Increase uscan version from 3 to 4.
-      + Change release URL from http://sf.net to https://github.com .
+  * debian/watch:
+    + Increase uscan version from 3 to 4.
+    + Change release URL from http://sf.net to https://github.com .
+  * debian/control:
+    + Bump Standards-Version to 3.9.8 (no changes necessary).
 
  -- Guilhem Moulin <guilhem@guilhem.org>  Tue, 26 Apr 2016 00:46:33 +0200
 
