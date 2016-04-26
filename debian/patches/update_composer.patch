@@ -1,17 +1,21 @@
-Description: Update PHP pear dependecies
+From 930173af9f6789ae4ddf54e6813abf4534dcba1b Mon Sep 17 00:00:00 2001
+From: Guilhem Moulin <guilhem@guilhem.org>
+Date: Tue, 26 Apr 2016 02:31:35 +0200
+Subject: [PATCH] Update PHP pear dependencies to match versions in stable.
+
  The current dependencies that are published by upstream are too
  conservative.
- * So replace ~ (that only allows minor versions changes) with >= as documented
- in the INSTALL file.
+ * enable version packages older than documented in the INSTALL file
+   when necessary (when the newer version seems unjustified and isn't packaged
+   in stable)
  * delete dependency to net_idna2, that is only needed for PHP < 5.3
    (idn_to_utf8 and idn_to_ascii)
-Author: Sandro Knauß <bugs@sandroknauss.de>
-Origin: Debian
-Last-Update: 2016-03-10
 ---
-This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
-Index: roundcube/composer.json-dist
-===================================================================
+ composer.json-dist | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/composer.json-dist b/composer.json-dist
+index e07e241..91decfe 100644
 --- a/composer.json-dist
 +++ b/composer.json-dist
 @@ -20,19 +20,18 @@
@@ -25,10 +29,10 @@ Index: roundcube/composer.json-dist
 -        "pear-pear.php.net/net_smtp": "~1.7.1",
 -        "patchwork/utf8": "~1.2.3"
 +        "pear-pear.php.net/auth_sasl": ">=1.0.6",
-+        "pear-pear.php.net/net_sieve": ">=1.3.4",
-+        "pear-pear.php.net/mail_mime": ">=1.9.0",
-+        "pear-pear.php.net/net_smtp": ">=1.7.1",
-+        "patchwork/utf8": ">=1.2.3"
++        "pear-pear.php.net/net_sieve": ">=1.3.2",
++        "pear-pear.php.net/mail_mime": ">=1.8.9",
++        "pear-pear.php.net/net_smtp": ">=1.6.2",
++        "patchwork/utf8": ">=1.1.25"
      },
      "require-dev": {
          "pear-pear.php.net/crypt_gpg": "*",
@@ -36,7 +40,10 @@ Index: roundcube/composer.json-dist
      },
      "suggest": {
 -        "pear-pear.php.net/net_ldap2": "~2.1.0 required for connecting to LDAP address books",
-+        "pear-pear.php.net/net_ldap2": ">=2.1.0",
++        "pear-pear.php.net/net_ldap2": ">=2.0.12",
          "kolab/Net_LDAP3": "dev-master required for connecting to LDAP address books"
      },
      "minimum-stability": "dev"
+-- 
+2.8.1
+
