@@ -2,8 +2,9 @@
 # Debian uscan file for ‘roundcube’ package.
 # Manpage: ‘uscan(1)’
 
-# Compulsory line, this is a version 3 file.
-version=3
+# Compulsory line, this is a version 4 file.
+version=4
 
-opts="uversionmangle=s/^([\d\.]*\d(-[^.]+)?)\..*/$1/;s/-/~/,dversionmangle=s/\+dfsg\.\d+$//,repacksuffix=+dfsg.1" \
-    http://sf.net/roundcubemail/roundcubemail-([\d\.]+(-(rc|alpha|beta))?)\.tar\.gz
+opts="filenamemangle=s#(?:.*?/)?v?(\d+(?:\.\d+)*(?:-(?:rc|alpha|beta))?)\.tar\.gz#roundcube-$1.tar.gz#,dversionmangle=s/\+dfsg\.\d+$//,repacksuffix=+dfsg.1" \
+    https://github.com/roundcube/roundcubemail/tags \
+    (?:.*?/)?v?(\d+(?:\.\d+)*(?:-(?:rc|alpha|beta))?)\.tar\.gz

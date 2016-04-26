@@ -1,3 +1,40 @@
+roundcube (1.1.5+dfsg.1-1) unstable; urgency=medium
+
+  * New upstream release (Closes: #822333).
+  * debian/watch:
+    + Increase uscan version from 3 to 4.
+    + Change release URL from http://sf.net to https://github.com .
+  * debian/control:
+    + Bump Standards-Version to 3.9.8 (no changes necessary).
+
+ -- Guilhem Moulin <guilhem@guilhem.org>  Tue, 26 Apr 2016 00:46:33 +0200
+
+roundcube (1.1.4+dfsg.1-3) unstable; urgency=medium
+
+  * No dependency to packages that are part of roundcube itself
+  * Updated composer.json so it matches debian available versions.
+    (Closes: 817792)
+
+ -- Sandro Knauß <bugs@sandroknauss.de>  Thu, 10 Mar 2016 17:44:23 +0100
+
+roundcube (1.1.4+dfsg.1-2) unstable; urgency=medium
+
+  [ Vincent Bernat ]
+  * Use an empty array for plugin configuration templates to ensure
+    Roundcube knows the configuration file is valid. Closes: #809769.
+  * Pre-Depends on appriopriate dpkg version for dir_to_symlink. Related
+    to #810980.
+
+  [ Sandro Knauß ]
+  * Use dh_phpcomposer to track php dependencies. (Closes: #814664)
+  * Use safe urls for VCS fields
+  * Bumped compat level to 9
+  * Updated lintian overrides
+  * Added php-pear to depends for roundcube-core. (Closes: #801973)
+  * Bump Standards-Version to 3.9.7
+
+ -- Sandro Knauß <bugs@sandroknauss.de>  Wed, 24 Feb 2016 15:17:35 +0100
+
 roundcube (1.1.4+dfsg.1-1~bpo8+1) jessie-backports; urgency=medium
 
   * Rebuild for jessie-backports.  No changes.

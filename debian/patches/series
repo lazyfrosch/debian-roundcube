@@ -7,3 +7,4 @@ debianize_password_plugin.patch
 map-sqlite3-to-sqlite.patch
 update_script.patch
 use-embedded-jquery-for-http-authentication.patch
+update_composer.patch
