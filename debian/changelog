@@ -1,12 +1,15 @@
 roundcube (1.1.5+dfsg.1-1) unstable; urgency=medium
 
+  [ Guilhem Moulin ]
   * New upstream release (Closes: #822333).
   * debian/watch:
     + Increase uscan version from 3 to 4.
     + Change release URL from http://sf.net to https://github.com .
-    + Use signed tarballs
   * debian/control:
     + Bump Standards-Version to 3.9.8 (no changes necessary).
+
+  [ Sandro Knauß ]
+  * Use and check signed tarballs
   * update patch hunks
 
  -- Sandro Knauß <bugs@sandroknauss.de>  Thu, 28 Apr 2016 00:25:04 +0200
