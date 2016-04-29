@@ -1,8 +1,3 @@
-# kolab uses not detached signature. it uses a opaque gpg signature.
-# so it is able to test via gpg -d <source>,
-# but this does not allow uscan at the moment
-roundcube source: debian-watch-may-check-gpg-signature
-
 # Those sources are not missing, they are in debian/missing-sources
 roundcube source: source-is-missing program/js/tinymce/*
 roundcube source: insane-line-length-in-source-file program/js/tinymce/*
