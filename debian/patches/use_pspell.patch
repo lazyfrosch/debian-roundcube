@@ -2,9 +2,9 @@ Instead of using Google by default, we use pspell to avoid to send each mail to 
 
 Index: roundcube/config/defaults.inc.php
 ===================================================================
---- roundcube.orig/config/defaults.inc.php	2015-03-23 22:23:11.461141439 +0100
-+++ roundcube/config/defaults.inc.php	2015-03-23 22:24:17.825102635 +0100
-@@ -668,7 +668,7 @@
+--- roundcube.orig/config/defaults.inc.php	2016-05-05 11:00:34.709330173 +0200
++++ roundcube/config/defaults.inc.php	2016-05-05 11:00:34.701330052 +0200
+@@ -715,7 +715,7 @@
  // Since Google shut down their public spell checking service, the default settings
  // connect to http://spell.roundcube.net which is a hosted service provided by Roundcube.
  // You can connect to any other googie-compliant service by setting 'spellcheck_uri' accordingly.

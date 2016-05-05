@@ -2,8 +2,8 @@ patch update scripts to work with debian package together
 
 Index: roundcube/bin/update.sh
 ===================================================================
---- roundcube.orig/bin/update.sh	2015-03-23 22:24:52.452096944 +0100
-+++ roundcube/bin/update.sh	2015-03-23 22:30:05.841730149 +0100
+--- roundcube.orig/bin/update.sh	2016-05-05 11:01:51.998496673 +0200
++++ roundcube/bin/update.sh	2016-05-05 11:04:44.663488854 +0200
 @@ -18,6 +18,13 @@
   | Author: Thomas Bruederli <roundcube@gmail.com>                        |
   +-----------------------------------------------------------------------+
@@ -68,32 +68,29 @@ Index: roundcube/bin/update.sh
              }
            }
          }
-@@ -153,13 +168,15 @@
+@@ -153,11 +168,13 @@
      echo "Please check the 'mime_types' config option and run this script again.\n";
    }
  
 -  // check database schema
 -  if ($RCI->config['db_dsnw']) {
 -    echo "Executing database schema update.\n";
--    system("php " . INSTALL_PATH . "bin/updatedb.sh --package=roundcube --version=" . $opts['version']
--      . " --dir=" . INSTALL_PATH . "SQL", $res);
+-    $success = rcmail_utils::db_update(INSTALL_PATH . 'SQL', 'roundcube', $opts['version'],
+-        array('errors' => true));
 +  if (!DEBIAN_PKG) {
 +    // check database schema
 +    if ($RCI->config['db_dsnw']) {
 +      echo "Executing database schema update.\n";
-+      system("php " . INSTALL_PATH . "bin/updatedb.sh --package=roundcube --version=" . $opts['version']
-+        . " --dir=" . INSTALL_PATH . "SQL", $res);
- 
--    $success = !$res;
-+      $success = !$res;
++      $success = rcmail_utils::db_update(INSTALL_PATH . 'SQL', 'roundcube', $opts['version'],
++          array('errors' => true));
 +    }
    }
  
    // update composer dependencies
 Index: roundcube/program/include/iniset.php
 ===================================================================
---- roundcube.orig/program/include/iniset.php	2015-03-23 22:24:52.452096944 +0100
-+++ roundcube/program/include/iniset.php	2015-03-23 22:24:52.445430215 +0100
+--- roundcube.orig/program/include/iniset.php	2016-05-05 11:01:51.998496673 +0200
++++ roundcube/program/include/iniset.php	2016-05-05 11:01:51.994496612 +0200
 @@ -36,6 +36,10 @@
      define('RCUBE_LOCALIZATION_DIR', INSTALL_PATH . 'program/localization/');
  }
@@ -107,70 +104,69 @@ Index: roundcube/program/include/iniset.php
  
 Index: roundcube/program/include/rcmail_install.php
 ===================================================================
---- roundcube.orig/program/include/rcmail_install.php	2015-03-22 23:56:52.566072589 +0100
-+++ roundcube/program/include/rcmail_install.php	2015-03-23 22:38:57.636767635 +0100
-@@ -103,10 +103,23 @@
-         $this->config = array_merge($this->config, $config);
-         $this->legacy_config = true;
-       }
+--- roundcube.orig/program/include/rcmail_install.php	2016-05-05 11:01:51.998496673 +0200
++++ roundcube/program/include/rcmail_install.php	2016-05-05 11:13:22.863400563 +0200
+@@ -104,10 +104,22 @@
+                 $this->legacy_config = true;
+             }
+ 
++            // Debian save its old config in dpkg-bak file
++            if (DEBIAN_PKG && $config = $this->load_config_file(RCUBE_CONFIG_DIR . 'main.inc.php.dpkg-bak')) {
++                $this->config        = array_merge($this->config, $config);
++                $this->legacy_config = true;
++            }
 +
-+      // Debian save its old config in dpkg-bak file
-+      if (DEBIAN_PKG &&  $config = $this->load_config_file(RCUBE_CONFIG_DIR . 'main.inc.php.dpkg-bak')) {
-+        $this->config = array_merge($this->config, $config);
-+        $this->legacy_config = true;
-+      }
+             if ($config = $this->load_config_file(RCUBE_CONFIG_DIR . 'db.inc.php')) {
+                 $this->config        = array_merge($this->config, $config);
+                 $this->legacy_config = true;
+             }
 +
-       if ($config = $this->load_config_file(RCUBE_CONFIG_DIR . 'db.inc.php')) {
-         $this->config = array_merge($this->config, $config);
-         $this->legacy_config = true;
-       }
++            // Debian save its old config in dpkg-bak file
++            if (DEBIAN_PKG && $config = $this->load_config_file(RCUBE_CONFIG_DIR . 'db.inc.php.dpkg-bak')) {
++                $this->config        = array_merge($this->config, $config);
++                $this->legacy_config = true;
++            }
+         }
+ 
+         $this->configured = !empty($config);
+@@ -267,8 +279,10 @@
+             }
+ 
+             // save change
+-            $this->config[$prop] = $value;
+-            $config[$prop]       = $value;
++            if (!DEBIAN_PKG || $prop != 'db_dsnw') {
++                $this->config[$prop] = $value;
++                $config[$prop]       = $value;
++            }
+         }
+ 
+         $out = "<?php\n\n";
+@@ -280,6 +294,11 @@
+             $out .= "\$config['$prop'] = " . self::_dump_var($value, $prop) . ";\n\n";
+         }
+ 
++        if (DEBIAN_PKG) {
++            $out .= "/* Do not set db_dsnw here, use dpkg-reconfigure roundcube-core to configure database ! */\n";
++            $out .= "include_once(\"/etc/roundcube/debian-db-roundcube.php\");\n";
++        }
 +
-+      // Debian save its old config in dpkg-bak file
-+      if (DEBIAN_PKG &&  $config = $this->load_config_file(RCUBE_CONFIG_DIR . 'db.inc.php.dpkg-bak')) {
-+        $this->config = array_merge($this->config, $config);
-+        $this->legacy_config = true;
-+      }
+         return $out;
      }
  
-     $this->configured = !empty($config);
-@@ -250,8 +263,10 @@
-       }
- 
-       // save change
--      $this->config[$prop] = $value;
--      $config[$prop] = $value;
-+      if (!DEBIAN_PKG || $prop != 'db_dsnw') {
-+        $this->config[$prop] = $value;
-+        $config[$prop] = $value;
-+      }
-     }
- 
-     $out = "<?php\n\n";
-@@ -262,6 +277,11 @@
-       $out .= "\$config['$prop'] = " . self::_dump_var($value, $prop) . ";\n\n";
-     }
- 
-+    if (DEBIAN_PKG) {
-+       $out .= "/* Do not set db_dsnw here, use dpkg-reconfigure roundcube-core to configure database ! */\n";
-+       $out .= "include_once(\"/etc/roundcube/debian-db-roundcube.php\");\n";
-+    }
+@@ -290,8 +309,14 @@
+      */
+     public function save_configfile($config)
+     {
++        $filename = "config.inc.php";
 +
-     return $out;
-   }
- 
-@@ -273,8 +293,14 @@
-    */
-   function save_configfile($config)
-   {
-+    $filename = "config.inc.php";
++        if (DEBIAN_PKG) {
++            $filename = "config.inc.php.dpkg-new";
++        }
 +
-+    if (DEBIAN_PKG) {
-+      $filename = "config.inc.php.dpkg-new";
-+    }
-+
-     if (is_writable(RCUBE_CONFIG_DIR)) {
--      return file_put_contents(RCUBE_CONFIG_DIR . 'config.inc.php', $config);
-+      return file_put_contents(RCUBE_CONFIG_DIR . $filename, $config);
-     }
+         if (is_writable(RCUBE_CONFIG_DIR)) {
+-            return file_put_contents(RCUBE_CONFIG_DIR . 'config.inc.php', $config);
++            return file_put_contents(RCUBE_CONFIG_DIR . $filename, $config);
+         }
  
-     return false;
+         return false;
