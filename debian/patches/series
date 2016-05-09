@@ -1,4 +1,5 @@
 dbconfig-common_support.patch
+debianize-config.patch
 correct_install_path.patch
 use_pspell.patch
 loginbox-size.patch
