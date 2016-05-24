@@ -12,24 +12,26 @@ Last-Update: 2016-05-05
 This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
 Index: roundcube/composer.json-dist
 ===================================================================
---- roundcube.orig/composer.json-dist	2016-05-05 11:13:56.152250759 +0200
-+++ roundcube/composer.json-dist	2016-05-05 11:15:11.778132524 +0200
-@@ -23,19 +23,18 @@
+--- roundcube.orig/composer.json-dist	2016-05-24 21:15:48.344410955 +0200
++++ roundcube/composer.json-dist	2016-05-24 21:17:06.522072889 +0200
+@@ -22,20 +22,19 @@
+     ],
      "require": {
          "php": ">=5.3.7",
-         "roundcube/plugin-installer": "~0.1.6",
+-        "roundcube/plugin-installer": "~0.1.6",
 -        "pear-pear.php.net/net_socket": "~1.0.12",
 -        "pear-pear.php.net/auth_sasl": "~1.0.6",
 -        "pear-pear.php.net/net_idna2": "~0.1.1",
 -        "pear-pear.php.net/mail_mime": "~1.10.0",
 -        "pear-pear.php.net/net_smtp": "~1.7.1",
--        "pear-pear.php.net/crypt_gpg": "~1.4.0",
+-        "pear-pear.php.net/crypt_gpg": "~1.4.1",
 -        "roundcube/net_sieve": "~1.5.0"
++        "roundcube/plugin-installer": ">=0.1.6",
 +        "pear-pear.php.net/net_socket": ">=1.0.12",
 +        "pear-pear.php.net/auth_sasl": ">=1.0.6",
 +        "pear-pear.php.net/mail_mime": ">=1.10.0",
 +        "pear-pear.php.net/net_smtp": ">=1.7.1",
-+        "pear-pear.php.net/crypt_gpg": ">=1.4.0",
++        "pear-pear.php.net/crypt_gpg": ">=1.4.1",
 +        "roundcube/net_sieve": ">=1.5.0"
      },
      "require-dev": {
