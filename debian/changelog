@@ -1,15 +1,15 @@
-roundcube (1.2+dfsg.1-1) unstable; urgency=medium
+roundcube (1.2.0+dfsg.1-1) unstable; urgency=medium
 
   * New upstream release. 
   * update patches (only file hunks updates)
   * add sql updates for 1.2~rc
   * make roundcube ready for PHP 7 (Closes: #821646)
-    - replace dependecies from php5-* to php-* packages
+    - replace dependencies from php5-* to php-* packages
   * Update default config file to match debian default installation
     - Disable spellchecking by default (needs pspell, that is only recommended)
     - Remove plugins from default config file (needs roundcube-plugins)
 
- -- Sandro Knauß <bugs@sandroknauss.de>  Thu, 05 May 2016 10:56:02 +0200
+ -- Sandro Knauß <bugs@sandroknauss.de>  Tue, 24 May 2016 21:35:06 +0200
 
 roundcube (1.1.5+dfsg.1-1) unstable; urgency=medium
 
