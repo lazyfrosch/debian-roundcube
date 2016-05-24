@@ -1,4 +1,4 @@
-roundcube (1.2~rc+dfsg.1-1) UNRELEASED; urgency=medium
+roundcube (1.2+dfsg.1-1) UNRELEASED; urgency=medium
 
   * New upstream release. 
   * update patches (only file hunks updates)
