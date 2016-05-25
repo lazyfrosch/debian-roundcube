@@ -8,6 +8,7 @@ roundcube (1.2.0+dfsg.1-1) unstable; urgency=medium
   * Update default config file to match debian default installation
     - Disable spellchecking by default (needs pspell, that is only recommended)
     - Remove plugins from default config file (needs roundcube-plugins)
+  * Update the internal copies of external libraries
 
  -- Sandro Knauß <bugs@sandroknauss.de>  Tue, 24 May 2016 21:35:06 +0200
 
