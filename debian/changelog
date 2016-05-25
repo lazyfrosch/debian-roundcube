@@ -2,7 +2,7 @@ roundcube (1.2.0+dfsg.1-1) unstable; urgency=medium
 
   * New upstream release. 
   * update patches (only file hunks updates)
-  * add sql updates for 1.2~rc
+  * add sql updates for 1.2.0
   * make roundcube ready for PHP 7 (Closes: #821646)
     - replace dependencies from php5-* to php-* packages
   * Update default config file to match debian default installation
