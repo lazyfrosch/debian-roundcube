@@ -1,4 +1,4 @@
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Roundcube Dev. - Switzerland
 Upstream-Contact: http://roundcube.net/support
 Source: http://roundcube.net/download
@@ -85,7 +85,6 @@ Files: plugins/enigma/enigma.php
 Copyright: Copyright (C) 2011, The Roundcube Dev Team
            Copyright (C) 2011, Kolab Systems AG
 License: GPL-2
-
 
 License: BSD-2-clause
  Redistribution and use in source and binary forms, with or without
