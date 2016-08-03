@@ -7,5 +7,5 @@ if [ -r /etc/default/roundcube-core ]; then
 fi
 
 if [ -d /var/lib/roundcube/temp ]; then
-	find /var/lib/roundcube/temp -type f -mtime +$MAX_TMPFILE_LIFETIME -print0 | xargs -0 -r rm
+	find /var/lib/roundcube/temp -type f -mtime +$MAX_TMPFILE_LIFETIME -delete
 fi

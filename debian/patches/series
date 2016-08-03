@@ -9,3 +9,4 @@ map-sqlite3-to-sqlite.patch
 update_script.patch
 use-embedded-jquery-for-http-authentication.patch
 update_composer.patch
+Set-INSTALL_PATH-to-var-lib-roundcube-in-bin-cleandb.patch

@@ -1,6 +1,11 @@
 roundcube (1.2.1+dfsg.1) UNRELEASED; urgency=medium
 
+  [ Sandro Knauß ]
   * New upstream release.
+
+  [ Guilhem Moulin ]
+  * d/roundcube-core.cron.d: install new cronjob (executed as www-data) to
+    finally remove all records that are marked as deleted (closes: #824676).
 
  -- Sandro Knauß <bugs@sandroknauss.de>  Wed, 03 Aug 2016 14:25:15 +0200
 
