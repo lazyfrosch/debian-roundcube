@@ -12,7 +12,7 @@ Last-Update: 2016-08-03
 This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
 --- a/composer.json-dist
 +++ b/composer.json-dist
-@@ -22,21 +22,21 @@
+@@ -22,21 +22,20 @@
      ],
      "require": {
          "php": ">=5.3.7",
