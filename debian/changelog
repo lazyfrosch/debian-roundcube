@@ -1,13 +1,15 @@
-roundcube (1.2.1+dfsg.1-1) UNRELEASED; urgency=medium
-
-  [ Sandro Knauß ]
-  * New upstream release.
+roundcube (1.2.1+dfsg.1-1) unstable; urgency=medium
 
   [ Guilhem Moulin ]
   * d/roundcube-core.cron.d: install new cronjob (executed as www-data) to
     finally remove all records that are marked as deleted (closes: #824676).
 
- -- Sandro Knauß <bugs@sandroknauss.de>  Wed, 03 Aug 2016 14:25:15 +0200
+  [ Sandro Knauß ]
+  * New upstream release.
+  * update update_composer.patch with upstream dependencies.
+  * Use secured links
+
+ -- Sandro Knauß <bugs@sandroknauss.de>  Wed, 03 Aug 2016 16:18:36 +0200
 
 roundcube (1.2.0+dfsg.1-1) unstable; urgency=medium
 
