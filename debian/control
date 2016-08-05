@@ -23,7 +23,7 @@ Depends: dbconfig-common,
          debconf,
          libapache2-mod-php | php,
          libmagic1,
-         php-pear,
+         php-pear (>= 1:1.10.1),
          php-cli,
          php-intl,
          php-json,
@@ -36,8 +36,7 @@ Recommends: apache2 | lighttpd | spawn-fcgi | php-fpm | httpd-cgi,
             php-gd,
             php-pspell,
             ${phpcomposer:Debian-recommend}
-Suggests: php-crypt-gpg,
-          roundcube-plugins,
+Suggests: roundcube-plugins,
           ${phpcomposer:Debian-suggest}
 Breaks: roundcube-plugins-extra (<= 0.6-20111030)
 Replaces: roundcube-plugins-extra (<= 0.6-20111030),
