@@ -99,6 +99,7 @@ Package: roundcube-plugins
 Architecture: all
 Pre-Depends: dpkg (>= 1.17.14)
 Depends: roundcube-core (= ${source:Version}), ${misc:Depends}
+Suggests: php-crypt-gpg, php-net-sieve, php-zip
 Breaks: roundcube-plugins-extra (<= 0.7-20120110)
 Replaces: roundcube-plugins-extra (<= 0.7-20120110)
 Description: skinnable AJAX based webmail solution for IMAP servers - plugins

@@ -5,6 +5,9 @@ roundcube (1.2.1+dfsg.1-3) UNRELEASED; urgency=low
       not used by any plugin.  However we keep it in roundcube-core's
       Recommends: field as $config['spellcheck_engine'] defaults to 'pspell'.
       (Closes: #825500).
+    + Add php-crypt-gpg, php-net-sieve and php-zip to roundcube-plugins'
+      Suggests: field, respectively for the enigma, managesieve, and
+      zipdownload plugins.  Thanks, Jan Gerber.  (Closes: #836909).
 
  -- Guilhem Moulin <guilhem@guilhem.org>  Mon, 12 Sep 2016 15:28:50 +0200
 
