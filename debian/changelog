@@ -1,3 +1,13 @@
+roundcube (1.2.1+dfsg.1-3) UNRELEASED; urgency=low
+
+  * debian/control:
+    + Remove php-pspell from roundcube-plugins' Depends: field, as pspell is
+      not used by any plugin.  However we keep it in roundcube-core's
+      Recommends: field as $config['spellcheck_engine'] defaults to 'pspell'.
+      (Closes: #825500).
+
+ -- Guilhem Moulin <guilhem@guilhem.org>  Mon, 12 Sep 2016 15:28:50 +0200
+
 roundcube (1.2.1+dfsg.1-2) unstable; urgency=medium
 
   * Update B-D according to composer.json-dist (Closes: #833461)
