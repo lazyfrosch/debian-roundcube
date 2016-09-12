@@ -11,7 +11,7 @@ Build-Depends: debhelper (>= 9),
                pkg-php-tools,
                po-debconf,
                yui-compressor
-Homepage: http://www.roundcube.net/
+Homepage: https://www.roundcube.net/
 Standards-Version: 3.9.8
 Vcs-Git: https://anonscm.debian.org/git/pkg-roundcube/roundcube.git
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-roundcube/roundcube.git
