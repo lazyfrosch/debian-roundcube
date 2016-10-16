@@ -1,6 +1,29 @@
 CHANGELOG Roundcube Webmail
 ===========================
 
+RELEASE 1.2.2
+-------------
+- Enigma: Add possibility to configure gpg-agent binary location (enigma_pgp_agent)
+- Enigma: Fix signature verification with some IMAP servers, e.g. Gmail, DBMail (#5371)
+- Enigma: Make recipient key searches case-insensitive (#5434)
+- Fix regression in resizing JPEG images with Imagick (#5376)
+- Managesieve: Fix parsing of vacation date-time with non-default date_format (#5372)
+- Use SymLinksIfOwnerMatch in .htaccess instead of FollowSymLinks disabled on some hosts for security reasons (#5370)
+- Wash position:fixed style in HTML mail for better security (#5264)
+- Fix bug where memcache_debug didn't work for session operations
+- Fix bug where Message-ID domain part was tied to username instead of current identity (#5385)
+- Fix bug where blocked.gif couldn't be attached to reply/forward with insecure content
+- Fix E_DEPRECATED warning when using Auth_SASL::factory() (#5401)
+- Fix bug where names of downloaded files could be malformed when derived from the message subject (#5404)
+- Fix so "All" messages selection is resetted on search reset (#5413)
+- Fix bug where folder creation could fail if personal namespace contained more than one entry (#5403)
+- Fix error causing empty INBOX listing in Firefox when using an URL with user:password specified (#5400)
+- Fix PHP warning when handling shared namespace with empty prefix (#5420)
+- Fix so folders list is scrolled to the selected folder on page load (#5424)
+- Fix so when moving to Trash we make sure the folder exists (#5192)
+- Fix displaying size of attachments with zero size
+- Fix so "Action disabled" error uses more appropriate 404 code (#5440)
+
 RELEASE 1.2.1
 -------------
 - Update TinyMCE to version 4.3.13 (#5309)
