@@ -9,6 +9,7 @@ roundcube (1.2.1+dfsg.1-3) UNRELEASED; urgency=low
       Suggests: field, respectively for the enigma, managesieve, and
       zipdownload plugins.  Thanks, Jan Gerber.  (Closes: #836909).
     + Upgrade Homepage: field from http:// to https://.
+  * debian/watch: fix syntax error due to missing comment markers.
 
  -- Guilhem Moulin <guilhem@guilhem.org>  Mon, 12 Sep 2016 15:28:50 +0200
 
