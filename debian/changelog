@@ -1,5 +1,10 @@
 roundcube (1.2.2+dfsg.1-1) unstable; urgency=medium
 
+  [ Sandro Knauß ]
+  * Change own mailadress to new debian one
+  * Update Copyright years for myself
+
+  [ Guilhem Moulin ]
   * New upstream release.
   * debian/control:
     + Remove php-pspell from roundcube-plugins' Depends: field, as pspell is
@@ -12,7 +17,7 @@ roundcube (1.2.2+dfsg.1-1) unstable; urgency=medium
     + Upgrade Homepage: field from http:// to https://.
   * debian/watch: fix syntax error due to missing comment markers.
 
- -- Guilhem Moulin <guilhem@guilhem.org>  Sun, 16 Oct 2016 15:59:59 +0200
+ -- Sandro Knauß <hefee@debian.org>  Sun, 16 Oct 2016 18:25:05 +0200
 
 roundcube (1.2.1+dfsg.1-2) unstable; urgency=medium
 

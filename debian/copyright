@@ -38,7 +38,7 @@ License: GPL-3+
 Files: debian/*
 Copyright: 2007-2011, Vincent Bernat <bernat@debian.org>
            2007-2011, Romain Beauxis <toots@rastageeks.org>
-           2015, Sandro Knauß <bugs@sandroknauss.de>
+           2015-2016, Sandro Knauß <hefee@debian.org>
 License: GPL-2+
 
 Files: skins/*
