@@ -1,6 +1,26 @@
 CHANGELOG Roundcube Webmail
 ===========================
 
+RELEASE 1.2.3
+-------------
+- Searching in both contacts and groups when LDAP addressbook with group_filters option is used
+- Fix vulnerability in handling of mail()'s 5th argument
+- Fix To: header encoding in mail sent with mail() method (#5475)
+- Fix flickering of header topline in min-mode (#5426)
+- Fix bug where folders list would scroll to top when clicking on subscription checkbox (#5447)
+- Fix decoding of GB2312/GBK text when iconv is not installed (#5448)
+- Fix regression where creation of default folders wasn't functioning without prefix (#5460)
+- Enigma: Fix bug where last records on keys list were hidden (#5461)
+- Enigma: Fix key search with keyword containing non-ascii characters (#5459)
+- Fix bug where deleting folders with subfolders could fail in some cases (#5466)
+- Fix bug where IMAP password could be exposed via error message (#5472)
+- Fix bug where it wasn't possible to store more that 2MB objects in memcache/apc,
+  Added memcache_max_allowed_packet and apc_max_allowed_packet settings (#5452)
+- Fix "Illegal string offset" warning in rcube::log_bug() on PHP 7.1 (#5508)
+- Fix storing "empty" values in rcube_cache/rcube_cache_shared (#5519)
+- Fix missing content check when image resize fails on attachment thumbnail generation (#5485)
+- Fix displaying attached images with wrong Content-Type specified (#5527)
+
 RELEASE 1.2.2
 -------------
 - Enigma: Add possibility to configure gpg-agent binary location (enigma_pgp_agent)

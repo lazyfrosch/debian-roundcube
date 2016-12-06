@@ -275,7 +275,7 @@ class rcube_cache_shared
                 }
             }
 
-            if ($data) {
+            if ($data !== false) {
                 $md5sum = md5($data);
                 $data   = $this->unserialize($data);
 
@@ -301,9 +301,9 @@ class rcube_cache_shared
                 0, 1, $this->prefix . '.' . $key);
 
             if ($sql_arr = $this->db->fetch_assoc($sql_result)) {
-                $md5sum = $sql_arr['data'] ? md5($sql_arr['data']) : null;
-                if ($sql_arr['data']) {
-                    $data = $this->unserialize($sql_arr['data']);
+                if (strlen($sql_arr['data']) > 0) {
+                    $md5sum = md5($sql_arr['data']);
+                    $data   = $this->unserialize($sql_arr['data']);
                 }
 
                 if ($nostore) {
@@ -630,16 +630,9 @@ class rcube_cache_shared
                 }
                 $this->max_packet -= 2000;
             }
-            else if ($this->type == 'memcache') {
-                if ($stats = $this->db->getStats()) {
-                    $remaining = $stats['limit_maxbytes'] - $stats['bytes'];
-                    $this->max_packet = min($remaining / 5, $this->max_packet);
-                }
-            }
-            else if ($this->type == 'apc' && function_exists('apc_sma_info')) {
-                if ($stats = apc_sma_info()) {
-                    $this->max_packet = min($stats['avail_mem'] / 5, $this->max_packet);
-                }
+            else {
+                $max_packet = rcube::get_instance()->config->get($this->type . '_max_allowed_packet');
+                $this->max_packet = parse_bytes($max_packet) ?: $this->max_packet;
             }
         }
 
