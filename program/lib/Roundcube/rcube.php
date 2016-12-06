@@ -1322,7 +1322,6 @@ class rcube
 
         // write error to local log file
         if (($level & 1) || !empty($arg_arr['fatal'])) {
-            $post_query = '';
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 foreach (array('_task', '_action') as $arg) {
                     if ($_POST[$arg] && !$_GET[$arg]) {
@@ -1676,7 +1675,7 @@ class rcube
             }
             else {
                 $delim      = $this->config->header_delimiter();
-                $to         = $mailto;
+                $to         = $message->encodeHeader('To', $mailto, RCUBE_CHARSET, 'quoted-printable');
                 $subject    = $headers['Subject'];
                 $header_str = rtrim($header_str);
 
@@ -1690,7 +1689,7 @@ class rcube
                 if (filter_var(ini_get('safe_mode'), FILTER_VALIDATE_BOOLEAN))
                     $sent = mail($to, $subject, $msg_body, $header_str);
                 else
-                    $sent = mail($to, $subject, $msg_body, $header_str, "-f$from");
+                    $sent = mail($to, $subject, $msg_body, $header_str, '-f ' . escapeshellarg($from));
             }
         }
 
