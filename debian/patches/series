@@ -8,3 +8,4 @@ map-sqlite3-to-sqlite.patch
 update_script.patch
 use-embedded-jquery-for-http-authentication.patch
 update_composer.patch
+Fix-vulnerability-in-handling-of-mail-s-5th-argument.patch

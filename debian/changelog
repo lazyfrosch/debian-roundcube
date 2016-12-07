@@ -1,3 +1,9 @@
+roundcube (1.1.5+dfsg.1-1~bpo8+2) jessie-backports; urgency=high
+
+  * Fix Command Execution via Email, cf. TEMP-0847287-64604E.
+
+ -- Guilhem Moulin <guilhem@guilhem.org>  Wed, 07 Dec 2016 11:12:51 +0100
+
 roundcube (1.1.5+dfsg.1-1~bpo8+1) jessie-backports; urgency=medium
 
   * Rebuild for jessie-backports.
