@@ -1,3 +1,12 @@
+roundcube (1.2.3+dfsg.1-1~ppa1404+1) trusty; urgency=medium
+
+  * [64c476d] Depend against PHP5
+  * [799f4e3] Disable special handling for dh_phpcomposer
+  * [7026f0c] Remove dep that has been introduced for dir_to_symlink
+  * Rebuild for Ubuntu trusty.
+
+ -- Markus Frosch <lazyfrosch@debian.org>  Mon, 09 Jan 2017 16:27:19 +0100
+
 roundcube (1.2.3+dfsg.1-1) unstable; urgency=high
 
   [ Guilhem Moulin ]
