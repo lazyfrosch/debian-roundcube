@@ -90,6 +90,6 @@ override_dh_installdocs:
 	dh_installdocs -proundcube-mysql -proundcube-pgsql -proundcube-sqlite3
 	mv $(CURDIR)/debian/roundcube-core/usr/share/doc/roundcube-core/CHANGELOG $(CURDIR)/debian/roundcube-core/usr/share/doc/roundcube-core/changelog
 
-override_dh_phpcomposer:
-	dh_phpcomposer --sourcedirectory=$(CURDIR)/debian/roundcube-core/usr/share/roundcube
+#override_dh_phpcomposer:
+#	dh_phpcomposer --sourcedirectory=$(CURDIR)/debian/roundcube-core/usr/share/roundcube
 
