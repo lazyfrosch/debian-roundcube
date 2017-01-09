@@ -21,20 +21,20 @@ Architecture: all
 Pre-Depends: dpkg (>= 1.17.14)
 Depends: dbconfig-common,
          debconf,
-         libapache2-mod-php | php,
+         libapache2-mod-php5 | php5,
          libmagic1,
-         php-pear (>= 1:1.10.1),
-         php-cli,
-         php-intl,
-         php-json,
-         php-mcrypt,
+         php-pear,
+         php5-cli,
+         php5-intl,
+         php5-json,
+         php5-mcrypt,
          roundcube-mysql (= ${source:Version}) | roundcube-sqlite3 (= ${source:Version}) | roundcube-pgsql (= ${source:Version}),
          ucf,
          ${misc:Depends},
          ${phpcomposer:Debian-require}
-Recommends: apache2 | lighttpd | spawn-fcgi | php-fpm | httpd-cgi,
-            php-gd,
-            php-pspell,
+Recommends: apache2 | lighttpd | spawn-fcgi | php5-fpm | httpd-cgi,
+            php5-gd,
+            php5-pspell,
             ${phpcomposer:Debian-recommend}
 Suggests: roundcube-plugins,
           ${phpcomposer:Debian-suggest}
@@ -70,7 +70,7 @@ Description: skinnable AJAX based webmail solution for IMAP servers - metapackag
 Package: roundcube-mysql
 Architecture: all
 Depends: mariadb-client | default-mysql-client | virtual-mysql-client,
-         php-mysqlnd | php-mysql,
+         php5-mysqlnd | php5-mysql,
          ${misc:Depends}
 Suggests: mariadb-server | default-mysql-server
 Description: metapackage providing MySQL dependencies for RoundCube
@@ -80,7 +80,7 @@ Description: metapackage providing MySQL dependencies for RoundCube
 
 Package: roundcube-pgsql
 Architecture: all
-Depends: php-pgsql, postgresql-client, ${misc:Depends}
+Depends: php5-pgsql, postgresql-client, ${misc:Depends}
 Suggests: postgresql
 Description: metapackage providing PostgreSQL dependencies for RoundCube
  This package provides PostgreSQL dependencies for RoundCube Webmail,
@@ -89,7 +89,7 @@ Description: metapackage providing PostgreSQL dependencies for RoundCube
 
 Package: roundcube-sqlite3
 Architecture: all
-Depends: php-sqlite3, sqlite3, ${misc:Depends}
+Depends: php5-sqlite, sqlite3, ${misc:Depends}
 Description: metapackage providing SQLite dependencies for RoundCube
  This package provides SQLite dependencies for RoundCube Webmail,
  a skinnable AJAX based webmail solution for IMAP servers. Install
